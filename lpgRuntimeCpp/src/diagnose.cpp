@@ -9,15 +9,28 @@
 #include "stringex.h"
 #include "TokenStream.h"
 
+DiagnoseParser::SecondaryRepairInfo::SecondaryRepairInfo(): code(0), distance(0), bufferPosition(0), stackPosition(0),
+                                                            numDeletions(0),
+                                                            symbol(0),
+                                                            recoveryOnNextStack(false
+															)
+{
+}
+
 DiagnoseParser::StateInfo::StateInfo()
 {
 }
 
 DiagnoseParser::DiagnoseParser(TokenStream* tokStream, ParseTable* prs, Monitor* monitor, int maxErrors, long maxTime):
-                                                                                                                       statePool(256, 4)
+	stateStackTop(0),
+	tempStackTop(0),
+	prevStackTop(0),
+	nextStackTop(0),
+	scopeStackTop(0),
+	statePool(256, 4)
 {
 	main_configuration_stack = std::make_shared<ConfigurationStack>(prs),
-	this->monitor = monitor;
+		this->monitor = monitor;
 	this->maxErrors = maxErrors;
 	this->maxTime = maxTime;
 	this->tokStream = tokStream;
@@ -35,7 +48,7 @@ DiagnoseParser::DiagnoseParser(TokenStream* tokStream, ParseTable* prs, Monitor*
 	EOLT_SYMBOL = prs->getEoltSymbol();
 	ACCEPT_ACTION = prs->getAcceptAction();
 	ERROR_ACTION = prs->getErrorAction();
-	
+
 	buffer.Resize(BUFF_SIZE);
 	list.Resize(NUM_SYMBOLS + 1);
 	list.MemReset();

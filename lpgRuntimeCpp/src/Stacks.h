@@ -3,10 +3,8 @@
 
 #include "tuple.h"
 
-struct Object
-{
-	
-};
+
+struct Object;
 
 struct Stacks
 {

@@ -2,6 +2,24 @@
 #include <exception>
 #include <string>
 
+struct UnsupportedOperationException :public std::exception
+{
+    /**
+     *
+     */
+
+    std::string str;
+
+    UnsupportedOperationException()
+    {
+        str = "UnsupportedOperationException";
+    }
+    UnsupportedOperationException(const std::string& str)
+    {
+        this->str = str;
+    }
+    std::string toString() { return str; }
+};
 struct NullTerminalSymbolsException :public std::exception
 {
     /**

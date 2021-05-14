@@ -57,6 +57,7 @@ struct DiagnoseParser :public ParseErrorCodes
 
     struct SecondaryRepairInfo
     {
+        SecondaryRepairInfo();
         int code,
             distance,
             bufferPosition,
@@ -184,21 +185,18 @@ struct DiagnoseParser :public ParseErrorCodes
     Array<int> locationStack;
 
 
-    //
-//
-//
-    int stateStackTop,
-        tempStackTop,
-        prevStackTop,
-        nextStackTop,
-        scopeStackTop;
+    int stateStackTop;
+    int tempStackTop;
+    int prevStackTop;
+    int nextStackTop;
+    int scopeStackTop;
 
     Array<int> stateStack,
-        tempStack,
-        nextStack,
-        prevStack,
-        scopeIndex,
-        scopePosition;
+               tempStack,
+               nextStack,
+               prevStack,
+               scopeIndex,
+               scopePosition;
 	
 
     Array<int> buffer;
@@ -209,7 +207,7 @@ struct DiagnoseParser :public ParseErrorCodes
     Array<int> list,
         stateSeen; // this variable is managed entirely by the function "scope_trial"  stateSeen;
 
-    int statePoolTop;
+    int statePoolTop=0;
     Tuple < StateInfo> statePool;
 
    

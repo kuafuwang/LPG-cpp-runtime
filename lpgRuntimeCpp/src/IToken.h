@@ -3,9 +3,16 @@
 #include <vector>
 
 
+struct IToken;
 struct IPrsStream;
 struct ILexStream;
 
+struct IGetToken
+{
+	virtual ~IGetToken() = default;
+	virtual IToken* getLeftIToken() = 0;
+    virtual IToken* getRightIToken() = 0;
+};
 struct IToken
 {
 	virtual ~IToken() = default;
@@ -52,4 +59,6 @@ struct IToken
   virtual     std::wstring getValue(std::vector<wchar_t>& inputChars)=0;
 
   virtual      std::wstring toString()=0;
+  std::string to_utf8_string();
 };
+

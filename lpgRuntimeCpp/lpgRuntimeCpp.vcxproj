@@ -88,6 +88,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,11 +151,19 @@
     <ClCompile Include="src\LexParser.cpp" />
     <ClCompile Include="src\LexStream.cpp" />
     <ClCompile Include="src\lpgRuntime.cpp" />
+    <ClCompile Include="src\PrsStream.cpp" />
     <ClCompile Include="src\RecoveryParser.cpp" />
     <ClCompile Include="src\Stacks.cpp" />
     <ClCompile Include="src\Token.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExprLexer.h" />
+    <ClInclude Include="ExprLexerprs.h" />
+    <ClInclude Include="ExprLexersym.h" />
+    <ClInclude Include="ExprParser.h" />
+    <ClInclude Include="ExprParserprs.h" />
+    <ClInclude Include="ExprParsersym.h" />
     <ClInclude Include="src\AbstractToken.h" />
     <ClInclude Include="src\Adjunct.h" />
     <ClInclude Include="src\BacktrackingParser.h" />
@@ -180,6 +190,7 @@
     <ClInclude Include="src\ObjectTuple.h" />
     <ClInclude Include="src\ParseErrorCodes.h" />
     <ClInclude Include="src\ParseTable.h" />
+    <ClInclude Include="src\PrsStream.h" />
     <ClInclude Include="src\RecoveryParser.h" />
     <ClInclude Include="src\RuleAction.h" />
     <ClInclude Include="src\Stacks.h" />

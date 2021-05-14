@@ -795,7 +795,7 @@ public:
         return  *this;
     }
     shared_ptr_array& operator=(shared_ptr_array&& right) noexcept { // take resource from _Right
-        _data.swap(right);
+        _data.swap(right._data);
         return *this;
     }
 

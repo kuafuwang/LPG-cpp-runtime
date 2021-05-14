@@ -2,6 +2,8 @@
 #include "Stacks.h"
 #include "tuple.h"
 
+
+
 struct ParseTable;
 struct RuleAction;
 struct TokenStream;
@@ -116,7 +118,7 @@ struct DeterministicParser :
         //
         //
         //
-        Object* parse() 
+	Object* parse() 
     {
         return parseEntry(0);
     }

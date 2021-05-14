@@ -11,7 +11,8 @@ using std::pair;
 namespace IcuUtil
 {
 	
-
+	 std::string ws2s(std::wstring const& wstr);
+	 std::wstring s2ws(std::string const& str);
 
 // 探测文件的编码
 // @return : <编码名称, 可信度>

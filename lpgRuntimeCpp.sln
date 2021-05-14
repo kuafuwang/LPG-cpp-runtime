@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lpgRuntimeCpp", "lpgRuntimeCpp\lpgRuntimeCpp.vcxproj", "{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lpg2", "lpg2\lpg2.vcxproj", "{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}.Release|x64.Build.0 = Release|x64
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}.Release|x86.ActiveCfg = Release|Win32
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}.Release|x86.Build.0 = Release|Win32
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Debug|x64.ActiveCfg = Debug|x64
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Debug|x64.Build.0 = Debug|x64
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Debug|x86.ActiveCfg = Debug|Win32
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Debug|x86.Build.0 = Debug|Win32
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Release|x64.ActiveCfg = Release|x64
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Release|x64.Build.0 = Release|x64
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Release|x86.ActiveCfg = Release|Win32
+		{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

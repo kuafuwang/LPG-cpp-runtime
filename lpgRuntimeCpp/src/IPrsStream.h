@@ -1,5 +1,6 @@
 #pragma once
 #include "TokenStream.h"
+#include "tuple.h"
 
 struct ILexStream;
 struct IMessageHandler;
@@ -68,7 +69,7 @@ struct IPrsStream :public  TokenStream
 
     virtual    void removeLastToken()=0;
 
-    virtual   void addTokensInRangeToList(std::vector<IToken*> list, IToken* start_token, IToken* end_token)=0;
+    virtual   void addTokensInRangeToList(std::vector<IToken*>& list, IToken* start_token, IToken* end_token)=0;
 
     virtual    int getLineCount()=0;
 
@@ -96,13 +97,13 @@ struct IPrsStream :public  TokenStream
 
     virtual    std::vector<std::wstring> orderedExportedSymbols()=0;
 
-    virtual   std::vector<IToken*> getTokens()=0;
+    virtual   Tuple <IToken*> getTokens()=0;
 
-    virtual   std::vector<IToken*> getAdjuncts()=0;
+    virtual   Tuple<IToken*> getAdjuncts()=0;
 
-    virtual   std::vector < IToken*> getFollowingAdjuncts(int i)=0;
+    virtual std::vector<IToken*> getFollowingAdjuncts(int i) =0;
 
-    virtual   std::vector < IToken*> getPrecedingAdjuncts(int i)=0;
+    virtual std::vector<IToken*> getPrecedingAdjuncts(int i) =0;
 
     virtual    IToken* getIToken(int i)=0;
 
@@ -155,11 +156,11 @@ struct IPrsStream :public  TokenStream
 
     virtual   int getEndColumnOfTokenAt(int i)=0;
 
-    virtual    std::vector<IToken*> incrementalResetAtCharacterOffset(int damage_offset)=0;
+    virtual    Tuple<IToken*> incrementalResetAtCharacterOffset(int damage_offset)=0;
 
-    virtual    std::wstring getInputChars()=0;
+    virtual    shared_ptr_array<wchar_t> getInputChars()=0;
 
-    virtual   std::vector<uint8_t>  getInputBytes()=0;
+    virtual   shared_ptr_array<char>  getInputBytes()=0;
 
     virtual   std::wstring toString(int first_token, int last_token)=0;
 

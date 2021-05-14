@@ -34,8 +34,9 @@ namespace Jikes { // Open namespace Jikes block
 			clone_for_struct = _b;
 		}
 	private:
-		bool clone_for_struct = false;
+		
 		Cell** base;
+		bool clone_for_struct = false;
 		unsigned base_size; // number of segment slots in base
 		unsigned base_index; // index of current non-full segment
 		unsigned offset; // offset to next free pointer in base[base_index]
@@ -92,7 +93,7 @@ namespace Jikes { // Open namespace Jikes block
 		// Constructor of a storage pool. The parameter is the number of tokens
 		// which the AST tree will contain.
 		//
-		StoragePool(unsigned num_tokens)
+		StoragePool(unsigned num_tokens=1024)
 			: base(NULL)
 			, base_size(0)
 			, base_index(0)
@@ -154,8 +155,9 @@ namespace Jikes { // Open namespace Jikes block
 		// Alloc allocates an object of size n in the pool and returns a pointer
 		// to it. The memory will be zero-initialized.
 		//
-		inline void* Alloc(size_t n)
+		void* Alloc(size_t n)
 		{
+		
 			unsigned chunk_size = (n + sizeof(Cell) - 1) / sizeof(Cell);
 			if (chunk_size > Blksize())
 			{
@@ -204,11 +206,7 @@ namespace Jikes { // Open namespace Jikes block
 
 	};
 
-
-
-
-
-
+	
 } // Close namespace Jikes block
 
 

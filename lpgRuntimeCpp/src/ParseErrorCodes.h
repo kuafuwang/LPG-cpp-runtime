@@ -24,6 +24,6 @@ struct ParseErrorCodes
             NO_MESSAGE_CODE = 13;
 
          static   const std::vector< std::wstring> errorMsgText;
-    
+
 
 };

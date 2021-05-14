@@ -1,8 +1,12 @@
 #include "lpgRuntime.h"
 
+#include <iostream>
+#include "IcuUtil.h"
 #include "ConfigurationElement.h"
+#include "IAst.h"
 #include "ParseErrorCodes.h"
 #include "StateElement.h"
+#include "StoragePool.h"
 #include "tuple.h"
 const  std::vector< std::wstring> ParseErrorCodes::errorMsgText =
 {
@@ -30,8 +34,12 @@ const  std::vector< std::wstring> ParseErrorCodes::errorMsgText =
         tail = tail->parent;
     }
 }
-
-int main(void)
+ std::string IAst::to_utf8_string()
  {
-    return 0;
+     return IcuUtil::ws2s(toString());
+ }
+
+ std::string IToken::to_utf8_string()
+ {
+     return IcuUtil::ws2s(toString());
  }

@@ -50,6 +50,17 @@ namespace IcuUtil
 		ucsdet_close(csd);
 		return pair<string, int>(string(), 0);
 	}
+
+	std::string ws2s(std::wstring const& wstr)
+	{
+		return  {};
+	}
+
+	std::wstring s2ws(std::string const& str)
+	{
+		return  {};
+	}
+
 	std::pair<std::string, int> detectFileEncoding(const wchar_t* fileName)
 	{
 		FILE* pFile = nullptr;
@@ -73,16 +84,15 @@ namespace IcuUtil
 	}
 	bool getFileUnicodeContent(const wchar_t* fileName,vector<wchar_t>& content)
 	{
-
-
-		/*FILE* pFile = _wfopen(fileName, L"r");
+		FILE* pFile = nullptr;
+		_wfopen_s(&pFile,fileName, L"r");
 		assert(pFile);
 		if (!pFile)
 			return  false;
 		struct _stat64i32 statbuf;
 		_wstat64i32(fileName, &statbuf);
 		const auto bufsize = statbuf.st_size;
-		std::vector<char> holder(0, bufsize);
+		std::vector<char> holder( bufsize, 0);
 		
 		uint32_t count = fread(&holder[0], 1, bufsize, pFile);
 		fclose(pFile);
@@ -111,7 +121,7 @@ namespace IcuUtil
 		if (U_FAILURE(inerr))
 			return false;
 		
-		content.resize(out_buf - tmp_buf);*/
+		content.resize(out_buf - tmp_buf);
 		
 		return true;
 	}

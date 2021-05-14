@@ -82,7 +82,7 @@ struct ParseTable
 
     virtual int getNumSymbols() = 0;
 
-    virtual int getSegmentSize() = 0;
+
 
     virtual int getStartState() = 0;
 
