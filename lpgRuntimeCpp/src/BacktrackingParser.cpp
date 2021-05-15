@@ -15,7 +15,9 @@
 int BacktrackingParser::getMarkerToken(int marker_kind, int start_token_index)
 {
 	if (marker_kind == 0)
+	{
 		return 0;
+	}
 	else
 	{
 		if (markerTokenIndex == 0)
@@ -33,6 +35,16 @@ int BacktrackingParser::getMarkerToken(int marker_kind, int start_token_index)
 	}
 
 	return markerTokenIndex;
+}
+
+int BacktrackingParser::getToken(int i)
+{
+	return tokens->get(locationStack[stateStackTop + (i - 1)]);
+}
+
+int BacktrackingParser::getCurrentRule()
+{
+	return currentAction;
 }
 
 int BacktrackingParser::getFirstToken()
@@ -58,6 +70,11 @@ int BacktrackingParser::getLastToken(int i)
 	return tokStream->getLastRealToken(l);
 }
 
+void BacktrackingParser::setMonitor(Monitor* monitor)
+{
+	this->monitor = monitor;
+}
+
 void BacktrackingParser::reset()
 {
 	action->reset();
@@ -68,7 +85,7 @@ void BacktrackingParser::reset()
 void BacktrackingParser::reset(Monitor* monitor, TokenStream* tokStream)
 {
 	this->monitor = monitor;
-	this->tokStream = (TokenStream*)tokStream;
+	this->tokStream = tokStream;
 	reset();
 }
 
@@ -90,6 +107,58 @@ void BacktrackingParser::reset(Monitor* monitor, TokenStream* tokStream, ParseTa
 
 	if (!prs->isValidForParser()) throw BadParseSymFileException();
 	if (!prs->getBacktrack()) throw NotBacktrackParseTableException();
+}
+
+BacktrackingParser::~BacktrackingParser()
+{
+	delete action;
+
+}
+
+BacktrackingParser::BacktrackingParser(): monitor(nullptr), START_STATE(0), NUM_RULES(0), NT_OFFSET(0),
+                                          LA_STATE_OFFSET(0),
+                                          EOFT_SYMBOL(0),
+                                          ERROR_SYMBOL(0),
+                                          ACCEPT_ACTION(0),
+                                          ERROR_ACTION(0),
+                                          lastToken(0),
+                                          currentAction(0),
+                                          tokStream(nullptr),
+                                          prs(nullptr),
+                                          ra(nullptr)
+{
+}
+
+BacktrackingParser::BacktrackingParser(TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
+: monitor(nullptr), START_STATE(0), NUM_RULES(0), NT_OFFSET(0),
+LA_STATE_OFFSET(0),
+EOFT_SYMBOL(0),
+ERROR_SYMBOL(0),
+ACCEPT_ACTION(0),
+ERROR_ACTION(0),
+lastToken(0),
+currentAction(0),
+tokStream(nullptr),
+prs(nullptr),
+ra(nullptr)
+{
+	reset(nullptr, tokStream, prs, ra);
+}
+
+BacktrackingParser::BacktrackingParser(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
+: monitor(nullptr), START_STATE(0), NUM_RULES(0), NT_OFFSET(0),
+LA_STATE_OFFSET(0),
+EOFT_SYMBOL(0),
+ERROR_SYMBOL(0),
+ACCEPT_ACTION(0),
+ERROR_ACTION(0),
+lastToken(0),
+currentAction(0),
+tokStream(nullptr),
+prs(nullptr),
+ra(nullptr)
+{
+	reset(monitor, tokStream, prs, ra);
 }
 
 void BacktrackingParser::reallocateOtherStacks(int start_token_index)
@@ -136,11 +205,11 @@ BacktrackingParser::ErrorPair::ErrorPair(int scope_index, int error_token)
 
 void BacktrackingParser::reportErrors()
 {
-	if (errors == nullptr) return;
+	if (!errors) return;
 	
 	for (size_t k = 0; k < errors->size(); k++)
 	{
-		ErrorPair error = (ErrorPair)errors->at(k);
+		ErrorPair& error = errors->at(k);
 		int scope_index = error.scopeIndex,
 		    error_token = error.errorToken;
 
@@ -174,8 +243,8 @@ void BacktrackingParser::reportErrors()
 
 void BacktrackingParser::addRecoveryError(int scope_index, int error_index)
 {
-	if (errors == nullptr)
-		errors = new std::vector<ErrorPair>();
+	if (!errors)
+		errors = std::make_shared<std::vector<ErrorPair>>();
 	errors->push_back(ErrorPair(scope_index, error_index));
 }
 
@@ -197,7 +266,7 @@ Object* BacktrackingParser::fuzzyParseEntry(int marker_kind, int max_error_count
 	int first_token = tokStream->peek(),
 	    start_token = first_token,
 	    marker_token = getMarkerToken(marker_kind, first_token);
-	tokens = new IntTuple(tokStream->getStreamLength());
+	tokens = std::make_shared<IntTuple>(tokStream->getStreamLength());
 	tokens->add(tokStream->getPrevious(first_token));
 
 	int error_token = backtrackParse(action, marker_token);
@@ -259,7 +328,7 @@ Object* BacktrackingParser::parseEntry(int marker_kind, int max_error_count)
 
 	skipTokens = max_error_count < 0;
 
-	if (max_error_count > 0 &&  dynamic_cast<IPrsStream*>( tokStream))
+	if (max_error_count > 0 &&  dynamic_cast<IPrsStream*>( tokStream ))
 	{
 		max_error_count = 0;
 	}
@@ -270,7 +339,7 @@ Object* BacktrackingParser::parseEntry(int marker_kind, int max_error_count)
 	// it up to the "Stream" implementer to define the predecessor
 	// of the first token as he sees fit.
 	//
-	tokens = new IntTuple(tokStream->getStreamLength());
+	tokens = std::make_shared<IntTuple>(tokStream->getStreamLength());
 	tokens->add(tokStream->getPrevious(tokStream->peek()));
 
 	int start_token_index = tokStream->peek(),
@@ -278,10 +347,7 @@ Object* BacktrackingParser::parseEntry(int marker_kind, int max_error_count)
 		start_action_index = action->size(); // obviously 0
 	
 	Array<int>  temp_stack(stateStackTop + 1);
-	for (int i = 0; i <= stateStackTop; ++i)
-	{
-		temp_stack[i] = stateStack[i];
-	}
+	System::arraycopy(stateStack, 0, temp_stack, 0, temp_stack.Size());
 	//System.arraycopy(stateStack, 0, temp_stack, 0, temp_stack.length);
 
 	int initial_error_token = backtrackParse(action, repair_token);
@@ -295,11 +361,8 @@ Object* BacktrackingParser::parseEntry(int marker_kind, int max_error_count)
 		action->reset(start_action_index);
 		tokStream->reset(start_token_index);
 		stateStackTop = temp_stack.Size() - 1;
-		for (int i = 0; i <= stateStackTop; ++i)
-		{
-			stateStack[i] = temp_stack[i];
-		}
 		//System.arraycopy(temp_stack, 0, stateStack, 0, temp_stack.length);
+		System::arraycopy(temp_stack, 0, stateStack, 0, temp_stack.Size());
 		reallocateOtherStacks(start_token_index);
 
 		backtrackParseUpToError(repair_token, error_token);
@@ -320,11 +383,7 @@ Object* BacktrackingParser::parseEntry(int marker_kind, int max_error_count)
 			throw BadParseException(initial_error_token);
 
 		temp_stack.Resize(stateStackTop + 1);
-		for (int i = 0; i <= stateStackTop; ++i)
-		{
-			temp_stack[i] = stateStack[i];
-		}
-		//System.arraycopy(stateStack, 0, temp_stack, 0, temp_stack.length);
+		System::arraycopy(stateStack, 0, temp_stack, 0, temp_stack.Size());
 
 		start_action_index = action->size();
 		start_token_index = tokStream->peek();
@@ -813,10 +872,7 @@ int BacktrackingParser::errorRepair(IPrsStream* stream, int recovery_token, int 
 {
 
 	Array<int> temp_stack(stateStackTop + 1);
-	for(int i = 0 ;  i <= stateStackTop; ++i)
-	{
-		temp_stack[i] = stateStack[i];
-	}
+	System::arraycopy(stateStack, 0, temp_stack, 0, temp_stack.Size());
 	for (;
 		stream->getKind(recovery_token) != EOFT_SYMBOL;
 		recovery_token = stream->getNext(recovery_token))
@@ -826,10 +882,7 @@ int BacktrackingParser::errorRepair(IPrsStream* stream, int recovery_token, int 
 			break;
 		
 		stateStackTop = temp_stack.Size() - 1;
-		for (int i = 0; i <= stateStackTop; ++i)
-		{
-			stateStack[i] = temp_stack[i];
-		}
+		System::arraycopy(temp_stack, 0, stateStack, 0, temp_stack.Size());
 		//System.arraycopy(temp_stack, 0, stateStack, 0, temp_stack.length);
 	}
 
@@ -839,10 +892,7 @@ int BacktrackingParser::errorRepair(IPrsStream* stream, int recovery_token, int 
 		if (!repairable(error_token))
 		{
 			stateStackTop = temp_stack.Size() - 1;
-			for (int i = 0; i <= stateStackTop; ++i)
-			{
-				stateStack[i] = temp_stack[i];
-			}
+			System::arraycopy(temp_stack, 0, stateStack, 0, temp_stack.Size());
 			//System.arraycopy(temp_stack, 0, stateStack, 0, temp_stack.length);
 			return 0;
 		}
@@ -852,10 +902,7 @@ int BacktrackingParser::errorRepair(IPrsStream* stream, int recovery_token, int 
 	//
 	//
 	stateStackTop = temp_stack.Size() - 1;
-	for (int i = 0; i <= stateStackTop; ++i)
-	{
-		stateStack[i] = temp_stack[i];
-	}
+	System::arraycopy(temp_stack, 0, stateStack, 0, temp_stack.Size());
 	//System.arraycopy(temp_stack, 0, stateStack, 0, temp_stack.length);
 	stream->reset(recovery_token);
 	tokens->reset(locationStack[stateStackTop] - 1);
@@ -881,4 +928,8 @@ int BacktrackingParser::tAction(int act, int sym)
 	return (act > LA_STATE_OFFSET
 		        ? lookahead(act, tokStream->peek())
 		        : act);
+}
+void BacktrackingParser::reset(TokenStream* tokStream)
+{
+	reset(nullptr, tokStream);
 }

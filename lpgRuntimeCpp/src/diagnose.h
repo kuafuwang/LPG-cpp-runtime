@@ -38,10 +38,7 @@ struct DiagnoseParser :public ParseErrorCodes
         {
         }
 
-        PrimaryRepairInfo(PrimaryRepairInfo& clone)
-        {
-            copy(clone);
-        }
+        PrimaryRepairInfo(PrimaryRepairInfo& clone);
 
         void copy(PrimaryRepairInfo& clone)
         {

@@ -7,13 +7,12 @@
 #include "Monitor.h"
 
 
-RecoveryParser::RecoveryParser(BacktrackingParser* parser, IntSegmentedTuple action, IntTuple tokens,
+RecoveryParser::RecoveryParser(BacktrackingParser* parser, IntSegmentedTuple& _action, IntTuple& _tokens,
                                IPrsStream* tokStream, ParseTable* prs, Monitor* monitor, int maxErrors, long maxTime):
-	DiagnoseParser(tokStream, prs, monitor, maxErrors, maxTime)
+	DiagnoseParser(tokStream, prs, monitor, maxErrors, maxTime), action(action), tokens(tokens)
 {
 	this->parser = parser;
-	this->action = action;
-	this->tokens = tokens;
+
 }
 
 void RecoveryParser::reallocateStacks()
@@ -91,7 +90,7 @@ bool RecoveryParser::fixError(int start_token, int error_token)
 	//
 	// Clear the configuration stack.
 	//
-	main_configuration_stack = std::make_shared<ConfigurationStack>(prs),
+	main_configuration_stack = std::make_shared<ConfigurationStack>(prs);
 
 	//
 	// Keep parsing until we reach the end of file and succeed or
@@ -271,7 +270,10 @@ void RecoveryParser::acceptRecovery(int error_token)
 			}
 			while (baseAction(act) != 0);
 		}
-		else recovery_action.add(act);
+		else
+		{
+			recovery_action.add(act);
+		}
 
 		//
 		// For each action defined on the scope lookahead symbol,
@@ -360,20 +362,16 @@ void RecoveryParser::acceptRecovery(int error_token)
 		}
 		// assert (index < recovery_action.size()); // sanity check!
 		stateStackTop = nextStackTop;
-		for(int i = 0 ; i <= stateStackTop; ++i)
-		{
-			stateStack[i] = nextStack[i];
-			
-		}
+		System::arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
 		//System.arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
 	}
 
 	return;
 }
 
-bool RecoveryParser::completeScope(IntSegmentedTuple action, int scope_rhs_index)
+bool RecoveryParser::completeScope(IntSegmentedTuple& action_arg, int scope_rhs_index)
 {
-	//System.err.println("**Completing a scope");
+	//std::cout << ("**Completing a scope") << std::endl;
 	int kind = scopeRhs(scope_rhs_index);
 	if (kind == 0)
 		return true;
@@ -393,7 +391,7 @@ bool RecoveryParser::completeScope(IntSegmentedTuple action, int scope_rhs_index
 		// if action is a goto-reduce action, save it as a shift-reduce
 		// action.
 		//
-		action.add(act <= NUM_RULES ? act + ERROR_ACTION : act);
+		action_arg.add(act <= NUM_RULES ? act + ERROR_ACTION : act);
 		while (act <= NUM_RULES)
 		{
 			nextStackTop -= (rhs(act) - 1);
@@ -401,8 +399,8 @@ bool RecoveryParser::completeScope(IntSegmentedTuple action, int scope_rhs_index
 		}
 		nextStackTop++;
 		nextStack[nextStackTop] = act;
-		//System.err.println("***Shifting nonterminal " + name(nonterminalIndex(lhs_symbol)));
-		return completeScope(action, scope_rhs_index + 1);
+		//std::cerr <<("***Shifting nonterminal " + name(nonterminalIndex(lhs_symbol))) ;
+		return completeScope(action_arg, scope_rhs_index + 1);
 	}
 
 	//
@@ -412,15 +410,15 @@ bool RecoveryParser::completeScope(IntSegmentedTuple action, int scope_rhs_index
 	// assert(act > NUM_RULES);
 	if (act < ACCEPT_ACTION)
 	{
-		action.add(act); // save this shift action
+		action_arg.add(act); // save this shift action
 		nextStackTop++;
 		nextStack[nextStackTop] = act;
-		//System.err.println("***Shifting terminal " + name(terminalIndex(kind)));
-		return completeScope(action, scope_rhs_index + 1);
+		//std::cout <<("***Shifting terminal " + name(terminalIndex(kind))) << std::endl;
+		return completeScope(action_arg, scope_rhs_index + 1);
 	}
 	else if (act > ERROR_ACTION)
 	{
-		action.add(act); // save this shift-reduce action
+		action_arg.add(act); // save this shift-reduce action
 		act -= ERROR_ACTION;
 		do
 		{
@@ -436,12 +434,12 @@ bool RecoveryParser::completeScope(IntSegmentedTuple action, int scope_rhs_index
 	}
 	else if (act > ACCEPT_ACTION && act < ERROR_ACTION) // conflicting actions?
 	{
-		int save_action_size = action.size(); // Save the current size of the action list
+		int save_action_size = action_arg.size(); // Save the current size of the action list
 		for (int i = act; baseAction(i) != 0; i++) // consider only shift and shift-reduce actions
 		{
-			action.reset(save_action_size);
+			action_arg.reset(save_action_size);
 			act = baseAction(i);
-			action.add(act); // save this terminal action
+			action_arg.add(act); // save this terminal action
 			if (act <= NUM_RULES)
 			{
 				// Ignore reduce actions
@@ -453,7 +451,7 @@ bool RecoveryParser::completeScope(IntSegmentedTuple action, int scope_rhs_index
 				nextStackTop++;
 				nextStack[nextStackTop] = act;
 				//System.err.println("***(2)Shifting terminal " + name(terminalIndex(kind)));
-				if (completeScope(action, scope_rhs_index + 1))
+				if (completeScope(action_arg, scope_rhs_index + 1))
 					return true;
 			}
 			else if (act > ERROR_ACTION)

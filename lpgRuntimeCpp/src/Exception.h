@@ -14,11 +14,15 @@ struct UnsupportedOperationException :public std::exception
     {
         str = "UnsupportedOperationException";
     }
-    UnsupportedOperationException(const std::string& str)
+    UnsupportedOperationException(const std::string& str):std::exception(str.c_str())
     {
         this->str = str;
     }
     std::string toString() { return str; }
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
 };
 struct NullTerminalSymbolsException :public std::exception
 {
@@ -27,7 +31,10 @@ struct NullTerminalSymbolsException :public std::exception
      */
 
     std::string str;
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     NullTerminalSymbolsException()
     {
         str = "NullTerminalSymbolsException";
@@ -45,7 +52,10 @@ struct NullExportedSymbolsException :public std::exception
      */
 
     std::string str;
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     NullExportedSymbolsException()
     {
         str = "NullExportedSymbolsException";
@@ -61,7 +71,10 @@ struct NotDeterministicParseTableException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     NotDeterministicParseTableException()
@@ -79,7 +92,10 @@ struct NotBacktrackParseTableException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     NotBacktrackParseTableException()
@@ -97,7 +113,10 @@ struct MismatchedInputCharsException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     MismatchedInputCharsException()
@@ -115,7 +134,10 @@ struct BadParseSymFileException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     BadParseSymFileException()
@@ -133,7 +155,10 @@ struct TokenStreamNotIPrsStreamException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     TokenStreamNotIPrsStreamException()
@@ -151,7 +176,10 @@ struct UnavailableParserInformationException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     UnavailableParserInformationException()
@@ -169,7 +197,10 @@ struct UndefinedEofSymbolException :public std::exception
     /**
      *
      */
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     std::string str;
 
     UndefinedEofSymbolException()
@@ -207,7 +238,10 @@ struct UnknownStreamType :public std::exception
      */
 
     std::string str;
-
+    char const* what() const override
+    {
+        return  str.c_str();
+    }
     UnknownStreamType()
     {
         str = "UnknownStreamType";

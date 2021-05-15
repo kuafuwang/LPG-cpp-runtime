@@ -37,26 +37,15 @@ struct IToken
   virtual     std::vector<IToken*> getFollowingAdjuncts()=0;
 
   virtual     ILexStream* getILexStream()=0;
-    /**
-     * @deprecated replaced by {@link #getILexStream()}
-     */
-  virtual      ILexStream* getLexStream()=0;
+   
 
   virtual      IPrsStream* getIPrsStream()=0;
-    /**
-     * @deprecated replaced by {@link #getIPrsStream()}
-     */
-  virtual     IPrsStream* getPrsStream()=0;
+  
 
   virtual      int getLine()=0;
   virtual      int getColumn()=0;
   virtual      int getEndLine()=0;
   virtual      int getEndColumn()=0;
-
-    /**
-     * @deprecated replaced by toString()
-     */
-  virtual     std::wstring getValue(std::vector<wchar_t>& inputChars)=0;
 
   virtual      std::wstring toString()=0;
   std::string to_utf8_string();

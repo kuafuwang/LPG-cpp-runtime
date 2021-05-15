@@ -4,12 +4,11 @@
 #include "ParseTable.h"
 #include "StateElement.h"
 
-ConfigurationStack::ConfigurationStack(ParseTable* prs): configuration_stack(1 << 12), max_configuration_size(0),
-                                                         stacks_size(0),
-                                                         state_element_size(0), table(TABLE_SIZE)
+ConfigurationStack::ConfigurationStack(ParseTable* _prs): table(TABLE_SIZE), configuration_stack(1 << 12),
+                                                         max_configuration_size(0),
+                                                         stacks_size(0), state_element_size(0), prs(_prs)
 {
-	this->prs = prs;
-
+	
 	state_element_size++;
 
 	state_root = new StateElement();
@@ -17,6 +16,19 @@ ConfigurationStack::ConfigurationStack(ParseTable* prs): configuration_stack(1 <
 	state_root->siblings = nullptr;
 	state_root->children = nullptr;
 	state_root->number = prs->getStartState();
+	state_pool.push_back(state_root);
+}
+
+ConfigurationStack::~ConfigurationStack()
+{
+	for(auto& it : state_pool)
+	{
+		delete it;
+	}
+	for (auto& it : configuration_element_pool)
+	{
+		delete it;
+	}
 }
 
 StateElement* ConfigurationStack::makeStateList(StateElement* parent, Array<int>& stack, int index, int stack_top)
@@ -26,6 +38,7 @@ StateElement* ConfigurationStack::makeStateList(StateElement* parent, Array<int>
 		state_element_size++;
 
 		StateElement* state = new StateElement();
+		state_pool.push_back(state);
 		state->number = stack[i];
 		state->parent = parent;
 		state->children = nullptr;
@@ -55,6 +68,7 @@ StateElement* ConfigurationStack::findOrInsertStack(StateElement* root, Array<in
 	state_element_size++;
 
 	StateElement* node = new StateElement();
+	state_pool.push_back(node);
 	node->number = state_number;
 	node->parent = root->parent;
 	node->children = nullptr;
@@ -81,6 +95,8 @@ bool ConfigurationStack::findConfiguration(Array<int>& stack, int stack_top, int
 void ConfigurationStack::push(Array<int>& stack, int stack_top, int conflict_index, int curtok, int action_length)
 {
 	ConfigurationElement* configuration = new ConfigurationElement();
+	configuration_element_pool.push_back(configuration);
+	
 	int hash_address = curtok % TABLE_SIZE;
 	configuration->next = table[hash_address];
 	table[hash_address] = configuration;

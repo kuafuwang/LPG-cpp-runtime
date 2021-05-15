@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "TokenStream.h"
 
 struct IPrsStream;
@@ -73,5 +75,5 @@ struct ILexStream : public TokenStream
 
    virtual void reportLexicalError(int errorCode, int left_loc, int right_loc, int error_left_loc, int error_right_loc, const std::vector<std::wstring>& errorInfo)=0;
 
-   virtual std::wstring toString(int startOffset, int endOffset)=0;
+   
 };

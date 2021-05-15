@@ -8,8 +8,7 @@
 
 DeterministicParser::~DeterministicParser()
 {
-	delete action;
-	action = nullptr;
+	
 }
 
 int DeterministicParser::lookahead(int act, int token)
@@ -102,12 +101,13 @@ void DeterministicParser::reset()
 void DeterministicParser::reset(Monitor* monitor, TokenStream* tokStream)
 {
 	this->monitor = monitor;
-	this->tokStream = (TokenStream*)tokStream;
+	this->tokStream = tokStream;
 
 	reset();
 }
 
-void DeterministicParser::reset(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
+void DeterministicParser::reset(Monitor* monitor, TokenStream* tokStream,
+                                ParseTable* prs, RuleAction* ra)
 {
 	reset(monitor, tokStream);
 
@@ -280,7 +280,7 @@ Object* DeterministicParser::parseActions()
 	}
 
 	taking_actions = false; // indicate that we are done.
-	delete action;
+	
 	action = nullptr; // turn into garbage
 	return parseStack[markerKind == 0 ? 0 : 1];
 }
@@ -294,8 +294,8 @@ Object* DeterministicParser::parseActions()
 	
 	stateStackTop = 0;
 	stateStack[stateStackTop] = START_STATE;
-	if (action == nullptr)
-		action = new IntTuple(1 << 20);
+	if (!action)
+		action = std::make_shared<IntTuple>(1 << 20);
 	else action->reset();
 
 	//

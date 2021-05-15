@@ -8,6 +8,9 @@ struct ConfigurationElement;
 
 struct ConfigurationStack
 {
+    std::vector< StateElement*> state_pool;
+    std::vector< ConfigurationElement*> configuration_element_pool;
+	
      constexpr  static int TABLE_SIZE = 1021; // 1021 is a prime
      Array<ConfigurationElement*>  table;
      Tuple<ConfigurationElement*> configuration_stack;
@@ -16,10 +19,11 @@ struct ConfigurationStack
         stacks_size,
         state_element_size;
 
-    ParseTable* prs;
+     ParseTable* prs;
 
-     ConfigurationStack(ParseTable* prs);
-
+     ConfigurationStack(ParseTable* _prs);
+     ~ConfigurationStack();
+	
      StateElement* makeStateList(StateElement* parent, Array<int>& stack, int index, int stack_top);
 
      StateElement* findOrInsertStack(StateElement* root, Array<int>& stack, int index, int stack_top);

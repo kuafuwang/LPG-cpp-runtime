@@ -75,7 +75,7 @@ struct IPrsStream :public  TokenStream
 
     virtual    int getSize()=0;
 
-    virtual    void remapTerminalSymbols(std::vector<std::wstring>ordered_parser_symbols, int eof_symbol)=0;
+    virtual    void remapTerminalSymbols(const std::vector<std::wstring>& ordered_parser_symbols, int eof_symbol)=0;
   
     virtual    std::vector<std::wstring> orderedTerminalSymbols()=0;
 

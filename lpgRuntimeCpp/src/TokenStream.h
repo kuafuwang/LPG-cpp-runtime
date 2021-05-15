@@ -53,4 +53,8 @@ struct TokenStream
   virtual void reportError(int errorCode, int leftToken, int rightToken, const std::vector< std::wstring>&  errorInfo)=0;
 
   virtual void reportError(int errorCode, int leftToken, int errorToken, int rightToken,const std::vector< std::wstring>& errorInfo)=0;
+
+  virtual std::wstring toString(int startOffset, int endOffset) = 0;
+	
+  std::string to_utf8_string(int startOffset, int endOffset);
 };

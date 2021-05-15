@@ -9,11 +9,16 @@
 #include "stringex.h"
 #include "TokenStream.h"
 
+DiagnoseParser::PrimaryRepairInfo::PrimaryRepairInfo(PrimaryRepairInfo& clone)
+{
+	copy(clone);
+}
+
 DiagnoseParser::SecondaryRepairInfo::SecondaryRepairInfo(): code(0), distance(0), bufferPosition(0), stackPosition(0),
                                                             numDeletions(0),
                                                             symbol(0),
                                                             recoveryOnNextStack(false
-															)
+                                                            )
 {
 }
 
@@ -707,7 +712,10 @@ int DiagnoseParser::parseCheck(Array<int>& stack, int stack_top, int first_symbo
 
 DiagnoseParser::RepairCandidate DiagnoseParser::errorRecovery(int error_token)
 {
-
+	if(error_token == 5410)
+	{
+		error_token = 5410;
+	}
 	int prevtok = tokStream->getPrevious(error_token);
 
 	//

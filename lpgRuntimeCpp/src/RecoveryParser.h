@@ -9,8 +9,8 @@ struct RecoveryParser :
 
     
         BacktrackingParser* parser;
-        IntSegmentedTuple action;
-        IntTuple tokens;
+        IntSegmentedTuple& action;
+        IntTuple& tokens;
         Array<int> actionStack;
         PrimaryRepairInfo scope_repair;
 
@@ -24,7 +24,7 @@ struct RecoveryParser :
         // maxTime is the maximum amount of time allowed for diagnosing
         // but at least one error must be diagnosed 
         //
-        RecoveryParser(BacktrackingParser* parser, IntSegmentedTuple action, IntTuple tokens, IPrsStream* tokStream,
+        RecoveryParser(BacktrackingParser* parser, IntSegmentedTuple& _action, IntTuple& _tokens, IPrsStream* tokStream,
                        ParseTable* prs, Monitor* monitor = nullptr, int maxErrors = 0, long maxTime = 0);
 
         void reallocateStacks();
@@ -59,6 +59,6 @@ struct RecoveryParser :
         //
         //
         //
-        bool completeScope(IntSegmentedTuple action, int scope_rhs_index);
+        bool completeScope(IntSegmentedTuple& action_arg, int scope_rhs_index);
 };
 

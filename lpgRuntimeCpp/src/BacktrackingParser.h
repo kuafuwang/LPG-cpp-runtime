@@ -12,23 +12,23 @@ struct
 BacktrackingParser :
     public Stacks
 {
-    Monitor* monitor;
-    int START_STATE,
-        NUM_RULES,
-        NT_OFFSET,
-        LA_STATE_OFFSET,
-        EOFT_SYMBOL,
-        ERROR_SYMBOL,
-        ACCEPT_ACTION,
-        ERROR_ACTION;
+     Monitor* monitor;
+    int START_STATE;
+    int NUM_RULES;
+    int NT_OFFSET;
+    int LA_STATE_OFFSET;
+    int EOFT_SYMBOL;
+    int ERROR_SYMBOL;
+    int ACCEPT_ACTION;
+    int ERROR_ACTION;
 
     int lastToken,
         currentAction;
-    TokenStream* tokStream;
-    ParseTable* prs;
-    RuleAction* ra;
+    TokenStream* tokStream = nullptr;
+    ParseTable* prs = nullptr;
+    RuleAction* ra = nullptr;
     IntSegmentedTuple* action = new IntSegmentedTuple(10, 1024); // IntTuple(1 << 20),
-    IntTuple* tokens = nullptr;
+    std::shared_ptr< IntTuple>  tokens = nullptr;
     Array<int> actionStack;
     bool skipTokens = false; // true if error productions are used to skip tokens
 
@@ -43,49 +43,37 @@ BacktrackingParser :
     //
     // Override the getToken function in Stacks.
     //
-    int getToken(int i)
-    {
-        return tokens->get(locationStack[stateStackTop + (i - 1)]);
-    }
+    int getToken(int i);
 
-    int getCurrentRule() { return currentAction; }
+    int getCurrentRule();
     int getFirstToken();
     int getFirstToken(int i);
     int getLastToken();
 
     int getLastToken(int i);
 
-    void setMonitor(Monitor* monitor) { this->monitor = monitor; }
+    void setMonitor(Monitor* monitor);
 
     void reset();
 
     void reset(Monitor* monitor, TokenStream* tokStream);
 
 
-    void reset(TokenStream* tokStream)
-    {
-        reset(nullptr, tokStream);
-    }
+    void reset(TokenStream* tokStream);
 
 
     void reset(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra);
 
-        void reset(TokenStream* tokStream, ParseTable* prs, RuleAction* ra) 
+     void reset(TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
     {
         reset(nullptr, tokStream, prs, ra);
     }
+        ~BacktrackingParser();
+    BacktrackingParser();
 
-        BacktrackingParser() {}
+    BacktrackingParser(TokenStream* tokStream, ParseTable* prs, RuleAction* ra);
 
-    BacktrackingParser(TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
-    {
-        reset(nullptr, tokStream, prs, ra);
-    }
-
-        BacktrackingParser(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra) 
-    {
-        reset(monitor, tokStream, prs, ra);
-    }
+    BacktrackingParser(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra);
 
         //
         // Allocate or reallocate all the stacks. Their sizes should always be the same.
@@ -115,7 +103,7 @@ BacktrackingParser :
         int scopeIndex,
             errorToken;
     };
-    std::vector<ErrorPair>* errors = nullptr;
+    std::shared_ptr<std::vector<ErrorPair>>  errors;
     void reportErrors();
 
     void addRecoveryError(int scope_index, int error_index);
@@ -215,4 +203,5 @@ BacktrackingParser :
     //
     int tAction(int act, int sym);
 };
+
 

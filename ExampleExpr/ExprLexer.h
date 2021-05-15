@@ -6,14 +6,14 @@
 #include "ExprLexerprs.h"
 #include "ExprLexersym.h"
 #include "ExprParsersym.h"
-#include "src/IPrsStream.h"
-#include "src/LexParser.h"
-#include "src/LexStream.h"
-#include "src/ParseTable.h"
-#include "src/RuleAction.h"
-#include "src/LpgLexStream.h"
+#include "IPrsStream.h"
+#include "LexParser.h"
+#include "LexStream.h"
+#include "ParseTable.h"
+#include "RuleAction.h"
+#include "LpgLexStream.h"
 #include "ExprLexerprs.h"
-#include "src/IToken.h"
+#include "IToken.h"
     //#line 128 "LexerTemplateD.g
 
  struct ExprLexer :public LpgLexStream ,public ExprParsersym, public ExprLexersym,public RuleAction
@@ -95,7 +95,7 @@
      * simply report a lexical error. Otherwise, we produce a bad token.
      */
      void reportLexicalError(int startLoc, int endLoc) {
-        IPrsStream *prs_stream = getPrsStream();
+        IPrsStream *prs_stream = getIPrsStream();
         if (prs_stream == nullptr)
             LpgLexStream ::reportLexicalError(startLoc, endLoc);
         else {

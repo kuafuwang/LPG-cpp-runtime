@@ -31,11 +31,11 @@ struct DeterministicParser :
    
 
 	
-    IntTuple* action = nullptr;
+    std::shared_ptr< IntTuple> action ;
 
-    TokenStream* tokStream=nullptr;
+    TokenStream*  tokStream=nullptr;
     ParseTable* prs = nullptr;
-    RuleAction* ra = nullptr;;
+    RuleAction*  ra = nullptr;
 
     //
     // keep looking ahead until we compute a valid action
@@ -98,19 +98,19 @@ struct DeterministicParser :
 
     void reset(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra);
 
-        void reset(TokenStream* tokStream, ParseTable* prs, RuleAction* ra) 
+     void reset(TokenStream* tokStream,ParseTable* prs, RuleAction* ra)
     {
         reset(nullptr, tokStream, prs, ra);
     }
 
     DeterministicParser() = default;
 
-    DeterministicParser(TokenStream* tokStream, ParseTable* prs, RuleAction* ra) 
+    DeterministicParser(TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
     {
         reset(nullptr, tokStream, prs, ra);
     }
 
-        DeterministicParser(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra) 
+        DeterministicParser(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
     {
         reset(monitor, tokStream, prs, ra);
     }

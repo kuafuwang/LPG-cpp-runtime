@@ -9,7 +9,7 @@
 
 void LexStream::this_init()
 {
-	lineOffsets.Resize(12);
+	lineOffsets->Resize(12);
 	setLineOffset(-1);
 }
 
@@ -19,13 +19,13 @@ void LexStream::this_tab(int tab)
 	this_init();
 }
 
-LexStream::LexStream(IntSegmentedTuple lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name)
+LexStream::LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name)
 {
 	this_init();
 	initialize(lineOffsets, inputChars, inputChars.size(), file_name);
 }
 
-LexStream::LexStream(IntSegmentedTuple lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
+LexStream::LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
                      const std::wstring& file_name)
 {
 	this_init();
@@ -50,8 +50,8 @@ void LexStream::initialize(const std::wstring& file_name)
 void LexStream::computeLineOffsets(int offset)
 {
 	int line = getLineNumberOfCharAt(offset), // The line containing the offset character
-	    line_offset = lineOffsets.get(line); // the beginnning character of the line containing the offset character
-	lineOffsets.reset(line + 1);
+	    line_offset = lineOffsets->get(line); // the beginnning character of the line containing the offset character
+	lineOffsets->reset(line + 1);
 	for (int i = line_offset + 1; i < inputChars_.size(); i++)
 		if (inputChars_[i] == 0x0A) setLineOffset(i);
 }
@@ -68,7 +68,7 @@ IPrsStream* LexStream::getPrsStream()
 
 int LexStream::getLineNumberOfCharAt(int i)
 {
-	int index = binarySearch(lineOffsets,i);
+	int index = binarySearch(*(lineOffsets.get()),i);
 	return index < 0 ? -index : index == 0 ? 1 : index;
 }
 

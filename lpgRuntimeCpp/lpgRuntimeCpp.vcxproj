@@ -27,13 +27,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,9 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin</OutDir>
+    <TargetName>lpg_MDD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin</OutDir>
+    <TargetName>lpg_MD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -155,15 +159,8 @@
     <ClCompile Include="src\RecoveryParser.cpp" />
     <ClCompile Include="src\Stacks.cpp" />
     <ClCompile Include="src\Token.cpp" />
-    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExprLexer.h" />
-    <ClInclude Include="ExprLexerprs.h" />
-    <ClInclude Include="ExprLexersym.h" />
-    <ClInclude Include="ExprParser.h" />
-    <ClInclude Include="ExprParserprs.h" />
-    <ClInclude Include="ExprParsersym.h" />
     <ClInclude Include="src\AbstractToken.h" />
     <ClInclude Include="src\Adjunct.h" />
     <ClInclude Include="src\BacktrackingParser.h" />
@@ -195,7 +192,6 @@
     <ClInclude Include="src\RuleAction.h" />
     <ClInclude Include="src\Stacks.h" />
     <ClInclude Include="src\StateElement.h" />
-    <ClInclude Include="src\StoragePool.h" />
     <ClInclude Include="src\stringex.h" />
     <ClInclude Include="src\Token.h" />
     <ClInclude Include="src\TokenStream.h" />

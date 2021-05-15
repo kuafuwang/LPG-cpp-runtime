@@ -1,11 +1,11 @@
-
+﻿
 
 #include <iostream>
 #include <ostream>
 
 #include "ExprLexer.h"
 #include "ExprParser.h"
-#include "src/IMessageHandler.h"
+#include "IMessageHandler.h"
 
 struct MessageHandle : public IMessageHandler
 {
@@ -25,13 +25,13 @@ struct MessageHandle : public IMessageHandler
 int main(void)
 {
     int idd = 2;
-    MessageHandle handle;
+    MessageHandle  handle;
   
     typedef  unsigned char byte;
     ExprLexer lex(LR"(C:\Users\kuafu\source\repos\lpg2\Debug\jikespg.g)",4);
-   // lex.setMessageHandler(&handle);
+   //lex.setMessageHandler(&handle);
     ExprParser  prs(&lex);
-  //  prs.setMessageHandler(&handle);
+   // prs.setMessageHandler(&handle);
     lex.lexer(&prs);
     prs.parser();
    

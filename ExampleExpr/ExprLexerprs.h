@@ -1,8 +1,9 @@
 #pragma once
  #include <string>
   #include "ExprLexersym.h"
+#include "ParseTable.h"
 
-#include "src/ParseTable.h"
+
 
 struct ExprLexerprs :public ParseTable,public ExprLexersym {
              typedef  unsigned char byte;

@@ -21,7 +21,7 @@ struct LexStream :
     shared_ptr_array<wchar_t>  inputChars_;
     std::wstring fileName_;
 	
-    IntSegmentedTuple lineOffsets;
+    std::shared_ptr<IntSegmentedTuple>  lineOffsets = std::make_shared<IntSegmentedTuple>();
 	
     int tab_ = DEFAULT_TAB;
 
@@ -52,9 +52,9 @@ struct LexStream :
         initialize(inputChars, inputLength, file_name);
     }
 
-    LexStream(IntSegmentedTuple lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name);
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name);
 
-    LexStream(IntSegmentedTuple lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
               const std::wstring& file_name);
 
     LexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name, int tab);
@@ -65,13 +65,13 @@ struct LexStream :
         initialize(inputChars, inputLength, fileName);
     }
 
-    LexStream(IntSegmentedTuple lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName, int tab)
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName, int tab)
     {
         this_tab(tab);
         initialize(lineOffsets, inputChars, inputChars.size(), fileName);
     }
 
-    LexStream(IntSegmentedTuple lineOffsets, std::vector<wchar_t> inputChars, int inputLength, const std::wstring& fileName, int tab)
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, std::vector<wchar_t> inputChars, int inputLength, const std::wstring& fileName, int tab)
     {
         this_tab(tab);
         initialize(lineOffsets, inputChars, inputLength, fileName);
@@ -92,12 +92,12 @@ struct LexStream :
         computeLineOffsets();
     }
 
-    void initialize(IntSegmentedTuple lineOffsets_, shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName)
+    void initialize(std::shared_ptr< IntSegmentedTuple>& lineOffsets_, shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName)
     {
         initialize(lineOffsets_, inputChars, inputChars.size(), fileName);
     }
 
-    void initialize(IntSegmentedTuple lineOffsets_, shared_ptr_array<wchar_t> inputChars, int inputLength, const std::wstring& fileName)
+    void initialize(std::shared_ptr< IntSegmentedTuple>& lineOffsets_, shared_ptr_array<wchar_t> inputChars, int inputLength, const std::wstring& fileName)
     {
         this->lineOffsets = lineOffsets_;
         setInputChars(inputChars);
@@ -107,7 +107,7 @@ struct LexStream :
 
     void computeLineOffsets()
     {
-        lineOffsets.reset();
+        lineOffsets->reset();
         setLineOffset(-1);
         for (int i = 0; i < inputChars_.size(); i++)
             if (inputChars_[i] == 0x0A) setLineOffset(i);
@@ -134,12 +134,12 @@ struct LexStream :
 
     std::wstring getFileName() { return fileName_; }
 
-    void setLineOffsets(IntSegmentedTuple lineOffsets)
+    void setLineOffsets(std::shared_ptr< IntSegmentedTuple>& lineOffsets)
     {
 	    this->lineOffsets = lineOffsets;
     }
 
-    IntSegmentedTuple& getLineOffsets() { return lineOffsets; }
+    std::shared_ptr<IntSegmentedTuple> getLineOffsets() { return lineOffsets; }
 
     void setTab(int tab) { this->tab_ = tab; }
 
@@ -158,7 +158,7 @@ struct LexStream :
 
     void setLineOffset(int i)
     {
-        lineOffsets.add(i);
+        lineOffsets->add(i);
     }
 
     /**
@@ -177,7 +177,7 @@ struct LexStream :
      *     ... getLineOffsetofLine(line_number) ...
      *
      */
-    int getLineOffset(int i) { return lineOffsets.get(i); }
+    int getLineOffset(int i) { return lineOffsets->get(i); }
 
     /**
      *
@@ -188,7 +188,7 @@ struct LexStream :
      * That is because lines are numbered from 1..MAX_LINE_NUMBER, whereas the lineOffsets
      * table is indexed from 0..MAX_LINE_NUMBER-1.
      */
-    int getLineOffsetOfLine(int line_number) { return lineOffsets.get(line_number - 1); }
+    int getLineOffsetOfLine(int line_number) { return lineOffsets->get(line_number - 1); }
 
     void setPrsStream(IPrsStream* prsStream);
 
@@ -210,14 +210,14 @@ struct LexStream :
      *
      */
     int getLine() { return getLineCount(); }
-    int getLineCount() { return lineOffsets.size(); }
+    int getLineCount() { return lineOffsets->size(); }
 
     int getLineNumberOfCharAt(int i);
 
     int getColumnOfCharAt(int i)
     {
         int lineNo = getLineNumberOfCharAt(i),
-            start = lineOffsets.get(lineNo - 1);
+            start = lineOffsets->get(lineNo - 1);
         if (start + 1 >= streamLength_) return 1;
         for (int k = start + 1; k < i; k++)
         {
@@ -352,7 +352,7 @@ struct LexStream :
         const std::vector<std::wstring>& errorInfo);
 
     std::wstring toString(int startOffset, int endOffset);
-
+   
 private:
     void this_init(); // can be used with explicit initialize call
 

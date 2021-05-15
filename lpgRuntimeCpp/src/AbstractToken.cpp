@@ -5,7 +5,71 @@
 #include "IPrsStream.h"
 #include <typeinfo>
 
+#include "Adjunct.h"
 #include "LexStream.h"
+
+AbstractToken::AbstractToken(IPrsStream* iPrsStream, int startOffset, int endOffset, int kind)
+{
+	this->iPrsStream = iPrsStream;
+	this->startOffset = startOffset;
+	this->endOffset = endOffset;
+	this->kind = kind;
+}
+
+int AbstractToken::getKind()
+{
+	return kind;
+}
+
+void AbstractToken::setKind(int kind)
+{
+	this->kind = kind;
+}
+
+int AbstractToken::getStartOffset()
+{
+	return startOffset;
+}
+
+void AbstractToken::setStartOffset(int start_offset)
+{
+	this->startOffset = start_offset;
+}
+
+int AbstractToken::getEndOffset()
+{
+	return endOffset;
+}
+
+void AbstractToken::setEndOffset(int endOffset)
+{
+	this->endOffset = endOffset;
+}
+
+int AbstractToken::getTokenIndex()
+{
+	return tokenIndex;
+}
+
+void AbstractToken::setTokenIndex(int tokenIndex)
+{
+	this->tokenIndex = tokenIndex;
+}
+
+void AbstractToken::setAdjunctIndex(int adjunctIndex)
+{
+	this->adjunctIndex = adjunctIndex;
+}
+
+int AbstractToken::getAdjunctIndex()
+{
+	return adjunctIndex;
+}
+
+IPrsStream* AbstractToken::getIPrsStream()
+{
+	return iPrsStream;
+}
 
 ILexStream* AbstractToken::getILexStream()
 {
@@ -32,29 +96,6 @@ int AbstractToken::getEndColumn()
 	return (iPrsStream == nullptr ? 0 : iPrsStream->getILexStream()->getColumnOfCharAt(endOffset));
 }
 
-ILexStream* AbstractToken::getLexStream()
-{
-	return iPrsStream == nullptr ? nullptr : iPrsStream->getILexStream();
-}
-
-std::wstring AbstractToken::getValue(std::vector<wchar_t>& inputChars)
-{
-	if (iPrsStream != nullptr)
-		return toString();
-	if (
-		 dynamic_cast<LexStream*> ( iPrsStream->getLexStream() ))
-	{
-		auto lex_stream = (LexStream*)iPrsStream->getLexStream();
-		//if (inputChars != lex_stream->getInputChars().data())
-		//	throw  MismatchedInputCharsException();
-		return toString();
-	}
-	const type_info& nInfo = typeid(iPrsStream->getLexStream());
-	std::string temp = "Unknown stream type ";
-	temp =+nInfo.name();
-	throw  UnknownStreamType(temp);
-}
-
 std::wstring AbstractToken::toString()
 {
 	return (iPrsStream == nullptr
@@ -62,3 +103,17 @@ std::wstring AbstractToken::toString()
 		        : iPrsStream->toString(this, this));
 }
 
+ Adjunct::Adjunct(IPrsStream* prsStream, int startOffset, int endOffset, int kind) : AbstractToken(
+	prsStream, startOffset, endOffset, kind)
+{
+}
+
+std::vector<IToken*> Adjunct::getFollowingAdjuncts()
+{
+	return {};
+}
+
+std::vector<IToken*> Adjunct::getPrecedingAdjuncts()
+{
+	return {};
+}
