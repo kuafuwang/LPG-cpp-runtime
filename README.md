@@ -1,4 +1,4 @@
-# LPGRuntimeCpp
+# LPG-cpp-runtime
 C++ runtime for LPG 2.0
 
 ## About
