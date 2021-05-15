@@ -85,6 +85,7 @@ void PrsStream::makeToken(int startLoc, int endLoc, int kind)
 	token->setTokenIndex(tokens.size());
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
+	
 }
 
 void PrsStream::makeToken(IToken* token, int offset_adjustment)
@@ -96,6 +97,7 @@ void PrsStream::makeToken(IToken* token, int offset_adjustment)
 
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
+
 }
 
 void PrsStream::removeLastToken()
@@ -138,7 +140,7 @@ int PrsStream::makeErrorToken(int firsttok, int lasttok, int errortok, int kind)
 	token->setTokenIndex(tokens.size());
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
-
+	
 	return index;
 }
 
@@ -147,6 +149,7 @@ void PrsStream::addToken(IToken* token)
 	token->setTokenIndex(tokens.size());
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
+	
 }
 
 void PrsStream::makeAdjunct(int startLoc, int endLoc, int kind)

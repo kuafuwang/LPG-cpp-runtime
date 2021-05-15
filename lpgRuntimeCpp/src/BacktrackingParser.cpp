@@ -138,7 +138,7 @@ void BacktrackingParser::reportErrors()
 {
 	if (errors == nullptr) return;
 	
-	for (int k = 0; k < errors->size(); k++)
+	for (size_t k = 0; k < errors->size(); k++)
 	{
 		ErrorPair error = (ErrorPair)errors->at(k);
 		int scope_index = error.scopeIndex,

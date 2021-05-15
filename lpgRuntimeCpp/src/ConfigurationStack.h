@@ -10,7 +10,7 @@ struct ConfigurationStack
 {
      constexpr  static int TABLE_SIZE = 1021; // 1021 is a prime
      Array<ConfigurationElement*>  table;
-     ObjectTuple configuration_stack;
+     Tuple<ConfigurationElement*> configuration_stack;
      StateElement* state_root;
      int max_configuration_size,
         stacks_size,

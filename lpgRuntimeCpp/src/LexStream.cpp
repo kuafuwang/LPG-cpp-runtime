@@ -5,6 +5,8 @@
 #include "IMessageHandler.h"
 #include "IPrsStream.h"
 #include "IcuUtil.h"
+#include "stringex.h"
+
 void LexStream::this_init()
 {
 	lineOffsets.Resize(12);
@@ -131,26 +133,34 @@ void LexStream::reportLexicalError(int errorCode, int left_loc, int right_loc, i
 {
 	if (errMsg == nullptr)
 	{
-		std::wstring locationInfo = getFileName() + L":";
-	
-		locationInfo.push_back(getLineNumberOfCharAt(left_loc));
+		std::wstringex locationInfo = getFileName() + L":";
+		std::wstringex fomat;
+		fomat.format(L"%d",getLineNumberOfCharAt(left_loc));
+		locationInfo += fomat;
 		locationInfo += L":";
 		
-		locationInfo.push_back(getColumnOfCharAt(left_loc));
+		fomat.format(L"%d", getColumnOfCharAt(left_loc));
+		locationInfo += fomat;
 		locationInfo.push_back(':');
 		
-		locationInfo.push_back(getLineNumberOfCharAt(right_loc));
+		fomat.format(L"%d", getLineNumberOfCharAt(right_loc));
+		locationInfo += fomat;
 		locationInfo += L":";
-		locationInfo.push_back(getColumnOfCharAt(right_loc));
+		fomat.format(L"%d", getColumnOfCharAt(right_loc));
+		locationInfo += fomat;
 		locationInfo.push_back(':');
 		
-		locationInfo.push_back(error_left_loc);
+		fomat.format(L"%d", error_left_loc);
+		locationInfo += fomat;
 		locationInfo.push_back(':');
 		
-		locationInfo.push_back(error_right_loc);
+		fomat.format(L"%d", error_right_loc);
+		locationInfo += fomat;
 		locationInfo.push_back(':');
 		
-		locationInfo.push_back(errorCode);
+		
+		fomat.format(L"%d", errorCode);
+		locationInfo += fomat;
 		locationInfo.push_back(':');
 
 		std::wcout << (L"****Error: " + locationInfo);
@@ -159,7 +169,7 @@ void LexStream::reportLexicalError(int errorCode, int left_loc, int right_loc, i
 			for (int i = 0; i < errorInfo.size(); i++)
 				std::wcout << (errorInfo[i] + L" ");
 		}
-		std::wcout<< (errorMsgText[errorCode]);
+		std::wcout<< (errorMsgText[errorCode]) << std::endl	;
 	}
 	else
 	{

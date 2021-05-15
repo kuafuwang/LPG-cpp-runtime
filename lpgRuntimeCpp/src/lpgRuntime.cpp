@@ -10,20 +10,20 @@
 #include "tuple.h"
 const  std::vector< std::wstring> ParseErrorCodes::errorMsgText =
 {
-    /* LEX_ERROR_CODE */                      (L"ParseErrorCodes.LEX_ERROR_CODE"), //$NON-NLS-1$
-    /* ERROR_CODE */                          (L"ParseErrorCodes.ERROR_CODE"), //$NON-NLS-1$
-    /* BEFORE_CODE */                         (L"ParseErrorCodes.BEFORE_CODE"), //$NON-NLS-1$
-    /* INSERTION_CODE */                      (L"ParseErrorCodes.INSERTION_CODE"), //$NON-NLS-1$
-    /* INVALID_CODE */                        (L"ParseErrorCodes.INVALID_CODE"), //$NON-NLS-1$
-    /* SUBSTITUTION_CODE, SECONDARY_CODE */   (L"ParseErrorCodes.SUBSTITUTION_CODE"), //$NON-NLS-1$
-    /* DELETION_CODE */                       (L"ParseErrorCodes.DELETION_CODE"), //$NON-NLS-1$
-    /* MERGE_CODE */                          (L"ParseErrorCodes.MERGE_CODE"), //$NON-NLS-1$
-    /* MISPLACED_CODE */                      (L"ParseErrorCodes.MISPLACED_CODE"), //$NON-NLS-1$
-    /* SCOPE_CODE */                          (L"ParseErrorCodes.SCOPE_CODE"), //$NON-NLS-1$
-    /* EOF_CODE */                            (L"ParseErrorCodes.EOF_CODE"), //$NON-NLS-1$
-    /* INVALID_TOKEN_CODE, ERROR_RULE_ERROR */(L"ParseErrorCodes.INVALID_TOKEN_CODE"), //$NON-NLS-1$
-    /* ERROR_RULE_WARNING */                  (L"ParseErrorCodes.ERROR_RULE_WARNING"), //$NON-NLS-1$
-    /* NO_MESSAGE_CODE */                     (L"ParseErrorCodes.NO_MESSAGE_CODE") //$NON-NLS-1$
+    /* LEX_ERROR_CODE */                      (L"unexpected character ignored"), //$NON-NLS-1$
+    /* ERROR_CODE */                          (L"parsing terminated at this token"), //$NON-NLS-1$
+    /* BEFORE_CODE */                         (L"{0} inserted before this token"), //$NON-NLS-1$
+    /* INSERTION_CODE */                      (L"{0} expected after this token"), //$NON-NLS-1$
+    /* INVALID_CODE */                        (L"unexpected input discarded"), //$NON-NLS-1$
+    /* SUBSTITUTION_CODE, SECONDARY_CODE */   (L"{0} expected instead of this input"), //$NON-NLS-1$
+    /* DELETION_CODE */                       (L"{0} unexpected token(s) ignored"), //$NON-NLS-1$
+    /* MERGE_CODE */                          (L"{0} formed from merged tokens"), //$NON-NLS-1$
+    /* MISPLACED_CODE */                      (L"misplaced construct(s)"), //$NON-NLS-1$
+    /* SCOPE_CODE */                          (L"{0} inserted to complete scope"), //$NON-NLS-1$
+    /* EOF_CODE */                            (L"{0} reached after this token"), //$NON-NLS-1$
+    /* INVALID_TOKEN_CODE, ERROR_RULE_ERROR */(L"{0} is invalid"), //$NON-NLS-1$
+    /* ERROR_RULE_WARNING */                  (L"{0} is ignored"), //$NON-NLS-1$
+    /* NO_MESSAGE_CODE */                     (L"{0}") //$NON-NLS-1$
 };
  void ConfigurationElement::retrieveStack(Array<int>& stack)
 {

@@ -121,6 +121,16 @@
 %Globals
     /.
     #include <string>
+    #include "ExprLexersym.h"
+    #include "ExprParsersym.h"
+    #include "src/IPrsStream.h"
+    #include "src/LexParser.h"
+    #include "src/LexStream.h"
+    #include "src/ParseTable.h"
+    #include "src/RuleAction.h"
+    #include "src/LpgLexStream.h"
+    #include "ExprLexerprs.h"
+    #include "src/IToken.h"
     ./
 %End
 

@@ -113,8 +113,8 @@ void DiagnoseParser::diagnoseEntry(int marker_kind, int error_token)
 	tempStackTop = stateStackTop;
 	
 	//System.arraycopy(tempStack, 0, stateStack, 0, tempStackTop + 1);
-	for (int i = 0; i <= stateStackTop; i++)
-		tempStack[i] = stateStack[i];
+	System::arraycopy(tempStack, 0, stateStack, 0, tempStackTop + 1);
+
 	
 	tokStream->reset();
 	if (marker_kind == 0)
@@ -146,9 +146,9 @@ void DiagnoseParser::diagnoseEntry(int marker_kind, int error_token)
 
 		int pos = stateStackTop;
 		tempStackTop = stateStackTop - 1;
-		//System.arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
-		for (int i = 0; i <= stateStackTop; i++)
-			tempStack[i] = stateStack[i];
+		// System.arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
+		System::arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
+
 		int action_index = 0;
 		act = action.get(action_index++); // tAction(act, current_kind);
 
@@ -355,10 +355,7 @@ void DiagnoseParser::diagnoseEntry(int marker_kind, int error_token)
 			
 			tempStackTop = stateStackTop;
 			//System.arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
-			for (int i = 0; i <= stateStackTop; i++)
-				tempStack[i] = stateStack[i];
-
-			
+			System::arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
 			error_token = parseForError(current_kind);
 
 			//
@@ -369,11 +366,8 @@ void DiagnoseParser::diagnoseEntry(int marker_kind, int error_token)
 			{
 				tokStream->reset(next_token);
 				tempStackTop = stateStackTop;
-				//System.arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
-				for (int i = 0; i <= stateStackTop; i++)
-					tempStack[i] = stateStack[i];
+				System::arraycopy(stateStack, 0, tempStack, 0, stateStackTop + 1);
 
-				
 				parseUpToError(action, current_kind, error_token);
 				tokStream->reset(next_token);
 			}
@@ -713,6 +707,7 @@ int DiagnoseParser::parseCheck(Array<int>& stack, int stack_top, int first_symbo
 
 DiagnoseParser::RepairCandidate DiagnoseParser::errorRecovery(int error_token)
 {
+
 	int prevtok = tokStream->getPrevious(error_token);
 
 	//
@@ -806,373 +801,7 @@ DiagnoseParser::RepairCandidate DiagnoseParser::errorRecovery(int error_token)
 
 	return candidate;
 }
-
-inline DiagnoseParser::RepairCandidate DiagnoseParser::secondaryPhase(int error_token)
-{
-	SecondaryRepairInfo repair, misplaced_repair;
-		
-
-	//
-	// If the next_stack is available, try misplaced and secondary
-	// recovery on it first.
-	//
-	int next_last_index = 0;
-	if (nextStackTop >= 0)
-	{
-		int save_location;
-
-		buffer[2] = error_token;
-		buffer[1] = tokStream->getPrevious(buffer[2]);
-		buffer[0] = tokStream->getPrevious(buffer[1]);
-
-		for (int k = 3; k < BUFF_UBOUND; k++)
-			buffer[k] = tokStream->getNext(buffer[k - 1]);
-
-		buffer[BUFF_UBOUND] = tokStream->badToken(); // elmt not available
-
-		//
-		// If we are at the end of the input stream, compute the
-		// index position of the first EOFT symbol (last useful
-		// index).
-		//
-		for (next_last_index = MAX_DISTANCE - 1;
-			next_last_index >= 1 &&
-			tokStream->getKind(buffer[next_last_index]) == EOFT_SYMBOL;
-			next_last_index--);
-		next_last_index = next_last_index + 1;
-
-		save_location = locationStack[nextStackTop];
-		locationStack[nextStackTop] = buffer[2];
-		misplaced_repair.numDeletions = nextStackTop;
-		misplacementRecovery(misplaced_repair, nextStack, nextStackTop, next_last_index, true);
-		if (misplaced_repair.recoveryOnNextStack)
-			misplaced_repair.distance++;
-
-		repair.numDeletions = nextStackTop + BUFF_UBOUND;
-		secondaryRecovery(repair,
-		                  nextStack, nextStackTop,
-		                  next_last_index, true);
-		if (repair.recoveryOnNextStack)
-			repair.distance++;
-
-		locationStack[nextStackTop] = save_location;
-	}
-	else // next_stack not available, initialize ...
-	{
-		misplaced_repair.numDeletions = stateStackTop;
-		repair.numDeletions = stateStackTop + BUFF_UBOUND;
-	}
-
-	//
-	// Try secondary recovery on the "stack" configuration->
-	//
-	buffer[3] = error_token;
-
-	buffer[2] = tokStream->getPrevious(buffer[3]);
-	buffer[1] = tokStream->getPrevious(buffer[2]);
-	buffer[0] = tokStream->getPrevious(buffer[1]);
-
-	for (int k = 4; k < BUFF_SIZE; k++)
-		buffer[k] = tokStream->getNext(buffer[k - 1]);
-
-	int last_index;
-	for (last_index = MAX_DISTANCE - 1;
-		last_index >= 1 && tokStream->getKind(buffer[last_index]) == EOFT_SYMBOL;
-		last_index--);
-	last_index++;
-
-	misplacementRecovery(misplaced_repair, stateStack, stateStackTop, last_index, false);
-
-	secondaryRecovery(repair, stateStack, stateStackTop, last_index, false);
-
-	//
-	// If a successful misplaced recovery was found, compare it with
-	// the most successful secondary recovery.  If the misplaced
-	// recovery either deletes fewer symbols or parse-checks further
-	// then it is chosen.
-	//
-	if (misplaced_repair.distance > MIN_DISTANCE)
-	{
-		if (misplaced_repair.numDeletions <= repair.numDeletions ||
-			(misplaced_repair.distance - misplaced_repair.numDeletions) >=
-			(repair.distance - repair.numDeletions))
-		{
-			repair.code = MISPLACED_CODE;
-			repair.stackPosition = misplaced_repair.stackPosition;
-			repair.bufferPosition = 2;
-			repair.numDeletions = misplaced_repair.numDeletions;
-			repair.distance = misplaced_repair.distance;
-			repair.recoveryOnNextStack = misplaced_repair.recoveryOnNextStack;
-		}
-	}
-
-	//
-	// If the successful recovery was on next_stack, update: stack,
-	// buffer, location_stack and last_index.
-	//
-	if (repair.recoveryOnNextStack)
-	{
-		stateStackTop = nextStackTop;
-		//System.arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
-		for (int i = 0; i <= stateStackTop; i++)
-			stateStack[i] = nextStack[i];
-		
-		buffer[2] = error_token;
-		buffer[1] = tokStream->getPrevious(buffer[2]);
-		buffer[0] = tokStream->getPrevious(buffer[1]);
-
-		for (int k = 3; k < BUFF_UBOUND; k++)
-			buffer[k] = tokStream->getNext(buffer[k - 1]);
-
-		buffer[BUFF_UBOUND] = tokStream->badToken(); // elmt not available
-
-		locationStack[nextStackTop] = buffer[2];
-		last_index = next_last_index;
-	}
-
-	//
-	// Next, try scope recoveries after deletion of one, two, three,
-	// four ... buffer_position tokens from the input stream.
-	//
-	if (repair.code == SECONDARY_CODE || repair.code == DELETION_CODE)
-	{
-		PrimaryRepairInfo scope_repair;
-		for (scope_repair.bufferPosition = 2;
-			scope_repair.bufferPosition <= repair.bufferPosition &&
-			repair.code != SCOPE_CODE; scope_repair.bufferPosition++)
-		{
-			scopeTrial(scope_repair, stateStack, stateStackTop);
-			int j = (scope_repair.distance >= MAX_DISTANCE
-				? last_index
-				: scope_repair.distance),
-				k = scope_repair.bufferPosition - 1;
-			if ((scope_repair.distance - k) > MIN_DISTANCE && (j - k) > (repair.distance - repair.numDeletions))
-			{
-				int i = scopeIndex[scopeStackTop]; // upper bound
-				repair.code = SCOPE_CODE;
-				repair.symbol = scopeLhs(i) + NT_OFFSET;
-				repair.stackPosition = stateStackTop;
-				repair.bufferPosition = scope_repair.bufferPosition;
-			}
-		}
-	}
-
-	//
-	// If a successful repair was not found, quit!  Otherwise, issue
-	// diagnosis and adjust configuration->..
-	//
-	RepairCandidate candidate;
-	if (repair.code == 0)
-		return candidate;
-
-	secondaryDiagnosis(repair);
-
-	//
-	// Update buffer based on number of elements that are deleted.
-	//
-	switch (repair.code)
-	{
-	case MISPLACED_CODE:
-		candidate.location = buffer[2];
-		candidate.symbol = tokStream->getKind(buffer[2]);
-		tokStream->reset(tokStream->getNext(buffer[2]));
-
-		break;
-
-	case DELETION_CODE:
-		candidate.location = buffer[repair.bufferPosition];
-		candidate.symbol = tokStream->getKind(buffer[repair.bufferPosition]);
-		tokStream->reset(tokStream->getNext(buffer[repair.bufferPosition]));
-
-		break;
-
-	default: // SCOPE_CODE || SECONDARY_CODE
-		candidate.symbol = repair.symbol;
-		candidate.location = buffer[repair.bufferPosition];
-		tokStream->reset(buffer[repair.bufferPosition]);
-
-		break;
-	}
-
-	return candidate;
-}
-
-void DiagnoseParser::misplacementRecovery(SecondaryRepairInfo& repair, Array<int>& stack, int stack_top,
-                                          int last_index, bool stack_flag)
-{
-	int previous_loc = buffer[2],
-	    stack_deletions = 0;
-
-	for (int top = stack_top - 1; top >= 0; top--)
-	{
-		if (locationStack[top] < previous_loc)
-			stack_deletions++;
-		previous_loc = locationStack[top];
-
-		int parse_distance = parseCheck(stack, top, tokStream->getKind(buffer[2]), 3),
-		    j = (parse_distance >= MAX_DISTANCE ? last_index : parse_distance);
-		if ((parse_distance > MIN_DISTANCE) && (j - stack_deletions) > (repair.distance - repair.numDeletions))
-		{
-			repair.stackPosition = top;
-			repair.distance = j;
-			repair.numDeletions = stack_deletions;
-			repair.recoveryOnNextStack = stack_flag;
-		}
-	}
-
-	return;
-}
-
-void DiagnoseParser::secondaryRecovery(SecondaryRepairInfo& repair, Array<int>& stack, int stack_top,
-                                       int last_index, bool stack_flag)
-{
-	int previous_loc = buffer[2],
-	    stack_deletions = 0;
-
-	for (int top = stack_top; top >= 0 && repair.numDeletions >= stack_deletions; top--)
-	{
-		if (locationStack[top] < previous_loc)
-			stack_deletions++;
-		previous_loc = locationStack[top];
-
-		for (int i = 2;
-		     i <= (last_index - MIN_DISTANCE + 1) &&
-		     (repair.numDeletions >= (stack_deletions + i - 1)); i++)
-		{
-			int parse_distance = parseCheck(stack, top, tokStream->getKind(buffer[i]), i + 1),
-			    j = (parse_distance >= MAX_DISTANCE ? last_index : parse_distance);
-
-			if ((parse_distance - i + 1) > MIN_DISTANCE)
-			{
-				int k = stack_deletions + i - 1;
-				if ((k < repair.numDeletions) ||
-					(j - k) > (repair.distance - repair.numDeletions) ||
-					((repair.code == SECONDARY_CODE) && (j - k) == (repair.distance - repair.numDeletions)))
-				{
-					repair.code = DELETION_CODE;
-					repair.distance = j;
-					repair.stackPosition = top;
-					repair.bufferPosition = i;
-					repair.numDeletions = k;
-					repair.recoveryOnNextStack = stack_flag;
-				}
-			}
-
-			for (int l = nasi(stack[top]); l >= 0 && nasr(l) != 0; l++)
-			{
-				int symbol = nasr(l) + NT_OFFSET;
-				parse_distance = parseCheck(stack, top, symbol, i);
-				j = (parse_distance >= MAX_DISTANCE ? last_index : parse_distance);
-
-				if ((parse_distance - i + 1) > MIN_DISTANCE)
-				{
-					int k = stack_deletions + i - 1;
-					if (k < repair.numDeletions || (j - k) > (repair.distance - repair.numDeletions))
-					{
-						repair.code = SECONDARY_CODE;
-						repair.symbol = symbol;
-						repair.distance = j;
-						repair.stackPosition = top;
-						repair.bufferPosition = i;
-						repair.numDeletions = k;
-						repair.recoveryOnNextStack = stack_flag;
-					}
-				}
-			}
-		}
-	}
-
-	return;
-}
-
-void DiagnoseParser::secondaryDiagnosis(SecondaryRepairInfo& repair)
-{
-	switch (repair.code)
-	{
-	case SCOPE_CODE:
-		{
-			if (repair.stackPosition < stateStackTop)
-				emitError(DELETION_CODE,
-				          terminalIndex(ERROR_SYMBOL),
-				          locationStack[repair.stackPosition],
-				          buffer[1]);
-			for (int i = 0; i < scopeStackTop; i++)
-				emitError(SCOPE_CODE,
-				          -scopeIndex[i],
-				          locationStack[scopePosition[i]],
-				          buffer[1],
-				          nonterminalIndex(scopeLhs(scopeIndex[i])));
-
-			repair.symbol = scopeLhs(scopeIndex[scopeStackTop]) + NT_OFFSET;
-			stateStackTop = scopePosition[scopeStackTop];
-			emitError(SCOPE_CODE,
-			          -scopeIndex[scopeStackTop],
-			          locationStack[scopePosition[scopeStackTop]],
-			          buffer[1],
-			          getNtermIndex(stateStack[stateStackTop],
-			                        repair.symbol,
-			                        repair.bufferPosition)
-			);
-			break;
-		}
-	default:
-		emitError(repair.code,
-		          (repair.code == SECONDARY_CODE
-			           ? getNtermIndex(stateStack[repair.stackPosition],
-			                           repair.symbol,
-			                           repair.bufferPosition)
-			           : terminalIndex(ERROR_SYMBOL)),
-		          locationStack[repair.stackPosition],
-		          buffer[repair.bufferPosition - 1]);
-		stateStackTop = repair.stackPosition;
-	}
-
-	return;
-}
-
-void DiagnoseParser::emitError(int msg_code, int name_index, int left_token, int right_token, int scope_name_index)
-{
-	int left_token_loc = (left_token > right_token ? right_token : left_token),
-	    right_token_loc = right_token;
-
-	std::wstringex temp_name = name(name_index);
-	std::wstringex upper_name = temp_name;
-	upper_name.toupper();
-	std::wstring token_name = (name_index >= 0 &&
-	                     ! (upper_name == (L"ERROR"))
-		                     ? L"\"" + temp_name + L"\""
-		                     : L"");
-
-	if (msg_code == INVALID_CODE)
-		msg_code = token_name.length() == 0 ? INVALID_CODE : INVALID_TOKEN_CODE;
-
-	if (msg_code == SCOPE_CODE)
-	{
-		token_name = L"\"";
-		for (int i = scopeSuffix(-(int)name_index); scopeRhs(i) != 0; i++)
-		{
-			if (!isNullable(scopeRhs(i)))
-			{
-				int symbol_index = (scopeRhs(i) > NT_OFFSET
-					                    ? nonterminalIndex(scopeRhs(i) - NT_OFFSET)
-					                    : terminalIndex(scopeRhs(i)));
-				if (name(symbol_index).length() > 0)
-				{
-					if (token_name.length() > 1) // Not just starting quote?
-						token_name += L" "; // add a space separator
-					token_name += name(symbol_index);
-				}
-			}
-		}
-		token_name += L"\"";
-	}
-
-	tokStream->reportError(msg_code, left_token, right_token, token_name);
-
-	return;
-}
-
- DiagnoseParser::RepairCandidate DiagnoseParser::primaryPhase(int error_token)
+DiagnoseParser::RepairCandidate DiagnoseParser::primaryPhase(int error_token)
 {
 	//
 	// Initialize the buffer.
@@ -1285,20 +914,20 @@ void DiagnoseParser::emitError(int msg_code, int name_index, int left_token, int
 	{
 		stateStackTop = prevStackTop;
 		//System.arraycopy(prevStack, 0, stateStack, 0, stateStackTop + 1);
-		for (int i = 0; i <= stateStackTop; i++)
-			stateStack[i] = prevStack[i];
+		System::arraycopy(prevStack, 0, stateStack, 0, stateStackTop + 1);
 	}
 	else if (nextStackTop >= 0 && repair.bufferPosition >= 3)
 	{
 		stateStackTop = nextStackTop;
 		//System.arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
-		for (int i = 0; i <= stateStackTop; i++)
-			stateStack[i] = nextStack[i];
+		System::arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
+
 		locationStack[stateStackTop] = buffer[3];
 	}
 
 	return primaryDiagnosis(repair);
 }
+
 
 int DiagnoseParser::mergeCandidate(int state, int buffer_position)
 {
@@ -1308,14 +937,13 @@ int DiagnoseParser::mergeCandidate(int state, int buffer_position)
 		int i = terminalIndex(asr(k));
 		if (str.length() == name(i).length())
 		{
-			if ( str.compare_nocase(name(i)) )
+			if (str.compare_nocase(name(i)))
 				return asr(k);
 		}
 	}
 
 	return 0;
 }
-
 void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>& stck, int stack_top)
 {
 	//
@@ -1346,13 +974,13 @@ void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>&
 	// Next, try deletion of the error token.
 	//
 	int j = parseCheck(stck,
-	                   stack_top,
-	                   tokStream->getKind(buffer[repair.bufferPosition + 1]),
-	                   repair.bufferPosition + 2);
+		stack_top,
+		tokStream->getKind(buffer[repair.bufferPosition + 1]),
+		repair.bufferPosition + 2);
 	int k = (tokStream->getKind(buffer[repair.bufferPosition]) == EOLT_SYMBOL &&
-	         tokStream->afterEol(buffer[repair.bufferPosition + 1])
-		         ? 10
-		         : 0);
+		tokStream->afterEol(buffer[repair.bufferPosition + 1])
+		? 10
+		: 0);
 	if (j > repair.distance || (j == repair.distance && k > repair.misspellIndex))
 	{
 		repair.misspellIndex = k;
@@ -1366,12 +994,12 @@ void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>&
 	// most state of the new configuration to next_state.
 	//
 	int next_state = stck[stack_top],
-	    max_pos = stack_top;
+		max_pos = stack_top;
 	tempStackTop = stack_top - 1;
 
 	tokStream->reset(buffer[repair.bufferPosition + 1]);
 	int tok = tokStream->getKind(buffer[repair.bufferPosition]),
-	    act = tAction(next_state, tok);
+		act = tAction(next_state, tok);
 	while (act <= NUM_RULES)
 	{
 		do
@@ -1379,11 +1007,10 @@ void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>&
 			int lhs_symbol = lhs(act);
 			tempStackTop -= (rhs(act) - 1);
 			act = (tempStackTop > max_pos
-				       ? tempStack[tempStackTop]
-				       : stck[tempStackTop]);
+				? tempStack[tempStackTop]
+				: stck[tempStackTop]);
 			act = ntAction(act, lhs_symbol);
-		}
-		while (act <= NUM_RULES);
+		}while (act <= NUM_RULES);
 		max_pos = max_pos < tempStackTop ? max_pos : tempStackTop;
 		tempStack[tempStackTop + 1] = act;
 		next_state = act;
@@ -1441,9 +1068,9 @@ void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>&
 	while (symbol != 0)
 	{
 		int m = parseCheck(stck, stack_top, symbol, repair.bufferPosition),
-		    n = (symbol == EOLT_SYMBOL && tokStream->afterEol(buffer[repair.bufferPosition])
-			         ? 10
-			         : 0);
+			n = (symbol == EOLT_SYMBOL && tokStream->afterEol(buffer[repair.bufferPosition])
+				? 10
+				: 0);
 		if (m > repair.distance ||
 			(m == repair.distance && n > repair.misspellIndex))
 		{
@@ -1464,9 +1091,9 @@ void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>&
 	while (symbol != 0)
 	{
 		int m = parseCheck(stck, stack_top, symbol, repair.bufferPosition + 1),
-		    n = (symbol == EOLT_SYMBOL && tokStream->afterEol(buffer[repair.bufferPosition + 1])
-			         ? 10
-			         : misspell(symbol, buffer[repair.bufferPosition]));
+			n = (symbol == EOLT_SYMBOL && tokStream->afterEol(buffer[repair.bufferPosition + 1])
+				? 10
+				: misspell(symbol, buffer[repair.bufferPosition]));
 		if (m > repair.distance ||
 			(m == repair.distance && n > repair.misspellIndex))
 		{
@@ -1487,7 +1114,8 @@ void DiagnoseParser::checkPrimaryDistance(PrimaryRepairInfo& repair, Array<int>&
 	// error token, or substituting a nonterminal candidate for the
 	// error token. Precedence is given to insertion.
 	//
-	for (int nt_index = nasi(stck[stack_top]); nasr(nt_index) != 0; nt_index++)
+	int nt_index = nasi(stck[stack_top]);
+	for (; nasr(nt_index) != 0; nt_index++)
 	{
 		symbol = nasr(nt_index) + NT_OFFSET;
 		int n = parseCheck(stck, stack_top, symbol, repair.bufferPosition + 1);
@@ -1518,78 +1146,78 @@ DiagnoseParser::RepairCandidate DiagnoseParser::primaryDiagnosis(PrimaryRepairIn
 	//  Issue diagnostic.
 	//
 	int prevtok = buffer[repair.bufferPosition - 1],
-	    current_token = buffer[repair.bufferPosition];
+		current_token = buffer[repair.bufferPosition];
 
 	switch (repair.code)
 	{
 	case INSERTION_CODE:
 	case BEFORE_CODE:
-		{
-			int name_index = (repair.symbol > NT_OFFSET
-				                  ? getNtermIndex(stateStack[stateStackTop],
-				                                  repair.symbol,
-				                                  repair.bufferPosition)
-				                  : getTermIndex(stateStack,
-				                                 stateStackTop,
-				                                 repair.symbol,
-				                                 repair.bufferPosition));
-			int tok = (repair.code == INSERTION_CODE ? prevtok : current_token);
-			emitError(repair.code, name_index, tok, tok);
-			break;
-		}
+	{
+		int name_index = (repair.symbol > NT_OFFSET
+			? getNtermIndex(stateStack[stateStackTop],
+				repair.symbol,
+				repair.bufferPosition)
+			: getTermIndex(stateStack,
+				stateStackTop,
+				repair.symbol,
+				repair.bufferPosition));
+		int tok = (repair.code == INSERTION_CODE ? prevtok : current_token);
+		emitError(repair.code, name_index, tok, tok);
+		break;
+	}
 	case INVALID_CODE:
-		{
-			int name_index = getNtermIndex(stateStack[stateStackTop],
-			                               repair.symbol,
-			                               repair.bufferPosition + 1);
-			emitError(repair.code, name_index, current_token, current_token);
-			break;
-		}
+	{
+		int name_index = getNtermIndex(stateStack[stateStackTop],
+			repair.symbol,
+			repair.bufferPosition + 1);
+		emitError(repair.code, name_index, current_token, current_token);
+		break;
+	}
 	case SUBSTITUTION_CODE:
+	{
+		int name_index;
+		if (repair.misspellIndex >= 6)
+			name_index = terminalIndex(repair.symbol);
+		else
 		{
-			int name_index;
-			if (repair.misspellIndex >= 6)
-				name_index = terminalIndex(repair.symbol);
-			else
-			{
-				name_index = getTermIndex(stateStack, stateStackTop,
-				                          repair.symbol,
-				                          repair.bufferPosition + 1);
-				if (name_index != terminalIndex(repair.symbol))
-					repair.code = INVALID_CODE;
-			}
-			emitError(repair.code, name_index, current_token, current_token);
-			break;
+			name_index = getTermIndex(stateStack, stateStackTop,
+				repair.symbol,
+				repair.bufferPosition + 1);
+			if (name_index != terminalIndex(repair.symbol))
+				repair.code = INVALID_CODE;
 		}
+		emitError(repair.code, name_index, current_token, current_token);
+		break;
+	}
 	case MERGE_CODE:
 		emitError(repair.code,
-		          terminalIndex(repair.symbol),
-		          current_token,
-		          tokStream->getNext(current_token));
+			terminalIndex(repair.symbol),
+			current_token,
+			tokStream->getNext(current_token));
 		break;
 	case SCOPE_CODE:
+	{
+		for (int i = 0; i < scopeStackTop; i++)
 		{
-			for (int i = 0; i < scopeStackTop; i++)
-			{
-				emitError(repair.code,
-				          -scopeIndex[i],
-				          locationStack[scopePosition[i]],
-				          prevtok,
-				          nonterminalIndex(scopeLhs(scopeIndex[i])));
-			}
-
-			repair.symbol = scopeLhs(scopeIndex[scopeStackTop]) + NT_OFFSET;
-			stateStackTop = scopePosition[scopeStackTop];
 			emitError(repair.code,
-			          -scopeIndex[scopeStackTop],
-			          locationStack[scopePosition[scopeStackTop]],
-			          prevtok,
-			          getNtermIndex(stateStack[stateStackTop],
-			                        repair.symbol,
-			                        repair.bufferPosition)
-			);
-			break;
+				-scopeIndex[i],
+				locationStack[scopePosition[i]],
+				prevtok,
+				nonterminalIndex(scopeLhs(scopeIndex[i])));
 		}
+
+		repair.symbol = scopeLhs(scopeIndex[scopeStackTop]) + NT_OFFSET;
+		stateStackTop = scopePosition[scopeStackTop];
+		emitError(repair.code,
+			-scopeIndex[scopeStackTop],
+			locationStack[scopePosition[scopeStackTop]],
+			prevtok,
+			getNtermIndex(stateStack[stateStackTop],
+				repair.symbol,
+				repair.bufferPosition)
+		);
+		break;
+	}
 	default: // deletion
 		emitError(repair.code, terminalIndex(ERROR_SYMBOL), current_token, current_token);
 	}
@@ -1606,9 +1234,9 @@ DiagnoseParser::RepairCandidate DiagnoseParser::primaryDiagnosis(PrimaryRepairIn
 		// repair only if after applying it the parser will accept the input. 
 		//
 		candidate.symbol = (tokStream->getKind(buffer[repair.bufferPosition]) != EOFT_SYMBOL ||
-			                   repair.distance >= MAX_DISTANCE)
-			                   ? repair.symbol
-			                   : 0;
+			repair.distance >= MAX_DISTANCE)
+			? repair.symbol
+			: 0;
 		candidate.location = buffer[repair.bufferPosition];
 		tokStream->reset(buffer[repair.bufferPosition]);
 		break;
@@ -1638,6 +1266,11 @@ DiagnoseParser::RepairCandidate DiagnoseParser::primaryDiagnosis(PrimaryRepairIn
 
 	return candidate;
 }
+
+
+
+
+
 
 int DiagnoseParser::getTermIndex(Array<int>& stck, int stack_top, int tok, int buffer_position)
 {
@@ -1810,12 +1443,12 @@ int DiagnoseParser::misspell(int sym, int tok)
 	//
 	std::wstringex s1 = (std::wstringex(name(terminalIndex(sym)))).tolower();
 	int n = s1.length();
-	s1.push_back('\u0000');
+	s1.push_back(0);
 
 	std::wstringex s2 = ( std::wstringex(tokStream->getName(tok))).tolower();
 	int m = (s2.length() < MAX_NAME_LENGTH ? s2.length() : MAX_NAME_LENGTH);
 	s2 = s2.substr(0, m);
-	s2.push_back('\u0000');
+	s2.push_back(0);
 
 	//
 	//  Singleton misspellings:
@@ -1878,7 +1511,7 @@ int DiagnoseParser::misspell(int sym, int tok)
 			j += 2;
 			num_errors++;
 		}
-		else if (s1[i + 1] == s2[j + 1])
+		else if (s1[i + 1] == s2[j + 1])// mismatch
 		{
 			i++;
 			j++;
@@ -2142,4 +1775,368 @@ bool DiagnoseParser::secondaryCheck(Array<int>& stack, int stack_top, int buffer
 	scopeTrial(scope_repair, stack, stack_top);
 
 	return ((scope_repair.distance - buffer_position) > MIN_DISTANCE && scope_repair.distance > repair.distance);
+}
+
+DiagnoseParser::RepairCandidate DiagnoseParser::secondaryPhase(int error_token)
+{
+	SecondaryRepairInfo repair, misplaced_repair;
+
+
+	//
+	// If the next_stack is available, try misplaced and secondary
+	// recovery on it first.
+	//
+	int next_last_index = 0;
+	if (nextStackTop >= 0)
+	{
+		int save_location;
+
+		buffer[2] = error_token;
+		buffer[1] = tokStream->getPrevious(buffer[2]);
+		buffer[0] = tokStream->getPrevious(buffer[1]);
+
+		for (int k = 3; k < BUFF_UBOUND; k++)
+			buffer[k] = tokStream->getNext(buffer[k - 1]);
+
+		buffer[BUFF_UBOUND] = tokStream->badToken(); // elmt not available
+
+		//
+		// If we are at the end of the input stream, compute the
+		// index position of the first EOFT symbol (last useful
+		// index).
+		//
+		for (next_last_index = MAX_DISTANCE - 1;
+			next_last_index >= 1 &&
+			tokStream->getKind(buffer[next_last_index]) == EOFT_SYMBOL;
+			next_last_index--);
+		next_last_index = next_last_index + 1;
+
+		save_location = locationStack[nextStackTop];
+		locationStack[nextStackTop] = buffer[2];
+		misplaced_repair.numDeletions = nextStackTop;
+		misplacementRecovery(misplaced_repair, nextStack, nextStackTop, next_last_index, true);
+		if (misplaced_repair.recoveryOnNextStack)
+			misplaced_repair.distance++;
+
+		repair.numDeletions = nextStackTop + BUFF_UBOUND;
+		secondaryRecovery(repair,
+			nextStack, nextStackTop,
+			next_last_index, true);
+		if (repair.recoveryOnNextStack)
+			repair.distance++;
+
+		locationStack[nextStackTop] = save_location;
+	}
+	else // next_stack not available, initialize ...
+	{
+		misplaced_repair.numDeletions = stateStackTop;
+		repair.numDeletions = stateStackTop + BUFF_UBOUND;
+	}
+
+	//
+	// Try secondary recovery on the "stack" configuration->
+	//
+	buffer[3] = error_token;
+
+	buffer[2] = tokStream->getPrevious(buffer[3]);
+	buffer[1] = tokStream->getPrevious(buffer[2]);
+	buffer[0] = tokStream->getPrevious(buffer[1]);
+
+	for (int k = 4; k < BUFF_SIZE; k++)
+		buffer[k] = tokStream->getNext(buffer[k - 1]);
+
+	int last_index;
+	for (last_index = MAX_DISTANCE - 1;
+		last_index >= 1 && tokStream->getKind(buffer[last_index]) == EOFT_SYMBOL;
+		last_index--);
+	last_index++;
+
+	misplacementRecovery(misplaced_repair, stateStack, stateStackTop, last_index, false);
+
+	secondaryRecovery(repair, stateStack, stateStackTop, last_index, false);
+
+	//
+	// If a successful misplaced recovery was found, compare it with
+	// the most successful secondary recovery.  If the misplaced
+	// recovery either deletes fewer symbols or parse-checks further
+	// then it is chosen.
+	//
+	if (misplaced_repair.distance > MIN_DISTANCE)
+	{
+		if (misplaced_repair.numDeletions <= repair.numDeletions ||
+			(misplaced_repair.distance - misplaced_repair.numDeletions) >=
+			(repair.distance - repair.numDeletions))
+		{
+			repair.code = MISPLACED_CODE;
+			repair.stackPosition = misplaced_repair.stackPosition;
+			repair.bufferPosition = 2;
+			repair.numDeletions = misplaced_repair.numDeletions;
+			repair.distance = misplaced_repair.distance;
+			repair.recoveryOnNextStack = misplaced_repair.recoveryOnNextStack;
+		}
+	}
+
+	//
+	// If the successful recovery was on next_stack, update: stack,
+	// buffer, location_stack and last_index.
+	//
+	if (repair.recoveryOnNextStack)
+	{
+		stateStackTop = nextStackTop;
+		//System.arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
+		System::arraycopy(nextStack, 0, stateStack, 0, stateStackTop + 1);
+
+		buffer[2] = error_token;
+		buffer[1] = tokStream->getPrevious(buffer[2]);
+		buffer[0] = tokStream->getPrevious(buffer[1]);
+
+		for (int k = 3; k < BUFF_UBOUND; k++)
+			buffer[k] = tokStream->getNext(buffer[k - 1]);
+
+		buffer[BUFF_UBOUND] = tokStream->badToken(); // elmt not available
+
+		locationStack[nextStackTop] = buffer[2];
+		last_index = next_last_index;
+	}
+
+	//
+	// Next, try scope recoveries after deletion of one, two, three,
+	// four ... buffer_position tokens from the input stream.
+	//
+	if (repair.code == SECONDARY_CODE || repair.code == DELETION_CODE)
+	{
+		PrimaryRepairInfo scope_repair;
+		for (scope_repair.bufferPosition = 2;
+			scope_repair.bufferPosition <= repair.bufferPosition &&
+			repair.code != SCOPE_CODE; scope_repair.bufferPosition++)
+		{
+			scopeTrial(scope_repair, stateStack, stateStackTop);
+			int j = (scope_repair.distance >= MAX_DISTANCE
+				? last_index
+				: scope_repair.distance),
+				k = scope_repair.bufferPosition - 1;
+			if ((scope_repair.distance - k) > MIN_DISTANCE && (j - k) > (repair.distance - repair.numDeletions))
+			{
+				int i = scopeIndex[scopeStackTop]; // upper bound
+				repair.code = SCOPE_CODE;
+				repair.symbol = scopeLhs(i) + NT_OFFSET;
+				repair.stackPosition = stateStackTop;
+				repair.bufferPosition = scope_repair.bufferPosition;
+			}
+		}
+	}
+
+	//
+	// If a successful repair was not found, quit!  Otherwise, issue
+	// diagnosis and adjust configuration->..
+	//
+	RepairCandidate candidate;
+	if (repair.code == 0)
+		return candidate;
+
+	secondaryDiagnosis(repair);
+
+	//
+	// Update buffer based on number of elements that are deleted.
+	//
+	switch (repair.code)
+	{
+	case MISPLACED_CODE:
+		candidate.location = buffer[2];
+		candidate.symbol = tokStream->getKind(buffer[2]);
+		tokStream->reset(tokStream->getNext(buffer[2]));
+
+		break;
+
+	case DELETION_CODE:
+		candidate.location = buffer[repair.bufferPosition];
+		candidate.symbol = tokStream->getKind(buffer[repair.bufferPosition]);
+		tokStream->reset(tokStream->getNext(buffer[repair.bufferPosition]));
+
+		break;
+
+	default: // SCOPE_CODE || SECONDARY_CODE
+		candidate.symbol = repair.symbol;
+		candidate.location = buffer[repair.bufferPosition];
+		tokStream->reset(buffer[repair.bufferPosition]);
+
+		break;
+	}
+
+	return candidate;
+}
+
+void DiagnoseParser::misplacementRecovery(SecondaryRepairInfo& repair, Array<int>& stack, int stack_top,
+	int last_index, bool stack_flag)
+{
+	int previous_loc = buffer[2],
+		stack_deletions = 0;
+
+	for (int top = stack_top - 1; top >= 0; top--)
+	{
+		if (locationStack[top] < previous_loc)
+			stack_deletions++;
+		previous_loc = locationStack[top];
+
+		int parse_distance = parseCheck(stack, top, tokStream->getKind(buffer[2]), 3),
+			j = (parse_distance >= MAX_DISTANCE ? last_index : parse_distance);
+		if ((parse_distance > MIN_DISTANCE) && (j - stack_deletions) > (repair.distance - repair.numDeletions))
+		{
+			repair.stackPosition = top;
+			repair.distance = j;
+			repair.numDeletions = stack_deletions;
+			repair.recoveryOnNextStack = stack_flag;
+		}
+	}
+
+	return;
+}
+
+void DiagnoseParser::secondaryRecovery(SecondaryRepairInfo& repair, Array<int>& stack, int stack_top,
+	int last_index, bool stack_flag)
+{
+	int previous_loc = buffer[2],
+		stack_deletions = 0;
+
+	for (int top = stack_top; top >= 0 && repair.numDeletions >= stack_deletions; top--)
+	{
+		if (locationStack[top] < previous_loc)
+			stack_deletions++;
+		previous_loc = locationStack[top];
+
+		for (int i = 2;
+			i <= (last_index - MIN_DISTANCE + 1) &&
+			(repair.numDeletions >= (stack_deletions + i - 1)); i++)
+		{
+			int parse_distance = parseCheck(stack, top, tokStream->getKind(buffer[i]), i + 1),
+				j = (parse_distance >= MAX_DISTANCE ? last_index : parse_distance);
+
+			if ((parse_distance - i + 1) > MIN_DISTANCE)
+			{
+				int k = stack_deletions + i - 1;
+				if ((k < repair.numDeletions) ||
+					(j - k) > (repair.distance - repair.numDeletions) ||
+					((repair.code == SECONDARY_CODE) && (j - k) == (repair.distance - repair.numDeletions)))
+				{
+					repair.code = DELETION_CODE;
+					repair.distance = j;
+					repair.stackPosition = top;
+					repair.bufferPosition = i;
+					repair.numDeletions = k;
+					repair.recoveryOnNextStack = stack_flag;
+				}
+			}
+
+			for (int l = nasi(stack[top]); l >= 0 && nasr(l) != 0; l++)
+			{
+				int symbol = nasr(l) + NT_OFFSET;
+				parse_distance = parseCheck(stack, top, symbol, i);
+				j = (parse_distance >= MAX_DISTANCE ? last_index : parse_distance);
+
+				if ((parse_distance - i + 1) > MIN_DISTANCE)
+				{
+					int k = stack_deletions + i - 1;
+					if (k < repair.numDeletions || (j - k) >(repair.distance - repair.numDeletions))
+					{
+						repair.code = SECONDARY_CODE;
+						repair.symbol = symbol;
+						repair.distance = j;
+						repair.stackPosition = top;
+						repair.bufferPosition = i;
+						repair.numDeletions = k;
+						repair.recoveryOnNextStack = stack_flag;
+					}
+				}
+			}
+		}
+	}
+
+	return;
+}
+
+void DiagnoseParser::secondaryDiagnosis(SecondaryRepairInfo& repair)
+{
+	switch (repair.code)
+	{
+	case SCOPE_CODE:
+	{
+		if (repair.stackPosition < stateStackTop)
+			emitError(DELETION_CODE,
+				terminalIndex(ERROR_SYMBOL),
+				locationStack[repair.stackPosition],
+				buffer[1]);
+		for (int i = 0; i < scopeStackTop; i++)
+			emitError(SCOPE_CODE,
+				-scopeIndex[i],
+				locationStack[scopePosition[i]],
+				buffer[1],
+				nonterminalIndex(scopeLhs(scopeIndex[i])));
+
+		repair.symbol = scopeLhs(scopeIndex[scopeStackTop]) + NT_OFFSET;
+		stateStackTop = scopePosition[scopeStackTop];
+		emitError(SCOPE_CODE,
+			-scopeIndex[scopeStackTop],
+			locationStack[scopePosition[scopeStackTop]],
+			buffer[1],
+			getNtermIndex(stateStack[stateStackTop],
+				repair.symbol,
+				repair.bufferPosition)
+		);
+		break;
+	}
+	default:
+		emitError(repair.code,
+			(repair.code == SECONDARY_CODE
+				? getNtermIndex(stateStack[repair.stackPosition],
+					repair.symbol,
+					repair.bufferPosition)
+				: terminalIndex(ERROR_SYMBOL)),
+			locationStack[repair.stackPosition],
+			buffer[repair.bufferPosition - 1]);
+		stateStackTop = repair.stackPosition;
+	}
+
+	return;
+}
+
+void DiagnoseParser::emitError(int msg_code, int name_index, int left_token, int right_token, int scope_name_index)
+{
+	int left_token_loc = (left_token > right_token ? right_token : left_token),
+		right_token_loc = right_token;
+
+	std::wstringex temp_name = name(name_index);
+	std::wstringex upper_name = temp_name;
+	upper_name.toupper();
+	std::wstring token_name = (name_index >= 0 &&
+		!(upper_name == (L"ERROR"))
+		? L"\"" + temp_name + L"\""
+		: L"");
+
+	if (msg_code == INVALID_CODE)
+		msg_code = token_name.length() == 0 ? INVALID_CODE : INVALID_TOKEN_CODE;
+
+	if (msg_code == SCOPE_CODE)
+	{
+		token_name = L"\"";
+		for (int i = scopeSuffix(-(int)name_index); scopeRhs(i) != 0; i++)
+		{
+			if (!isNullable(scopeRhs(i)))
+			{
+				int symbol_index = (scopeRhs(i) > NT_OFFSET
+					? nonterminalIndex(scopeRhs(i) - NT_OFFSET)
+					: terminalIndex(scopeRhs(i)));
+				if (name(symbol_index).length() > 0)
+				{
+					if (token_name.length() > 1) // Not just starting quote?
+						token_name += L" "; // add a space separator
+					token_name += name(symbol_index);
+				}
+			}
+		}
+		token_name += L"\"";
+	}
+
+	tokStream->reportError(msg_code, left_token, right_token, token_name);
+
+	return;
 }

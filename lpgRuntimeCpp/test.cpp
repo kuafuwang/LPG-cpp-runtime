@@ -29,9 +29,9 @@ int main(void)
   
     typedef  unsigned char byte;
     ExprLexer lex(LR"(C:\Users\kuafu\source\repos\lpg2\Debug\jikespg.g)",4);
-    lex.setMessageHandler(&handle);
+   // lex.setMessageHandler(&handle);
     ExprParser  prs(&lex);
-    prs.setMessageHandler(&handle);
+  //  prs.setMessageHandler(&handle);
     lex.lexer(&prs);
     prs.parser();
    

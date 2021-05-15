@@ -149,7 +149,10 @@ struct LexStream :
 
     int getStreamIndex() { return index; }
 
-    void setStreamLength(int streamLength) { this->streamLength_ = streamLength; }
+    void setStreamLength(int streamLength)
+    {
+	    this->streamLength_ = streamLength;
+    }
 
     int getStreamLength() { return streamLength_; }
 

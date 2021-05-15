@@ -4,9 +4,10 @@
 #include "ParseTable.h"
 #include "StateElement.h"
 
-ConfigurationStack::ConfigurationStack(ParseTable* prs): configuration_stack(1 << 12), state_element_size(0), table(TABLE_SIZE)
+ConfigurationStack::ConfigurationStack(ParseTable* prs): configuration_stack(1 << 12), max_configuration_size(0),
+                                                         stacks_size(0),
+                                                         state_element_size(0), table(TABLE_SIZE)
 {
-	
 	this->prs = prs;
 
 	state_element_size++;
@@ -117,7 +118,7 @@ ConfigurationElement* ConfigurationStack::top()
 	ConfigurationElement* configuration = nullptr;
 	if (configuration_stack.size() > 0)
 	{
-		int index = configuration_stack.Length() - 1;
+		int index = configuration_stack.size() - 1;
 		configuration = (ConfigurationElement*)configuration_stack.get(index);
 		configuration->act = prs->baseAction(configuration->conflict_index);
 	}

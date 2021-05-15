@@ -11,25 +11,28 @@
 //
 // Wrapper for a simple array
 //
+
 template <class T>
 class Array
 {
     int size;
     T *info;
-
+    std::vector<T> holder;
 public:
     Array() : size(0),
               info(NULL)
     {}
 
-    Array(int size_) : size(size_)
+    Array(int size_) : size(size_), holder(size_,{})
     {
-        info = new T[size];
+        info = &holder[0];
+        //info = new T[size];
     }
 
-    Array(int size_, T value) : size(size_)
+    Array(int size_, T value) :  size(size_), holder(size_, {})
     {
-        info = new T[size];
+      //  info = new T[size];
+        info = &holder[0];
         Initialize(value);
 
         return;
@@ -37,7 +40,7 @@ public:
 
     ~Array()
     {
-        delete [] info;
+       // delete [] info;
     }
 
     void Initialize(T init_value)
@@ -50,9 +53,11 @@ public:
     {
         if (new_size > size)
         {
-            T *old_info = info;
-            info = (T *) memmove(new T[new_size], old_info, size * sizeof(T));
-            delete [] old_info;
+            //T *old_info = info;
+            //info = (T *) memmove(new T[new_size], old_info, size * sizeof(T));
+            //delete [] old_info;
+            holder.resize(new_size);
+            info = &holder[0];
         }
         size = new_size;
 
@@ -63,9 +68,12 @@ public:
     {
         if (new_size > size)
         {
-            T *old_info = info;
-            info = (T *) new T[new_size];
-            delete [] old_info;
+            //T *old_info = info;
+            //info = (T *) new T[new_size];
+            //delete [] old_info;
+            holder.clear(new_size);
+            holder.resize(new_size);
+            info = &holder[0];
         }
         size = new_size;
 
@@ -108,7 +116,10 @@ public:
     //
     // Can the array be indexed with i?
     //
-    inline bool OutOfRange(const int i) { return (i < 0 || i >= size); }
+    inline bool OutOfRange(const int i)
+    {
+	    return (i < 0 || i >= size);
+    }
     T& at(const int i)
     {
     	if(OutOfRange(i))
@@ -829,7 +840,19 @@ public:
 };
 
 
-
+namespace System
+{
+    template <class T>
+	void arraycopy(T& src,  int  srcPos,
+        T& dest, int destPos,
+        int length)
+	{
+		for(int i= 0; i < length;  ++i)
+		{
+            dest[destPos + i] = src[srcPos + i];
+		}
+	}
+}
 
 
 

@@ -1,6 +1,5 @@
 
     //#line 122 "LexerTemplateD.g
-#pragma once
 
 #include <string>
 
@@ -9,17 +8,17 @@
 #include "ExprParsersym.h"
 #include "src/IPrsStream.h"
 #include "src/LexParser.h"
-#include "src/LpgLexStream.h"
+#include "src/LexStream.h"
 #include "src/ParseTable.h"
 #include "src/RuleAction.h"
-#include "src/LexStream.h"
+#include "src/LpgLexStream.h"
+#include "ExprLexerprs.h"
+#include "src/IToken.h"
     //#line 128 "LexerTemplateD.g
-
- 
 
  struct ExprLexer :public LpgLexStream ,public ExprParsersym, public ExprLexersym,public RuleAction
 {
-     inline   static ParseTable* prs = new ExprLexerprs();
+    inline  static ParseTable* prs = new ExprLexerprs();
      ParseTable* getParseTable() { return prs; }
 
      LexParser* lexParser = new LexParser(this, prs, this);
@@ -119,20 +118,19 @@
      void makeToken(int kind)
     {
         int startOffset = getLeftSpan(), endOffset = getRightSpan();
-     	
-        LpgLexStream :: makeToken(startOffset, endOffset, kind);
+        LpgLexStream ::makeToken(startOffset, endOffset, kind);
     }
   
-      int getKind(int i)  // Classify character at ith location
+    int getKind(int i)  // Classify character at ith location
     {
-        char c = (i >= getStreamLength() ? '\uffff' : getCharValue(i));
+        int c = (i >= getStreamLength() ? IToken::EOF_ : getCharValue(i));
         return (c <  33		? Char_WSChar : 
         		c>= '0' && c <= '9' ? Char_Digit :
         		c == '+' 		? Char_Plus :
         		c == '*' 		? Char_Star :
         		c == '(' 		? Char_LeftParen :
         		c == ')' 		? Char_RightParen :
-        		c == '\uffff' 	? Char_EOF : 
+        		c == IToken::EOF_ 	? Char_EOF : 
         					  Char_Unused);
     }
 
@@ -191,7 +189,5 @@
         }
         return;
     }
-
-
 };
 

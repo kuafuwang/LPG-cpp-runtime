@@ -16,7 +16,7 @@ struct IGetToken
 struct IToken
 {
 	virtual ~IToken() = default;
-	static constexpr  wchar_t EOF_ = '\uffff';
+	static constexpr  wchar_t EOF_ = 0xFFFF;
 
   virtual    int getKind()=0;
   virtual      void setKind(int kind)=0;

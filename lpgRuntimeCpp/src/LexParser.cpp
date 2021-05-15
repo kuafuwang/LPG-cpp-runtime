@@ -252,7 +252,10 @@ ProcessTokens:
 			curtok = tokStream->getToken();
 			current_kind = tokStream->getKind(curtok);
 		}
-		else tokStream->reportLexicalError(starttok, lastToken);
+		else
+		{
+			tokStream->reportLexicalError(starttok, lastToken);
+		}
 	}
 break_ProcessTokens:
 	taking_actions = false; // indicate that we are done
