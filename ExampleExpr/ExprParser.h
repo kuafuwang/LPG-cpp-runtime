@@ -150,7 +150,11 @@ struct ExprParser :public PrsStream, public RuleAction
 
     struct Ast;
     struct AbstractAstList;
+    struct IAstToken;
     struct AstToken;
+    struct IE;
+    struct IT;
+    struct IF;
     struct E;
     struct T;
     struct F;
@@ -256,6 +260,24 @@ struct ExprParser :public PrsStream, public RuleAction
 
     };
 
+    /**
+     * is always implemented by <b>AstToken</b>. It is also implemented by:
+     *<b>
+     *<ul>
+     *<li>F
+     *<li>ParenExpr
+     *</ul>
+     *</b>
+     */
+    struct IAstToken :virtual IGetToken
+    {
+
+        virtual void accept(Visitor* v) = 0;
+        virtual void accept(ArgumentVisitor* v, Object* o) = 0;
+        virtual Object* accept(ResultVisitor* v) = 0;
+        virtual Object* accept(ResultArgumentVisitor* v, Object* o) = 0;
+    };
+
     struct AstToken :public  Ast
     {
         AstToken(IToken* token) :Ast(token) { }
@@ -270,6 +292,49 @@ struct ExprParser :public PrsStream, public RuleAction
     };
 
     /**
+     * is implemented by:
+     *<b>
+     *<ul>
+     *<li>E
+     *<li>T
+     *<li>F
+     *<li>ParenExpr
+     *</ul>
+     *</b>
+     */
+    struct IE :virtual IGetToken
+    {
+
+        virtual void accept(Visitor* v) = 0;
+        virtual void accept(ArgumentVisitor* v, Object* o) = 0;
+        virtual Object* accept(ResultVisitor* v) = 0;
+        virtual Object* accept(ResultArgumentVisitor* v, Object* o) = 0;
+    };
+
+    /**
+     * is implemented by:
+     *<b>
+     *<ul>
+     *<li>T
+     *<li>F
+     *<li>ParenExpr
+     *</ul>
+     *</b>
+     */
+    struct IT : public IE {};
+
+    /**
+     * is implemented by:
+     *<b>
+     *<ul>
+     *<li>F
+     *<li>ParenExpr
+     *</ul>
+     *</b>
+     */
+    struct IF : public IT, public IAstToken {};
+
+    /**
      *<em>
      *<li>Rule 2:  E ::= T
      *</em>
@@ -278,18 +343,19 @@ struct ExprParser :public PrsStream, public RuleAction
      *<li>Rule 1:  E ::= E + T
      *</b>
      */
-    struct E :public Ast {
-        E* _E;
-        T* _T;
+    struct E :public Ast, public IE
+    {
+        IE* _E;
+        IT* _T;
 
-        E* getE() { return _E; };
-        void setE(E* _E) { this->_E = _E; }
-        T* getT() { return _T; };
-        void setT(T* _T) { this->_T = _T; }
+        IE* getE() { return _E; };
+        void setE(IE* _E) { this->_E = _E; }
+        IT* getT() { return _T; };
+        void setT(IT* _T) { this->_T = _T; }
 
         E(IToken* leftIToken, IToken* rightIToken,
-            E* _E,
-            T* _T) :Ast(leftIToken, rightIToken) {
+            IE* _E,
+            IT* _T) :Ast(leftIToken, rightIToken) {
             this->_E = _E;
             this->_T = _T;
             initialize();
@@ -310,18 +376,19 @@ struct ExprParser :public PrsStream, public RuleAction
      *<li>Rule 3:  T ::= T * F
      *</b>
      */
-    struct T :public Ast {
-        T* _T;
-        F* _F;
+    struct T :public Ast, public IT
+    {
+        IT* _T;
+        IF* _F;
 
-        T* getT() { return _T; };
-        void setT(T* _T) { this->_T = _T; }
-        F* getF() { return _F; };
-        void setF(F* _F) { this->_F = _F; }
+        IT* getT() { return _T; };
+        void setT(IT* _T) { this->_T = _T; }
+        IF* getF() { return _F; };
+        void setF(IF* _F) { this->_F = _F; }
 
         T(IToken* leftIToken, IToken* rightIToken,
-            T* _T,
-            F* _F) :Ast(leftIToken, rightIToken) {
+            IT* _T,
+            IF* _F) :Ast(leftIToken, rightIToken) {
             this->_T = _T;
             this->_F = _F;
             initialize();
@@ -338,7 +405,8 @@ struct ExprParser :public PrsStream, public RuleAction
      *<li>Rule 5:  F ::= IntegerLiteral
      *</b>
      */
-    struct F :public AstToken {
+    struct F :public AstToken, public IF
+    {
         F(IToken* token) :AstToken(token)
         {
             initialize();
@@ -355,14 +423,15 @@ struct ExprParser :public PrsStream, public RuleAction
      *<li>Rule 6:  F ::= ( E )
      *</b>
      */
-    struct ParenExpr :public Ast {
-        E* _E;
+    struct ParenExpr :public Ast, public IF
+    {
+        IE* _E;
 
-        E* getE() { return _E; };
-        void setE(E* _E) { this->_E = _E; }
+        IE* getE() { return _E; };
+        void setE(IE* _E) { this->_E = _E; }
 
         ParenExpr(IToken* leftIToken, IToken* rightIToken,
-            E* _E) :Ast(leftIToken, rightIToken) {
+            IE* _E) :Ast(leftIToken, rightIToken) {
             this->_E = _E;
             initialize();
         }
@@ -507,9 +576,9 @@ struct ExprParser :public PrsStream, public RuleAction
                 //#line 15 ExprParser.g
                 ast_pool.Next() = new E(getLeftIToken(), getRightIToken(),
                     //#line 15 ExprParser.g
-                    (E*)getRhsSym(1),
+                    (IE*)getRhsSym(1),
                     //#line 15 ExprParser.g
-                    (T*)getRhsSym(3))
+                    (IT*)getRhsSym(3))
                 //#line 15 ExprParser.g
             );
             break;
@@ -527,9 +596,9 @@ struct ExprParser :public PrsStream, public RuleAction
                 //#line 17 ExprParser.g
                 ast_pool.Next() = new T(getLeftIToken(), getRightIToken(),
                     //#line 17 ExprParser.g
-                    (T*)getRhsSym(1),
+                    (IT*)getRhsSym(1),
                     //#line 17 ExprParser.g
-                    (F*)getRhsSym(3))
+                    (IF*)getRhsSym(3))
                 //#line 17 ExprParser.g
             );
             break;
@@ -558,7 +627,7 @@ struct ExprParser :public PrsStream, public RuleAction
                 //#line 20 ExprParser.g
                 ast_pool.Next() = new ParenExpr(getLeftIToken(), getRightIToken(),
                     //#line 20 ExprParser.g
-                    (E*)getRhsSym(2))
+                    (IE*)getRhsSym(2))
                 //#line 20 ExprParser.g
             );
             break;
@@ -571,7 +640,5 @@ struct ExprParser :public PrsStream, public RuleAction
         }
         return;
     }
-
-   
 };
 

@@ -86,9 +86,10 @@ namespace IcuUtil
 	{
 		FILE* pFile = nullptr;
 		_wfopen_s(&pFile,fileName, L"r");
-		assert(pFile);
+		
 		if (!pFile)
 			return  false;
+		
 		struct _stat64i32 statbuf;
 		_wstat64i32(fileName, &statbuf);
 		const auto bufsize = statbuf.st_size;

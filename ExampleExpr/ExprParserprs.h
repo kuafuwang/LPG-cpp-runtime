@@ -1,7 +1,7 @@
 #pragma once
  #include <string>
   #include "ExprParsersym.h"
-
+ #include "ParseTable.h"
  struct ExprParserprs :public ParseTable,public ExprParsersym {
              typedef  unsigned char byte;
      constexpr   static int ERROR_SYMBOL = 7;

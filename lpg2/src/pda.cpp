@@ -256,7 +256,7 @@ void Pda::ComputeRead(void)
                             item_no = q -> value - 1;
                             la_set[la_ptr] += base -> First(base -> item_table[item_no].suffix_index);
                         }
-                        la_index[la_ptr] = (la_set[la_ptr][grammar -> empty] ? Util::OMEGA : Util::INFINITY);
+                        la_index[la_ptr] = (la_set[la_ptr][grammar -> empty] ? Util::OMEGA : Util::INFINITY_);
                         if (option -> lalr_level > 1 || option -> single_productions || option -> backtrack)
                         {
                             if (state > 0)
@@ -331,10 +331,10 @@ void Pda::LaTraverse(int state_no, int goto_index)
         for (int i = stack.Top(); i != la_ptr; i = stack.Top())
         {
             la_set[i] = la_set[la_ptr];
-            la_index[i] = Util::INFINITY;
+            la_index[i] = Util::INFINITY_;
             stack.Pop();
         }
-        la_index[la_ptr] = Util::INFINITY;
+        la_index[la_ptr] = Util::INFINITY_;
         stack.Pop();
     }
 
@@ -813,7 +813,7 @@ void Pda::MakeReductions(void)
             msg.Next() = "Grammar is not ";
             if (! option -> slr)
             {
-                if (highest_level != Util::INFINITY)
+                if (highest_level != Util::INFINITY_)
                 {
                     IntToString hl_str(highest_level);
 

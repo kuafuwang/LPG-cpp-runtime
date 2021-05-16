@@ -40,7 +40,7 @@
     }
 #endif
 
-int Util::INFINITY = INT_MAX;
+int Util::INFINITY_ = INT_MAX;
 int Util::OMEGA    = INT_MIN;
 int Util::NIL      = INT_MIN + 1;
 

@@ -5,10 +5,12 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lpgRuntimeCpp", "lpgRuntimeCpp\lpgRuntimeCpp.vcxproj", "{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleExpr", "ExampleExpr\ExampleExpr.vcxproj", "{2BEA18BE-262B-49DF-8385-13BEE0F2E1A2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LpgExample", "LpgExample\LpgExample.vcxproj", "{E3D87F53-7036-449B-9231-A28307577E9E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A} = {2671CCA9-7315-4EE8-9D87-F8CCBD76656A}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleExpr", "ExampleExpr\ExampleExpr.vcxproj", "{2BEA18BE-262B-49DF-8385-13BEE0F2E1A2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lpg2", "lpg2\lpg2.vcxproj", "{F39B855C-1157-4EB3-AEBA-33C6FE7B5BFE}"
 EndProject
@@ -28,6 +30,14 @@ Global
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}.Release|x64.Build.0 = Release|x64
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}.Release|x86.ActiveCfg = Release|Win32
 		{2671CCA9-7315-4EE8-9D87-F8CCBD76656A}.Release|x86.Build.0 = Release|Win32
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Debug|x64.ActiveCfg = Debug|x64
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Debug|x64.Build.0 = Debug|x64
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Debug|x86.ActiveCfg = Debug|Win32
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Debug|x86.Build.0 = Debug|Win32
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Release|x64.ActiveCfg = Release|x64
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Release|x64.Build.0 = Release|x64
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Release|x86.ActiveCfg = Release|Win32
+		{E3D87F53-7036-449B-9231-A28307577E9E}.Release|x86.Build.0 = Release|Win32
 		{2BEA18BE-262B-49DF-8385-13BEE0F2E1A2}.Debug|x64.ActiveCfg = Debug|x64
 		{2BEA18BE-262B-49DF-8385-13BEE0F2E1A2}.Debug|x64.Build.0 = Debug|x64
 		{2BEA18BE-262B-49DF-8385-13BEE0F2E1A2}.Debug|x86.ActiveCfg = Debug|Win32

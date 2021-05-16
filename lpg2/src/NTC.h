@@ -62,11 +62,11 @@ class NTC
             for (int dependent = stack.Top(); dependent != nt; dependent = stack.Top())
             {
                 is_null[dependent] = is_null[nt];
-                index_of[dependent] = Util::INFINITY;
+                index_of[dependent] = Util::INFINITY_;
                 stack.Pop();
             }
 
-            index_of[nt] = Util::INFINITY;
+            index_of[nt] = Util::INFINITY_;
             stack.Pop();
         }
 

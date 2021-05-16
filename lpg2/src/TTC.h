@@ -54,11 +54,11 @@ class TTC
             for (int dependent = stack.Top(); dependent != nt; dependent = stack.Top())
             {
                 is_terminal[dependent] = is_terminal[nt];
-                index_of[dependent] = Util::INFINITY;
+                index_of[dependent] = Util::INFINITY_;
                 stack.Pop();
             }
 
-            index_of[nt] = Util::INFINITY;
+            index_of[nt] = Util::INFINITY_;
             stack.Pop();
         }
 
@@ -78,7 +78,7 @@ public:
         // considered to be a terminal
         //
         is_terminal[0] = false;
-        index_of[0] = Util::INFINITY;
+        index_of[0] = Util::INFINITY_;
 
         //
         // Identify each terminal symbol as a terminal.
@@ -86,7 +86,7 @@ public:
         for (int t = 1; t < global_map_.Lbound(); t++)
         {
             is_terminal[t] = true;
-            index_of[t] = Util::INFINITY;
+            index_of[t] = Util::INFINITY_;
         }
 
         //

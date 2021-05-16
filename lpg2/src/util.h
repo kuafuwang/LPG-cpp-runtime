@@ -9,7 +9,7 @@ class Util
 {
 public:
 
-    static int INFINITY,
+    static int INFINITY_,
                OMEGA,
                NIL;
 

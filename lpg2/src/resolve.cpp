@@ -155,7 +155,7 @@ void Resolve::compute_cyclic(int state_no)
         {
             if (index_of[act] == Util::OMEGA)
                 compute_cyclic(act);
-            else if (index_of[act] != Util::INFINITY)
+            else if (index_of[act] != Util::INFINITY_)
                 cyclic[state_no] = true;
             cyclic[state_no] = cyclic[state_no] || cyclic[act];
 
@@ -169,7 +169,7 @@ void Resolve::compute_cyclic(int state_no)
         do
         {
             stack.Pop(act);
-            index_of[act] = Util::INFINITY;
+            index_of[act] = Util::INFINITY_;
         } while(act != state_no);
     }
 
@@ -1203,7 +1203,7 @@ int Resolve::state_to_resolve_conflicts(Resolve::SourcesElement &sources, int la
         {
             if (stack_was_seen(sources.stack_seen, stack))
             {// This is the superfluous code mentioned above!
-                pda -> highest_level = Util::INFINITY;
+                pda -> highest_level = Util::INFINITY_;
                 break;
             }
 
@@ -1654,7 +1654,7 @@ void Resolve::ResolveConflictsAndAddSoftActions(int state_no,
                     {
                         Dfa::ConflictCell &identifier_cell = cells.Next();
                         identifier_cell.action = identifier_action;
-                        identifier_cell.priority = Util::INFINITY;
+                        identifier_cell.priority = Util::INFINITY_;
                     }
 
                     Dfa::Conflict &conf = conflict.Next();
@@ -1757,7 +1757,7 @@ void Resolve::ResolveConflictsAndAddSoftActions(int state_no,
             {
                 Dfa::ConflictCell &identifier_cell = cells.Next();
                 identifier_cell.action = identifier_action;
-                identifier_cell.priority = Util::INFINITY;
+                identifier_cell.priority = Util::INFINITY_;
 
                 assert(identifier_action > 0 && identifier_action <= grammar -> num_rules && shift_action[grammar -> identifier_image] == Util::OMEGA);
                 int item_no = base -> adequate_item[identifier_action] -> value;
@@ -2325,7 +2325,7 @@ void Resolve::ResolveKeywordIdentifierShiftReduceConflicts(int state_no,
         {
             Dfa::ConflictCell &identifier_cell = cells.Next();
             identifier_cell.action = identifier_action;
-            identifier_cell.priority = Util::INFINITY;
+            identifier_cell.priority = Util::INFINITY_;
         }
 
         Dfa::Conflict &conf = conflict.Next();
@@ -2384,7 +2384,7 @@ void Resolve::ResolveKeywordIdentifierShiftReduceConflicts(int state_no,
         {
             Dfa::ConflictCell &identifier_cell = cells.Next();
             identifier_cell.action = identifier_action;
-            identifier_cell.priority = Util::INFINITY;
+            identifier_cell.priority = Util::INFINITY_;
         }
 
         Dfa::Conflict &conf = conflict.Next();
@@ -2456,7 +2456,7 @@ void Resolve::ResolveKeywordIdentifierReduceReduceConflicts(int state_no,
             Dfa::ConflictCell &identifier_cell = cells.Next();
             assert(identifier_action > 0 && identifier_action <= grammar -> num_rules);
             identifier_cell.action = identifier_action;
-            identifier_cell.priority = Util::INFINITY;
+            identifier_cell.priority = Util::INFINITY_;
         }
 
         Dfa::Conflict &conf = conflict.Next();

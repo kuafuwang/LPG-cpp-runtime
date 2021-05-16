@@ -1183,21 +1183,21 @@ void CppTable2::print_source_tables(void)
         //
         if (pda -> scope_prefix.Size() == 0)
         {
-            prs_buffer.Put("      static int scopePrefix[] = null;\n"
+            prs_buffer.Put("  inline    static int* _scopePrefix = NULL;\n"
                            "     int scopePrefix(int index) { return 0;}\n\n"
-                           "      static int scopeSuffix[] = null;\n"
+                           "   inline   static int* _scopeSuffix = NULL;\n"
                            "     int scopeSuffix(int index) { return 0;}\n\n"
-                           "      static int scopeLhs[] = null;\n"
+                           "    inline  static int* _scopeLhs = NULL;\n"
                            "     int scopeLhs(int index) { return 0;}\n\n"
-                           "      static int scopeLa[] = null;\n"
+                           "    inline  static int* _scopeLa = NULL;\n"
                            "     int scopeLa(int index) { return 0;}\n\n"
-                           "      static int scopeStateSet[] = null;\n"
+                           "    inline  static int* scopeStateSet = NULL;\n"
                            "     int scopeStateSet(int index) { return 0;}\n\n"
-                           "      static int scopeRhs[] = null;\n"
+                           "   inline   static int* _scopeRhs = NULL;\n"
                            "     int scopeRhs(int index) { return 0;}\n\n"
-                           "      static int scopeState[] = null;\n"
+                           "   inline   static int* _scopeState = NULL;\n"
                            "     int scopeState(int index) { return 0;}\n\n"
-                           "      static int inSymb[] = null;\n"
+                           "   inline   static int* _inSymb = NULL;\n"
                            "     int inSymb(int index) { return 0;}\n\n");
         }
 

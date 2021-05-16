@@ -356,7 +356,7 @@ void Base::Process(void)
 
         index_of.Resize(grammar -> num_terminals + 1, grammar -> num_symbols);
         index_of.Initialize(OMEGA);
-        index_of[grammar -> accept_image] = INFINITY;  // mark computed
+        index_of[grammar -> accept_image] = INFINITY_;  // mark computed
         for (int nt = grammar -> FirstNonTerminal(); nt <= grammar -> LastNonTerminal(); nt++)
         {
             if (index_of[nt] == OMEGA) // not yet computed ?
@@ -482,14 +482,14 @@ void Base::Process(void)
         last.Resize(grammar -> num_symbols + 1);
         last[0].Initialize(grammar -> num_terminals + 1);
         index_of.Resize(0, last.Size());
-        index_of[0] = INFINITY;
+        index_of[0] = INFINITY_;
         for (int i = 1; i < last.Size(); i++)
         {
             last[i].Initialize(grammar -> num_terminals + 1);
             if (grammar -> IsTerminal(i))
             {
                  last[i].AddElement(i);
-                 index_of[i] = INFINITY;
+                 index_of[i] = INFINITY_;
             }
             else index_of[i] = OMEGA;
         }
@@ -722,11 +722,11 @@ void Base::ComputeClosure(int lhs_symbol)
                     closure[symbol].Next() = element;
             }
 
-            index_of[symbol] = INFINITY;
+            index_of[symbol] = INFINITY_;
             stack.Pop();
         }
 
-        index_of[lhs_symbol] = INFINITY;
+        index_of[lhs_symbol] = INFINITY_;
         stack.Pop();
     }
 
@@ -887,10 +887,10 @@ void Base::ComputeFirst(int nt)
         for (int symbol = stack.Top(); symbol != nt; symbol = stack.Top())
         {
             nt_first[symbol] = nt_first[nt];
-            index_of[symbol] = INFINITY;
+            index_of[symbol] = INFINITY_;
             stack.Pop();
         }
-        index_of[nt] = INFINITY;
+        index_of[nt] = INFINITY_;
         stack.Pop();
     }
 
@@ -942,10 +942,10 @@ void Base::ComputeLast(int nt)
         for (int symbol = stack.Top(); symbol != nt; symbol = stack.Top())
         {
             last[symbol] = last[nt];
-            index_of[symbol] = INFINITY;
+            index_of[symbol] = INFINITY_;
             stack.Pop();
         }
-        index_of[nt] = INFINITY;
+        index_of[nt] = INFINITY_;
         stack.Pop();
     }
 
@@ -996,10 +996,10 @@ void Base::ComputePredecessor(int symbol)
         for (int other = stack.Top(); other != symbol; other = stack.Top())
         {
             predecessor[other] = predecessor[symbol];
-            index_of[other] = INFINITY;
+            index_of[other] = INFINITY_;
             stack.Pop();
         }
-        index_of[symbol] = INFINITY;
+        index_of[symbol] = INFINITY_;
         stack.Pop();
     }
 
@@ -1054,12 +1054,12 @@ void Base::CheckCanGenerateString(int nt)
     {
         int symbol = stack.Top();
         is_cyclic[nt] = is_cyclic[nt] || (symbol != nt); // more than one symbol in SCC?
-        index_of[nt] = INFINITY;
+        index_of[nt] = INFINITY_;
         for ( ; symbol != nt; symbol = stack.Top())
         {
             generates_string[symbol] = generates_string[nt];
             is_cyclic[symbol] = is_cyclic[nt]; // obviously true!!!
-            index_of[symbol] = INFINITY;
+            index_of[symbol] = INFINITY_;
             stack.Pop();
         }
         stack.Pop();
@@ -1115,10 +1115,10 @@ void Base::CheckCanGenerateNull(int nt)
         for (int symbol = stack.Top(); symbol != nt; symbol = stack.Top())
         {
             generates_null[symbol] = generates_null[nt];
-            index_of[symbol] = INFINITY;
+            index_of[symbol] = INFINITY_;
             stack.Pop();
         }
-        index_of[nt] = INFINITY;
+        index_of[nt] = INFINITY_;
         stack.Pop();
     }
 
@@ -1175,7 +1175,7 @@ void Base::ComputeRank(int nt)
         {
             symbol = stack.Top();
             ProcessRank(symbol);
-            index_of[symbol] = INFINITY;
+            index_of[symbol] = INFINITY_;
             stack.Pop();
         }
         else // a non-trivial SCC
@@ -1186,7 +1186,7 @@ void Base::ComputeRank(int nt)
                 symbol = stack.Top();
                 scc.Next() = symbol;
                 ProcessRank(symbol);
-                index_of[symbol] = INFINITY;
+                index_of[symbol] = INFINITY_;
                 stack.Pop();
             } while (symbol != nt);
         }
@@ -1344,11 +1344,11 @@ void Base::ComputeProduces(int symbol)
              new_symbol != symbol; new_symbol = stack.Top())
         {
             produces[new_symbol] = produces[symbol];
-            index_of[new_symbol] = INFINITY;
+            index_of[new_symbol] = INFINITY_;
             stack.Pop();
         }
 
-        index_of[symbol] = INFINITY;
+        index_of[symbol] = INFINITY_;
         stack.Pop();
     }
 
@@ -1396,10 +1396,10 @@ void Base::ComputeFollow(int nt)
         for (int lhs_symbol = stack.Top(); lhs_symbol != nt; lhs_symbol = stack.Top())
         {
             follow[lhs_symbol] = follow[nt];
-            index_of[lhs_symbol] = INFINITY;
+            index_of[lhs_symbol] = INFINITY_;
             stack.Pop();
         }
-        index_of[nt] = INFINITY;
+        index_of[nt] = INFINITY_;
         stack.Pop();
     }
 

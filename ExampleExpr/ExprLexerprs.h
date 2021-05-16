@@ -1,11 +1,8 @@
 #pragma once
  #include <string>
   #include "ExprLexersym.h"
-#include "ParseTable.h"
-
-
-
-struct ExprLexerprs :public ParseTable,public ExprLexersym {
+ #include "ParseTable.h"
+ struct ExprLexerprs :public ParseTable,public ExprLexersym {
              typedef  unsigned char byte;
      constexpr   static int ERROR_SYMBOL = 0;
      int getErrorSymbol() { return ERROR_SYMBOL; }

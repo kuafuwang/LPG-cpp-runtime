@@ -11,8 +11,4 @@ public:
      virtual void addElement(T elt) = 0;
     
 
-    /**
-     * @deprecated.  No longer needed as this interface now extends List.
-     */
-     virtual std::vector<T> getAllChildren()=0;
 };

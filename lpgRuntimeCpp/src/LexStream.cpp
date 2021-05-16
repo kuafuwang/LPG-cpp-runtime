@@ -41,9 +41,15 @@ LexStream::LexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& f
 void LexStream::initialize(const std::wstring& file_name)
 {
 	std::vector<wchar_t> buffer;
-	IcuUtil::getFileUnicodeContent(file_name.c_str(), buffer);
-	shared_ptr_array<wchar_t> inputChars(std::move(buffer));
-	initialize(inputChars, inputChars.size(), file_name);
+	if(IcuUtil::getFileUnicodeContent(file_name.c_str(), buffer))
+	{
+		shared_ptr_array<wchar_t> inputChars(std::move(buffer));
+		initialize(inputChars, inputChars.size(), file_name);
+	}
+	else
+	{
+		throw std::exception("can't open file:");
+	}
 	
 }
 

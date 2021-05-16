@@ -17,8 +17,8 @@ struct PrsStream :public IPrsStream, public ParseErrorCodes
     Tuple<IToken*> adjuncts;
     int index = 0;
     int len = 0;
-
-    PrsStream() { }
+    ~PrsStream();
+    PrsStream();
 
     PrsStream(ILexStream* iLexStream);
 
@@ -279,4 +279,7 @@ struct PrsStream :public IPrsStream, public ParseErrorCodes
 
     void reportError(int errorCode, int leftToken, int errorToken, int rightToken,
         const  std::vector<std::wstring>& errorInfo);
+
+private:
+    void internalResetTokenStream();
 };

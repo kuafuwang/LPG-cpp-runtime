@@ -75,7 +75,7 @@ void Sp::ComputeSpMap(int symbol)
         do
         {
             element = stack.Pop();
-            index_of[element] = Util::INFINITY;
+            index_of[element] = Util::INFINITY_;
         } while(element != symbol);
     }
 

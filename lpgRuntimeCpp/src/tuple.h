@@ -837,6 +837,15 @@ public:
     {
         return   _data->operator[](i);
     }
+    bool operator!() const
+    {
+        return  !operator()();
+    }
+	bool operator()() const
+    {
+	    if(!_data) return false;
+        return (!_data->empty());
+    }
 };
 
 

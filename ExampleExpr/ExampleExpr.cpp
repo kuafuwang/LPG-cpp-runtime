@@ -28,7 +28,7 @@ int main(void)
     MessageHandle  handle;
   
     typedef  unsigned char byte;
-    ExprLexer lex(LR"(C:\Users\kuafu\source\repos\lpg2\Debug\jikespg.g)",4);
+    ExprLexer lex(LR"(D:\workspace\New_Parser\lpg\src\jikespg.g)",4);
    //lex.setMessageHandler(&handle);
     ExprParser  prs(&lex);
    // prs.setMessageHandler(&handle);

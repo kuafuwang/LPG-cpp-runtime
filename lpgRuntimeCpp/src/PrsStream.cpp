@@ -11,11 +11,20 @@
 #include "LexStream.h"
 #include "Token.h"
 
+PrsStream::~PrsStream()
+{
+	internalResetTokenStream();
+}
+
+PrsStream::PrsStream(): iLexStream(nullptr)
+{
+}
+
 PrsStream::PrsStream(ILexStream* iLexStream)
 {
 	this->iLexStream = iLexStream;
 	if (iLexStream != nullptr) iLexStream->setPrsStream(this);
-	resetTokenStream();
+	internalResetTokenStream();
 }
 
 void PrsStream::remapTerminalSymbols(const std::vector<std::wstring>& ordered_parser_symbols, int eof_symbol)
@@ -58,13 +67,23 @@ void PrsStream::remapTerminalSymbols(const std::vector<std::wstring>& ordered_pa
 	if (unimplemented_symbols.size() > 0)
 		throw UnimplementedTerminalsException(unimplemented_symbols);
 }
-
-void PrsStream::resetTokenStream()
+void PrsStream::internalResetTokenStream()
 {
+	for (int i = 0; i < tokens.size(); ++i)
+	{
+		delete tokens[i];
+	}
 	tokens.reset();
 	index = 0;
-
+	for (int i = 0; i < adjuncts.size(); ++i)
+	{
+		delete adjuncts[i];
+	}
 	adjuncts.reset();
+}
+void PrsStream::resetTokenStream()
+{
+	internalResetTokenStream();
 }
 
 void PrsStream::setLexStream(ILexStream* lexStream)

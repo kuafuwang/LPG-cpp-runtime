@@ -49,11 +49,11 @@ class LCA
             for (int ancestor = stack.Top(); ancestor != nt; ancestor = stack.Top())
             {
                 ancestorClosure[ancestor] = ancestorClosure[nt];
-                index_of[ancestor] = Util::INFINITY;
+                index_of[ancestor] = Util::INFINITY_;
                 stack.Pop();
             }
 
-            index_of[nt] = Util::INFINITY;
+            index_of[nt] = Util::INFINITY_;
             stack.Pop();
             table[ancestorClosure[nt].Hash(TABLE_SIZE)].Next() = nt;
         }

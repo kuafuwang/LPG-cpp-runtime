@@ -8,12 +8,10 @@
 #include "ExprParsersym.h"
 #include "IPrsStream.h"
 #include "LexParser.h"
-#include "LexStream.h"
+#include "LpgLexStream.h"
 #include "ParseTable.h"
 #include "RuleAction.h"
-#include "LpgLexStream.h"
-#include "ExprLexerprs.h"
-#include "IToken.h"
+
     //#line 128 "LexerTemplateD.g
 
  struct ExprLexer :public LpgLexStream ,public ExprParsersym, public ExprLexersym,public RuleAction
@@ -95,7 +93,7 @@
      * simply report a lexical error. Otherwise, we produce a bad token.
      */
      void reportLexicalError(int startLoc, int endLoc) {
-        IPrsStream *prs_stream = getIPrsStream();
+        IPrsStream *prs_stream = getPrsStream();
         if (prs_stream == nullptr)
             LpgLexStream ::reportLexicalError(startLoc, endLoc);
         else {
@@ -123,14 +121,14 @@
   
     int getKind(int i)  // Classify character at ith location
     {
-        int c = (i >= getStreamLength() ? IToken::EOF_ : getCharValue(i));
+        int c = (i >= getStreamLength() ? 0xffff : getCharValue(i));
         return (c <  33		? Char_WSChar : 
         		c>= '0' && c <= '9' ? Char_Digit :
         		c == '+' 		? Char_Plus :
         		c == '*' 		? Char_Star :
         		c == '(' 		? Char_LeftParen :
         		c == ')' 		? Char_RightParen :
-        		c == IToken::EOF_ 	? Char_EOF : 
+        		c == 0xffff ? Char_EOF :
         					  Char_Unused);
     }
 

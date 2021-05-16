@@ -266,11 +266,11 @@ void Produce::compute_produces(BoundedArray<BitSetWithOffset> &produces, int sym
         for (int new_symbol = stack.Top(); new_symbol != symbol; new_symbol = stack.Top())
         {
             produces[new_symbol] = produces[symbol];
-            index_of[new_symbol] = Util::INFINITY;
+            index_of[new_symbol] = Util::INFINITY_;
             stack.Pop();
         }
 
-        index_of[symbol] = Util::INFINITY;
+        index_of[symbol] = Util::INFINITY_;
         stack.Pop();
     }
 
