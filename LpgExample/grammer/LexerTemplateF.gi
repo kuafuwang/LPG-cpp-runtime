@@ -121,7 +121,19 @@
 
 %Globals
     /.
-    
+
+#pragma once  
+#include <iostream>
+#include "IPrsStream.h"
+#include "LexParser.h"
+#include "LPGKWLexer.h"
+#include "LPGLexerprs.h"
+#include "LpgLexStream.h"
+#include "Object.h"
+#include "ParseTable.h"
+#include "RuleAction.h"
+#include "stringex.h"
+#include "Token.h"
     ./
 %End
 

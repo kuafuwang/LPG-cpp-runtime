@@ -11,9 +11,9 @@
 --
 -- B E G I N N I N G   O F   T E M P L A T E   KeywordTemplateF (Similar to KeywordTemplateD)
 --
-%Options Programming_Language=cpp2,margin=4
+%Options Programming_Language=rt_cpp,margin=4
 %Options table
-%options action-block=("*.cpp", "/.", "./")
+%options action-block=("*.h", "/.", "./")
 %options ParseTable=ParseTable
 %Options prefix=Char_
 %Options single-productions
@@ -31,7 +31,7 @@
     --
     -- Macro that may be respecified in an instance of this template
     --
-    $eof_char /.$sym_type$.$prefix$EOF$suffix$./
+    $eof_char /.$sym_type$::$prefix$EOF$suffix$./
 
     --
     -- Macros useful for specifying actions
@@ -55,7 +55,8 @@
 %End
 
 %Globals
-    /.import lpg.runtime.*;
+    /.
+    
     ./
 %End
 
@@ -66,7 +67,7 @@
 	{
 		 shared_ptr_array<wchar_t> inputChars;
 		 static  constexpr int  keywordKindLenth = $num_rules + 1;
-		 int keywordKind[keywordKindLenth]]={};
+		 int keywordKind[keywordKindLenth]={};
 		 int* getKeywordKinds() { return keywordKind; }
 
 		 int lexer(int curtok, int lasttok)
@@ -101,7 +102,7 @@
 %Rules
     /.
 
-         $action_type(char[] inputChars, int identifierKind)
+         $action_type(shared_ptr_array<wchar_t> inputChars, int identifierKind)
         {
             this->inputChars = inputChars;
             keywordKind[0] = identifierKind;
@@ -116,7 +117,7 @@
                     keywordKind[i] = identifierKind;
             }
         }
-    }
+    };
     ./
 %End
 

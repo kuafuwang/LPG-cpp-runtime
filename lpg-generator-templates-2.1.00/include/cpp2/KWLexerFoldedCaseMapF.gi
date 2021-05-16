@@ -13,8 +13,9 @@
         // in the input, it is mapped into $sym_type::$prefix$a$suffix$ just
         // like 'a'.
         //
-         static int tokenKind[128] = {};
-        static
+         inline static int tokenKind[128] = {};
+        
+        static bool static_init()
         {
             tokenKind['$'] = $sym_type::$prefix$DollarSign$suffix$;
             tokenKind['%'] = $sym_type::$prefix$Percent$suffix$;
@@ -73,9 +74,10 @@
             tokenKind['X'] = $sym_type::$prefix$x$suffix$;
             tokenKind['Y'] = $sym_type::$prefix$y$suffix$;
             tokenKind['Z'] = $sym_type::$prefix$z$suffix$;
+            return true;
         };
-    
-         int getKind(char c)
+        inline static bool ddddd = static_init();
+         int getKind(wchar_t c)
         {
             return (c < 128 ? tokenKind[c] : 0);
         }

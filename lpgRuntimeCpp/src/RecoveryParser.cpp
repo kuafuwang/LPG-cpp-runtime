@@ -9,7 +9,7 @@
 
 RecoveryParser::RecoveryParser(BacktrackingParser* parser, IntSegmentedTuple& _action, IntTuple& _tokens,
                                IPrsStream* tokStream, ParseTable* prs, Monitor* monitor, int maxErrors, long maxTime):
-	DiagnoseParser(tokStream, prs, monitor, maxErrors, maxTime), action(action), tokens(tokens)
+	DiagnoseParser(tokStream, prs, monitor, maxErrors, maxTime), action(_action), tokens(_tokens)
 {
 	this->parser = parser;
 

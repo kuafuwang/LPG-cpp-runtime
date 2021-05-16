@@ -213,7 +213,10 @@
             IToken* err = PrsStream::getIToken(index);
             return (ErrorToken*) (  dynamic_cast<ErrorToken*>(err) ? err : nullptr);
         }
-
+		~$action_type()
+		{
+		   delete dtParser;
+		}
          $action_type(ILexStream* lexStream):PrsStream(lexStream)
         {
             try

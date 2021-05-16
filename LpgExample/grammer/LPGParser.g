@@ -1,29 +1,11 @@
 %options la=6
 %options automatic_ast,ast_type=ASTNode,visitor=preorder,parent_saved
-%options template=dtParserTemplateF.gi
+%options template=btParserTemplateF.gi
 %options import_terminals=LPGLexer.gi
 
 %Globals
     /.
-#pragma once
 
-#include <iostream>
-
-#include "DeterministicParser.h"
-#include "diagnose.h"
-#include "ErrorToken.h"
-#include "Exception.h"
-#include "IAbstractArrayList.h"
-#include "IAst.h"
-#include "IAstVisitor.h"
-#include "ILexStream.h"
-#include "LPGParserprs.h"
-#include "LPGParsersym.h"
-#include "Object.h"
-#include "ParseTable.h"
-#include "PrsStream.h"
-#include "RuleAction.h"
-#include "IcuUtil.h"
      ./
 %End
 

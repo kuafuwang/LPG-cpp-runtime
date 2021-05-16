@@ -1,14 +1,11 @@
 
-    //#line 157 "dtParserTemplateF.gi
-
-
-
-    //#line 7 "LPGParser.g
+    //#line 161 "btParserTemplateF.gi
 
 #pragma once
 
 #include <iostream>
 
+#include "BacktrackingParser.h"
 #include "DeterministicParser.h"
 #include "diagnose.h"
 #include "ErrorToken.h"
@@ -24,8 +21,12 @@
 #include "PrsStream.h"
 #include "RuleAction.h"
 #include "IcuUtil.h"
+
+    //#line 7 "LPGParser.g
+
+
  
-    //#line 163 "dtParserTemplateF.gi
+    //#line 186 "btParserTemplateF.gi
 
  struct LPGParser :public Object ,public RuleAction
 {
@@ -33,101 +34,106 @@
     
      bool unimplementedSymbolsWarning = false;
 
-    inline static ParseTable* prsTable = new LPGParserprs();
+     inline static ParseTable* prsTable = new LPGParserprs();
      ParseTable* getParseTable() { return prsTable; }
 
-     DeterministicParser* dtParser = nullptr;
-     DeterministicParser* getParser() { return dtParser; }
+     BacktrackingParser* btParser = nullptr;
+     BacktrackingParser* getParser() { return btParser; }
 
-     void setResult(Object* object) { dtParser->setSym1(object); }
-     Object* getRhsSym(int i) { return dtParser->getSym(i); }
+     void setResult(Object* object) { btParser->setSym1(object); }
+     Object* getRhsSym(int i) { return btParser->getSym(i); }
 
-     int getRhsTokenIndex(int i) { return dtParser->getToken(i); }
+     int getRhsTokenIndex(int i) { return btParser->getToken(i); }
      IToken* getRhsIToken(int i) { return prsStream->getIToken(getRhsTokenIndex(i)); }
     
-     int getRhsFirstTokenIndex(int i) { return dtParser->getFirstToken(i); }
+     int getRhsFirstTokenIndex(int i) { return btParser->getFirstToken(i); }
      IToken* getRhsFirstIToken(int i) { return prsStream->getIToken(getRhsFirstTokenIndex(i)); }
 
-     int getRhsLastTokenIndex(int i) { return dtParser->getLastToken(i); }
+     int getRhsLastTokenIndex(int i) { return btParser->getLastToken(i); }
      IToken* getRhsLastIToken(int i) { return prsStream->getIToken(getRhsLastTokenIndex(i)); }
 
-     int getLeftSpan() { return dtParser->getFirstToken(); }
+     int getLeftSpan() { return btParser->getFirstToken(); }
      IToken* getLeftIToken()  { return prsStream->getIToken(getLeftSpan()); }
 
-     int getRightSpan() { return dtParser->getLastToken(); }
+     int getRightSpan() { return btParser->getLastToken(); }
      IToken* getRightIToken() { return prsStream->getIToken(getRightSpan()); }
 
      int getRhsErrorTokenIndex(int i)
     {
-        int index = dtParser->getToken(i);
+        int index = btParser->getToken(i);
         IToken* err = prsStream->getIToken(index);
-        return (dynamic_cast<ErrorToken*>(err) ? index : 0);
+        return ( dynamic_cast<ErrorToken*>(err) ? index : 0);
     }
-     ErrorToken* getRhsErrorIToken(int i)
+     ErrorToken * getRhsErrorIToken(int i)
     {
-        int index = dtParser->getToken(i);
+        int index = btParser->getToken(i);
         IToken* err = prsStream->getIToken(index);
-        return (ErrorToken*) (dynamic_cast<ErrorToken*>(err) ? err : nullptr);
+        return (ErrorToken*) ( dynamic_cast<ErrorToken*>(err) ? err : nullptr);
     }
 
      void reset(ILexStream* lexStream)
     {
         prsStream = new PrsStream(lexStream);
-        dtParser->reset(prsStream);
+        btParser->reset(prsStream);
 
         try
         {
             prsStream->remapTerminalSymbols(orderedTerminalSymbols(), prsTable->getEoftSymbol());
         }
-        catch(NullExportedSymbolsException& e) {
+        catch (NullExportedSymbolsException& e) {
         }
-        catch(NullTerminalSymbolsException& e) {
+        catch (NullTerminalSymbolsException& e) {
         }
-        catch(UnimplementedTerminalsException& e)
+        catch (UnimplementedTerminalsException& e)
         {
             if (unimplementedSymbolsWarning) {
-                auto unimplemented_symbols = e.getSymbols();
-                std::cout <<"The Lexer will not scan the following token(s):";
+               auto unimplemented_symbols = e.getSymbols();
+                std::cout << "The Lexer will not scan the following token(s):" << std::endl;
                 for (int i = 0; i < unimplemented_symbols.size(); i++)
                 {
-                    auto id =  unimplemented_symbols[i];
-                    std::wcout << L"    " << LPGParsersym::orderedTerminalSymbols[id];               
+                    auto id = unimplemented_symbols.at(i);
+                    std::wcout <<L"    " << LPGParsersym::orderedTerminalSymbols[id] << std::endl;               
                 }
-                std::cout << std::endl;
+               std::cout <<std::endl;  
             }
         }
-        catch(UndefinedEofSymbolException& e)
+        catch (UndefinedEofSymbolException& e)
         {
-            std::string str = "The Lexer does not implement the Eof symbol ";
+            std::stringex str= "The Lexer does not implement the Eof symbol ";
             str += IcuUtil::ws2s(LPGParsersym::orderedTerminalSymbols[prsTable->getEoftSymbol()]);
             throw  UndefinedEofSymbolException(str);
-        }
+        } 
     }
     
      LPGParser(ILexStream* lexStream = nullptr)
     {
         try
         {
-            dtParser = new DeterministicParser(prsStream, prsTable,  this);
+            btParser = new BacktrackingParser(prsStream, prsTable,  this);
         }
-        catch (NotDeterministicParseTableException& e)
+        catch (NotBacktrackParseTableException& e)
         {
-            throw  ( NotDeterministicParseTableException
-                                ("Regenerate LPGParserprs.java with -NOBACKTRACK option"));
+            throw ( NotBacktrackParseTableException
+                                ("Regenerate LPGParserprs.java with -BACKTRACK option"));
         }
         catch (BadParseSymFileException& e)
         {
-            throw  (BadParseSymFileException("Bad Parser Symbol File -- LPGParsersym.cpp. Regenerate LPGParserprs.cpp"));
+            throw ( BadParseSymFileException("Bad Parser Symbol File -- LPGParsersym::java"));
         }
-		if(lexStream){
-			reset(lexStream);
-		}
+
+        if(lexStream)
+        {
+            reset(lexStream);
+        }
     }
+    
 
     
      int numTokenKinds() { return LPGParsersym::numTokenKinds; }
-     std::vector< std::wstring> orderedTerminalSymbols() { return LPGParsersym::orderedTerminalSymbols; }
-     std::wstring getTokenKindName(int kind) { return LPGParsersym::orderedTerminalSymbols[kind]; }            
+     std::vector<std::wstring> orderedTerminalSymbols() { 
+         return LPGParsersym::orderedTerminalSymbols; 
+    }
+     std::wstring getTokenKindName(int kind) { return LPGParsersym::orderedTerminalSymbols[kind]; }
      int getEOFTokenKind() { return prsTable->getEoftSymbol(); }
      IPrsStream* getIPrsStream() { return prsStream; }
 
@@ -141,36 +147,36 @@
      * @deprecated replaced by {@link #getIPrsStream()}
      *
      */
-     PrsStream * getParseStream() { return prsStream; }
+     PrsStream* getParseStream() { return prsStream; }
 
-     Object * parser()
+     Object* parser()
     {
         return parser(nullptr, 0);
     }
-        
-     Object * parser(Monitor* monitor)
+    
+     Object* parser(Monitor* monitor)
     {
         return parser(monitor, 0);
     }
-        
+    
      Object * parser(int error_repair_count)
     {
         return parser(nullptr, error_repair_count);
     }
-        
-     Object *parser(Monitor* monitor, int error_repair_count)
-    {
-        dtParser->setMonitor(monitor);
 
+     Object * parser(Monitor* monitor, int error_repair_count)
+    {
+        btParser->setMonitor(monitor);
+        
         try
         {
-            return (Object *) dtParser->parse();
+            return (Object *) btParser->fuzzyParse(error_repair_count);
         }
         catch (BadParseException& e)
         {
             prsStream->reset(e.error_token); // point to error token
 
-            auto diagnoseParser = new DiagnoseParser(prsStream, prsTable);
+            std::shared_ptr< DiagnoseParser> diagnoseParser = std::make_shared<DiagnoseParser>(prsStream, prsTable);
             diagnoseParser->diagnose(e.error_token);
         }
 
@@ -182,7 +188,7 @@
     //
     
 
-    //#line 55 "LPGParser.g
+    //#line 37 "LPGParser.g
 
     
    struct ASTNode;
@@ -495,7 +501,7 @@
             v->endVisit(this);
         }
 
-    //#line 62 "LPGParser.g
+    //#line 44 "LPGParser.g
 
   
      };
@@ -2013,7 +2019,7 @@
             v->endVisit(this);
         }
 
-    //#line 130 "LPGParser.g
+    //#line 112 "LPGParser.g
 
    
      };
@@ -2817,7 +2823,7 @@
             v->endVisit(this);
         }
 
-    //#line 202 "LPGParser.g
+    //#line 184 "LPGParser.g
 
  
      };
@@ -3123,7 +3129,7 @@
             v->endVisit(this);
         }
 
-    //#line 244 "LPGParser.g
+    //#line 226 "LPGParser.g
 
 
     };
@@ -3283,7 +3289,7 @@
             v->endVisit(this);
         }
 
-    //#line 258 "LPGParser.g
+    //#line 240 "LPGParser.g
 
  
      };
@@ -3592,7 +3598,7 @@
             v->endVisit(this);
         }
 
-    //#line 287 "LPGParser.g
+    //#line 269 "LPGParser.g
 
    
      };
@@ -4889,7 +4895,7 @@
             v->endVisit(this);
         }
 
-    //#line 264 "LPGParser.g
+    //#line 246 "LPGParser.g
 
   
      };
@@ -5763,27 +5769,27 @@
         }
     };
 
-    //#line 323 "dtParserTemplateF.gi
+    //#line 351 "btParserTemplateF.gi
 
+ 
      void ruleAction(int ruleNumber)
     {
         switch (ruleNumber)
         {
-            //#line 324 "dtParserTemplateF.gi"
 
             //
             // Rule 1:  LPG ::= options_segment LPG_INPUT
             //
             case 1: {
-                //#line 61 "LPGParser.g"
+               //#line 43 "LPGParser.g"
                 setResult(
-                    //#line 61 LPGParser.g
+                    //#line 43 LPGParser.g
                     ast_pool.Next()=new LPG(this, getLeftIToken(), getRightIToken(),
-                            //#line 61 LPGParser.g
+                            //#line 43 LPGParser.g
                             (IAst*)getRhsSym(1),
-                            //#line 61 LPGParser.g
+                            //#line 43 LPGParser.g
                             (IAst*)getRhsSym(2))
-                //#line 61 LPGParser.g
+                //#line 43 LPGParser.g
                 );
             break;
             }
@@ -5791,11 +5797,11 @@
             // Rule 2:  LPG_INPUT ::= $Empty
             //
             case 2: {
-                //#line 66 "LPGParser.g"
+               //#line 48 "LPGParser.g"
                 setResult(
-                    //#line 66 LPGParser.g
+                    //#line 48 LPGParser.g
                     ast_pool.Next()=new LPG_itemList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 66 LPGParser.g
+                //#line 48 LPGParser.g
                 );
             break;
             }
@@ -5803,7 +5809,7 @@
             // Rule 3:  LPG_INPUT ::= LPG_INPUT LPG_item
             //
             case 3: {
-                //#line 67 "LPGParser.g"
+               //#line 49 "LPGParser.g"
                 ((LPG_itemList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -5811,13 +5817,13 @@
             // Rule 4:  LPG_item ::= ALIAS_KEY$ alias_segment END_KEY_OPT$
             //
             case 4: {
-                //#line 70 "LPGParser.g"
+               //#line 52 "LPGParser.g"
                 setResult(
-                    //#line 70 LPGParser.g
+                    //#line 52 LPGParser.g
                     ast_pool.Next()=new AliasSeg(getLeftIToken(), getRightIToken(),
-                                 //#line 70 LPGParser.g
+                                 //#line 52 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 70 LPGParser.g
+                //#line 52 LPGParser.g
                 );
             break;
             }
@@ -5825,13 +5831,13 @@
             // Rule 5:  LPG_item ::= AST_KEY$ ast_segment END_KEY_OPT$
             //
             case 5: {
-                //#line 71 "LPGParser.g"
+               //#line 53 "LPGParser.g"
                 setResult(
-                    //#line 71 LPGParser.g
+                    //#line 53 LPGParser.g
                     ast_pool.Next()=new AstSeg(getLeftIToken(), getRightIToken(),
-                               //#line 71 LPGParser.g
+                               //#line 53 LPGParser.g
                                (IAst*)getRhsSym(2))
-                //#line 71 LPGParser.g
+                //#line 53 LPGParser.g
                 );
             break;
             }
@@ -5839,13 +5845,13 @@
             // Rule 6:  LPG_item ::= DEFINE_KEY$ define_segment END_KEY_OPT$
             //
             case 6: {
-                //#line 72 "LPGParser.g"
+               //#line 54 "LPGParser.g"
                 setResult(
-                    //#line 72 LPGParser.g
+                    //#line 54 LPGParser.g
                     ast_pool.Next()=new DefineSeg(getLeftIToken(), getRightIToken(),
-                                  //#line 72 LPGParser.g
+                                  //#line 54 LPGParser.g
                                   (IAst*)getRhsSym(2))
-                //#line 72 LPGParser.g
+                //#line 54 LPGParser.g
                 );
             break;
             }
@@ -5853,13 +5859,13 @@
             // Rule 7:  LPG_item ::= EOF_KEY$ eof_segment END_KEY_OPT$
             //
             case 7: {
-                //#line 73 "LPGParser.g"
+               //#line 55 "LPGParser.g"
                 setResult(
-                    //#line 73 LPGParser.g
+                    //#line 55 LPGParser.g
                     ast_pool.Next()=new EofSeg(getLeftIToken(), getRightIToken(),
-                               //#line 73 LPGParser.g
+                               //#line 55 LPGParser.g
                                (IAst*)getRhsSym(2))
-                //#line 73 LPGParser.g
+                //#line 55 LPGParser.g
                 );
             break;
             }
@@ -5867,13 +5873,13 @@
             // Rule 8:  LPG_item ::= EOL_KEY$ eol_segment END_KEY_OPT$
             //
             case 8: {
-                //#line 74 "LPGParser.g"
+               //#line 56 "LPGParser.g"
                 setResult(
-                    //#line 74 LPGParser.g
+                    //#line 56 LPGParser.g
                     ast_pool.Next()=new EolSeg(getLeftIToken(), getRightIToken(),
-                               //#line 74 LPGParser.g
+                               //#line 56 LPGParser.g
                                (IAst*)getRhsSym(2))
-                //#line 74 LPGParser.g
+                //#line 56 LPGParser.g
                 );
             break;
             }
@@ -5881,13 +5887,13 @@
             // Rule 9:  LPG_item ::= ERROR_KEY$ error_segment END_KEY_OPT$
             //
             case 9: {
-                //#line 75 "LPGParser.g"
+               //#line 57 "LPGParser.g"
                 setResult(
-                    //#line 75 LPGParser.g
+                    //#line 57 LPGParser.g
                     ast_pool.Next()=new ErrorSeg(getLeftIToken(), getRightIToken(),
-                                 //#line 75 LPGParser.g
+                                 //#line 57 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 75 LPGParser.g
+                //#line 57 LPGParser.g
                 );
             break;
             }
@@ -5895,13 +5901,13 @@
             // Rule 10:  LPG_item ::= EXPORT_KEY$ export_segment END_KEY_OPT$
             //
             case 10: {
-                //#line 76 "LPGParser.g"
+               //#line 58 "LPGParser.g"
                 setResult(
-                    //#line 76 LPGParser.g
+                    //#line 58 LPGParser.g
                     ast_pool.Next()=new ExportSeg(getLeftIToken(), getRightIToken(),
-                                  //#line 76 LPGParser.g
+                                  //#line 58 LPGParser.g
                                   (IAst*)getRhsSym(2))
-                //#line 76 LPGParser.g
+                //#line 58 LPGParser.g
                 );
             break;
             }
@@ -5909,13 +5915,13 @@
             // Rule 11:  LPG_item ::= GLOBALS_KEY$ globals_segment END_KEY_OPT$
             //
             case 11: {
-                //#line 77 "LPGParser.g"
+               //#line 59 "LPGParser.g"
                 setResult(
-                    //#line 77 LPGParser.g
+                    //#line 59 LPGParser.g
                     ast_pool.Next()=new GlobalsSeg(getLeftIToken(), getRightIToken(),
-                                   //#line 77 LPGParser.g
+                                   //#line 59 LPGParser.g
                                    (IAst*)getRhsSym(2))
-                //#line 77 LPGParser.g
+                //#line 59 LPGParser.g
                 );
             break;
             }
@@ -5923,13 +5929,13 @@
             // Rule 12:  LPG_item ::= HEADERS_KEY$ headers_segment END_KEY_OPT$
             //
             case 12: {
-                //#line 78 "LPGParser.g"
+               //#line 60 "LPGParser.g"
                 setResult(
-                    //#line 78 LPGParser.g
+                    //#line 60 LPGParser.g
                     ast_pool.Next()=new HeadersSeg(getLeftIToken(), getRightIToken(),
-                                   //#line 78 LPGParser.g
+                                   //#line 60 LPGParser.g
                                    (IAst*)getRhsSym(2))
-                //#line 78 LPGParser.g
+                //#line 60 LPGParser.g
                 );
             break;
             }
@@ -5937,13 +5943,13 @@
             // Rule 13:  LPG_item ::= IDENTIFIER_KEY$ identifier_segment END_KEY_OPT$
             //
             case 13: {
-                //#line 79 "LPGParser.g"
+               //#line 61 "LPGParser.g"
                 setResult(
-                    //#line 79 LPGParser.g
+                    //#line 61 LPGParser.g
                     ast_pool.Next()=new IdentifierSeg(getLeftIToken(), getRightIToken(),
-                                      //#line 79 LPGParser.g
+                                      //#line 61 LPGParser.g
                                       (IAst*)getRhsSym(2))
-                //#line 79 LPGParser.g
+                //#line 61 LPGParser.g
                 );
             break;
             }
@@ -5951,13 +5957,13 @@
             // Rule 14:  LPG_item ::= IMPORT_KEY$ import_segment END_KEY_OPT$
             //
             case 14: {
-                //#line 80 "LPGParser.g"
+               //#line 62 "LPGParser.g"
                 setResult(
-                    //#line 80 LPGParser.g
+                    //#line 62 LPGParser.g
                     ast_pool.Next()=new ImportSeg(getLeftIToken(), getRightIToken(),
-                                  //#line 80 LPGParser.g
+                                  //#line 62 LPGParser.g
                                   (IAst*)getRhsSym(2))
-                //#line 80 LPGParser.g
+                //#line 62 LPGParser.g
                 );
             break;
             }
@@ -5965,13 +5971,13 @@
             // Rule 15:  LPG_item ::= INCLUDE_KEY$ include_segment END_KEY_OPT$
             //
             case 15: {
-                //#line 81 "LPGParser.g"
+               //#line 63 "LPGParser.g"
                 setResult(
-                    //#line 81 LPGParser.g
+                    //#line 63 LPGParser.g
                     ast_pool.Next()=new IncludeSeg(getLeftIToken(), getRightIToken(),
-                                   //#line 81 LPGParser.g
+                                   //#line 63 LPGParser.g
                                    (IAst*)getRhsSym(2))
-                //#line 81 LPGParser.g
+                //#line 63 LPGParser.g
                 );
             break;
             }
@@ -5979,13 +5985,13 @@
             // Rule 16:  LPG_item ::= KEYWORDS_KEY$ keywords_segment END_KEY_OPT$
             //
             case 16: {
-                //#line 82 "LPGParser.g"
+               //#line 64 "LPGParser.g"
                 setResult(
-                    //#line 82 LPGParser.g
+                    //#line 64 LPGParser.g
                     ast_pool.Next()=new KeywordsSeg(getLeftIToken(), getRightIToken(),
-                                    //#line 82 LPGParser.g
+                                    //#line 64 LPGParser.g
                                     (IAst*)getRhsSym(2))
-                //#line 82 LPGParser.g
+                //#line 64 LPGParser.g
                 );
             break;
             }
@@ -5993,13 +5999,13 @@
             // Rule 17:  LPG_item ::= NAMES_KEY$ names_segment END_KEY_OPT$
             //
             case 17: {
-                //#line 83 "LPGParser.g"
+               //#line 65 "LPGParser.g"
                 setResult(
-                    //#line 83 LPGParser.g
+                    //#line 65 LPGParser.g
                     ast_pool.Next()=new NamesSeg(getLeftIToken(), getRightIToken(),
-                                 //#line 83 LPGParser.g
+                                 //#line 65 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 83 LPGParser.g
+                //#line 65 LPGParser.g
                 );
             break;
             }
@@ -6007,13 +6013,13 @@
             // Rule 18:  LPG_item ::= NOTICE_KEY$ notice_segment END_KEY_OPT$
             //
             case 18: {
-                //#line 84 "LPGParser.g"
+               //#line 66 "LPGParser.g"
                 setResult(
-                    //#line 84 LPGParser.g
+                    //#line 66 LPGParser.g
                     ast_pool.Next()=new NoticeSeg(getLeftIToken(), getRightIToken(),
-                                  //#line 84 LPGParser.g
+                                  //#line 66 LPGParser.g
                                   (IAst*)getRhsSym(2))
-                //#line 84 LPGParser.g
+                //#line 66 LPGParser.g
                 );
             break;
             }
@@ -6021,13 +6027,13 @@
             // Rule 19:  LPG_item ::= RULES_KEY$ rules_segment END_KEY_OPT$
             //
             case 19: {
-                //#line 85 "LPGParser.g"
+               //#line 67 "LPGParser.g"
                 setResult(
-                    //#line 85 LPGParser.g
+                    //#line 67 LPGParser.g
                     ast_pool.Next()=new RulesSeg(getLeftIToken(), getRightIToken(),
-                                 //#line 85 LPGParser.g
+                                 //#line 67 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 85 LPGParser.g
+                //#line 67 LPGParser.g
                 );
             break;
             }
@@ -6035,13 +6041,13 @@
             // Rule 20:  LPG_item ::= SOFT_KEYWORDS_KEY$ keywords_segment END_KEY_OPT$
             //
             case 20: {
-                //#line 86 "LPGParser.g"
+               //#line 68 "LPGParser.g"
                 setResult(
-                    //#line 86 LPGParser.g
+                    //#line 68 LPGParser.g
                     ast_pool.Next()=new SoftKeywordsSeg(getLeftIToken(), getRightIToken(),
-                                        //#line 86 LPGParser.g
+                                        //#line 68 LPGParser.g
                                         (IAst*)getRhsSym(2))
-                //#line 86 LPGParser.g
+                //#line 68 LPGParser.g
                 );
             break;
             }
@@ -6049,13 +6055,13 @@
             // Rule 21:  LPG_item ::= START_KEY$ start_segment END_KEY_OPT$
             //
             case 21: {
-                //#line 87 "LPGParser.g"
+               //#line 69 "LPGParser.g"
                 setResult(
-                    //#line 87 LPGParser.g
+                    //#line 69 LPGParser.g
                     ast_pool.Next()=new StartSeg(getLeftIToken(), getRightIToken(),
-                                 //#line 87 LPGParser.g
+                                 //#line 69 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 87 LPGParser.g
+                //#line 69 LPGParser.g
                 );
             break;
             }
@@ -6063,13 +6069,13 @@
             // Rule 22:  LPG_item ::= TERMINALS_KEY$ terminals_segment END_KEY_OPT$
             //
             case 22: {
-                //#line 88 "LPGParser.g"
+               //#line 70 "LPGParser.g"
                 setResult(
-                    //#line 88 LPGParser.g
+                    //#line 70 LPGParser.g
                     ast_pool.Next()=new TerminalsSeg(getLeftIToken(), getRightIToken(),
-                                     //#line 88 LPGParser.g
+                                     //#line 70 LPGParser.g
                                      (IAst*)getRhsSym(2))
-                //#line 88 LPGParser.g
+                //#line 70 LPGParser.g
                 );
             break;
             }
@@ -6077,13 +6083,13 @@
             // Rule 23:  LPG_item ::= TRAILERS_KEY$ trailers_segment END_KEY_OPT$
             //
             case 23: {
-                //#line 89 "LPGParser.g"
+               //#line 71 "LPGParser.g"
                 setResult(
-                    //#line 89 LPGParser.g
+                    //#line 71 LPGParser.g
                     ast_pool.Next()=new TrailersSeg(getLeftIToken(), getRightIToken(),
-                                    //#line 89 LPGParser.g
+                                    //#line 71 LPGParser.g
                                     (IAst*)getRhsSym(2))
-                //#line 89 LPGParser.g
+                //#line 71 LPGParser.g
                 );
             break;
             }
@@ -6091,13 +6097,13 @@
             // Rule 24:  LPG_item ::= TYPES_KEY$ types_segment END_KEY_OPT$
             //
             case 24: {
-                //#line 90 "LPGParser.g"
+               //#line 72 "LPGParser.g"
                 setResult(
-                    //#line 90 LPGParser.g
+                    //#line 72 LPGParser.g
                     ast_pool.Next()=new TypesSeg(getLeftIToken(), getRightIToken(),
-                                 //#line 90 LPGParser.g
+                                 //#line 72 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 90 LPGParser.g
+                //#line 72 LPGParser.g
                 );
             break;
             }
@@ -6105,13 +6111,13 @@
             // Rule 25:  LPG_item ::= RECOVER_KEY$ recover_segment END_KEY_OPT$
             //
             case 25: {
-                //#line 91 "LPGParser.g"
+               //#line 73 "LPGParser.g"
                 setResult(
-                    //#line 91 LPGParser.g
+                    //#line 73 LPGParser.g
                     ast_pool.Next()=new RecoverSeg(getLeftIToken(), getRightIToken(),
-                                   //#line 91 LPGParser.g
+                                   //#line 73 LPGParser.g
                                    (IAst*)getRhsSym(2))
-                //#line 91 LPGParser.g
+                //#line 73 LPGParser.g
                 );
             break;
             }
@@ -6119,13 +6125,13 @@
             // Rule 26:  LPG_item ::= DISJOINTPREDECESSORSETS_KEY$ predecessor_segment END_KEY_OPT$
             //
             case 26: {
-                //#line 92 "LPGParser.g"
+               //#line 74 "LPGParser.g"
                 setResult(
-                    //#line 92 LPGParser.g
+                    //#line 74 LPGParser.g
                     ast_pool.Next()=new PredecessorSeg(getLeftIToken(), getRightIToken(),
-                                       //#line 92 LPGParser.g
+                                       //#line 74 LPGParser.g
                                        (IAst*)getRhsSym(2))
-                //#line 92 LPGParser.g
+                //#line 74 LPGParser.g
                 );
             break;
             }
@@ -6133,11 +6139,11 @@
             // Rule 27:  options_segment ::= $Empty
             //
             case 27: {
-                //#line 95 "LPGParser.g"
+               //#line 77 "LPGParser.g"
                 setResult(
-                    //#line 95 LPGParser.g
+                    //#line 77 LPGParser.g
                     ast_pool.Next()=new option_specList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 95 LPGParser.g
+                //#line 77 LPGParser.g
                 );
             break;
             }
@@ -6145,7 +6151,7 @@
             // Rule 28:  options_segment ::= options_segment option_spec
             //
             case 28: {
-                //#line 95 "LPGParser.g"
+               //#line 77 "LPGParser.g"
                 ((option_specList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6153,13 +6159,13 @@
             // Rule 29:  option_spec ::= OPTIONS_KEY$ option_list
             //
             case 29: {
-                //#line 96 "LPGParser.g"
+               //#line 78 "LPGParser.g"
                 setResult(
-                    //#line 96 LPGParser.g
+                    //#line 78 LPGParser.g
                     ast_pool.Next()=new option_spec(getLeftIToken(), getRightIToken(),
-                                    //#line 96 LPGParser.g
+                                    //#line 78 LPGParser.g
                                     (IAst*)getRhsSym(2))
-                //#line 96 LPGParser.g
+                //#line 78 LPGParser.g
                 );
             break;
             }
@@ -6167,11 +6173,11 @@
             // Rule 30:  option_list ::= option
             //
             case 30: {
-                //#line 97 "LPGParser.g"
+               //#line 79 "LPGParser.g"
                 setResult(
-                    //#line 97 LPGParser.g
+                    //#line 79 LPGParser.g
                     ast_pool.Next()=new optionList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 97 LPGParser.g
+                //#line 79 LPGParser.g
                 );
             break;
             }
@@ -6179,7 +6185,7 @@
             // Rule 31:  option_list ::= option_list ,$ option
             //
             case 31: {
-                //#line 97 "LPGParser.g"
+               //#line 79 "LPGParser.g"
                 ((optionList*)getRhsSym(1))->addElement((IAst*)getRhsSym(3));
             break;
             }
@@ -6187,15 +6193,15 @@
             // Rule 32:  option ::= SYMBOL option_value
             //
             case 32: {
-                //#line 98 "LPGParser.g"
+               //#line 80 "LPGParser.g"
                 setResult(
-                    //#line 98 LPGParser.g
+                    //#line 80 LPGParser.g
                     ast_pool.Next()=new option(getLeftIToken(), getRightIToken(),
-                               //#line 98 LPGParser.g
+                               //#line 80 LPGParser.g
                                ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                               //#line 98 LPGParser.g
+                               //#line 80 LPGParser.g
                                (IAst*)getRhsSym(2))
-                //#line 98 LPGParser.g
+                //#line 80 LPGParser.g
                 );
             break;
             }
@@ -6203,7 +6209,7 @@
             // Rule 33:  option_value ::= $Empty
             //
             case 33: {
-                //#line 99 "LPGParser.g"
+               //#line 81 "LPGParser.g"
                 setResult(nullptr);
             break;
             }
@@ -6211,13 +6217,13 @@
             // Rule 34:  option_value ::= =$ SYMBOL
             //
             case 34: {
-                //#line 99 "LPGParser.g"
+               //#line 81 "LPGParser.g"
                 setResult(
-                    //#line 99 LPGParser.g
+                    //#line 81 LPGParser.g
                     ast_pool.Next()=new option_value0(getLeftIToken(), getRightIToken(),
-                                      //#line 99 LPGParser.g
+                                      //#line 81 LPGParser.g
                                       ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)))
-                //#line 99 LPGParser.g
+                //#line 81 LPGParser.g
                 );
             break;
             }
@@ -6225,13 +6231,13 @@
             // Rule 35:  option_value ::= =$ ($ symbol_list )$
             //
             case 35: {
-                //#line 99 "LPGParser.g"
+               //#line 81 "LPGParser.g"
                 setResult(
-                    //#line 99 LPGParser.g
+                    //#line 81 LPGParser.g
                     ast_pool.Next()=new option_value1(getLeftIToken(), getRightIToken(),
-                                      //#line 99 LPGParser.g
+                                      //#line 81 LPGParser.g
                                       (IAst*)getRhsSym(3))
-                //#line 99 LPGParser.g
+                //#line 81 LPGParser.g
                 );
             break;
             }
@@ -6239,11 +6245,11 @@
             // Rule 36:  symbol_list ::= SYMBOL
             //
             case 36: {
-                //#line 101 "LPGParser.g"
+               //#line 83 "LPGParser.g"
                 setResult(
-                    //#line 101 LPGParser.g
+                    //#line 83 LPGParser.g
                     ast_pool.Next()=new SYMBOLList(ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
-                //#line 101 LPGParser.g
+                //#line 83 LPGParser.g
                 );
             break;
             }
@@ -6251,7 +6257,7 @@
             // Rule 37:  symbol_list ::= symbol_list ,$ SYMBOL
             //
             case 37: {
-                //#line 102 "LPGParser.g"
+               //#line 84 "LPGParser.g"
                 ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.Next()=new ASTNodeToken(getRhsIToken(3)));
             break;
             }
@@ -6259,11 +6265,11 @@
             // Rule 38:  alias_segment ::= aliasSpec
             //
             case 38: {
-                //#line 105 "LPGParser.g"
+               //#line 87 "LPGParser.g"
                 setResult(
-                    //#line 105 LPGParser.g
+                    //#line 87 LPGParser.g
                     ast_pool.Next()=new aliasSpecList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 105 LPGParser.g
+                //#line 87 LPGParser.g
                 );
             break;
             }
@@ -6271,7 +6277,7 @@
             // Rule 39:  alias_segment ::= alias_segment aliasSpec
             //
             case 39: {
-                //#line 105 "LPGParser.g"
+               //#line 87 "LPGParser.g"
                 ((aliasSpecList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6279,17 +6285,17 @@
             // Rule 40:  aliasSpec ::= ERROR_KEY produces alias_rhs
             //
             case 40: {
-                //#line 107 "LPGParser.g"
+               //#line 89 "LPGParser.g"
                 setResult(
-                    //#line 107 LPGParser.g
+                    //#line 89 LPGParser.g
                     ast_pool.Next()=new aliasSpec0(getLeftIToken(), getRightIToken(),
-                                   //#line 107 LPGParser.g
+                                   //#line 89 LPGParser.g
                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                   //#line 107 LPGParser.g
+                                   //#line 89 LPGParser.g
                                    (IAst*)getRhsSym(2),
-                                   //#line 107 LPGParser.g
+                                   //#line 89 LPGParser.g
                                    (IAst*)getRhsSym(3))
-                //#line 107 LPGParser.g
+                //#line 89 LPGParser.g
                 );
             break;
             }
@@ -6297,17 +6303,17 @@
             // Rule 41:  aliasSpec ::= EOL_KEY produces alias_rhs
             //
             case 41: {
-                //#line 108 "LPGParser.g"
+               //#line 90 "LPGParser.g"
                 setResult(
-                    //#line 108 LPGParser.g
+                    //#line 90 LPGParser.g
                     ast_pool.Next()=new aliasSpec1(getLeftIToken(), getRightIToken(),
-                                   //#line 108 LPGParser.g
+                                   //#line 90 LPGParser.g
                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                   //#line 108 LPGParser.g
+                                   //#line 90 LPGParser.g
                                    (IAst*)getRhsSym(2),
-                                   //#line 108 LPGParser.g
+                                   //#line 90 LPGParser.g
                                    (IAst*)getRhsSym(3))
-                //#line 108 LPGParser.g
+                //#line 90 LPGParser.g
                 );
             break;
             }
@@ -6315,17 +6321,17 @@
             // Rule 42:  aliasSpec ::= EOF_KEY produces alias_rhs
             //
             case 42: {
-                //#line 109 "LPGParser.g"
+               //#line 91 "LPGParser.g"
                 setResult(
-                    //#line 109 LPGParser.g
+                    //#line 91 LPGParser.g
                     ast_pool.Next()=new aliasSpec2(getLeftIToken(), getRightIToken(),
-                                   //#line 109 LPGParser.g
+                                   //#line 91 LPGParser.g
                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                   //#line 109 LPGParser.g
+                                   //#line 91 LPGParser.g
                                    (IAst*)getRhsSym(2),
-                                   //#line 109 LPGParser.g
+                                   //#line 91 LPGParser.g
                                    (IAst*)getRhsSym(3))
-                //#line 109 LPGParser.g
+                //#line 91 LPGParser.g
                 );
             break;
             }
@@ -6333,17 +6339,17 @@
             // Rule 43:  aliasSpec ::= IDENTIFIER_KEY produces alias_rhs
             //
             case 43: {
-                //#line 110 "LPGParser.g"
+               //#line 92 "LPGParser.g"
                 setResult(
-                    //#line 110 LPGParser.g
+                    //#line 92 LPGParser.g
                     ast_pool.Next()=new aliasSpec3(getLeftIToken(), getRightIToken(),
-                                   //#line 110 LPGParser.g
+                                   //#line 92 LPGParser.g
                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                   //#line 110 LPGParser.g
+                                   //#line 92 LPGParser.g
                                    (IAst*)getRhsSym(2),
-                                   //#line 110 LPGParser.g
+                                   //#line 92 LPGParser.g
                                    (IAst*)getRhsSym(3))
-                //#line 110 LPGParser.g
+                //#line 92 LPGParser.g
                 );
             break;
             }
@@ -6351,17 +6357,17 @@
             // Rule 44:  aliasSpec ::= SYMBOL produces alias_rhs
             //
             case 44: {
-                //#line 111 "LPGParser.g"
+               //#line 93 "LPGParser.g"
                 setResult(
-                    //#line 111 LPGParser.g
+                    //#line 93 LPGParser.g
                     ast_pool.Next()=new aliasSpec4(getLeftIToken(), getRightIToken(),
-                                   //#line 111 LPGParser.g
+                                   //#line 93 LPGParser.g
                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                   //#line 111 LPGParser.g
+                                   //#line 93 LPGParser.g
                                    (IAst*)getRhsSym(2),
-                                   //#line 111 LPGParser.g
+                                   //#line 93 LPGParser.g
                                    (IAst*)getRhsSym(3))
-                //#line 111 LPGParser.g
+                //#line 93 LPGParser.g
                 );
             break;
             }
@@ -6369,17 +6375,17 @@
             // Rule 45:  aliasSpec ::= alias_lhs_macro_name produces alias_rhs
             //
             case 45: {
-                //#line 112 "LPGParser.g"
+               //#line 94 "LPGParser.g"
                 setResult(
-                    //#line 112 LPGParser.g
+                    //#line 94 LPGParser.g
                     ast_pool.Next()=new aliasSpec5(getLeftIToken(), getRightIToken(),
-                                   //#line 112 LPGParser.g
+                                   //#line 94 LPGParser.g
                                    (IAst*)getRhsSym(1),
-                                   //#line 112 LPGParser.g
+                                   //#line 94 LPGParser.g
                                    (IAst*)getRhsSym(2),
-                                   //#line 112 LPGParser.g
+                                   //#line 94 LPGParser.g
                                    (IAst*)getRhsSym(3))
-                //#line 112 LPGParser.g
+                //#line 94 LPGParser.g
                 );
             break;
             }
@@ -6387,11 +6393,11 @@
             // Rule 46:  alias_lhs_macro_name ::= MACRO_NAME
             //
             case 46: {
-                //#line 114 "LPGParser.g"
+               //#line 96 "LPGParser.g"
                 setResult(
-                    //#line 114 LPGParser.g
+                    //#line 96 LPGParser.g
                     ast_pool.Next()=new alias_lhs_macro_name(getRhsIToken(1))
-                //#line 114 LPGParser.g
+                //#line 96 LPGParser.g
                 );
             break;
             }
@@ -6399,11 +6405,11 @@
             // Rule 47:  alias_rhs ::= SYMBOL
             //
             case 47: {
-                //#line 116 "LPGParser.g"
+               //#line 98 "LPGParser.g"
                 setResult(
-                    //#line 116 LPGParser.g
+                    //#line 98 LPGParser.g
                     ast_pool.Next()=new alias_rhs0(getRhsIToken(1))
-                //#line 116 LPGParser.g
+                //#line 98 LPGParser.g
                 );
             break;
             }
@@ -6411,11 +6417,11 @@
             // Rule 48:  alias_rhs ::= MACRO_NAME
             //
             case 48: {
-                //#line 117 "LPGParser.g"
+               //#line 99 "LPGParser.g"
                 setResult(
-                    //#line 117 LPGParser.g
+                    //#line 99 LPGParser.g
                     ast_pool.Next()=new alias_rhs1(getRhsIToken(1))
-                //#line 117 LPGParser.g
+                //#line 99 LPGParser.g
                 );
             break;
             }
@@ -6423,11 +6429,11 @@
             // Rule 49:  alias_rhs ::= ERROR_KEY
             //
             case 49: {
-                //#line 118 "LPGParser.g"
+               //#line 100 "LPGParser.g"
                 setResult(
-                    //#line 118 LPGParser.g
+                    //#line 100 LPGParser.g
                     ast_pool.Next()=new alias_rhs2(getRhsIToken(1))
-                //#line 118 LPGParser.g
+                //#line 100 LPGParser.g
                 );
             break;
             }
@@ -6435,11 +6441,11 @@
             // Rule 50:  alias_rhs ::= EOL_KEY
             //
             case 50: {
-                //#line 119 "LPGParser.g"
+               //#line 101 "LPGParser.g"
                 setResult(
-                    //#line 119 LPGParser.g
+                    //#line 101 LPGParser.g
                     ast_pool.Next()=new alias_rhs3(getRhsIToken(1))
-                //#line 119 LPGParser.g
+                //#line 101 LPGParser.g
                 );
             break;
             }
@@ -6447,11 +6453,11 @@
             // Rule 51:  alias_rhs ::= EOF_KEY
             //
             case 51: {
-                //#line 120 "LPGParser.g"
+               //#line 102 "LPGParser.g"
                 setResult(
-                    //#line 120 LPGParser.g
+                    //#line 102 LPGParser.g
                     ast_pool.Next()=new alias_rhs4(getRhsIToken(1))
-                //#line 120 LPGParser.g
+                //#line 102 LPGParser.g
                 );
             break;
             }
@@ -6459,11 +6465,11 @@
             // Rule 52:  alias_rhs ::= EMPTY_KEY
             //
             case 52: {
-                //#line 121 "LPGParser.g"
+               //#line 103 "LPGParser.g"
                 setResult(
-                    //#line 121 LPGParser.g
+                    //#line 103 LPGParser.g
                     ast_pool.Next()=new alias_rhs5(getRhsIToken(1))
-                //#line 121 LPGParser.g
+                //#line 103 LPGParser.g
                 );
             break;
             }
@@ -6471,11 +6477,11 @@
             // Rule 53:  alias_rhs ::= IDENTIFIER_KEY
             //
             case 53: {
-                //#line 122 "LPGParser.g"
+               //#line 104 "LPGParser.g"
                 setResult(
-                    //#line 122 LPGParser.g
+                    //#line 104 LPGParser.g
                     ast_pool.Next()=new alias_rhs6(getRhsIToken(1))
-                //#line 122 LPGParser.g
+                //#line 104 LPGParser.g
                 );
             break;
             }
@@ -6488,11 +6494,11 @@
             // Rule 55:  define_segment ::= defineSpec
             //
             case 55: {
-                //#line 128 "LPGParser.g"
+               //#line 110 "LPGParser.g"
                 setResult(
-                    //#line 128 LPGParser.g
+                    //#line 110 LPGParser.g
                     ast_pool.Next()=new defineSpecList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 128 LPGParser.g
+                //#line 110 LPGParser.g
                 );
             break;
             }
@@ -6500,7 +6506,7 @@
             // Rule 56:  define_segment ::= define_segment defineSpec
             //
             case 56: {
-                //#line 128 "LPGParser.g"
+               //#line 110 "LPGParser.g"
                 ((defineSpecList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6508,15 +6514,15 @@
             // Rule 57:  defineSpec ::= macro_name_symbol macro_segment
             //
             case 57: {
-                //#line 129 "LPGParser.g"
+               //#line 111 "LPGParser.g"
                 setResult(
-                    //#line 129 LPGParser.g
+                    //#line 111 LPGParser.g
                     ast_pool.Next()=new defineSpec(this, getLeftIToken(), getRightIToken(),
-                                   //#line 129 LPGParser.g
+                                   //#line 111 LPGParser.g
                                    (IAst*)getRhsSym(1),
-                                   //#line 129 LPGParser.g
+                                   //#line 111 LPGParser.g
                                    (IAst*)getRhsSym(2))
-                //#line 129 LPGParser.g
+                //#line 111 LPGParser.g
                 );
             break;
             }
@@ -6524,11 +6530,11 @@
             // Rule 58:  macro_name_symbol ::= MACRO_NAME
             //
             case 58: {
-                //#line 134 "LPGParser.g"
+               //#line 116 "LPGParser.g"
                 setResult(
-                    //#line 134 LPGParser.g
+                    //#line 116 LPGParser.g
                     ast_pool.Next()=new macro_name_symbol0(getRhsIToken(1))
-                //#line 134 LPGParser.g
+                //#line 116 LPGParser.g
                 );
             break;
             }
@@ -6536,11 +6542,11 @@
             // Rule 59:  macro_name_symbol ::= SYMBOL
             //
             case 59: {
-                //#line 135 "LPGParser.g"
+               //#line 117 "LPGParser.g"
                 setResult(
-                    //#line 135 LPGParser.g
+                    //#line 117 LPGParser.g
                     ast_pool.Next()=new macro_name_symbol1(getRhsIToken(1))
-                //#line 135 LPGParser.g
+                //#line 117 LPGParser.g
                 );
             break;
             }
@@ -6548,11 +6554,11 @@
             // Rule 60:  macro_segment ::= BLOCK
             //
             case 60: {
-                //#line 136 "LPGParser.g"
+               //#line 118 "LPGParser.g"
                 setResult(
-                    //#line 136 LPGParser.g
+                    //#line 118 LPGParser.g
                     ast_pool.Next()=new macro_segment(getRhsIToken(1))
-                //#line 136 LPGParser.g
+                //#line 118 LPGParser.g
                 );
             break;
             }
@@ -6575,11 +6581,11 @@
             // Rule 64:  export_segment ::= terminal_symbol
             //
             case 64: {
-                //#line 146 "LPGParser.g"
+               //#line 128 "LPGParser.g"
                 setResult(
-                    //#line 146 LPGParser.g
+                    //#line 128 LPGParser.g
                     ast_pool.Next()=new terminal_symbolList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 146 LPGParser.g
+                //#line 128 LPGParser.g
                 );
             break;
             }
@@ -6587,7 +6593,7 @@
             // Rule 65:  export_segment ::= export_segment terminal_symbol
             //
             case 65: {
-                //#line 146 "LPGParser.g"
+               //#line 128 "LPGParser.g"
                 ((terminal_symbolList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6595,11 +6601,11 @@
             // Rule 66:  globals_segment ::= action_segment
             //
             case 66: {
-                //#line 149 "LPGParser.g"
+               //#line 131 "LPGParser.g"
                 setResult(
-                    //#line 149 LPGParser.g
+                    //#line 131 LPGParser.g
                     ast_pool.Next()=new action_segmentList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 149 LPGParser.g
+                //#line 131 LPGParser.g
                 );
             break;
             }
@@ -6607,7 +6613,7 @@
             // Rule 67:  globals_segment ::= globals_segment action_segment
             //
             case 67: {
-                //#line 149 "LPGParser.g"
+               //#line 131 "LPGParser.g"
                 ((action_segmentList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6625,15 +6631,15 @@
             // Rule 70:  import_segment ::= SYMBOL drop_command_list
             //
             case 70: {
-                //#line 158 "LPGParser.g"
+               //#line 140 "LPGParser.g"
                 setResult(
-                    //#line 158 LPGParser.g
+                    //#line 140 LPGParser.g
                     ast_pool.Next()=new import_segment(getLeftIToken(), getRightIToken(),
-                                       //#line 158 LPGParser.g
+                                       //#line 140 LPGParser.g
                                        ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                       //#line 158 LPGParser.g
+                                       //#line 140 LPGParser.g
                                        (IAst*)getRhsSym(2))
-                //#line 158 LPGParser.g
+                //#line 140 LPGParser.g
                 );
             break;
             }
@@ -6641,11 +6647,11 @@
             // Rule 71:  drop_command_list ::= $Empty
             //
             case 71: {
-                //#line 160 "LPGParser.g"
+               //#line 142 "LPGParser.g"
                 setResult(
-                    //#line 160 LPGParser.g
+                    //#line 142 LPGParser.g
                     ast_pool.Next()=new drop_commandList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 160 LPGParser.g
+                //#line 142 LPGParser.g
                 );
             break;
             }
@@ -6653,7 +6659,7 @@
             // Rule 72:  drop_command_list ::= drop_command_list drop_command
             //
             case 72: {
-                //#line 160 "LPGParser.g"
+               //#line 142 "LPGParser.g"
                 ((drop_commandList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6661,15 +6667,15 @@
             // Rule 73:  drop_command ::= DROPSYMBOLS_KEY drop_symbols
             //
             case 73: {
-                //#line 162 "LPGParser.g"
+               //#line 144 "LPGParser.g"
                 setResult(
-                    //#line 162 LPGParser.g
+                    //#line 144 LPGParser.g
                     ast_pool.Next()=new drop_command0(getLeftIToken(), getRightIToken(),
-                                      //#line 162 LPGParser.g
+                                      //#line 144 LPGParser.g
                                       ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                      //#line 162 LPGParser.g
+                                      //#line 144 LPGParser.g
                                       (IAst*)getRhsSym(2))
-                //#line 162 LPGParser.g
+                //#line 144 LPGParser.g
                 );
             break;
             }
@@ -6677,15 +6683,15 @@
             // Rule 74:  drop_command ::= DROPRULES_KEY drop_rules
             //
             case 74: {
-                //#line 163 "LPGParser.g"
+               //#line 145 "LPGParser.g"
                 setResult(
-                    //#line 163 LPGParser.g
+                    //#line 145 LPGParser.g
                     ast_pool.Next()=new drop_command1(getLeftIToken(), getRightIToken(),
-                                      //#line 163 LPGParser.g
+                                      //#line 145 LPGParser.g
                                       ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                      //#line 163 LPGParser.g
+                                      //#line 145 LPGParser.g
                                       (IAst*)getRhsSym(2))
-                //#line 163 LPGParser.g
+                //#line 145 LPGParser.g
                 );
             break;
             }
@@ -6693,11 +6699,11 @@
             // Rule 75:  drop_symbols ::= SYMBOL
             //
             case 75: {
-                //#line 165 "LPGParser.g"
+               //#line 147 "LPGParser.g"
                 setResult(
-                    //#line 165 LPGParser.g
+                    //#line 147 LPGParser.g
                     ast_pool.Next()=new SYMBOLList(ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
-                //#line 165 LPGParser.g
+                //#line 147 LPGParser.g
                 );
             break;
             }
@@ -6705,7 +6711,7 @@
             // Rule 76:  drop_symbols ::= drop_symbols SYMBOL
             //
             case 76: {
-                //#line 166 "LPGParser.g"
+               //#line 148 "LPGParser.g"
                 ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)));
             break;
             }
@@ -6713,11 +6719,11 @@
             // Rule 77:  drop_rules ::= drop_rule
             //
             case 77: {
-                //#line 167 "LPGParser.g"
+               //#line 149 "LPGParser.g"
                 setResult(
-                    //#line 167 LPGParser.g
+                    //#line 149 LPGParser.g
                     ast_pool.Next()=new drop_ruleList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 167 LPGParser.g
+                //#line 149 LPGParser.g
                 );
             break;
             }
@@ -6725,7 +6731,7 @@
             // Rule 78:  drop_rules ::= drop_rules drop_rule
             //
             case 78: {
-                //#line 168 "LPGParser.g"
+               //#line 150 "LPGParser.g"
                 ((drop_ruleList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6733,19 +6739,19 @@
             // Rule 79:  drop_rule ::= SYMBOL optMacroName produces ruleList
             //
             case 79: {
-                //#line 170 "LPGParser.g"
+               //#line 152 "LPGParser.g"
                 setResult(
-                    //#line 170 LPGParser.g
+                    //#line 152 LPGParser.g
                     ast_pool.Next()=new drop_rule(getLeftIToken(), getRightIToken(),
-                                  //#line 170 LPGParser.g
+                                  //#line 152 LPGParser.g
                                   ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                  //#line 170 LPGParser.g
+                                  //#line 152 LPGParser.g
                                   (IAst*)getRhsSym(2),
-                                  //#line 170 LPGParser.g
+                                  //#line 152 LPGParser.g
                                   (IAst*)getRhsSym(3),
-                                  //#line 170 LPGParser.g
+                                  //#line 152 LPGParser.g
                                   (IAst*)getRhsSym(4))
-                //#line 170 LPGParser.g
+                //#line 152 LPGParser.g
                 );
             break;
             }
@@ -6753,7 +6759,7 @@
             // Rule 80:  optMacroName ::= $Empty
             //
             case 80: {
-                //#line 172 "LPGParser.g"
+               //#line 154 "LPGParser.g"
                 setResult(nullptr);
             break;
             }
@@ -6761,11 +6767,11 @@
             // Rule 81:  optMacroName ::= MACRO_NAME
             //
             case 81: {
-                //#line 172 "LPGParser.g"
+               //#line 154 "LPGParser.g"
                 setResult(
-                    //#line 172 LPGParser.g
+                    //#line 154 LPGParser.g
                     ast_pool.Next()=new optMacroName(getRhsIToken(1))
-                //#line 172 LPGParser.g
+                //#line 154 LPGParser.g
                 );
             break;
             }
@@ -6773,11 +6779,11 @@
             // Rule 82:  include_segment ::= SYMBOL
             //
             case 82: {
-                //#line 175 "LPGParser.g"
+               //#line 157 "LPGParser.g"
                 setResult(
-                    //#line 175 LPGParser.g
+                    //#line 157 LPGParser.g
                     ast_pool.Next()=new include_segment(getRhsIToken(1))
-                //#line 175 LPGParser.g
+                //#line 157 LPGParser.g
                 );
             break;
             }
@@ -6785,11 +6791,11 @@
             // Rule 83:  keywords_segment ::= keywordSpec
             //
             case 83: {
-                //#line 178 "LPGParser.g"
+               //#line 160 "LPGParser.g"
                 setResult(
-                    //#line 178 LPGParser.g
+                    //#line 160 LPGParser.g
                     ast_pool.Next()=new keywordSpecList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 178 LPGParser.g
+                //#line 160 LPGParser.g
                 );
             break;
             }
@@ -6797,7 +6803,7 @@
             // Rule 84:  keywords_segment ::= keywords_segment keywordSpec
             //
             case 84: {
-                //#line 178 "LPGParser.g"
+               //#line 160 "LPGParser.g"
                 ((keywordSpecList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6810,17 +6816,17 @@
             // Rule 86:  keywordSpec ::= terminal_symbol produces name
             //
             case 86: {
-                //#line 180 "LPGParser.g"
+               //#line 162 "LPGParser.g"
                 setResult(
-                    //#line 180 LPGParser.g
+                    //#line 162 LPGParser.g
                     ast_pool.Next()=new keywordSpec(getLeftIToken(), getRightIToken(),
-                                    //#line 180 LPGParser.g
+                                    //#line 162 LPGParser.g
                                     (IAst*)getRhsSym(1),
-                                    //#line 180 LPGParser.g
+                                    //#line 162 LPGParser.g
                                     (IAst*)getRhsSym(2),
-                                    //#line 180 LPGParser.g
+                                    //#line 162 LPGParser.g
                                     (IAst*)getRhsSym(3))
-                //#line 180 LPGParser.g
+                //#line 162 LPGParser.g
                 );
             break;
             }
@@ -6828,11 +6834,11 @@
             // Rule 87:  names_segment ::= nameSpec
             //
             case 87: {
-                //#line 183 "LPGParser.g"
+               //#line 165 "LPGParser.g"
                 setResult(
-                    //#line 183 LPGParser.g
+                    //#line 165 LPGParser.g
                     ast_pool.Next()=new nameSpecList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 183 LPGParser.g
+                //#line 165 LPGParser.g
                 );
             break;
             }
@@ -6840,7 +6846,7 @@
             // Rule 88:  names_segment ::= names_segment nameSpec
             //
             case 88: {
-                //#line 183 "LPGParser.g"
+               //#line 165 "LPGParser.g"
                 ((nameSpecList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6848,17 +6854,17 @@
             // Rule 89:  nameSpec ::= name produces name
             //
             case 89: {
-                //#line 184 "LPGParser.g"
+               //#line 166 "LPGParser.g"
                 setResult(
-                    //#line 184 LPGParser.g
+                    //#line 166 LPGParser.g
                     ast_pool.Next()=new nameSpec(getLeftIToken(), getRightIToken(),
-                                 //#line 184 LPGParser.g
+                                 //#line 166 LPGParser.g
                                  (IAst*)getRhsSym(1),
-                                 //#line 184 LPGParser.g
+                                 //#line 166 LPGParser.g
                                  (IAst*)getRhsSym(2),
-                                 //#line 184 LPGParser.g
+                                 //#line 166 LPGParser.g
                                  (IAst*)getRhsSym(3))
-                //#line 184 LPGParser.g
+                //#line 166 LPGParser.g
                 );
             break;
             }
@@ -6866,11 +6872,11 @@
             // Rule 90:  name ::= SYMBOL
             //
             case 90: {
-                //#line 186 "LPGParser.g"
+               //#line 168 "LPGParser.g"
                 setResult(
-                    //#line 186 LPGParser.g
+                    //#line 168 LPGParser.g
                     ast_pool.Next()=new name0(getRhsIToken(1))
-                //#line 186 LPGParser.g
+                //#line 168 LPGParser.g
                 );
             break;
             }
@@ -6878,11 +6884,11 @@
             // Rule 91:  name ::= MACRO_NAME
             //
             case 91: {
-                //#line 187 "LPGParser.g"
+               //#line 169 "LPGParser.g"
                 setResult(
-                    //#line 187 LPGParser.g
+                    //#line 169 LPGParser.g
                     ast_pool.Next()=new name1(getRhsIToken(1))
-                //#line 187 LPGParser.g
+                //#line 169 LPGParser.g
                 );
             break;
             }
@@ -6890,11 +6896,11 @@
             // Rule 92:  name ::= EMPTY_KEY
             //
             case 92: {
-                //#line 188 "LPGParser.g"
+               //#line 170 "LPGParser.g"
                 setResult(
-                    //#line 188 LPGParser.g
+                    //#line 170 LPGParser.g
                     ast_pool.Next()=new name2(getRhsIToken(1))
-                //#line 188 LPGParser.g
+                //#line 170 LPGParser.g
                 );
             break;
             }
@@ -6902,11 +6908,11 @@
             // Rule 93:  name ::= ERROR_KEY
             //
             case 93: {
-                //#line 189 "LPGParser.g"
+               //#line 171 "LPGParser.g"
                 setResult(
-                    //#line 189 LPGParser.g
+                    //#line 171 LPGParser.g
                     ast_pool.Next()=new name3(getRhsIToken(1))
-                //#line 189 LPGParser.g
+                //#line 171 LPGParser.g
                 );
             break;
             }
@@ -6914,11 +6920,11 @@
             // Rule 94:  name ::= EOL_KEY
             //
             case 94: {
-                //#line 190 "LPGParser.g"
+               //#line 172 "LPGParser.g"
                 setResult(
-                    //#line 190 LPGParser.g
+                    //#line 172 LPGParser.g
                     ast_pool.Next()=new name4(getRhsIToken(1))
-                //#line 190 LPGParser.g
+                //#line 172 LPGParser.g
                 );
             break;
             }
@@ -6926,11 +6932,11 @@
             // Rule 95:  name ::= IDENTIFIER_KEY
             //
             case 95: {
-                //#line 191 "LPGParser.g"
+               //#line 173 "LPGParser.g"
                 setResult(
-                    //#line 191 LPGParser.g
+                    //#line 173 LPGParser.g
                     ast_pool.Next()=new name5(getRhsIToken(1))
-                //#line 191 LPGParser.g
+                //#line 173 LPGParser.g
                 );
             break;
             }
@@ -6938,11 +6944,11 @@
             // Rule 96:  notice_segment ::= action_segment
             //
             case 96: {
-                //#line 194 "LPGParser.g"
+               //#line 176 "LPGParser.g"
                 setResult(
-                    //#line 194 LPGParser.g
+                    //#line 176 LPGParser.g
                     ast_pool.Next()=new action_segmentList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 194 LPGParser.g
+                //#line 176 LPGParser.g
                 );
             break;
             }
@@ -6950,7 +6956,7 @@
             // Rule 97:  notice_segment ::= notice_segment action_segment
             //
             case 97: {
-                //#line 194 "LPGParser.g"
+               //#line 176 "LPGParser.g"
                 ((action_segmentList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6958,15 +6964,15 @@
             // Rule 98:  rules_segment ::= action_segment_list nonTermList
             //
             case 98: {
-                //#line 197 "LPGParser.g"
+               //#line 179 "LPGParser.g"
                 setResult(
-                    //#line 197 LPGParser.g
+                    //#line 179 LPGParser.g
                     ast_pool.Next()=new rules_segment(getLeftIToken(), getRightIToken(),
-                                      //#line 197 LPGParser.g
+                                      //#line 179 LPGParser.g
                                       (IAst*)getRhsSym(1),
-                                      //#line 197 LPGParser.g
+                                      //#line 179 LPGParser.g
                                       (IAst*)getRhsSym(2))
-                //#line 197 LPGParser.g
+                //#line 179 LPGParser.g
                 );
             break;
             }
@@ -6974,11 +6980,11 @@
             // Rule 99:  nonTermList ::= $Empty
             //
             case 99: {
-                //#line 199 "LPGParser.g"
+               //#line 181 "LPGParser.g"
                 setResult(
-                    //#line 199 LPGParser.g
+                    //#line 181 LPGParser.g
                     ast_pool.Next()=new nonTermList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 199 LPGParser.g
+                //#line 181 LPGParser.g
                 );
             break;
             }
@@ -6986,7 +6992,7 @@
             // Rule 100:  nonTermList ::= nonTermList nonTerm
             //
             case 100: {
-                //#line 199 "LPGParser.g"
+               //#line 181 "LPGParser.g"
                 ((nonTermList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -6994,17 +7000,17 @@
             // Rule 101:  nonTerm ::= ruleNameWithAttributes produces ruleList
             //
             case 101: {
-                //#line 201 "LPGParser.g"
+               //#line 183 "LPGParser.g"
                 setResult(
-                    //#line 201 LPGParser.g
+                    //#line 183 LPGParser.g
                     ast_pool.Next()=new nonTerm(this, getLeftIToken(), getRightIToken(),
-                                //#line 201 LPGParser.g
+                                //#line 183 LPGParser.g
                                 (IAst*)getRhsSym(1),
-                                //#line 201 LPGParser.g
+                                //#line 183 LPGParser.g
                                 (IAst*)getRhsSym(2),
-                                //#line 201 LPGParser.g
+                                //#line 183 LPGParser.g
                                 (IAst*)getRhsSym(3))
-                //#line 201 LPGParser.g
+                //#line 183 LPGParser.g
                 );
             break;
             }
@@ -7012,17 +7018,17 @@
             // Rule 102:  ruleNameWithAttributes ::= SYMBOL
             //
             case 102: {
-                //#line 207 "LPGParser.g"
+               //#line 189 "LPGParser.g"
                 setResult(
-                    //#line 207 LPGParser.g
+                    //#line 189 LPGParser.g
                     ast_pool.Next()=new RuleName(getLeftIToken(), getRightIToken(),
-                                 //#line 207 LPGParser.g
+                                 //#line 189 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                 //#line 207 LPGParser.g
+                                 //#line 189 LPGParser.g
                                  nullptr,
-                                 //#line 207 LPGParser.g
+                                 //#line 189 LPGParser.g
                                  nullptr)
-                //#line 207 LPGParser.g
+                //#line 189 LPGParser.g
                 );
             break;
             }
@@ -7030,17 +7036,17 @@
             // Rule 103:  ruleNameWithAttributes ::= SYMBOL MACRO_NAME$className
             //
             case 103: {
-                //#line 208 "LPGParser.g"
+               //#line 190 "LPGParser.g"
                 setResult(
-                    //#line 208 LPGParser.g
+                    //#line 190 LPGParser.g
                     ast_pool.Next()=new RuleName(getLeftIToken(), getRightIToken(),
-                                 //#line 208 LPGParser.g
+                                 //#line 190 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                 //#line 208 LPGParser.g
+                                 //#line 190 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)),
-                                 //#line 208 LPGParser.g
+                                 //#line 190 LPGParser.g
                                  nullptr)
-                //#line 208 LPGParser.g
+                //#line 190 LPGParser.g
                 );
             break;
             }
@@ -7048,17 +7054,17 @@
             // Rule 104:  ruleNameWithAttributes ::= SYMBOL MACRO_NAME$className MACRO_NAME$arrayElement
             //
             case 104: {
-                //#line 209 "LPGParser.g"
+               //#line 191 "LPGParser.g"
                 setResult(
-                    //#line 209 LPGParser.g
+                    //#line 191 LPGParser.g
                     ast_pool.Next()=new RuleName(getLeftIToken(), getRightIToken(),
-                                 //#line 209 LPGParser.g
+                                 //#line 191 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                 //#line 209 LPGParser.g
+                                 //#line 191 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)),
-                                 //#line 209 LPGParser.g
+                                 //#line 191 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(3)))
-                //#line 209 LPGParser.g
+                //#line 191 LPGParser.g
                 );
             break;
             }
@@ -7066,11 +7072,11 @@
             // Rule 105:  ruleList ::= rule
             //
             case 105: {
-                //#line 223 "LPGParser.g"
+               //#line 205 "LPGParser.g"
                 setResult(
-                    //#line 223 LPGParser.g
+                    //#line 205 LPGParser.g
                     ast_pool.Next()=new ruleList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 223 LPGParser.g
+                //#line 205 LPGParser.g
                 );
             break;
             }
@@ -7078,7 +7084,7 @@
             // Rule 106:  ruleList ::= ruleList |$ rule
             //
             case 106: {
-                //#line 223 "LPGParser.g"
+               //#line 205 "LPGParser.g"
                 ((ruleList*)getRhsSym(1))->addElement((IAst*)getRhsSym(3));
             break;
             }
@@ -7086,11 +7092,11 @@
             // Rule 107:  produces ::= ::=
             //
             case 107: {
-                //#line 225 "LPGParser.g"
+               //#line 207 "LPGParser.g"
                 setResult(
-                    //#line 225 LPGParser.g
+                    //#line 207 LPGParser.g
                     ast_pool.Next()=new produces0(getRhsIToken(1))
-                //#line 225 LPGParser.g
+                //#line 207 LPGParser.g
                 );
             break;
             }
@@ -7098,11 +7104,11 @@
             // Rule 108:  produces ::= ::=?
             //
             case 108: {
-                //#line 226 "LPGParser.g"
+               //#line 208 "LPGParser.g"
                 setResult(
-                    //#line 226 LPGParser.g
+                    //#line 208 LPGParser.g
                     ast_pool.Next()=new produces1(getRhsIToken(1))
-                //#line 226 LPGParser.g
+                //#line 208 LPGParser.g
                 );
             break;
             }
@@ -7110,11 +7116,11 @@
             // Rule 109:  produces ::= ->
             //
             case 109: {
-                //#line 227 "LPGParser.g"
+               //#line 209 "LPGParser.g"
                 setResult(
-                    //#line 227 LPGParser.g
+                    //#line 209 LPGParser.g
                     ast_pool.Next()=new produces2(getRhsIToken(1))
-                //#line 227 LPGParser.g
+                //#line 209 LPGParser.g
                 );
             break;
             }
@@ -7122,11 +7128,11 @@
             // Rule 110:  produces ::= ->?
             //
             case 110: {
-                //#line 228 "LPGParser.g"
+               //#line 210 "LPGParser.g"
                 setResult(
-                    //#line 228 LPGParser.g
+                    //#line 210 LPGParser.g
                     ast_pool.Next()=new produces3(getRhsIToken(1))
-                //#line 228 LPGParser.g
+                //#line 210 LPGParser.g
                 );
             break;
             }
@@ -7134,15 +7140,15 @@
             // Rule 111:  rule ::= symWithAttrsList opt_action_segment
             //
             case 111: {
-                //#line 230 "LPGParser.g"
+               //#line 212 "LPGParser.g"
                 setResult(
-                    //#line 230 LPGParser.g
+                    //#line 212 LPGParser.g
                     ast_pool.Next()=new rule(getLeftIToken(), getRightIToken(),
-                             //#line 230 LPGParser.g
+                             //#line 212 LPGParser.g
                              (IAst*)getRhsSym(1),
-                             //#line 230 LPGParser.g
+                             //#line 212 LPGParser.g
                              (IAst*)getRhsSym(2))
-                //#line 230 LPGParser.g
+                //#line 212 LPGParser.g
                 );
             break;
             }
@@ -7150,11 +7156,11 @@
             // Rule 112:  symWithAttrsList ::= $Empty
             //
             case 112: {
-                //#line 232 "LPGParser.g"
+               //#line 214 "LPGParser.g"
                 setResult(
-                    //#line 232 LPGParser.g
+                    //#line 214 LPGParser.g
                     ast_pool.Next()=new symWithAttrsList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 232 LPGParser.g
+                //#line 214 LPGParser.g
                 );
             break;
             }
@@ -7162,7 +7168,7 @@
             // Rule 113:  symWithAttrsList ::= symWithAttrsList symWithAttrs
             //
             case 113: {
-                //#line 232 "LPGParser.g"
+               //#line 214 "LPGParser.g"
                 ((symWithAttrsList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -7170,11 +7176,11 @@
             // Rule 114:  symWithAttrs ::= EMPTY_KEY
             //
             case 114: {
-                //#line 234 "LPGParser.g"
+               //#line 216 "LPGParser.g"
                 setResult(
-                    //#line 234 LPGParser.g
+                    //#line 216 LPGParser.g
                     ast_pool.Next()=new symWithAttrs0(getRhsIToken(1))
-                //#line 234 LPGParser.g
+                //#line 216 LPGParser.g
                 );
             break;
             }
@@ -7182,15 +7188,15 @@
             // Rule 115:  symWithAttrs ::= SYMBOL optAttrList
             //
             case 115: {
-                //#line 235 "LPGParser.g"
+               //#line 217 "LPGParser.g"
                 setResult(
-                    //#line 235 LPGParser.g
+                    //#line 217 LPGParser.g
                     ast_pool.Next()=new symWithAttrs1(getLeftIToken(), getRightIToken(),
-                                      //#line 235 LPGParser.g
+                                      //#line 217 LPGParser.g
                                       ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                      //#line 235 LPGParser.g
+                                      //#line 217 LPGParser.g
                                       (IAst*)getRhsSym(2))
-                //#line 235 LPGParser.g
+                //#line 217 LPGParser.g
                 );
             break;
             }
@@ -7198,13 +7204,13 @@
             // Rule 116:  optAttrList ::= $Empty
             //
             case 116: {
-                //#line 238 "LPGParser.g"
+               //#line 220 "LPGParser.g"
                 setResult(
-                    //#line 238 LPGParser.g
+                    //#line 220 LPGParser.g
                     ast_pool.Next()=new symAttrs(getLeftIToken(), getRightIToken(),
-                                 //#line 238 LPGParser.g
+                                 //#line 220 LPGParser.g
                                  nullptr)
-                //#line 238 LPGParser.g
+                //#line 220 LPGParser.g
                 );
             break;
             }
@@ -7212,13 +7218,13 @@
             // Rule 117:  optAttrList ::= MACRO_NAME
             //
             case 117: {
-                //#line 239 "LPGParser.g"
+               //#line 221 "LPGParser.g"
                 setResult(
-                    //#line 239 LPGParser.g
+                    //#line 221 LPGParser.g
                     ast_pool.Next()=new symAttrs(getLeftIToken(), getRightIToken(),
-                                 //#line 239 LPGParser.g
+                                 //#line 221 LPGParser.g
                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)))
-                //#line 239 LPGParser.g
+                //#line 221 LPGParser.g
                 );
             break;
             }
@@ -7226,7 +7232,7 @@
             // Rule 118:  opt_action_segment ::= $Empty
             //
             case 118: {
-                //#line 241 "LPGParser.g"
+               //#line 223 "LPGParser.g"
                 setResult(nullptr);
             break;
             }
@@ -7239,11 +7245,11 @@
             // Rule 120:  action_segment ::= BLOCK
             //
             case 120: {
-                //#line 243 "LPGParser.g"
+               //#line 225 "LPGParser.g"
                 setResult(
-                    //#line 243 LPGParser.g
+                    //#line 225 LPGParser.g
                     ast_pool.Next()=new action_segment(this, getRhsIToken(1))
-                //#line 243 LPGParser.g
+                //#line 225 LPGParser.g
                 );
             break;
             }
@@ -7251,11 +7257,11 @@
             // Rule 121:  start_segment ::= start_symbol
             //
             case 121: {
-                //#line 249 "LPGParser.g"
+               //#line 231 "LPGParser.g"
                 setResult(
-                    //#line 249 LPGParser.g
+                    //#line 231 LPGParser.g
                     ast_pool.Next()=new start_symbolList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 249 LPGParser.g
+                //#line 231 LPGParser.g
                 );
             break;
             }
@@ -7263,7 +7269,7 @@
             // Rule 122:  start_segment ::= start_segment start_symbol
             //
             case 122: {
-                //#line 249 "LPGParser.g"
+               //#line 231 "LPGParser.g"
                 ((start_symbolList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -7271,11 +7277,11 @@
             // Rule 123:  start_symbol ::= SYMBOL
             //
             case 123: {
-                //#line 250 "LPGParser.g"
+               //#line 232 "LPGParser.g"
                 setResult(
-                    //#line 250 LPGParser.g
+                    //#line 232 LPGParser.g
                     ast_pool.Next()=new start_symbol0(getRhsIToken(1))
-                //#line 250 LPGParser.g
+                //#line 232 LPGParser.g
                 );
             break;
             }
@@ -7283,11 +7289,11 @@
             // Rule 124:  start_symbol ::= MACRO_NAME
             //
             case 124: {
-                //#line 251 "LPGParser.g"
+               //#line 233 "LPGParser.g"
                 setResult(
-                    //#line 251 LPGParser.g
+                    //#line 233 LPGParser.g
                     ast_pool.Next()=new start_symbol1(getRhsIToken(1))
-                //#line 251 LPGParser.g
+                //#line 233 LPGParser.g
                 );
             break;
             }
@@ -7295,11 +7301,11 @@
             // Rule 125:  terminals_segment ::= terminal
             //
             case 125: {
-                //#line 254 "LPGParser.g"
+               //#line 236 "LPGParser.g"
                 setResult(
-                    //#line 254 LPGParser.g
+                    //#line 236 LPGParser.g
                     ast_pool.Next()=new terminalList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 254 LPGParser.g
+                //#line 236 LPGParser.g
                 );
             break;
             }
@@ -7307,7 +7313,7 @@
             // Rule 126:  terminals_segment ::= terminals_segment terminal
             //
             case 126: {
-                //#line 254 "LPGParser.g"
+               //#line 236 "LPGParser.g"
                 ((terminalList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -7315,15 +7321,15 @@
             // Rule 127:  terminal ::= terminal_symbol optTerminalAlias
             //
             case 127: {
-                //#line 257 "LPGParser.g"
+               //#line 239 "LPGParser.g"
                 setResult(
-                    //#line 257 LPGParser.g
+                    //#line 239 LPGParser.g
                     ast_pool.Next()=new terminal(this, getLeftIToken(), getRightIToken(),
-                                 //#line 257 LPGParser.g
+                                 //#line 239 LPGParser.g
                                  (IAst*)getRhsSym(1),
-                                 //#line 257 LPGParser.g
+                                 //#line 239 LPGParser.g
                                  (IAst*)getRhsSym(2))
-                //#line 257 LPGParser.g
+                //#line 239 LPGParser.g
                 );
             break;
             }
@@ -7331,7 +7337,7 @@
             // Rule 128:  optTerminalAlias ::= $Empty
             //
             case 128: {
-                //#line 261 "LPGParser.g"
+               //#line 243 "LPGParser.g"
                 setResult(nullptr);
             break;
             }
@@ -7339,15 +7345,15 @@
             // Rule 129:  optTerminalAlias ::= produces name
             //
             case 129: {
-                //#line 261 "LPGParser.g"
+               //#line 243 "LPGParser.g"
                 setResult(
-                    //#line 261 LPGParser.g
+                    //#line 243 LPGParser.g
                     ast_pool.Next()=new optTerminalAlias(getLeftIToken(), getRightIToken(),
-                                         //#line 261 LPGParser.g
+                                         //#line 243 LPGParser.g
                                          (IAst*)getRhsSym(1),
-                                         //#line 261 LPGParser.g
+                                         //#line 243 LPGParser.g
                                          (IAst*)getRhsSym(2))
-                //#line 261 LPGParser.g
+                //#line 243 LPGParser.g
                 );
             break;
             }
@@ -7355,11 +7361,11 @@
             // Rule 130:  terminal_symbol ::= SYMBOL
             //
             case 130: {
-                //#line 263 "LPGParser.g"
+               //#line 245 "LPGParser.g"
                 setResult(
-                    //#line 263 LPGParser.g
+                    //#line 245 LPGParser.g
                     ast_pool.Next()=new terminal_symbol0(this, getRhsIToken(1))
-                //#line 263 LPGParser.g
+                //#line 245 LPGParser.g
                 );
             break;
             }
@@ -7367,11 +7373,11 @@
             // Rule 131:  terminal_symbol ::= MACRO_NAME
             //
             case 131: {
-                //#line 267 "LPGParser.g"
+               //#line 249 "LPGParser.g"
                 setResult(
-                    //#line 267 LPGParser.g
+                    //#line 249 LPGParser.g
                     ast_pool.Next()=new terminal_symbol1(getRhsIToken(1))
-                //#line 267 LPGParser.g
+                //#line 249 LPGParser.g
                 );
             break;
             }
@@ -7384,11 +7390,11 @@
             // Rule 133:  types_segment ::= type_declarations
             //
             case 133: {
-                //#line 273 "LPGParser.g"
+               //#line 255 "LPGParser.g"
                 setResult(
-                    //#line 273 LPGParser.g
+                    //#line 255 LPGParser.g
                     ast_pool.Next()=new type_declarationsList((IAst*)getRhsSym(1), true /* left recursive */)
-                //#line 273 LPGParser.g
+                //#line 255 LPGParser.g
                 );
             break;
             }
@@ -7396,7 +7402,7 @@
             // Rule 134:  types_segment ::= types_segment type_declarations
             //
             case 134: {
-                //#line 273 "LPGParser.g"
+               //#line 255 "LPGParser.g"
                 ((type_declarationsList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -7404,17 +7410,17 @@
             // Rule 135:  type_declarations ::= SYMBOL produces barSymbolList
             //
             case 135: {
-                //#line 275 "LPGParser.g"
+               //#line 257 "LPGParser.g"
                 setResult(
-                    //#line 275 LPGParser.g
+                    //#line 257 LPGParser.g
                     ast_pool.Next()=new type_declarations(getLeftIToken(), getRightIToken(),
-                                          //#line 275 LPGParser.g
+                                          //#line 257 LPGParser.g
                                           ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                          //#line 275 LPGParser.g
+                                          //#line 257 LPGParser.g
                                           (IAst*)getRhsSym(2),
-                                          //#line 275 LPGParser.g
+                                          //#line 257 LPGParser.g
                                           (IAst*)getRhsSym(3))
-                //#line 275 LPGParser.g
+                //#line 257 LPGParser.g
                 );
             break;
             }
@@ -7422,11 +7428,11 @@
             // Rule 136:  barSymbolList ::= SYMBOL
             //
             case 136: {
-                //#line 276 "LPGParser.g"
+               //#line 258 "LPGParser.g"
                 setResult(
-                    //#line 276 LPGParser.g
+                    //#line 258 LPGParser.g
                     ast_pool.Next()=new SYMBOLList(ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
-                //#line 276 LPGParser.g
+                //#line 258 LPGParser.g
                 );
             break;
             }
@@ -7434,7 +7440,7 @@
             // Rule 137:  barSymbolList ::= barSymbolList |$ SYMBOL
             //
             case 137: {
-                //#line 276 "LPGParser.g"
+               //#line 258 "LPGParser.g"
                 ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.Next()=new ASTNodeToken(getRhsIToken(3)));
             break;
             }
@@ -7442,11 +7448,11 @@
             // Rule 138:  predecessor_segment ::= $Empty
             //
             case 138: {
-                //#line 279 "LPGParser.g"
+               //#line 261 "LPGParser.g"
                 setResult(
-                    //#line 279 LPGParser.g
+                    //#line 261 LPGParser.g
                     ast_pool.Next()=new symbol_pairList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 279 LPGParser.g
+                //#line 261 LPGParser.g
                 );
             break;
             }
@@ -7454,7 +7460,7 @@
             // Rule 139:  predecessor_segment ::= predecessor_segment symbol_pair
             //
             case 139: {
-                //#line 279 "LPGParser.g"
+               //#line 261 "LPGParser.g"
                 ((symbol_pairList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
@@ -7462,15 +7468,15 @@
             // Rule 140:  symbol_pair ::= SYMBOL SYMBOL
             //
             case 140: {
-                //#line 281 "LPGParser.g"
+               //#line 263 "LPGParser.g"
                 setResult(
-                    //#line 281 LPGParser.g
+                    //#line 263 LPGParser.g
                     ast_pool.Next()=new symbol_pair(getLeftIToken(), getRightIToken(),
-                                    //#line 281 LPGParser.g
+                                    //#line 263 LPGParser.g
                                     ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
-                                    //#line 281 LPGParser.g
+                                    //#line 263 LPGParser.g
                                     ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)))
-                //#line 281 LPGParser.g
+                //#line 263 LPGParser.g
                 );
             break;
             }
@@ -7478,11 +7484,11 @@
             // Rule 141:  recover_segment ::= $Empty
             //
             case 141: {
-                //#line 284 "LPGParser.g"
+               //#line 266 "LPGParser.g"
                 setResult(
-                    //#line 284 LPGParser.g
+                    //#line 266 LPGParser.g
                     ast_pool.Next()=new SYMBOLList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 284 LPGParser.g
+                //#line 266 LPGParser.g
                 );
             break;
             }
@@ -7490,7 +7496,7 @@
             // Rule 142:  recover_segment ::= recover_segment recover_symbol
             //
             case 142: {
-                //#line 284 "LPGParser.g"
+               //#line 266 "LPGParser.g"
                 setResult((SYMBOLList*)getRhsSym(1));
             break;
             }
@@ -7498,11 +7504,11 @@
             // Rule 143:  recover_symbol ::= SYMBOL
             //
             case 143: {
-                //#line 286 "LPGParser.g"
+               //#line 268 "LPGParser.g"
                 setResult(
-                    //#line 286 LPGParser.g
+                    //#line 268 LPGParser.g
                     ast_pool.Next()=new recover_symbol(this, getRhsIToken(1))
-                //#line 286 LPGParser.g
+                //#line 268 LPGParser.g
                 );
             break;
             }
@@ -7510,7 +7516,7 @@
             // Rule 144:  END_KEY_OPT ::= $Empty
             //
             case 144: {
-                //#line 291 "LPGParser.g"
+               //#line 273 "LPGParser.g"
                 setResult(nullptr);
             break;
             }
@@ -7518,11 +7524,11 @@
             // Rule 145:  END_KEY_OPT ::= END_KEY
             //
             case 145: {
-                //#line 292 "LPGParser.g"
+               //#line 274 "LPGParser.g"
                 setResult(
-                    //#line 292 LPGParser.g
+                    //#line 274 LPGParser.g
                     ast_pool.Next()=new END_KEY_OPT(getRhsIToken(1))
-                //#line 292 LPGParser.g
+                //#line 274 LPGParser.g
                 );
             break;
             }
@@ -7530,11 +7536,11 @@
             // Rule 146:  action_segment_list ::= $Empty
             //
             case 146: {
-                //#line 294 "LPGParser.g"
+               //#line 276 "LPGParser.g"
                 setResult(
-                    //#line 294 LPGParser.g
+                    //#line 276 LPGParser.g
                     ast_pool.Next()=new action_segmentList(getLeftIToken(), getRightIToken(), true /* left recursive */)
-                //#line 294 LPGParser.g
+                //#line 276 LPGParser.g
                 );
             break;
             }
@@ -7542,11 +7548,11 @@
             // Rule 147:  action_segment_list ::= action_segment_list action_segment
             //
             case 147: {
-                //#line 295 "LPGParser.g"
+               //#line 277 "LPGParser.g"
                 ((action_segmentList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
-    //#line 327 "dtParserTemplateF.gi
+    //#line 355 "btParserTemplateF.gi
 
     
             default:

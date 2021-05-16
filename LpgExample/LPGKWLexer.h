@@ -16,10 +16,16 @@
 
 
 
-    //#line 64 "KeywordTemplateF.gi
+    //#line 45 "LPGKWLexer.gi
 
+#pragma once
+#include "LPGLexerprs.h"
+#include "tuple.h"
 #include "LPGKWLexerprs.h"
 #include "LPGParsersym.h"
+
+    //#line 64 "KeywordTemplateF.gi
+
 #include "tuple.h"
  struct  LPGKWLexer :public LPGKWLexerprs
 {

@@ -74,6 +74,7 @@
             tokenKind['X'] = $sym_type::$prefix$x$suffix$;
             tokenKind['Y'] = $sym_type::$prefix$y$suffix$;
             tokenKind['Z'] = $sym_type::$prefix$z$suffix$;
+            return true;
         };
         inline static bool ddddd = static_init();
          int getKind(wchar_t c)

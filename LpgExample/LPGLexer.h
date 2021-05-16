@@ -15,15 +15,8 @@
     //#line 123 "LexerTemplateF.gi
 
 
-
-    //#line 7 "LPGLexer.gi
-
-
-
-    //#line 129 "LexerTemplateF.gi
-
+#pragma once  
 #include <iostream>
-
 #include "IPrsStream.h"
 #include "LexParser.h"
 #include "LPGKWLexer.h"
@@ -35,7 +28,13 @@
 #include "stringex.h"
 #include "Token.h"
 
-struct LPGLexer :public Object ,public RuleAction
+    //#line 7 "LPGLexer.gi
+
+
+
+    //#line 141 "LexerTemplateF.gi
+
+ struct LPGLexer :public Object ,public RuleAction
 {
      struct  LPGLexerLpgLexStream;
      LPGLexerLpgLexStream * lexStream;
@@ -375,7 +374,7 @@ struct LPGLexer :public Object ,public RuleAction
     {
        auto  input = lexStream->getInputChars().data();
         std::wstring s(input + startOffset,input + startOffset+  endOffset - startOffset + 1);
-        std::wcout << (s) << std::endl;
+        std::wcout << (s) << std::endl ;
     }
 
     //
@@ -515,6 +514,7 @@ struct LPGLexer :public Object ,public RuleAction
 
         LPGLexersym::Char_AfterASCII,      // for all chars in range 128..65534
         LPGLexersym::Char_EOF              // for '\uffff' or 65535 
+        
     };
             
       int getKind(int i)  // Classify character at ith location
@@ -545,7 +545,7 @@ struct LPGLexer :public Object ,public RuleAction
     }
     };
 
-    //#line 393 "LexerTemplateF.gi
+    //#line 405 "LexerTemplateF.gi
 
      void ruleAction(int ruleNumber)
     {
@@ -1658,7 +1658,7 @@ struct LPGLexer :public Object ,public RuleAction
               makeToken(getRhsFirstTokenIndex(2), getRhsLastTokenIndex(2), LPGParsersym::TK_SYMBOL);             break;
             } 
 
-    //#line 397 "LexerTemplateF.gi
+    //#line 409 "LexerTemplateF.gi
 
     
             default:

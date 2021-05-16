@@ -41,7 +41,15 @@
    TRAILERS_KEY
    TYPES_KEY
 %End
-
+%Globals
+    /.
+#pragma once
+#include "LPGLexerprs.h"
+#include "tuple.h"
+#include "LPGKWLexerprs.h"
+#include "LPGParsersym.h"
+    ./
+%End
 %Start
     Keyword
 %End

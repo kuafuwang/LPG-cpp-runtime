@@ -221,6 +221,7 @@
 
             $sym_type::$prefix$AfterASCII$suffix$,      // for all chars in range 128..65534
             $sym_type::$prefix$EOF$suffix$              // for '\uffff' or 65535 
+            
         };
                 
           int getKind(int i)  // Classify character at ith location
