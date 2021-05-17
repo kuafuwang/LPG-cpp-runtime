@@ -95,35 +95,35 @@
 
     $entry_declarations
     /.
-         $ast_class parse$entry_name()
+         $ast_class * parse$entry_name()
         {
             return parse$entry_name(nullptr, 0);
         }
             
-         $ast_class parse$entry_name(Monitor monitor)
+         $ast_class * parse$entry_name(Monitor monitor)
         {
             return parse$entry_name(monitor, 0);
         }
             
-         $ast_class parse$entry_name(int error_repair_count)
+         $ast_class * parse$entry_name(int error_repair_count)
         {
             return parse$entry_name(nullptr, error_repair_count);
         }
             
-         $ast_class parse$entry_name(Monitor monitor, int error_repair_count)
+         $ast_class * parse$entry_name(Monitor monitor, int error_repair_count)
         {
             btParser->setMonitor(monitor);
             
             try
             {
-                return ($ast_class) btParser->fuzzyParseEntry($sym_type::$entry_marker, error_repair_count);
+                return ($ast_class *) btParser->fuzzyParseEntry($sym_type::$entry_marker, error_repair_count);
             }
-            catch (BadParseException e)
+            catch (BadParseException& e)
             {
                 prsStream->reset(e.error_token); // point to error token
 
-                DiagnoseParser diagnoseParser = new DiagnoseParser(prsStream, prsTable);
-                diagnoseParser.diagnoseEntry($sym_type::$entry_marker, e.error_token);
+                 std::shared_ptr< DiagnoseParser> diagnoseParser = std::make_shared<DiagnoseParser>(prsStream, prsTable);
+                diagnoseParser->diagnoseEntry($sym_type::$entry_marker, e.error_token);
             }
 
             return nullptr;
@@ -172,8 +172,8 @@
 #include "IAst.h"
 #include "IAstVisitor.h"
 #include "ILexStream.h"
-#include "LPGParserprs.h"
-#include "LPGParsersym.h"
+#include "$sym_type.h"
+#include "$prs_type.h"
 #include "Object.h"
 #include "ParseTable.h"
 #include "PrsStream.h"
@@ -256,7 +256,7 @@
             catch (UndefinedEofSymbolException& e)
             {
                 std::stringex str= "The Lexer does not implement the Eof symbol ";
-                str += IcuUtil::ws2s(LPGParsersym::orderedTerminalSymbols[prsTable->getEoftSymbol()]);
+                str += IcuUtil::ws2s($sym_type::orderedTerminalSymbols[prsTable->getEoftSymbol()]);
                 throw  UndefinedEofSymbolException(str);
             } 
         }

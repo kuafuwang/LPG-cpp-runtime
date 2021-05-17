@@ -1612,8 +1612,8 @@ void Base::PrintXref(void)
         QuickSortSymbols(sort_sym, 1, grammar -> num_symbols);
     }
 
-    char line[Control::PRINT_LINE_SIZE + 1],
-         tok[Control::SYMBOL_SIZE + 1];
+    char line[Control::PRINT_LINE_SIZE*2 + 1],
+         tok[Control::SYMBOL_SIZE*2 + 1];
 
     //
     // First, flush any data left in the report buffer.

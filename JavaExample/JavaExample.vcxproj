@@ -21,19 +21,19 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2671cca9-7315-4ee8-9d87-f8ccbd76656a}</ProjectGuid>
-    <RootNamespace>lpgRuntimeCpp</RootNamespace>
+    <ProjectGuid>{500b644f-b0a8-4874-b318-9b5b8934072b}</ProjectGuid>
+    <RootNamespace>JavaExample</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -73,12 +73,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin</OutDir>
-    <TargetName>lpg_MDD</TargetName>
+    <IncludePath>..\lpgRuntimeCpp\src;$(IncludePath)</IncludePath>
+    <LibraryPath>..\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin</OutDir>
-    <TargetName>lpg_MD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -92,12 +91,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>lpg_MDD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,66 +144,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\AbstractToken.cpp" />
-    <ClCompile Include="src\BacktrackingParser.cpp" />
-    <ClCompile Include="src\ConfigurationStack.cpp" />
-    <ClCompile Include="src\DeterministicParser.cpp" />
-    <ClCompile Include="src\diagnose.cpp" />
-    <ClCompile Include="src\Differ.cpp" />
-    <ClCompile Include="src\DifferLines.cpp" />
-    <ClCompile Include="src\DifferTokens.cpp" />
-    <ClCompile Include="src\ErrorToken.cpp" />
-    <ClCompile Include="src\IcuUtil.cpp" />
-    <ClCompile Include="src\LexParser.cpp" />
-    <ClCompile Include="src\LexStream.cpp" />
-    <ClCompile Include="src\lpgRuntime.cpp" />
-    <ClCompile Include="src\PrsStream.cpp" />
-    <ClCompile Include="src\RecoveryParser.cpp" />
-    <ClCompile Include="src\Stacks.cpp" />
-    <ClCompile Include="src\Token.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\AbstractToken.h" />
-    <ClInclude Include="src\Adjunct.h" />
-    <ClInclude Include="src\BacktrackingParser.h" />
-    <ClInclude Include="src\ConfigurationElement.h" />
-    <ClInclude Include="src\ConfigurationStack.h" />
-    <ClInclude Include="src\DeterministicParser.h" />
-    <ClInclude Include="src\diagnose.h" />
-    <ClInclude Include="src\Differ.h" />
-    <ClInclude Include="src\DifferLines.h" />
-    <ClInclude Include="src\DifferTokens.h" />
-    <ClInclude Include="src\ErrorToken.h" />
-    <ClInclude Include="src\IcuUtil.h" />
-    <ClInclude Include="src\IAbstractArrayList.h" />
-    <ClInclude Include="src\IAst.h" />
-    <ClInclude Include="src\IAstVisitor.h" />
-    <ClInclude Include="src\ILexStream.h" />
-    <ClInclude Include="src\IMessageHandler.h" />
-    <ClInclude Include="src\IPrsStream.h" />
-    <ClInclude Include="src\IToken.h" />
-    <ClInclude Include="src\LexParser.h" />
-    <ClInclude Include="src\LexStream.h" />
-    <ClInclude Include="src\LpgLexStream.h" />
-    <ClInclude Include="src\lpgRuntime.h" />
-    <ClInclude Include="src\Monitor.h" />
-    <ClInclude Include="src\Exception.h" />
-    <ClInclude Include="src\Object.h" />
-    <ClInclude Include="src\ObjectTuple.h" />
-    <ClInclude Include="src\ParseErrorCodes.h" />
-    <ClInclude Include="src\ParseTable.h" />
-    <ClInclude Include="src\PrsStream.h" />
-    <ClInclude Include="src\RecoveryParser.h" />
-    <ClInclude Include="src\RuleAction.h" />
-    <ClInclude Include="src\Stacks.h" />
-    <ClInclude Include="src\StateElement.h" />
-    <ClInclude Include="src\stringex.h" />
-    <ClInclude Include="src\Token.h" />
-    <ClInclude Include="src\TokenStream.h" />
-    <ClInclude Include="src\tuple.h" />
+    <ClCompile Include="JavaExample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="JavaKWLexer.h" />
+    <ClInclude Include="JavaKWLexerprs.h" />
+    <ClInclude Include="JavaKWLexersym.h" />
+    <ClInclude Include="JavaLexer.h" />
+    <ClInclude Include="JavaLexerprs.h" />
+    <ClInclude Include="JavaLexersym.h" />
+    <ClInclude Include="JavaParser.h" />
+    <ClInclude Include="JavaParserprs.h" />
+    <ClInclude Include="JavaParsersym.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

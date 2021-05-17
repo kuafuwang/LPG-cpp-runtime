@@ -126,16 +126,16 @@ void CppTable2::PrintNames()
                  prs_buffer.Put(option -> escape);
             else prs_buffer.Put(tok[j]);
             k++;
-            if (k == 30 && (! (j == len - 1)))
-            {
-                k = 0;
-                prs_buffer.Put('\"');
-                prs_buffer.Put(' ');
-                prs_buffer.Put('+');
-                prs_buffer.Put('\n');
-                prs_buffer.Pad();
-                prs_buffer.Put('\"');
-            }
+            //if (k == 30 && (! (j == len - 1)))
+            //{
+            //    k = 0;
+            //    prs_buffer.Put('\"');
+            //    prs_buffer.Put(' ');
+            //    prs_buffer.Put('+');
+            //    prs_buffer.Put('\n');
+            //    prs_buffer.Pad();
+            //    prs_buffer.Put('\"');
+            //}
         }
         prs_buffer.Put('\"');
         if (i < name_info.Size() - 1)
@@ -1191,7 +1191,7 @@ void CppTable2::print_source_tables(void)
                            "     int scopeLhs(int index) { return 0;}\n\n"
                            "    inline  static int* _scopeLa = NULL;\n"
                            "     int scopeLa(int index) { return 0;}\n\n"
-                           "    inline  static int* scopeStateSet = NULL;\n"
+                           "    inline  static int* _scopeStateSet = NULL;\n"
                            "     int scopeStateSet(int index) { return 0;}\n\n"
                            "   inline   static int* _scopeRhs = NULL;\n"
                            "     int scopeRhs(int index) { return 0;}\n\n"

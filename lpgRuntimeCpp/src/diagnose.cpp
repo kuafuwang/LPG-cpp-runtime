@@ -2111,8 +2111,12 @@ void DiagnoseParser::emitError(int msg_code, int name_index, int left_token, int
 {
 	int left_token_loc = (left_token > right_token ? right_token : left_token),
 		right_token_loc = right_token;
-
-	std::wstringex temp_name = name(name_index);
+	std::wstringex temp_name;
+	if (name_index >= 0)
+	{
+		temp_name = name(name_index);	
+	}
+	
 	std::wstringex upper_name = temp_name;
 	upper_name.toupper();
 	std::wstring token_name = (name_index >= 0 &&

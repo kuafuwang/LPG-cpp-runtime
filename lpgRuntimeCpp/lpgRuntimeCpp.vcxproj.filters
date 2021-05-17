@@ -57,6 +57,15 @@
     <ClCompile Include="src\PrsStream.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Differ.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DifferLines.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DifferTokens.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IAst.h">
@@ -162,6 +171,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\PrsStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Differ.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DifferLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DifferTokens.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
