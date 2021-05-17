@@ -17,14 +17,14 @@ $Headers
       
         int getKind(int i)  // Classify character at ith location
         {
-            char c = (i >= getStreamLength() ? '\uffff' : getCharValue(i));
+            char c = (i >= getStreamLength() ? 0xffff : getCharValue(i));
             return (c <  33		? Char_WSChar : 
             		c>= '0' && c <= '9' ? Char_Digit :
             		c == '+' 		? Char_Plus :
             		c == '*' 		? Char_Star :
             		c == '(' 		? Char_LeftParen :
             		c == ')' 		? Char_RightParen :
-            		c == '\uffff' 	? Char_EOF : 
+            		c == 0xffff 	? Char_EOF : 
             					  Char_Unused);
         }
     ./
