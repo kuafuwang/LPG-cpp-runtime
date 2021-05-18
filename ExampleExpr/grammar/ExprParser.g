@@ -1,9 +1,7 @@
-%options ast_directory=./ExprAst,automatic_ast=nested,var=nt,visitor=default
+%options ast_directory=./ExprAst,automatic_ast=topLevel,var=nt,visitor=default
 %options programming_language=rt_cpp
-%options package=expr1
 %options template=dtParserTemplateD.g
 %options import_terminals=ExprLexer.g
-
 $Terminals
  IntegerLiteral
  PLUS ::= +

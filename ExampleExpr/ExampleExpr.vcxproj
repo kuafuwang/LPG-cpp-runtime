@@ -154,6 +154,7 @@
     <ClInclude Include="ExprParser.h" />
     <ClInclude Include="ExprParserprs.h" />
     <ClInclude Include="ExprParsersym.h" />
+    <ClInclude Include="ExprParser_top_level_ast.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

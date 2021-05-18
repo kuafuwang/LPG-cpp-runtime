@@ -26,7 +26,6 @@
 #include "JavaLexersym.h"
 #include "JavaLexerprs.h"
 #include "JavaKWLexer.h"
-#include "JavaParsersym.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
 

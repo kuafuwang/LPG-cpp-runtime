@@ -1,7 +1,7 @@
 %options visitor=preorder
 %options parent_saved
 %options variables
-%options automatic_ast
+%options automatic_ast=topLevel
 %options fp=JavaParser
 %options verbose
 %options template=btParserTemplateF.gi

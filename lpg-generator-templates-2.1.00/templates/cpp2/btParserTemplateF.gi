@@ -10,6 +10,7 @@
 %Options table,error_maps,scopes
 %options prefix=TK_
 %options action-block=("*.h", "/.", "./")
+
 %options ParseTable=ParseTable
 %options nt-check
 
@@ -162,7 +163,7 @@
 #pragma once
 
 #include <iostream>
-
+#include "AstPoolHolder.h"
 #include "BacktrackingParser.h"
 #include "DeterministicParser.h"
 #include "diagnose.h"
@@ -179,7 +180,7 @@
 #include "PrsStream.h"
 #include "RuleAction.h"
 #include "IcuUtil.h"
-
+#include "stringex.h"
     ./
 %End
 
@@ -187,7 +188,7 @@
     /.
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
-       
+          pool_holder ast_pool;
         PrsStream* prsStream = nullptr;
         ~$action_type (){
             delete prsStream;

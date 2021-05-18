@@ -29,7 +29,7 @@ int main(void)
   
     typedef  unsigned char byte;
     ExprLexer lex(LR"(D:\workspace\New_Parser\lpg\src\jikespg.g)",4);
-   //lex.setMessageHandler(&handle);
+   lex.setMessageHandler(&handle);
     ExprParser  prs(&lex);
    // prs.setMessageHandler(&handle);
     lex.lexer(&prs);

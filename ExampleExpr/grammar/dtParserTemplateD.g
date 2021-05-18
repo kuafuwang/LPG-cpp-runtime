@@ -154,6 +154,13 @@
 
 %Globals
     /.
+
+    ./
+%End
+
+%Headers
+    /.
+    
 #include <iostream>
 
 #include "ExprParserprs.h"
@@ -167,14 +174,10 @@
 #include "ParseTable.h"
 #include "PrsStream.h"
 #include "RuleAction.h"
-
-    ./
-%End
-
-%Headers
-    /.
+#include "AstPoolHolder.h"
      struct $action_type :public PrsStream ,public RuleAction$additional_interfaces
     {
+	   pool_holder ast_pool;
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
           struct  $ast_class ;
 

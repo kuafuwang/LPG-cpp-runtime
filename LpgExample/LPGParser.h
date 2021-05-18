@@ -1,10 +1,10 @@
 
-    //#line 161 "btParserTemplateF.gi
+    //#line 162 "btParserTemplateF.gi
 
 #pragma once
 
 #include <iostream>
-
+#include "AstPoolHolder.h"
 #include "BacktrackingParser.h"
 #include "DeterministicParser.h"
 #include "diagnose.h"
@@ -21,17 +21,17 @@
 #include "PrsStream.h"
 #include "RuleAction.h"
 #include "IcuUtil.h"
-
+#include "stringex.h"
 
     //#line 7 "LPGParser.g
 
 
  
-    //#line 187 "btParserTemplateF.gi
+    //#line 188 "btParserTemplateF.gi
 
  struct LPGParser :public Object ,public RuleAction
 {
-   
+      pool_holder ast_pool;
     PrsStream* prsStream = nullptr;
     ~LPGParser (){
         delete prsStream;
@@ -197,7 +197,8 @@
     //#line 37 "LPGParser.g
 
     
-   struct ASTNode;
+   struct Visitor;
+  struct ASTNode;
   struct AbstractASTNodeList;
   struct ASTNodeToken;
   struct LPG;
@@ -301,16 +302,320 @@
   struct start_symbol1;
   struct terminal_symbol0;
   struct terminal_symbol1;
-  struct Visitor;
   struct AbstractVisitor;
-struct pool_holder{
-Tuple<IAst*> data;
-~pool_holder(){for(int i =0 ; i < data.size();++i){
- delete data[i];
-}
-}
-};
- pool_holder ast_pool;
+    struct Visitor :public IAstVisitor
+    {
+      virtual  bool visit(ASTNode *n)=0;
+     virtual   void endVisit(ASTNode *n)=0;
+
+     virtual   bool visit(ASTNodeToken *n)=0;
+      virtual  void endVisit(ASTNodeToken *n)=0;
+
+     virtual   bool visit(LPG *n)=0;
+      virtual  void endVisit(LPG *n)=0;
+
+     virtual   bool visit(LPG_itemList *n)=0;
+      virtual  void endVisit(LPG_itemList *n)=0;
+
+     virtual   bool visit(AliasSeg *n)=0;
+      virtual  void endVisit(AliasSeg *n)=0;
+
+     virtual   bool visit(AstSeg *n)=0;
+      virtual  void endVisit(AstSeg *n)=0;
+
+     virtual   bool visit(DefineSeg *n)=0;
+      virtual  void endVisit(DefineSeg *n)=0;
+
+     virtual   bool visit(EofSeg *n)=0;
+      virtual  void endVisit(EofSeg *n)=0;
+
+     virtual   bool visit(EolSeg *n)=0;
+      virtual  void endVisit(EolSeg *n)=0;
+
+     virtual   bool visit(ErrorSeg *n)=0;
+      virtual  void endVisit(ErrorSeg *n)=0;
+
+     virtual   bool visit(ExportSeg *n)=0;
+      virtual  void endVisit(ExportSeg *n)=0;
+
+     virtual   bool visit(GlobalsSeg *n)=0;
+      virtual  void endVisit(GlobalsSeg *n)=0;
+
+     virtual   bool visit(HeadersSeg *n)=0;
+      virtual  void endVisit(HeadersSeg *n)=0;
+
+     virtual   bool visit(IdentifierSeg *n)=0;
+      virtual  void endVisit(IdentifierSeg *n)=0;
+
+     virtual   bool visit(ImportSeg *n)=0;
+      virtual  void endVisit(ImportSeg *n)=0;
+
+     virtual   bool visit(IncludeSeg *n)=0;
+      virtual  void endVisit(IncludeSeg *n)=0;
+
+     virtual   bool visit(KeywordsSeg *n)=0;
+      virtual  void endVisit(KeywordsSeg *n)=0;
+
+     virtual   bool visit(NamesSeg *n)=0;
+      virtual  void endVisit(NamesSeg *n)=0;
+
+     virtual   bool visit(NoticeSeg *n)=0;
+      virtual  void endVisit(NoticeSeg *n)=0;
+
+     virtual   bool visit(RulesSeg *n)=0;
+      virtual  void endVisit(RulesSeg *n)=0;
+
+     virtual   bool visit(SoftKeywordsSeg *n)=0;
+      virtual  void endVisit(SoftKeywordsSeg *n)=0;
+
+     virtual   bool visit(StartSeg *n)=0;
+      virtual  void endVisit(StartSeg *n)=0;
+
+     virtual   bool visit(TerminalsSeg *n)=0;
+      virtual  void endVisit(TerminalsSeg *n)=0;
+
+     virtual   bool visit(TrailersSeg *n)=0;
+      virtual  void endVisit(TrailersSeg *n)=0;
+
+     virtual   bool visit(TypesSeg *n)=0;
+      virtual  void endVisit(TypesSeg *n)=0;
+
+     virtual   bool visit(RecoverSeg *n)=0;
+      virtual  void endVisit(RecoverSeg *n)=0;
+
+     virtual   bool visit(PredecessorSeg *n)=0;
+      virtual  void endVisit(PredecessorSeg *n)=0;
+
+     virtual   bool visit(option_specList *n)=0;
+      virtual  void endVisit(option_specList *n)=0;
+
+     virtual   bool visit(option_spec *n)=0;
+      virtual  void endVisit(option_spec *n)=0;
+
+     virtual   bool visit(optionList *n)=0;
+      virtual  void endVisit(optionList *n)=0;
+
+     virtual   bool visit(option *n)=0;
+      virtual  void endVisit(option *n)=0;
+
+     virtual   bool visit(SYMBOLList *n)=0;
+      virtual  void endVisit(SYMBOLList *n)=0;
+
+     virtual   bool visit(aliasSpecList *n)=0;
+      virtual  void endVisit(aliasSpecList *n)=0;
+
+     virtual   bool visit(alias_lhs_macro_name *n)=0;
+      virtual  void endVisit(alias_lhs_macro_name *n)=0;
+
+     virtual   bool visit(defineSpecList *n)=0;
+      virtual  void endVisit(defineSpecList *n)=0;
+
+     virtual   bool visit(defineSpec *n)=0;
+      virtual  void endVisit(defineSpec *n)=0;
+
+     virtual   bool visit(macro_segment *n)=0;
+      virtual  void endVisit(macro_segment *n)=0;
+
+     virtual   bool visit(terminal_symbolList *n)=0;
+      virtual  void endVisit(terminal_symbolList *n)=0;
+
+     virtual   bool visit(action_segmentList *n)=0;
+      virtual  void endVisit(action_segmentList *n)=0;
+
+     virtual   bool visit(import_segment *n)=0;
+      virtual  void endVisit(import_segment *n)=0;
+
+     virtual   bool visit(drop_commandList *n)=0;
+      virtual  void endVisit(drop_commandList *n)=0;
+
+     virtual   bool visit(drop_ruleList *n)=0;
+      virtual  void endVisit(drop_ruleList *n)=0;
+
+     virtual   bool visit(drop_rule *n)=0;
+      virtual  void endVisit(drop_rule *n)=0;
+
+     virtual   bool visit(optMacroName *n)=0;
+      virtual  void endVisit(optMacroName *n)=0;
+
+     virtual   bool visit(include_segment *n)=0;
+      virtual  void endVisit(include_segment *n)=0;
+
+     virtual   bool visit(keywordSpecList *n)=0;
+      virtual  void endVisit(keywordSpecList *n)=0;
+
+     virtual   bool visit(keywordSpec *n)=0;
+      virtual  void endVisit(keywordSpec *n)=0;
+
+     virtual   bool visit(nameSpecList *n)=0;
+      virtual  void endVisit(nameSpecList *n)=0;
+
+     virtual   bool visit(nameSpec *n)=0;
+      virtual  void endVisit(nameSpec *n)=0;
+
+     virtual   bool visit(rules_segment *n)=0;
+      virtual  void endVisit(rules_segment *n)=0;
+
+     virtual   bool visit(nonTermList *n)=0;
+      virtual  void endVisit(nonTermList *n)=0;
+
+     virtual   bool visit(nonTerm *n)=0;
+      virtual  void endVisit(nonTerm *n)=0;
+
+     virtual   bool visit(RuleName *n)=0;
+      virtual  void endVisit(RuleName *n)=0;
+
+     virtual   bool visit(ruleList *n)=0;
+      virtual  void endVisit(ruleList *n)=0;
+
+     virtual   bool visit(rule *n)=0;
+      virtual  void endVisit(rule *n)=0;
+
+     virtual   bool visit(symWithAttrsList *n)=0;
+      virtual  void endVisit(symWithAttrsList *n)=0;
+
+     virtual   bool visit(symAttrs *n)=0;
+      virtual  void endVisit(symAttrs *n)=0;
+
+     virtual   bool visit(action_segment *n)=0;
+      virtual  void endVisit(action_segment *n)=0;
+
+     virtual   bool visit(start_symbolList *n)=0;
+      virtual  void endVisit(start_symbolList *n)=0;
+
+     virtual   bool visit(terminalList *n)=0;
+      virtual  void endVisit(terminalList *n)=0;
+
+     virtual   bool visit(terminal *n)=0;
+      virtual  void endVisit(terminal *n)=0;
+
+     virtual   bool visit(optTerminalAlias *n)=0;
+      virtual  void endVisit(optTerminalAlias *n)=0;
+
+     virtual   bool visit(type_declarationsList *n)=0;
+      virtual  void endVisit(type_declarationsList *n)=0;
+
+     virtual   bool visit(type_declarations *n)=0;
+      virtual  void endVisit(type_declarations *n)=0;
+
+     virtual   bool visit(symbol_pairList *n)=0;
+      virtual  void endVisit(symbol_pairList *n)=0;
+
+     virtual   bool visit(symbol_pair *n)=0;
+      virtual  void endVisit(symbol_pair *n)=0;
+
+     virtual   bool visit(recover_symbol *n)=0;
+      virtual  void endVisit(recover_symbol *n)=0;
+
+     virtual   bool visit(END_KEY_OPT *n)=0;
+      virtual  void endVisit(END_KEY_OPT *n)=0;
+
+     virtual   bool visit(option_value0 *n)=0;
+      virtual  void endVisit(option_value0 *n)=0;
+
+     virtual   bool visit(option_value1 *n)=0;
+      virtual  void endVisit(option_value1 *n)=0;
+
+     virtual   bool visit(aliasSpec0 *n)=0;
+      virtual  void endVisit(aliasSpec0 *n)=0;
+
+     virtual   bool visit(aliasSpec1 *n)=0;
+      virtual  void endVisit(aliasSpec1 *n)=0;
+
+     virtual   bool visit(aliasSpec2 *n)=0;
+      virtual  void endVisit(aliasSpec2 *n)=0;
+
+     virtual   bool visit(aliasSpec3 *n)=0;
+      virtual  void endVisit(aliasSpec3 *n)=0;
+
+     virtual   bool visit(aliasSpec4 *n)=0;
+      virtual  void endVisit(aliasSpec4 *n)=0;
+
+     virtual   bool visit(aliasSpec5 *n)=0;
+      virtual  void endVisit(aliasSpec5 *n)=0;
+
+     virtual   bool visit(alias_rhs0 *n)=0;
+      virtual  void endVisit(alias_rhs0 *n)=0;
+
+     virtual   bool visit(alias_rhs1 *n)=0;
+      virtual  void endVisit(alias_rhs1 *n)=0;
+
+     virtual   bool visit(alias_rhs2 *n)=0;
+      virtual  void endVisit(alias_rhs2 *n)=0;
+
+     virtual   bool visit(alias_rhs3 *n)=0;
+      virtual  void endVisit(alias_rhs3 *n)=0;
+
+     virtual   bool visit(alias_rhs4 *n)=0;
+      virtual  void endVisit(alias_rhs4 *n)=0;
+
+     virtual   bool visit(alias_rhs5 *n)=0;
+      virtual  void endVisit(alias_rhs5 *n)=0;
+
+     virtual   bool visit(alias_rhs6 *n)=0;
+      virtual  void endVisit(alias_rhs6 *n)=0;
+
+     virtual   bool visit(macro_name_symbol0 *n)=0;
+      virtual  void endVisit(macro_name_symbol0 *n)=0;
+
+     virtual   bool visit(macro_name_symbol1 *n)=0;
+      virtual  void endVisit(macro_name_symbol1 *n)=0;
+
+     virtual   bool visit(drop_command0 *n)=0;
+      virtual  void endVisit(drop_command0 *n)=0;
+
+     virtual   bool visit(drop_command1 *n)=0;
+      virtual  void endVisit(drop_command1 *n)=0;
+
+     virtual   bool visit(name0 *n)=0;
+      virtual  void endVisit(name0 *n)=0;
+
+     virtual   bool visit(name1 *n)=0;
+      virtual  void endVisit(name1 *n)=0;
+
+     virtual   bool visit(name2 *n)=0;
+      virtual  void endVisit(name2 *n)=0;
+
+     virtual   bool visit(name3 *n)=0;
+      virtual  void endVisit(name3 *n)=0;
+
+     virtual   bool visit(name4 *n)=0;
+      virtual  void endVisit(name4 *n)=0;
+
+     virtual   bool visit(name5 *n)=0;
+      virtual  void endVisit(name5 *n)=0;
+
+     virtual   bool visit(produces0 *n)=0;
+      virtual  void endVisit(produces0 *n)=0;
+
+     virtual   bool visit(produces1 *n)=0;
+      virtual  void endVisit(produces1 *n)=0;
+
+     virtual   bool visit(produces2 *n)=0;
+      virtual  void endVisit(produces2 *n)=0;
+
+     virtual   bool visit(produces3 *n)=0;
+      virtual  void endVisit(produces3 *n)=0;
+
+     virtual   bool visit(symWithAttrs0 *n)=0;
+      virtual  void endVisit(symWithAttrs0 *n)=0;
+
+     virtual   bool visit(symWithAttrs1 *n)=0;
+      virtual  void endVisit(symWithAttrs1 *n)=0;
+
+     virtual   bool visit(start_symbol0 *n)=0;
+      virtual  void endVisit(start_symbol0 *n)=0;
+
+     virtual   bool visit(start_symbol1 *n)=0;
+      virtual  void endVisit(start_symbol1 *n)=0;
+
+     virtual   bool visit(terminal_symbol0 *n)=0;
+      virtual  void endVisit(terminal_symbol0 *n)=0;
+
+     virtual   bool visit(terminal_symbol1 *n)=0;
+      virtual  void endVisit(terminal_symbol1 *n)=0;
+
+    };
+
     struct ASTNode :public IAst
     {
         IAst* getNextAst() { return nullptr; }
@@ -4940,319 +5245,6 @@ Tuple<IAst*> data;
         }
     };
 
-    struct Visitor :public IAstVisitor
-    {
-      virtual  bool visit(ASTNode *n)=0;
-     virtual   void endVisit(ASTNode *n)=0;
-
-     virtual   bool visit(ASTNodeToken *n)=0;
-      virtual  void endVisit(ASTNodeToken *n)=0;
-
-     virtual   bool visit(LPG *n)=0;
-      virtual  void endVisit(LPG *n)=0;
-
-     virtual   bool visit(LPG_itemList *n)=0;
-      virtual  void endVisit(LPG_itemList *n)=0;
-
-     virtual   bool visit(AliasSeg *n)=0;
-      virtual  void endVisit(AliasSeg *n)=0;
-
-     virtual   bool visit(AstSeg *n)=0;
-      virtual  void endVisit(AstSeg *n)=0;
-
-     virtual   bool visit(DefineSeg *n)=0;
-      virtual  void endVisit(DefineSeg *n)=0;
-
-     virtual   bool visit(EofSeg *n)=0;
-      virtual  void endVisit(EofSeg *n)=0;
-
-     virtual   bool visit(EolSeg *n)=0;
-      virtual  void endVisit(EolSeg *n)=0;
-
-     virtual   bool visit(ErrorSeg *n)=0;
-      virtual  void endVisit(ErrorSeg *n)=0;
-
-     virtual   bool visit(ExportSeg *n)=0;
-      virtual  void endVisit(ExportSeg *n)=0;
-
-     virtual   bool visit(GlobalsSeg *n)=0;
-      virtual  void endVisit(GlobalsSeg *n)=0;
-
-     virtual   bool visit(HeadersSeg *n)=0;
-      virtual  void endVisit(HeadersSeg *n)=0;
-
-     virtual   bool visit(IdentifierSeg *n)=0;
-      virtual  void endVisit(IdentifierSeg *n)=0;
-
-     virtual   bool visit(ImportSeg *n)=0;
-      virtual  void endVisit(ImportSeg *n)=0;
-
-     virtual   bool visit(IncludeSeg *n)=0;
-      virtual  void endVisit(IncludeSeg *n)=0;
-
-     virtual   bool visit(KeywordsSeg *n)=0;
-      virtual  void endVisit(KeywordsSeg *n)=0;
-
-     virtual   bool visit(NamesSeg *n)=0;
-      virtual  void endVisit(NamesSeg *n)=0;
-
-     virtual   bool visit(NoticeSeg *n)=0;
-      virtual  void endVisit(NoticeSeg *n)=0;
-
-     virtual   bool visit(RulesSeg *n)=0;
-      virtual  void endVisit(RulesSeg *n)=0;
-
-     virtual   bool visit(SoftKeywordsSeg *n)=0;
-      virtual  void endVisit(SoftKeywordsSeg *n)=0;
-
-     virtual   bool visit(StartSeg *n)=0;
-      virtual  void endVisit(StartSeg *n)=0;
-
-     virtual   bool visit(TerminalsSeg *n)=0;
-      virtual  void endVisit(TerminalsSeg *n)=0;
-
-     virtual   bool visit(TrailersSeg *n)=0;
-      virtual  void endVisit(TrailersSeg *n)=0;
-
-     virtual   bool visit(TypesSeg *n)=0;
-      virtual  void endVisit(TypesSeg *n)=0;
-
-     virtual   bool visit(RecoverSeg *n)=0;
-      virtual  void endVisit(RecoverSeg *n)=0;
-
-     virtual   bool visit(PredecessorSeg *n)=0;
-      virtual  void endVisit(PredecessorSeg *n)=0;
-
-     virtual   bool visit(option_specList *n)=0;
-      virtual  void endVisit(option_specList *n)=0;
-
-     virtual   bool visit(option_spec *n)=0;
-      virtual  void endVisit(option_spec *n)=0;
-
-     virtual   bool visit(optionList *n)=0;
-      virtual  void endVisit(optionList *n)=0;
-
-     virtual   bool visit(option *n)=0;
-      virtual  void endVisit(option *n)=0;
-
-     virtual   bool visit(SYMBOLList *n)=0;
-      virtual  void endVisit(SYMBOLList *n)=0;
-
-     virtual   bool visit(aliasSpecList *n)=0;
-      virtual  void endVisit(aliasSpecList *n)=0;
-
-     virtual   bool visit(alias_lhs_macro_name *n)=0;
-      virtual  void endVisit(alias_lhs_macro_name *n)=0;
-
-     virtual   bool visit(defineSpecList *n)=0;
-      virtual  void endVisit(defineSpecList *n)=0;
-
-     virtual   bool visit(defineSpec *n)=0;
-      virtual  void endVisit(defineSpec *n)=0;
-
-     virtual   bool visit(macro_segment *n)=0;
-      virtual  void endVisit(macro_segment *n)=0;
-
-     virtual   bool visit(terminal_symbolList *n)=0;
-      virtual  void endVisit(terminal_symbolList *n)=0;
-
-     virtual   bool visit(action_segmentList *n)=0;
-      virtual  void endVisit(action_segmentList *n)=0;
-
-     virtual   bool visit(import_segment *n)=0;
-      virtual  void endVisit(import_segment *n)=0;
-
-     virtual   bool visit(drop_commandList *n)=0;
-      virtual  void endVisit(drop_commandList *n)=0;
-
-     virtual   bool visit(drop_ruleList *n)=0;
-      virtual  void endVisit(drop_ruleList *n)=0;
-
-     virtual   bool visit(drop_rule *n)=0;
-      virtual  void endVisit(drop_rule *n)=0;
-
-     virtual   bool visit(optMacroName *n)=0;
-      virtual  void endVisit(optMacroName *n)=0;
-
-     virtual   bool visit(include_segment *n)=0;
-      virtual  void endVisit(include_segment *n)=0;
-
-     virtual   bool visit(keywordSpecList *n)=0;
-      virtual  void endVisit(keywordSpecList *n)=0;
-
-     virtual   bool visit(keywordSpec *n)=0;
-      virtual  void endVisit(keywordSpec *n)=0;
-
-     virtual   bool visit(nameSpecList *n)=0;
-      virtual  void endVisit(nameSpecList *n)=0;
-
-     virtual   bool visit(nameSpec *n)=0;
-      virtual  void endVisit(nameSpec *n)=0;
-
-     virtual   bool visit(rules_segment *n)=0;
-      virtual  void endVisit(rules_segment *n)=0;
-
-     virtual   bool visit(nonTermList *n)=0;
-      virtual  void endVisit(nonTermList *n)=0;
-
-     virtual   bool visit(nonTerm *n)=0;
-      virtual  void endVisit(nonTerm *n)=0;
-
-     virtual   bool visit(RuleName *n)=0;
-      virtual  void endVisit(RuleName *n)=0;
-
-     virtual   bool visit(ruleList *n)=0;
-      virtual  void endVisit(ruleList *n)=0;
-
-     virtual   bool visit(rule *n)=0;
-      virtual  void endVisit(rule *n)=0;
-
-     virtual   bool visit(symWithAttrsList *n)=0;
-      virtual  void endVisit(symWithAttrsList *n)=0;
-
-     virtual   bool visit(symAttrs *n)=0;
-      virtual  void endVisit(symAttrs *n)=0;
-
-     virtual   bool visit(action_segment *n)=0;
-      virtual  void endVisit(action_segment *n)=0;
-
-     virtual   bool visit(start_symbolList *n)=0;
-      virtual  void endVisit(start_symbolList *n)=0;
-
-     virtual   bool visit(terminalList *n)=0;
-      virtual  void endVisit(terminalList *n)=0;
-
-     virtual   bool visit(terminal *n)=0;
-      virtual  void endVisit(terminal *n)=0;
-
-     virtual   bool visit(optTerminalAlias *n)=0;
-      virtual  void endVisit(optTerminalAlias *n)=0;
-
-     virtual   bool visit(type_declarationsList *n)=0;
-      virtual  void endVisit(type_declarationsList *n)=0;
-
-     virtual   bool visit(type_declarations *n)=0;
-      virtual  void endVisit(type_declarations *n)=0;
-
-     virtual   bool visit(symbol_pairList *n)=0;
-      virtual  void endVisit(symbol_pairList *n)=0;
-
-     virtual   bool visit(symbol_pair *n)=0;
-      virtual  void endVisit(symbol_pair *n)=0;
-
-     virtual   bool visit(recover_symbol *n)=0;
-      virtual  void endVisit(recover_symbol *n)=0;
-
-     virtual   bool visit(END_KEY_OPT *n)=0;
-      virtual  void endVisit(END_KEY_OPT *n)=0;
-
-     virtual   bool visit(option_value0 *n)=0;
-      virtual  void endVisit(option_value0 *n)=0;
-
-     virtual   bool visit(option_value1 *n)=0;
-      virtual  void endVisit(option_value1 *n)=0;
-
-     virtual   bool visit(aliasSpec0 *n)=0;
-      virtual  void endVisit(aliasSpec0 *n)=0;
-
-     virtual   bool visit(aliasSpec1 *n)=0;
-      virtual  void endVisit(aliasSpec1 *n)=0;
-
-     virtual   bool visit(aliasSpec2 *n)=0;
-      virtual  void endVisit(aliasSpec2 *n)=0;
-
-     virtual   bool visit(aliasSpec3 *n)=0;
-      virtual  void endVisit(aliasSpec3 *n)=0;
-
-     virtual   bool visit(aliasSpec4 *n)=0;
-      virtual  void endVisit(aliasSpec4 *n)=0;
-
-     virtual   bool visit(aliasSpec5 *n)=0;
-      virtual  void endVisit(aliasSpec5 *n)=0;
-
-     virtual   bool visit(alias_rhs0 *n)=0;
-      virtual  void endVisit(alias_rhs0 *n)=0;
-
-     virtual   bool visit(alias_rhs1 *n)=0;
-      virtual  void endVisit(alias_rhs1 *n)=0;
-
-     virtual   bool visit(alias_rhs2 *n)=0;
-      virtual  void endVisit(alias_rhs2 *n)=0;
-
-     virtual   bool visit(alias_rhs3 *n)=0;
-      virtual  void endVisit(alias_rhs3 *n)=0;
-
-     virtual   bool visit(alias_rhs4 *n)=0;
-      virtual  void endVisit(alias_rhs4 *n)=0;
-
-     virtual   bool visit(alias_rhs5 *n)=0;
-      virtual  void endVisit(alias_rhs5 *n)=0;
-
-     virtual   bool visit(alias_rhs6 *n)=0;
-      virtual  void endVisit(alias_rhs6 *n)=0;
-
-     virtual   bool visit(macro_name_symbol0 *n)=0;
-      virtual  void endVisit(macro_name_symbol0 *n)=0;
-
-     virtual   bool visit(macro_name_symbol1 *n)=0;
-      virtual  void endVisit(macro_name_symbol1 *n)=0;
-
-     virtual   bool visit(drop_command0 *n)=0;
-      virtual  void endVisit(drop_command0 *n)=0;
-
-     virtual   bool visit(drop_command1 *n)=0;
-      virtual  void endVisit(drop_command1 *n)=0;
-
-     virtual   bool visit(name0 *n)=0;
-      virtual  void endVisit(name0 *n)=0;
-
-     virtual   bool visit(name1 *n)=0;
-      virtual  void endVisit(name1 *n)=0;
-
-     virtual   bool visit(name2 *n)=0;
-      virtual  void endVisit(name2 *n)=0;
-
-     virtual   bool visit(name3 *n)=0;
-      virtual  void endVisit(name3 *n)=0;
-
-     virtual   bool visit(name4 *n)=0;
-      virtual  void endVisit(name4 *n)=0;
-
-     virtual   bool visit(name5 *n)=0;
-      virtual  void endVisit(name5 *n)=0;
-
-     virtual   bool visit(produces0 *n)=0;
-      virtual  void endVisit(produces0 *n)=0;
-
-     virtual   bool visit(produces1 *n)=0;
-      virtual  void endVisit(produces1 *n)=0;
-
-     virtual   bool visit(produces2 *n)=0;
-      virtual  void endVisit(produces2 *n)=0;
-
-     virtual   bool visit(produces3 *n)=0;
-      virtual  void endVisit(produces3 *n)=0;
-
-     virtual   bool visit(symWithAttrs0 *n)=0;
-      virtual  void endVisit(symWithAttrs0 *n)=0;
-
-     virtual   bool visit(symWithAttrs1 *n)=0;
-      virtual  void endVisit(symWithAttrs1 *n)=0;
-
-     virtual   bool visit(start_symbol0 *n)=0;
-      virtual  void endVisit(start_symbol0 *n)=0;
-
-     virtual   bool visit(start_symbol1 *n)=0;
-      virtual  void endVisit(start_symbol1 *n)=0;
-
-     virtual   bool visit(terminal_symbol0 *n)=0;
-      virtual  void endVisit(terminal_symbol0 *n)=0;
-
-     virtual   bool visit(terminal_symbol1 *n)=0;
-      virtual  void endVisit(terminal_symbol1 *n)=0;
-
-    };
-
     struct AbstractVisitor :public Visitor
     {
         virtual void unimplementedVisitor(const std::string& s)=0;
@@ -5676,113 +5668,113 @@ Tuple<IAst*> data;
         }
       virtual  void endVisit(ASTNode *n)
         {
-            if (dynamic_cast<ASTNodeToken*>(n) ) endVisit((ASTNodeToken*) n);return;
-            if (dynamic_cast<LPG*>(n) ) endVisit((LPG*) n);return;
-            if (dynamic_cast<LPG_itemList*>(n) ) endVisit((LPG_itemList*) n);return;
-            if (dynamic_cast<AliasSeg*>(n) ) endVisit((AliasSeg*) n);return;
-            if (dynamic_cast<AstSeg*>(n) ) endVisit((AstSeg*) n);return;
-            if (dynamic_cast<DefineSeg*>(n) ) endVisit((DefineSeg*) n);return;
-            if (dynamic_cast<EofSeg*>(n) ) endVisit((EofSeg*) n);return;
-            if (dynamic_cast<EolSeg*>(n) ) endVisit((EolSeg*) n);return;
-            if (dynamic_cast<ErrorSeg*>(n) ) endVisit((ErrorSeg*) n);return;
-            if (dynamic_cast<ExportSeg*>(n) ) endVisit((ExportSeg*) n);return;
-            if (dynamic_cast<GlobalsSeg*>(n) ) endVisit((GlobalsSeg*) n);return;
-            if (dynamic_cast<HeadersSeg*>(n) ) endVisit((HeadersSeg*) n);return;
-            if (dynamic_cast<IdentifierSeg*>(n) ) endVisit((IdentifierSeg*) n);return;
-            if (dynamic_cast<ImportSeg*>(n) ) endVisit((ImportSeg*) n);return;
-            if (dynamic_cast<IncludeSeg*>(n) ) endVisit((IncludeSeg*) n);return;
-            if (dynamic_cast<KeywordsSeg*>(n) ) endVisit((KeywordsSeg*) n);return;
-            if (dynamic_cast<NamesSeg*>(n) ) endVisit((NamesSeg*) n);return;
-            if (dynamic_cast<NoticeSeg*>(n) ) endVisit((NoticeSeg*) n);return;
-            if (dynamic_cast<RulesSeg*>(n) ) endVisit((RulesSeg*) n);return;
-            if (dynamic_cast<SoftKeywordsSeg*>(n) ) endVisit((SoftKeywordsSeg*) n);return;
-            if (dynamic_cast<StartSeg*>(n) ) endVisit((StartSeg*) n);return;
-            if (dynamic_cast<TerminalsSeg*>(n) ) endVisit((TerminalsSeg*) n);return;
-            if (dynamic_cast<TrailersSeg*>(n) ) endVisit((TrailersSeg*) n);return;
-            if (dynamic_cast<TypesSeg*>(n) ) endVisit((TypesSeg*) n);return;
-            if (dynamic_cast<RecoverSeg*>(n) ) endVisit((RecoverSeg*) n);return;
-            if (dynamic_cast<PredecessorSeg*>(n) ) endVisit((PredecessorSeg*) n);return;
-            if (dynamic_cast<option_specList*>(n) ) endVisit((option_specList*) n);return;
-            if (dynamic_cast<option_spec*>(n) ) endVisit((option_spec*) n);return;
-            if (dynamic_cast<optionList*>(n) ) endVisit((optionList*) n);return;
-            if (dynamic_cast<option*>(n) ) endVisit((option*) n);return;
-            if (dynamic_cast<SYMBOLList*>(n) ) endVisit((SYMBOLList*) n);return;
-            if (dynamic_cast<aliasSpecList*>(n) ) endVisit((aliasSpecList*) n);return;
-            if (dynamic_cast<alias_lhs_macro_name*>(n) ) endVisit((alias_lhs_macro_name*) n);return;
-            if (dynamic_cast<defineSpecList*>(n) ) endVisit((defineSpecList*) n);return;
-            if (dynamic_cast<defineSpec*>(n) ) endVisit((defineSpec*) n);return;
-            if (dynamic_cast<macro_segment*>(n) ) endVisit((macro_segment*) n);return;
-            if (dynamic_cast<terminal_symbolList*>(n) ) endVisit((terminal_symbolList*) n);return;
-            if (dynamic_cast<action_segmentList*>(n) ) endVisit((action_segmentList*) n);return;
-            if (dynamic_cast<import_segment*>(n) ) endVisit((import_segment*) n);return;
-            if (dynamic_cast<drop_commandList*>(n) ) endVisit((drop_commandList*) n);return;
-            if (dynamic_cast<drop_ruleList*>(n) ) endVisit((drop_ruleList*) n);return;
-            if (dynamic_cast<drop_rule*>(n) ) endVisit((drop_rule*) n);return;
-            if (dynamic_cast<optMacroName*>(n) ) endVisit((optMacroName*) n);return;
-            if (dynamic_cast<include_segment*>(n) ) endVisit((include_segment*) n);return;
-            if (dynamic_cast<keywordSpecList*>(n) ) endVisit((keywordSpecList*) n);return;
-            if (dynamic_cast<keywordSpec*>(n) ) endVisit((keywordSpec*) n);return;
-            if (dynamic_cast<nameSpecList*>(n) ) endVisit((nameSpecList*) n);return;
-            if (dynamic_cast<nameSpec*>(n) ) endVisit((nameSpec*) n);return;
-            if (dynamic_cast<rules_segment*>(n) ) endVisit((rules_segment*) n);return;
-            if (dynamic_cast<nonTermList*>(n) ) endVisit((nonTermList*) n);return;
-            if (dynamic_cast<nonTerm*>(n) ) endVisit((nonTerm*) n);return;
-            if (dynamic_cast<RuleName*>(n) ) endVisit((RuleName*) n);return;
-            if (dynamic_cast<ruleList*>(n) ) endVisit((ruleList*) n);return;
-            if (dynamic_cast<rule*>(n) ) endVisit((rule*) n);return;
-            if (dynamic_cast<symWithAttrsList*>(n) ) endVisit((symWithAttrsList*) n);return;
-            if (dynamic_cast<symAttrs*>(n) ) endVisit((symAttrs*) n);return;
-            if (dynamic_cast<action_segment*>(n) ) endVisit((action_segment*) n);return;
-            if (dynamic_cast<start_symbolList*>(n) ) endVisit((start_symbolList*) n);return;
-            if (dynamic_cast<terminalList*>(n) ) endVisit((terminalList*) n);return;
-            if (dynamic_cast<terminal*>(n) ) endVisit((terminal*) n);return;
-            if (dynamic_cast<optTerminalAlias*>(n) ) endVisit((optTerminalAlias*) n);return;
-            if (dynamic_cast<type_declarationsList*>(n) ) endVisit((type_declarationsList*) n);return;
-            if (dynamic_cast<type_declarations*>(n) ) endVisit((type_declarations*) n);return;
-            if (dynamic_cast<symbol_pairList*>(n) ) endVisit((symbol_pairList*) n);return;
-            if (dynamic_cast<symbol_pair*>(n) ) endVisit((symbol_pair*) n);return;
-            if (dynamic_cast<recover_symbol*>(n) ) endVisit((recover_symbol*) n);return;
-            if (dynamic_cast<END_KEY_OPT*>(n) ) endVisit((END_KEY_OPT*) n);return;
-            if (dynamic_cast<option_value0*>(n) ) endVisit((option_value0*) n);return;
-            if (dynamic_cast<option_value1*>(n) ) endVisit((option_value1*) n);return;
-            if (dynamic_cast<aliasSpec0*>(n) ) endVisit((aliasSpec0*) n);return;
-            if (dynamic_cast<aliasSpec1*>(n) ) endVisit((aliasSpec1*) n);return;
-            if (dynamic_cast<aliasSpec2*>(n) ) endVisit((aliasSpec2*) n);return;
-            if (dynamic_cast<aliasSpec3*>(n) ) endVisit((aliasSpec3*) n);return;
-            if (dynamic_cast<aliasSpec4*>(n) ) endVisit((aliasSpec4*) n);return;
-            if (dynamic_cast<aliasSpec5*>(n) ) endVisit((aliasSpec5*) n);return;
-            if (dynamic_cast<alias_rhs0*>(n) ) endVisit((alias_rhs0*) n);return;
-            if (dynamic_cast<alias_rhs1*>(n) ) endVisit((alias_rhs1*) n);return;
-            if (dynamic_cast<alias_rhs2*>(n) ) endVisit((alias_rhs2*) n);return;
-            if (dynamic_cast<alias_rhs3*>(n) ) endVisit((alias_rhs3*) n);return;
-            if (dynamic_cast<alias_rhs4*>(n) ) endVisit((alias_rhs4*) n);return;
-            if (dynamic_cast<alias_rhs5*>(n) ) endVisit((alias_rhs5*) n);return;
-            if (dynamic_cast<alias_rhs6*>(n) ) endVisit((alias_rhs6*) n);return;
-            if (dynamic_cast<macro_name_symbol0*>(n) ) endVisit((macro_name_symbol0*) n);return;
-            if (dynamic_cast<macro_name_symbol1*>(n) ) endVisit((macro_name_symbol1*) n);return;
-            if (dynamic_cast<drop_command0*>(n) ) endVisit((drop_command0*) n);return;
-            if (dynamic_cast<drop_command1*>(n) ) endVisit((drop_command1*) n);return;
-            if (dynamic_cast<name0*>(n) ) endVisit((name0*) n);return;
-            if (dynamic_cast<name1*>(n) ) endVisit((name1*) n);return;
-            if (dynamic_cast<name2*>(n) ) endVisit((name2*) n);return;
-            if (dynamic_cast<name3*>(n) ) endVisit((name3*) n);return;
-            if (dynamic_cast<name4*>(n) ) endVisit((name4*) n);return;
-            if (dynamic_cast<name5*>(n) ) endVisit((name5*) n);return;
-            if (dynamic_cast<produces0*>(n) ) endVisit((produces0*) n);return;
-            if (dynamic_cast<produces1*>(n) ) endVisit((produces1*) n);return;
-            if (dynamic_cast<produces2*>(n) ) endVisit((produces2*) n);return;
-            if (dynamic_cast<produces3*>(n) ) endVisit((produces3*) n);return;
-            if (dynamic_cast<symWithAttrs0*>(n) ) endVisit((symWithAttrs0*) n);return;
-            if (dynamic_cast<symWithAttrs1*>(n) ) endVisit((symWithAttrs1*) n);return;
-            if (dynamic_cast<start_symbol0*>(n) ) endVisit((start_symbol0*) n);return;
-            if (dynamic_cast<start_symbol1*>(n) ) endVisit((start_symbol1*) n);return;
-            if (dynamic_cast<terminal_symbol0*>(n) ) endVisit((terminal_symbol0*) n);return;
-            if (dynamic_cast<terminal_symbol1*>(n) ) endVisit((terminal_symbol1*) n);return;
+            if (dynamic_cast<ASTNodeToken*>(n) ){ endVisit((ASTNodeToken*) n);return;}
+            if (dynamic_cast<LPG*>(n) ){ endVisit((LPG*) n);return;}
+            if (dynamic_cast<LPG_itemList*>(n) ){ endVisit((LPG_itemList*) n);return;}
+            if (dynamic_cast<AliasSeg*>(n) ){ endVisit((AliasSeg*) n);return;}
+            if (dynamic_cast<AstSeg*>(n) ){ endVisit((AstSeg*) n);return;}
+            if (dynamic_cast<DefineSeg*>(n) ){ endVisit((DefineSeg*) n);return;}
+            if (dynamic_cast<EofSeg*>(n) ){ endVisit((EofSeg*) n);return;}
+            if (dynamic_cast<EolSeg*>(n) ){ endVisit((EolSeg*) n);return;}
+            if (dynamic_cast<ErrorSeg*>(n) ){ endVisit((ErrorSeg*) n);return;}
+            if (dynamic_cast<ExportSeg*>(n) ){ endVisit((ExportSeg*) n);return;}
+            if (dynamic_cast<GlobalsSeg*>(n) ){ endVisit((GlobalsSeg*) n);return;}
+            if (dynamic_cast<HeadersSeg*>(n) ){ endVisit((HeadersSeg*) n);return;}
+            if (dynamic_cast<IdentifierSeg*>(n) ){ endVisit((IdentifierSeg*) n);return;}
+            if (dynamic_cast<ImportSeg*>(n) ){ endVisit((ImportSeg*) n);return;}
+            if (dynamic_cast<IncludeSeg*>(n) ){ endVisit((IncludeSeg*) n);return;}
+            if (dynamic_cast<KeywordsSeg*>(n) ){ endVisit((KeywordsSeg*) n);return;}
+            if (dynamic_cast<NamesSeg*>(n) ){ endVisit((NamesSeg*) n);return;}
+            if (dynamic_cast<NoticeSeg*>(n) ){ endVisit((NoticeSeg*) n);return;}
+            if (dynamic_cast<RulesSeg*>(n) ){ endVisit((RulesSeg*) n);return;}
+            if (dynamic_cast<SoftKeywordsSeg*>(n) ){ endVisit((SoftKeywordsSeg*) n);return;}
+            if (dynamic_cast<StartSeg*>(n) ){ endVisit((StartSeg*) n);return;}
+            if (dynamic_cast<TerminalsSeg*>(n) ){ endVisit((TerminalsSeg*) n);return;}
+            if (dynamic_cast<TrailersSeg*>(n) ){ endVisit((TrailersSeg*) n);return;}
+            if (dynamic_cast<TypesSeg*>(n) ){ endVisit((TypesSeg*) n);return;}
+            if (dynamic_cast<RecoverSeg*>(n) ){ endVisit((RecoverSeg*) n);return;}
+            if (dynamic_cast<PredecessorSeg*>(n) ){ endVisit((PredecessorSeg*) n);return;}
+            if (dynamic_cast<option_specList*>(n) ){ endVisit((option_specList*) n);return;}
+            if (dynamic_cast<option_spec*>(n) ){ endVisit((option_spec*) n);return;}
+            if (dynamic_cast<optionList*>(n) ){ endVisit((optionList*) n);return;}
+            if (dynamic_cast<option*>(n) ){ endVisit((option*) n);return;}
+            if (dynamic_cast<SYMBOLList*>(n) ){ endVisit((SYMBOLList*) n);return;}
+            if (dynamic_cast<aliasSpecList*>(n) ){ endVisit((aliasSpecList*) n);return;}
+            if (dynamic_cast<alias_lhs_macro_name*>(n) ){ endVisit((alias_lhs_macro_name*) n);return;}
+            if (dynamic_cast<defineSpecList*>(n) ){ endVisit((defineSpecList*) n);return;}
+            if (dynamic_cast<defineSpec*>(n) ){ endVisit((defineSpec*) n);return;}
+            if (dynamic_cast<macro_segment*>(n) ){ endVisit((macro_segment*) n);return;}
+            if (dynamic_cast<terminal_symbolList*>(n) ){ endVisit((terminal_symbolList*) n);return;}
+            if (dynamic_cast<action_segmentList*>(n) ){ endVisit((action_segmentList*) n);return;}
+            if (dynamic_cast<import_segment*>(n) ){ endVisit((import_segment*) n);return;}
+            if (dynamic_cast<drop_commandList*>(n) ){ endVisit((drop_commandList*) n);return;}
+            if (dynamic_cast<drop_ruleList*>(n) ){ endVisit((drop_ruleList*) n);return;}
+            if (dynamic_cast<drop_rule*>(n) ){ endVisit((drop_rule*) n);return;}
+            if (dynamic_cast<optMacroName*>(n) ){ endVisit((optMacroName*) n);return;}
+            if (dynamic_cast<include_segment*>(n) ){ endVisit((include_segment*) n);return;}
+            if (dynamic_cast<keywordSpecList*>(n) ){ endVisit((keywordSpecList*) n);return;}
+            if (dynamic_cast<keywordSpec*>(n) ){ endVisit((keywordSpec*) n);return;}
+            if (dynamic_cast<nameSpecList*>(n) ){ endVisit((nameSpecList*) n);return;}
+            if (dynamic_cast<nameSpec*>(n) ){ endVisit((nameSpec*) n);return;}
+            if (dynamic_cast<rules_segment*>(n) ){ endVisit((rules_segment*) n);return;}
+            if (dynamic_cast<nonTermList*>(n) ){ endVisit((nonTermList*) n);return;}
+            if (dynamic_cast<nonTerm*>(n) ){ endVisit((nonTerm*) n);return;}
+            if (dynamic_cast<RuleName*>(n) ){ endVisit((RuleName*) n);return;}
+            if (dynamic_cast<ruleList*>(n) ){ endVisit((ruleList*) n);return;}
+            if (dynamic_cast<rule*>(n) ){ endVisit((rule*) n);return;}
+            if (dynamic_cast<symWithAttrsList*>(n) ){ endVisit((symWithAttrsList*) n);return;}
+            if (dynamic_cast<symAttrs*>(n) ){ endVisit((symAttrs*) n);return;}
+            if (dynamic_cast<action_segment*>(n) ){ endVisit((action_segment*) n);return;}
+            if (dynamic_cast<start_symbolList*>(n) ){ endVisit((start_symbolList*) n);return;}
+            if (dynamic_cast<terminalList*>(n) ){ endVisit((terminalList*) n);return;}
+            if (dynamic_cast<terminal*>(n) ){ endVisit((terminal*) n);return;}
+            if (dynamic_cast<optTerminalAlias*>(n) ){ endVisit((optTerminalAlias*) n);return;}
+            if (dynamic_cast<type_declarationsList*>(n) ){ endVisit((type_declarationsList*) n);return;}
+            if (dynamic_cast<type_declarations*>(n) ){ endVisit((type_declarations*) n);return;}
+            if (dynamic_cast<symbol_pairList*>(n) ){ endVisit((symbol_pairList*) n);return;}
+            if (dynamic_cast<symbol_pair*>(n) ){ endVisit((symbol_pair*) n);return;}
+            if (dynamic_cast<recover_symbol*>(n) ){ endVisit((recover_symbol*) n);return;}
+            if (dynamic_cast<END_KEY_OPT*>(n) ){ endVisit((END_KEY_OPT*) n);return;}
+            if (dynamic_cast<option_value0*>(n) ){ endVisit((option_value0*) n);return;}
+            if (dynamic_cast<option_value1*>(n) ){ endVisit((option_value1*) n);return;}
+            if (dynamic_cast<aliasSpec0*>(n) ){ endVisit((aliasSpec0*) n);return;}
+            if (dynamic_cast<aliasSpec1*>(n) ){ endVisit((aliasSpec1*) n);return;}
+            if (dynamic_cast<aliasSpec2*>(n) ){ endVisit((aliasSpec2*) n);return;}
+            if (dynamic_cast<aliasSpec3*>(n) ){ endVisit((aliasSpec3*) n);return;}
+            if (dynamic_cast<aliasSpec4*>(n) ){ endVisit((aliasSpec4*) n);return;}
+            if (dynamic_cast<aliasSpec5*>(n) ){ endVisit((aliasSpec5*) n);return;}
+            if (dynamic_cast<alias_rhs0*>(n) ){ endVisit((alias_rhs0*) n);return;}
+            if (dynamic_cast<alias_rhs1*>(n) ){ endVisit((alias_rhs1*) n);return;}
+            if (dynamic_cast<alias_rhs2*>(n) ){ endVisit((alias_rhs2*) n);return;}
+            if (dynamic_cast<alias_rhs3*>(n) ){ endVisit((alias_rhs3*) n);return;}
+            if (dynamic_cast<alias_rhs4*>(n) ){ endVisit((alias_rhs4*) n);return;}
+            if (dynamic_cast<alias_rhs5*>(n) ){ endVisit((alias_rhs5*) n);return;}
+            if (dynamic_cast<alias_rhs6*>(n) ){ endVisit((alias_rhs6*) n);return;}
+            if (dynamic_cast<macro_name_symbol0*>(n) ){ endVisit((macro_name_symbol0*) n);return;}
+            if (dynamic_cast<macro_name_symbol1*>(n) ){ endVisit((macro_name_symbol1*) n);return;}
+            if (dynamic_cast<drop_command0*>(n) ){ endVisit((drop_command0*) n);return;}
+            if (dynamic_cast<drop_command1*>(n) ){ endVisit((drop_command1*) n);return;}
+            if (dynamic_cast<name0*>(n) ){ endVisit((name0*) n);return;}
+            if (dynamic_cast<name1*>(n) ){ endVisit((name1*) n);return;}
+            if (dynamic_cast<name2*>(n) ){ endVisit((name2*) n);return;}
+            if (dynamic_cast<name3*>(n) ){ endVisit((name3*) n);return;}
+            if (dynamic_cast<name4*>(n) ){ endVisit((name4*) n);return;}
+            if (dynamic_cast<name5*>(n) ){ endVisit((name5*) n);return;}
+            if (dynamic_cast<produces0*>(n) ){ endVisit((produces0*) n);return;}
+            if (dynamic_cast<produces1*>(n) ){ endVisit((produces1*) n);return;}
+            if (dynamic_cast<produces2*>(n) ){ endVisit((produces2*) n);return;}
+            if (dynamic_cast<produces3*>(n) ){ endVisit((produces3*) n);return;}
+            if (dynamic_cast<symWithAttrs0*>(n) ){ endVisit((symWithAttrs0*) n);return;}
+            if (dynamic_cast<symWithAttrs1*>(n) ){ endVisit((symWithAttrs1*) n);return;}
+            if (dynamic_cast<start_symbol0*>(n) ){ endVisit((start_symbol0*) n);return;}
+            if (dynamic_cast<start_symbol1*>(n) ){ endVisit((start_symbol1*) n);return;}
+            if (dynamic_cast<terminal_symbol0*>(n) ){ endVisit((terminal_symbol0*) n);return;}
+            if (dynamic_cast<terminal_symbol1*>(n) ){ endVisit((terminal_symbol1*) n);return;}
             throw UnsupportedOperationException("visit(" + n->to_utf8_string() + ")");
         }
     };
 
-    //#line 357 "btParserTemplateF.gi
+    //#line 358 "btParserTemplateF.gi
 
  
      void ruleAction(int ruleNumber)
@@ -7565,7 +7557,7 @@ Tuple<IAst*> data;
                 ((action_segmentList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
-    //#line 361 "btParserTemplateF.gi
+    //#line 362 "btParserTemplateF.gi
 
     
             default:

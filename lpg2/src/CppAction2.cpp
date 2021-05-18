@@ -400,15 +400,129 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
         }
     }
     NTC ntc(global_map, user_specified_null_ast, grammar);
-
+    ActionFileSymbol* top_level_ast_file_symbol = nullptr;
     //
     // First process the root class, the list class, and the Token class.
     //
-    ast_buffer.Put("struct pool_holder{\nTuple<IAst*> data;\n");
-    ast_buffer.Put("~pool_holder(){for(int i =0 ; i < data.size();++i){\n delete data[i];\n}\n}\n};\n");
-    ast_buffer.Put(" pool_holder ast_pool;\n");
+    if (option->automatic_ast == Option::TOPLEVEL)
+    {
+	    {
+            top_level_ast_file_symbol = GenerateTitleAndGlobals(ast_filename_table, notice_actions, option->top_level_ast_file_prefix, false);
+            TextBuffer& header_buffer = *(top_level_ast_file_symbol->InitialHeadersBuffer());
+            header_buffer.Put("#pragma once\n");
+            header_buffer.Put(R"(#include "IAbstractArrayList.h")");
+            header_buffer.Put("\n");
+            header_buffer.Put(R"(#include "IAst.h")");
+            header_buffer.Put("\n");
+            header_buffer.Put("namespace ");
+            header_buffer.Put(option->top_level_ast_file_prefix);
+            header_buffer.Put("{\n");
+	    }
+
+    }
 
 
+    //
+       //
+       //
+    SymbolLookupTable type_set;
+    type_set.FindOrInsertName(grammar->Get_ast_token_classname(), strlen(grammar->Get_ast_token_classname()));
+    {
+        for (int i = 0; i < classname.Length(); i++)
+        {
+            //
+            // No class is generated for rules that are associated with the null classname.
+            //
+            if (!IsNullClassname(classname[i]))
+            {
+                //
+                // Note that it is CRUCIAL that the special array names be added
+                // to the type_set prior to the base array. Since they are subclasses
+                // of the base array, when visiting a generic AST node, we need to check
+                // first whether or not it is a special array before we check if it the base.
+                //
+                for (int k = 0; k < classname[i].special_arrays.Length(); k++)
+                    type_set.FindOrInsertName(classname[i].special_arrays[k].name, strlen(classname[i].special_arrays[k].name));
+                type_set.FindOrInsertName(classname[i].real_name, strlen(classname[i].real_name));
+            }
+        }
+    }
+    //
+    // Generate the visitor interfaces and Abstract classes that implements
+    // the visitors.
+    //
+    {
+        const char* visitor_type = option->visitor_type,
+            * argument = "Argument",
+            * result = "Result",
+            * abstract = "Abstract";
+        char* argument_visitor_type = new char[strlen(argument) + strlen(visitor_type) + 1],
+            * result_visitor_type = new char[strlen(result) + strlen(visitor_type) + 1],
+            * result_argument_visitor_type = new char[strlen(result) + strlen(argument) + strlen(visitor_type) + 1];
+       
+        strcpy(argument_visitor_type, argument);
+        strcat(argument_visitor_type, visitor_type);
+
+        strcpy(result_visitor_type, result);
+        strcat(result_visitor_type, visitor_type);
+
+        strcpy(result_argument_visitor_type, result);
+        strcat(result_argument_visitor_type, argument);
+        strcat(result_argument_visitor_type, visitor_type);
+
+    
+        if (option->visitor == Option::DEFAULT)
+        {
+            if (option->automatic_ast == Option::NESTED)
+            {
+                GenerateSimpleVisitorInterface(ast_filename_symbol, "    ", visitor_type, type_set);
+                GenerateArgumentVisitorInterface(ast_filename_symbol, "    ", argument_visitor_type, type_set);
+                GenerateResultVisitorInterface(ast_filename_symbol, "    ", result_visitor_type, type_set);
+                GenerateResultArgumentVisitorInterface(ast_filename_symbol, "    ", result_argument_visitor_type, type_set);
+
+            }
+            else
+            {
+              
+                GenerateSimpleVisitorInterface(top_level_ast_file_symbol, "", visitor_type, type_set);
+
+
+
+                GenerateArgumentVisitorInterface(top_level_ast_file_symbol, "", argument_visitor_type, type_set);
+
+
+
+                GenerateResultVisitorInterface(top_level_ast_file_symbol, "", result_visitor_type, type_set);
+
+
+
+                GenerateResultArgumentVisitorInterface(top_level_ast_file_symbol, "", result_argument_visitor_type, type_set);
+
+
+
+            }
+        }
+        else if (option->visitor == Option::PREORDER)
+        {
+            if (option->automatic_ast == Option::NESTED)
+            {
+                GeneratePreorderVisitorInterface(ast_filename_symbol, "    ", visitor_type, type_set);
+
+            }
+            else
+            {
+               
+                GeneratePreorderVisitorInterface(top_level_ast_file_symbol, "", visitor_type, type_set);
+
+            }
+        }
+
+        delete[] argument_visitor_type;
+        delete[] result_visitor_type;
+        delete[] result_argument_visitor_type;
+
+    }
+	
     {
         if (option->automatic_ast == Option::NESTED)
         {
@@ -419,20 +533,17 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
         {
             assert(option->automatic_ast == Option::TOPLEVEL);
 
-            ActionFileSymbol* file_symbol = GenerateTitleAndGlobals(ast_filename_table,
-                notice_actions,
-                option->ast_type,
-                (grammar->parser.ast_blocks.Length() > 0));
-            GenerateAstType(file_symbol, "", option->ast_type);
-            file_symbol->Flush();
+  
+            GenerateAstType(top_level_ast_file_symbol, "", option->ast_type);
+           
 
-            file_symbol = GenerateTitleAndGlobals(ast_filename_table, notice_actions, abstract_ast_list_classname, false);
-            GenerateAbstractAstListType(file_symbol, "", abstract_ast_list_classname);
-            file_symbol->Flush();
+        
+            GenerateAbstractAstListType(top_level_ast_file_symbol, "", abstract_ast_list_classname);
+           
 
         }
     }
-
+     
     //
     // Generate the token interface
     //
@@ -454,19 +565,19 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
         }
         else
         {
-            ActionFileSymbol* file_symbol = GenerateTitleAndGlobals(ast_filename_table, notice_actions, ast_token_interfacename, false);
+          
             GenerateInterface(true /* is token */,
-                              file_symbol,
+                              top_level_ast_file_symbol,
                               (char*)"",
                               ast_token_interfacename,
                               extension_of[grammar->Get_ast_token_interface()],
                               interface_map[grammar->Get_ast_token_interface()],
                               classname);
-            file_symbol->Flush();
+           
 
-            file_symbol = GenerateTitleAndGlobals(ast_filename_table, notice_actions, grammar->Get_ast_token_classname(), false);
-            GenerateAstTokenType(ntc, file_symbol, "", grammar->Get_ast_token_classname());
-            file_symbol->Flush();
+           
+            GenerateAstTokenType(ntc, top_level_ast_file_symbol, "", grammar->Get_ast_token_classname());
+       
         }
 
         delete[] ast_token_interfacename;
@@ -493,17 +604,15 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                                   classname);
             else
             {
-                ActionFileSymbol* file_symbol = extension_of[symbol].Length() > 0
-                    ? GenerateTitle(ast_filename_table, notice_actions, interface_name, false)
-                    : GenerateTitleAndGlobals(ast_filename_table, notice_actions, interface_name, false);
+              
                 GenerateInterface(ctc.IsTerminalClass(symbol),
-                                  file_symbol,
+                                  top_level_ast_file_symbol,
                                   (char*)"",
                                   interface_name,
                                   extension_of[symbol],
                                   interface_map[symbol],
                                   classname);
-                file_symbol->Flush();
+               
             }
 
             delete[] interface_name;
@@ -564,12 +673,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
         // If the classes are to be generated as top-level classes, we first obtain
         // a file for this class.
         //
-        ActionFileSymbol* file_symbol = (option->automatic_ast == Option::NESTED
-            ? NULL
-            : GenerateTitleAndGlobals(ast_filename_table,
-                notice_actions,
-                classname[i].real_name,
-                classname[i].needs_environment));
+
         //
         //
         //
@@ -582,7 +686,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                               ntc,
                               (option->automatic_ast == Option::NESTED
 	                               ? ast_filename_symbol
-	                               : file_symbol),
+	                               : top_level_ast_file_symbol),
                               (option->automatic_ast == Option::NESTED
 	                               ? (char*)"    "
 	                               : (char*)""),
@@ -598,21 +702,19 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                     ast_buffer.Put("    };\n\n");
                 else
                 {
-                    file_symbol->BodyBuffer()->Put("};\n\n");
-                    file_symbol->Flush();
+                    top_level_ast_file_symbol->BodyBuffer()->Put("};\n\n");
+                    top_level_ast_file_symbol->Flush();
                 }
 
                 //
                 // Process the new special array class.
                 //
-                file_symbol = (option->automatic_ast == Option::NESTED
-                    ? NULL
-                    : GenerateTitleAndGlobals(ast_filename_table, notice_actions, classname[i].special_arrays[j].name, true)); // needs_environment
+
                 GenerateListExtensionClass(ctc,
                                            ntc,
                                            (option->automatic_ast == Option::NESTED
 	                                            ? ast_filename_symbol
-	                                            : file_symbol),
+	                                            : top_level_ast_file_symbol),
                                            (option->automatic_ast == Option::NESTED
 	                                            ? (char*)"    "
 	                                            : (char*)""),
@@ -628,10 +730,10 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                 {
                     int rule_no = special_rule[k];
                     Tuple<ActionBlockElement>& actions = rule_action_map[rule_no];
-                    if (file_symbol != NULL) // possible when option -> automatic_ast == Option::TOPLEVEL
+                    if (top_level_ast_file_symbol != NULL) // possible when option -> automatic_ast == Option::TOPLEVEL
                     {
                         for (int l = 0; l < actions.Length(); l++)
-                            actions[l].buffer = file_symbol->BodyBuffer();
+                            actions[l].buffer = top_level_ast_file_symbol->BodyBuffer();
                     }
                     rule_allocation_map[rule_no].needs_environment = true;
                     ProcessCodeActions(actions, typestring, processed_rule_map);
@@ -649,17 +751,17 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                                   ntc,
                                   (option->automatic_ast == Option::NESTED
 	                                   ? ast_filename_symbol
-	                                   : file_symbol),
+	                                   : top_level_ast_file_symbol),
                                   (option->automatic_ast == Option::NESTED
 	                                   ? (char*)"    "
 	                                   : (char*)""),
                                   classname[i],
                                   typestring);
 
-                if (file_symbol != NULL) // option -> automatic_ast == Option::TOPLEVEL
+                if (top_level_ast_file_symbol != NULL) // option -> automatic_ast == Option::TOPLEVEL
                 {
                     for (int j = 0; j < actions.Length(); j++)
-                        actions[j].buffer = file_symbol->BodyBuffer();
+                        actions[j].buffer = top_level_ast_file_symbol->BodyBuffer();
                 }
                 ProcessCodeActions(actions, typestring, processed_rule_map);
             }
@@ -670,7 +772,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                     GenerateTerminalMergedClass(ntc,
                                                 (option->automatic_ast == Option::NESTED
 	                                                 ? ast_filename_symbol
-	                                                 : file_symbol),
+	                                                 : top_level_ast_file_symbol),
                                                 (option->automatic_ast == Option::NESTED
 	                                                 ? (char*)"    "
 	                                                 : (char*)""),
@@ -680,7 +782,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                                          ntc,
                                          (option->automatic_ast == Option::NESTED
 	                                          ? ast_filename_symbol
-	                                          : file_symbol),
+	                                          : top_level_ast_file_symbol),
                                          (option->automatic_ast == Option::NESTED
 	                                          ? (char*)"    "
 	                                          : (char*)""),
@@ -693,10 +795,10 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                     int rule_no = rule[k];
                     rule_allocation_map[rule_no].needs_environment = classname[i].needs_environment;
                     Tuple<ActionBlockElement>& actions = rule_action_map[rule_no];
-                    if (file_symbol != NULL) // possible when option -> automatic_ast == Option::TOPLEVEL
+                    if (top_level_ast_file_symbol != NULL) // possible when option -> automatic_ast == Option::TOPLEVEL
                     {
                         for (int j = 0; j < actions.Length(); j++)
-                            actions[j].buffer = file_symbol->BodyBuffer();
+                            actions[j].buffer = top_level_ast_file_symbol->BodyBuffer();
                     }
                     ProcessCodeActions(actions, typestring, processed_rule_map);
                 }
@@ -707,36 +809,12 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
             ast_buffer.Put("    };\n\n");
         else
         {
-            file_symbol->BodyBuffer()->Put("};\n\n");
-            file_symbol->Flush();
+            top_level_ast_file_symbol->BodyBuffer()->Put("};\n\n");
+         
         }
     }
 
-    //
-    //
-    //
-    SymbolLookupTable type_set;
-    type_set.FindOrInsertName(grammar->Get_ast_token_classname(), strlen(grammar->Get_ast_token_classname()));
-    {
-        for (int i = 0; i < classname.Length(); i++)
-        {
-            //
-            // No class is generated for rules that are associated with the null classname.
-            //
-            if (!IsNullClassname(classname[i]))
-            {
-                //
-                // Note that it is CRUCIAL that the special array names be added
-                // to the type_set prior to the base array. Since they are subclasses
-                // of the base array, when visiting a generic AST node, we need to check
-                // first whether or not it is a special array before we check if it the base.
-                //
-                for (int k = 0; k < classname[i].special_arrays.Length(); k++)
-                    type_set.FindOrInsertName(classname[i].special_arrays[k].name, strlen(classname[i].special_arrays[k].name));
-                type_set.FindOrInsertName(classname[i].real_name, strlen(classname[i].real_name));
-            }
-        }
-    }
+
 
     //
     // Generate the visitor interfaces and Abstract classes that implements
@@ -747,21 +825,13 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
             * argument = "Argument",
             * result = "Result",
             * abstract = "Abstract";
-        char* argument_visitor_type = new char[strlen(argument) + strlen(visitor_type) + 1],
-            * result_visitor_type = new char[strlen(result) + strlen(visitor_type) + 1],
-            * result_argument_visitor_type = new char[strlen(result) + strlen(argument) + strlen(visitor_type) + 1],
+        char 
+         
+          
             * abstract_visitor_type = new char[strlen(abstract) + strlen(visitor_type) + 1],
             * abstract_result_visitor_type = new char[strlen(abstract) + strlen(result) + strlen(visitor_type) + 1];
 
-        strcpy(argument_visitor_type, argument);
-        strcat(argument_visitor_type, visitor_type);
-
-        strcpy(result_visitor_type, result);
-        strcat(result_visitor_type, visitor_type);
-
-        strcpy(result_argument_visitor_type, result);
-        strcat(result_argument_visitor_type, argument);
-        strcat(result_argument_visitor_type, visitor_type);
+      
 
         strcpy(abstract_visitor_type, abstract);
         strcat(abstract_visitor_type, visitor_type);
@@ -774,68 +844,53 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
         {
             if (option->automatic_ast == Option::NESTED)
             {
-                GenerateSimpleVisitorInterface(ast_filename_symbol, "    ", visitor_type, type_set);
-                GenerateArgumentVisitorInterface(ast_filename_symbol, "    ", argument_visitor_type, type_set);
-                GenerateResultVisitorInterface(ast_filename_symbol, "    ", result_visitor_type, type_set);
-                GenerateResultArgumentVisitorInterface(ast_filename_symbol, "    ", result_argument_visitor_type, type_set);
-
+             
                 GenerateNoResultVisitorAbstractClass(ast_filename_symbol, "    ", abstract_visitor_type, type_set);
                 GenerateResultVisitorAbstractClass(ast_filename_symbol, "    ", abstract_result_visitor_type, type_set);
             }
             else
             {
-                ActionFileSymbol* file_symbol = GenerateTitle(ast_filename_table, notice_actions, visitor_type, false);
-                GenerateSimpleVisitorInterface(file_symbol, "", visitor_type, type_set);
-                file_symbol->Flush();
+           
+                GenerateNoResultVisitorAbstractClass(top_level_ast_file_symbol, "", abstract_visitor_type, type_set);
+              
 
-                file_symbol = GenerateTitle(ast_filename_table, notice_actions, argument_visitor_type, false);
-                GenerateArgumentVisitorInterface(file_symbol, "", argument_visitor_type, type_set);
-                file_symbol->Flush();
-
-                file_symbol = GenerateTitle(ast_filename_table, notice_actions, result_visitor_type, false);
-                GenerateResultVisitorInterface(file_symbol, "", result_visitor_type, type_set);
-                file_symbol->Flush();
-
-                file_symbol = GenerateTitle(ast_filename_table, notice_actions, result_argument_visitor_type, false);
-                GenerateResultArgumentVisitorInterface(file_symbol, "", result_argument_visitor_type, type_set);
-                file_symbol->Flush();
-
-                file_symbol = GenerateTitle(ast_filename_table, notice_actions, abstract_visitor_type, false);
-                GenerateNoResultVisitorAbstractClass(file_symbol, "", abstract_visitor_type, type_set);
-                file_symbol->Flush();
-
-                file_symbol = GenerateTitle(ast_filename_table, notice_actions, abstract_result_visitor_type, false);
-                GenerateResultVisitorAbstractClass(file_symbol, "", abstract_result_visitor_type, type_set);
-                file_symbol->Flush();
+  
+                GenerateResultVisitorAbstractClass(top_level_ast_file_symbol, "", abstract_result_visitor_type, type_set);
+              
             }
         }
         else if (option->visitor == Option::PREORDER)
         {
             if (option->automatic_ast == Option::NESTED)
             {
-                GeneratePreorderVisitorInterface(ast_filename_symbol, "    ", visitor_type, type_set);
+              
                 GeneratePreorderVisitorAbstractClass(ast_filename_symbol, "    ", abstract_visitor_type, type_set);
             }
             else
             {
-                ActionFileSymbol* file_symbol = GenerateTitleAndGlobals(ast_filename_table, notice_actions, visitor_type, false);
-                GeneratePreorderVisitorInterface(file_symbol, "", visitor_type, type_set);
-                file_symbol->Flush();
-
-                file_symbol = GenerateTitleAndGlobals(ast_filename_table, notice_actions, abstract_visitor_type, false);
-                GeneratePreorderVisitorAbstractClass(file_symbol, "", abstract_visitor_type, type_set);
-                file_symbol->Flush();
+             
+                GeneratePreorderVisitorAbstractClass(top_level_ast_file_symbol, "", abstract_visitor_type, type_set);
+               
             }
         }
-
-        delete[] argument_visitor_type;
-        delete[] result_visitor_type;
-        delete[] result_argument_visitor_type;
         delete[] abstract_visitor_type;
         delete[] abstract_result_visitor_type;
     }
+	
 
     ProcessCodeActions(initial_actions, typestring, processed_rule_map);
+    if (option->automatic_ast == Option::TOPLEVEL)
+    {
+        
+       
+        ast_buffer.Put("using namespace ");
+        ast_buffer.Put(option->top_level_ast_file_prefix);
+        ast_buffer.Put(";\n");
+
+        TextBuffer& _buffer = *(top_level_ast_file_symbol->BodyBuffer());
+        _buffer.Put("\n};");
+        top_level_ast_file_symbol->Flush();
+    }
 
     int count = 0;
     {
@@ -910,7 +965,10 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
             }
         }
     }
+          
+        
 
+        
     return;
 }
 
@@ -1340,9 +1398,9 @@ void CppAction2::GenerateNoResultVisitorAbstractClass(ActionFileSymbol* ast_file
                                          ast_buffer.Put("if (dynamic_cast< ");                        
                                          ast_buffer.Put(symbol -> Name());
                                          ast_buffer.Put("*>(n)");
-                                         ast_buffer.Put(") visit((");
+                                         ast_buffer.Put("){ visit((");
                                          ast_buffer.Put(symbol -> Name());
-                                         ast_buffer.Put("*) n);return;\n");
+                                         ast_buffer.Put("*) n);return;}\n");
         }
     }
     ast_buffer.Put(indentation); ast_buffer.Put("        throw UnsupportedOperationException(\"visit(\" + n->to_utf8_string() + \")\");\n");
@@ -1363,9 +1421,9 @@ void CppAction2::GenerateNoResultVisitorAbstractClass(ActionFileSymbol* ast_file
                                          ast_buffer.Put("if (dynamic_cast<");
                                          ast_buffer.Put(symbol -> Name());
                                          ast_buffer.Put("*>(n)");
-                                         ast_buffer.Put(") visit((");
+                                         ast_buffer.Put(") {visit((");
                                          ast_buffer.Put(symbol -> Name());
-                                         ast_buffer.Put("*) n, o);return;\n");
+                                         ast_buffer.Put("*) n, o);return;}\n");
         }
     }
     ast_buffer.Put(indentation); ast_buffer.Put("        throw UnsupportedOperationException(\"visit(\" + n->to_utf8_string() + \")\");\n");
@@ -1540,9 +1598,9 @@ void CppAction2::GeneratePreorderVisitorAbstractClass(ActionFileSymbol* ast_file
                                          ast_buffer.Put("if (dynamic_cast<");
                                          ast_buffer.Put(symbol->Name());
                                          ast_buffer.Put("*>(n) ");
-                                         ast_buffer.Put(") endVisit((");
+                                         ast_buffer.Put("){ endVisit((");
                                          ast_buffer.Put(symbol -> Name());
-                                         ast_buffer.Put("*) n);return;\n");
+                                         ast_buffer.Put("*) n);return;}\n");
         }
     }
     ast_buffer.Put(indentation); ast_buffer.Put("        throw UnsupportedOperationException(\"visit(\" + n->to_utf8_string() + \")\");\n");

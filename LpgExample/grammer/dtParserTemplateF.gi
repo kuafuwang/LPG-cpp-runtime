@@ -158,7 +158,7 @@
     #pragma once
 
 #include <iostream>
-
+#include "AstPoolHolder.h"
 #include "DeterministicParser.h"
 #include "diagnose.h"
 #include "ErrorToken.h"
@@ -181,7 +181,7 @@
     /.
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
-       
+        pool_holder ast_pool;
          PrsStream* prsStream = nullptr;
         ~$action_type (){
             delete prsStream;

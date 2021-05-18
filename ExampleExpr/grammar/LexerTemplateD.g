@@ -120,8 +120,15 @@
 
 %Globals
     /.
-    #pragma once  
-    #include <string>
+
+    ./
+%End
+
+%Headers
+    /.
+    
+#pragma once  
+#include <string>
 #include <iostream>
 #include "IPrsStream.h"
 #include "Object.h"
@@ -133,11 +140,7 @@
 #include "$prs_type.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
-    ./
-%End
 
-%Headers
-    /.
      struct $action_type :public $super_stream_class ,public $exp_type, public $sym_type,public RuleAction$additional_interfaces
     {
         inline  static ParseTable* prs = new $prs_type();

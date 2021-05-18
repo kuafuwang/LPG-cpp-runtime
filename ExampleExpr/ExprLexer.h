@@ -1,6 +1,11 @@
 
     //#line 122 "LexerTemplateD.g
 
+
+
+    //#line 128 "LexerTemplateD.g
+
+
 #pragma once  
 #include <string>
 #include <iostream>
@@ -15,8 +20,6 @@
 #include "ExprParsersym.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
-
-    //#line 140 "LexerTemplateD.g
 
  struct ExprLexer :public LpgLexStream ,public ExprParsersym, public ExprLexersym,public RuleAction
 {
@@ -140,7 +143,7 @@
         					  Char_Unused);
     }
 
-    //#line 245 "LexerTemplateD.g
+    //#line 248 "LexerTemplateD.g
 
      void ruleAction(int ruleNumber)
     {
@@ -187,7 +190,7 @@
                 break;
             }
     
-    //#line 249 "LexerTemplateD.g
+    //#line 252 "LexerTemplateD.g
 
     
             default:

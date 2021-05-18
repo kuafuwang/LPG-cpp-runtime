@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="JavaExample.cpp" />
+    <ClCompile Include="JavaParser_Action.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -159,6 +160,7 @@
     <ClInclude Include="JavaParser.h" />
     <ClInclude Include="JavaParserprs.h" />
     <ClInclude Include="JavaParsersym.h" />
+    <ClInclude Include="JavaParser_top_level_ast.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

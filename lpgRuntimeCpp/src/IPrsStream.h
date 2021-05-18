@@ -17,7 +17,10 @@ struct IPrsStream :public  TokenStream
             this->startToken = start_token;
             this->endToken = end_token;
         }
-
+        ~Range()
+        {
+            delete list;
+        }
         IPrsStream* iprsStream;
         IToken* startToken;
         IToken* endToken;

@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="src\AbstractToken.h" />
     <ClInclude Include="src\Adjunct.h" />
+    <ClInclude Include="src\AstPoolHolder.h" />
     <ClInclude Include="src\BacktrackingParser.h" />
     <ClInclude Include="src\ConfigurationElement.h" />
     <ClInclude Include="src\ConfigurationStack.h" />

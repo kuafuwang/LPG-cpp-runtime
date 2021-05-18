@@ -38,6 +38,9 @@
     <ClInclude Include="ExprParsersym.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ExprParser_top_level_ast.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

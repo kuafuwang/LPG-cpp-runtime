@@ -5,17 +5,18 @@
 
 #include "JavaLexer.h"
 #include "JavaParser.h"
+#include "JavaParser_top_level_ast.h"
 
 int main()
 {
 
     JavaLexer lexer; // Create the lexer
-    lexer.reset(LR"(D:\workspace\New_Parser\lpg_java\src\org\eclipse\imp\lpg\parser\LPGParser.java)", 8);
+    lexer.reset(LR"(D:\workspace\New_Parser\lpg_java\src\test\test2.java)", 8);
     //lexer.reset(LR"(C:\Users\kuafu\source\repos\lpgRuntimeCpp\LpgExample\LpgExample.cpp)", 4);
 
     JavaParser parser(lexer.getILexStream()); // Create the parser
     lexer.lexer(nullptr, parser.getIPrsStream());
-    JavaParser::Ast* ast = (JavaParser::Ast*)parser.parser(nullptr, 100000);
+    JavaParser_top_level_ast::Ast* ast = (JavaParser_top_level_ast::Ast*)parser.parser(nullptr, 100000);
     std::cout << "Hello World!\n";
 }
 

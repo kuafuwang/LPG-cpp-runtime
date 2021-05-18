@@ -116,6 +116,8 @@ Option::Option(int argc_, const char **argv_)
     tab_file = NULL;
     prs_file = NULL;
     sym_file = NULL;
+    top_level_ast_file = NULL;
+    top_level_ast_file_prefix = NULL;
     exp_file = NULL;
     exp_prefix = NULL;
     exp_suffix = NULL;
@@ -2649,9 +2651,14 @@ void Option::CheckAutomaticAst()
             if (*package == NULL_CHAR)
             {
                 temp_ast_package = NewString("");
-                EmitError(ast_directory_location,
-                          "The ast package cannot be a subpackage of the unnamed package."
-                          " Please specify a package name using the package option");
+            	if(programming_language == JAVA)
+            	{
+                   
+                    EmitError(ast_directory_location,
+                        "The ast package cannot be a subpackage of the unnamed package."
+                        " Please specify a package name using the package option");
+            	}
+
             }
             else
             {
@@ -3162,6 +3169,23 @@ void Option::CompleteOptionProcessing()
                                                           : "xml")))));
     }
     sym_type = GetType(sym_file);
+	if(NULL ==top_level_ast_file)
+	{
+        top_level_ast_file = GetFile(out_directory,
+            "_top_level_ast.",
+            (programming_language == JAVA
+                ? "java"
+                : (programming_language == ML
+                    ? "ml"
+                    : (programming_language == PLX || programming_language == PLXASM
+                        ? "copy"
+                        : (programming_language == C
+                            || programming_language == CPP
+                            || programming_language == CPP2
+                            ? "h"
+                            : "xml")))));
+	}
+    top_level_ast_file_prefix = GetType(top_level_ast_file);
 
     //
     // The dat_directory must be processed prior to the 
