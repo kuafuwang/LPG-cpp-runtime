@@ -100,7 +100,7 @@
             return parse$entry_name(nullptr, 0);
         }
             
-         $ast_class * parse$entry_name(Monitor monitor)
+         $ast_class * parse$entry_name(Monitor* monitor)
         {
             return parse$entry_name(monitor, 0);
         }
@@ -110,7 +110,7 @@
             return parse$entry_name(nullptr, error_repair_count);
         }
             
-         $ast_class * parse$entry_name(Monitor monitor, int error_repair_count)
+         $ast_class * parse$entry_name(Monitor *monitor, int error_repair_count)
         {
             btParser->setMonitor(monitor);
             
@@ -186,6 +186,7 @@
     /.
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
+        struct $ast_class;
          PrsStream* prsStream = nullptr;
         
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;

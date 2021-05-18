@@ -24,6 +24,7 @@ Action::Action(Control *control_, Blocks *action_blocks_, Grammar *grammar_, Mac
 
     const char *abstract = "Abstract",
                *list = "List";
+    ast_member_prefix = "lpg_";
     abstract_ast_list_classname = new char[strlen(abstract) + strlen(control_ -> option -> ast_type) + strlen(list) + 1];
     strcpy(abstract_ast_list_classname, abstract);
     strcat(abstract_ast_list_classname, control_ -> option -> ast_type);

@@ -31,7 +31,7 @@ public:
     int return_code; 
 
 protected:
-
+    std::string ast_member_prefix;
     Control *control;
     Blocks *action_blocks;
     Grammar *grammar;
