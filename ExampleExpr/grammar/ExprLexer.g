@@ -17,7 +17,7 @@ $Headers
       
         int getKind(int i)  // Classify character at ith location
         {
-            char c = (i >= getStreamLength() ? 0xffff : getCharValue(i));
+            int c = (i >= getStreamLength() ? 0xffff : getCharValue(i));
             return (c <  33		? Char_WSChar : 
             		c>= '0' && c <= '9' ? Char_Digit :
             		c == '+' 		? Char_Plus :

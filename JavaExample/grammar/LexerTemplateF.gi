@@ -132,6 +132,7 @@
 #include "Token.h"
 #include "$sym_type.h"
 #include "$prs_type.h"
+#include "$kw_lexer_class.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
     ./
@@ -142,8 +143,13 @@
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
          struct  $super_stream_class;
-         $super_stream_class * lexStream;
+         $super_stream_class * lexStream = nullptr;
         
+        ~$action_type(){
+            delete lexStream;
+            delete lexParser;
+        }
+
          inline  static ParseTable* prs = new $prs_type();
          ParseTable* getParseTable() { return prs; }
 
@@ -166,6 +172,7 @@
   
          void reset(const std::wstring& filename, int tab) 
         {
+            delete lexStream;
             lexStream = new $super_stream_class(filename, tab);
             lexParser->reset((ILexStream*) lexStream, prs,  this);
             resetKeywordLexer();
@@ -178,6 +185,7 @@
         
          void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
         {
+             delete lexStream;
             lexStream = new $super_stream_class(input_chars, filename, tab);
             lexParser->reset((ILexStream*) lexStream, prs,  this);
             resetKeywordLexer();

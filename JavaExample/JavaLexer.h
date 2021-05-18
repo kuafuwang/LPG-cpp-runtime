@@ -18,7 +18,6 @@
 #pragma once  
 #include <iostream>
 #include "IPrsStream.h"
-#include "JavaKWLexer.h"
 #include "Object.h"
 #include "ParseTable.h"
 #include "RuleAction.h"
@@ -26,16 +25,23 @@
 #include "Token.h"
 #include "JavaLexersym.h"
 #include "JavaLexerprs.h"
+#include "JavaKWLexer.h"
+#include "JavaParsersym.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
 
-//#line 139 "LexerTemplateF.gi
+    //#line 142 "LexerTemplateF.gi
 
  struct JavaLexer :public Object ,public RuleAction
 {
      struct  JavaLexerLpgLexStream;
-     JavaLexerLpgLexStream * lexStream;
+     JavaLexerLpgLexStream * lexStream = nullptr;
     
+    ~JavaLexer(){
+        delete lexStream;
+        delete lexParser;
+    }
+
      inline  static ParseTable* prs = new JavaLexerprs();
      ParseTable* getParseTable() { return prs; }
 
@@ -58,6 +64,7 @@
 
      void reset(const std::wstring& filename, int tab) 
     {
+        delete lexStream;
         lexStream = new JavaLexerLpgLexStream(filename, tab);
         lexParser->reset((ILexStream*) lexStream, prs,  this);
         resetKeywordLexer();
@@ -70,6 +77,7 @@
     
      void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
     {
+         delete lexStream;
         lexStream = new JavaLexerLpgLexStream(input_chars, filename, tab);
         lexParser->reset((ILexStream*) lexStream, prs,  this);
         resetKeywordLexer();
@@ -542,7 +550,7 @@
     }
     };
 
-    //#line 403 "LexerTemplateF.gi
+    //#line 413 "LexerTemplateF.gi
 
      void ruleAction(int ruleNumber)
     {
@@ -965,7 +973,7 @@
                   break;
             }
     
-    //#line 407 "LexerTemplateF.gi
+    //#line 417 "LexerTemplateF.gi
 
     
             default:

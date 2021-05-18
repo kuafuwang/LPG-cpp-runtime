@@ -18,27 +18,33 @@
 #pragma once  
 #include <iostream>
 #include "IPrsStream.h"
-#include "LexParser.h"
-#include "LPGKWLexer.h"
-#include "LPGLexerprs.h"
-#include "LpgLexStream.h"
 #include "Object.h"
 #include "ParseTable.h"
 #include "RuleAction.h"
 #include "stringex.h"
 #include "Token.h"
+#include "LPGLexersym.h"
+#include "LPGLexerprs.h"
+#include "LPGKWLexer.h"
+#include "LexParser.h"
+#include "LpgLexStream.h"
 
     //#line 7 "LPGLexer.gi
 
 
 
-    //#line 141 "LexerTemplateF.gi
+    //#line 142 "LexerTemplateF.gi
 
  struct LPGLexer :public Object ,public RuleAction
 {
      struct  LPGLexerLpgLexStream;
-     LPGLexerLpgLexStream * lexStream;
+     LPGLexerLpgLexStream * lexStream = nullptr;
     
+    ~LPGLexer(){
+        delete lexStream;
+        delete lexParser;
+    }
+
      inline  static ParseTable* prs = new LPGLexerprs();
      ParseTable* getParseTable() { return prs; }
 
@@ -61,6 +67,7 @@
 
      void reset(const std::wstring& filename, int tab) 
     {
+        delete lexStream;
         lexStream = new LPGLexerLpgLexStream(filename, tab);
         lexParser->reset((ILexStream*) lexStream, prs,  this);
         resetKeywordLexer();
@@ -73,6 +80,7 @@
     
      void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
     {
+         delete lexStream;
         lexStream = new LPGLexerLpgLexStream(input_chars, filename, tab);
         lexParser->reset((ILexStream*) lexStream, prs,  this);
         resetKeywordLexer();
@@ -545,7 +553,7 @@
     }
     };
 
-    //#line 405 "LexerTemplateF.gi
+    //#line 413 "LexerTemplateF.gi
 
      void ruleAction(int ruleNumber)
     {
@@ -1658,7 +1666,7 @@
               makeToken(getRhsFirstTokenIndex(2), getRhsLastTokenIndex(2), LPGParsersym::TK_SYMBOL);             break;
             } 
 
-    //#line 409 "LexerTemplateF.gi
+    //#line 417 "LexerTemplateF.gi
 
     
             default:

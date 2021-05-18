@@ -167,8 +167,8 @@
 #include "IAst.h"
 #include "IAstVisitor.h"
 #include "ILexStream.h"
-#include "LPGParserprs.h"
-#include "LPGParsersym.h"
+#include "$sym_type.h"
+#include "$prs_type.h"
 #include "Object.h"
 #include "ParseTable.h"
 #include "PrsStream.h"
@@ -181,8 +181,12 @@
     /.
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
+       
          PrsStream* prsStream = nullptr;
-        
+        ~$action_type (){
+            delete prsStream;
+            delete dtParser;
+        }
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
 
         inline static ParseTable* prsTable = new $prs_type();
@@ -224,6 +228,7 @@
 
          void reset(ILexStream* lexStream)
         {
+            delete prsStream;
             prsStream = new PrsStream(lexStream);
             dtParser->reset(prsStream);
 

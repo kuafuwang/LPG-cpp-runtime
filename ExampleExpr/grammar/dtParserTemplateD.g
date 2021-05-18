@@ -176,6 +176,7 @@
      struct $action_type :public PrsStream ,public RuleAction$additional_interfaces
     {
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
+          struct  $ast_class ;
 
         inline static ParseTable* prs = new $prs_type();
          ParseTable* getParseTable() { return prs; }

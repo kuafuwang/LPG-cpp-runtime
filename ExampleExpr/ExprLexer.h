@@ -1,22 +1,30 @@
 
     //#line 122 "LexerTemplateD.g
 
+#pragma once  
 #include <string>
-
-#include "ExprLexerprs.h"
-#include "ExprLexersym.h"
-#include "ExprParsersym.h"
+#include <iostream>
 #include "IPrsStream.h"
-#include "LexParser.h"
-#include "LpgLexStream.h"
+#include "Object.h"
 #include "ParseTable.h"
 #include "RuleAction.h"
+#include "stringex.h"
+#include "Token.h"
+#include "ExprLexersym.h"
+#include "ExprLexerprs.h"
+#include "ExprParsersym.h"
+#include "LexParser.h"
+#include "LpgLexStream.h"
 
-    //#line 128 "LexerTemplateD.g
+    //#line 140 "LexerTemplateD.g
 
  struct ExprLexer :public LpgLexStream ,public ExprParsersym, public ExprLexersym,public RuleAction
 {
     inline  static ParseTable* prs = new ExprLexerprs();
+
+    ~ExprLexer(){
+        delete lexParser;
+    }
      ParseTable* getParseTable() { return prs; }
 
      LexParser* lexParser = new LexParser(this, prs, this);
@@ -128,11 +136,11 @@
         		c == '*' 		? Char_Star :
         		c == '(' 		? Char_LeftParen :
         		c == ')' 		? Char_RightParen :
-        		c == 0xffff ? Char_EOF :
+        		c == 0xffff 	? Char_EOF : 
         					  Char_Unused);
     }
 
-    //#line 229 "LexerTemplateD.g
+    //#line 245 "LexerTemplateD.g
 
      void ruleAction(int ruleNumber)
     {
@@ -179,7 +187,7 @@
                 break;
             }
     
-    //#line 233 "LexerTemplateD.g
+    //#line 249 "LexerTemplateD.g
 
     
             default:

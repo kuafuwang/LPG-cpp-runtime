@@ -98,7 +98,7 @@
 %End
 %Globals
     /.
-    #include "$sym_type.h"
+#include "$sym_type.h"
 #include "$prs_type.h"
     ./
 %End

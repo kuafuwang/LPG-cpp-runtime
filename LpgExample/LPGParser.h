@@ -14,24 +14,29 @@
 #include "IAst.h"
 #include "IAstVisitor.h"
 #include "ILexStream.h"
-#include "LPGParserprs.h"
 #include "LPGParsersym.h"
+#include "LPGParserprs.h"
 #include "Object.h"
 #include "ParseTable.h"
 #include "PrsStream.h"
 #include "RuleAction.h"
 #include "IcuUtil.h"
 
+
     //#line 7 "LPGParser.g
 
 
  
-    //#line 186 "btParserTemplateF.gi
+    //#line 187 "btParserTemplateF.gi
 
  struct LPGParser :public Object ,public RuleAction
 {
-     PrsStream* prsStream = nullptr;
-    
+   
+    PrsStream* prsStream = nullptr;
+    ~LPGParser (){
+        delete prsStream;
+        delete btParser;
+    }
      bool unimplementedSymbolsWarning = false;
 
      inline static ParseTable* prsTable = new LPGParserprs();
@@ -73,6 +78,7 @@
 
      void reset(ILexStream* lexStream)
     {
+        delete prsStream;
         prsStream = new PrsStream(lexStream);
         btParser->reset(prsStream);
 
@@ -297,7 +303,14 @@
   struct terminal_symbol1;
   struct Visitor;
   struct AbstractVisitor;
- Tuple<IAst*> ast_pool;
+struct pool_holder{
+Tuple<IAst*> data;
+~pool_holder(){for(int i =0 ; i < data.size();++i){
+ delete data[i];
+}
+}
+};
+ pool_holder ast_pool;
     struct ASTNode :public IAst
     {
         IAst* getNextAst() { return nullptr; }
@@ -453,22 +466,22 @@
         LPGParser* environment;
         LPGParser* getEnvironment() { return environment; }
 
-        IAst *_options_segment;
-        IAst *_LPG_INPUT;
+        IAst *lpg_options_segment;
+        IAst *lpg_LPG_INPUT;
 
-        IAst *getoptions_segment() { return _options_segment; };
-        void setoptions_segment(IAst *_options_segment) { this->_options_segment = _options_segment; }
-        IAst *getLPG_INPUT() { return _LPG_INPUT; };
-        void setLPG_INPUT(IAst *_LPG_INPUT) { this->_LPG_INPUT = _LPG_INPUT; }
+        IAst *getoptions_segment() { return lpg_options_segment; };
+        void setoptions_segment(IAst *lpg_options_segment) { this->lpg_options_segment = lpg_options_segment; }
+        IAst *getLPG_INPUT() { return lpg_LPG_INPUT; };
+        void setLPG_INPUT(IAst *lpg_LPG_INPUT) { this->lpg_LPG_INPUT = lpg_LPG_INPUT; }
 
         LPG(LPGParser *environment, IToken* leftIToken, IToken* rightIToken,
-            IAst *_options_segment,
-            IAst *_LPG_INPUT):ASTNode(leftIToken, rightIToken)    {
+            IAst *lpg_options_segment,
+            IAst *lpg_LPG_INPUT):ASTNode(leftIToken, rightIToken)    {
             this->environment = environment;
-            this->_options_segment = _options_segment;
-            ((ASTNode*) _options_segment)->setParent(this);
-            this->_LPG_INPUT = _LPG_INPUT;
-            ((ASTNode*) _LPG_INPUT)->setParent(this);
+            this->lpg_options_segment = lpg_options_segment;
+            ((ASTNode*) lpg_options_segment)->setParent(this);
+            this->lpg_LPG_INPUT = lpg_LPG_INPUT;
+            ((ASTNode*) lpg_LPG_INPUT)->setParent(this);
             initialize();
         }
 
@@ -478,8 +491,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_options_segment);
-            list.push_back(_LPG_INPUT);
+            list.push_back(lpg_options_segment);
+            list.push_back(lpg_LPG_INPUT);
             return list;
         }
 
@@ -495,8 +508,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _options_segment->accept(v);
-                _LPG_INPUT->accept(v);
+                lpg_options_segment->accept(v);
+                lpg_LPG_INPUT->accept(v);
             }
             v->endVisit(this);
         }
@@ -519,15 +532,15 @@
 {
         }
 
-        LPG_itemList(IAst* _LPG_item, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _LPG_item, leftRecursive)
+        LPG_itemList(IAst* lpg_LPG_item, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_LPG_item, leftRecursive)
         {
-            ((ASTNode*) _LPG_item)->setParent(this);
+            ((ASTNode*) lpg_LPG_item)->setParent(this);
         }
 
-        void addElement(IAst *_LPG_item)
+        void addElement(IAst *lpg_LPG_item)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _LPG_item);
-            ((ASTNode*) _LPG_item)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_LPG_item);
+            ((ASTNode*) lpg_LPG_item)->setParent(this);
         }
 
 
@@ -559,15 +572,15 @@
      */
     struct AliasSeg :public ASTNode
     {
-        IAst *_alias_segment;
+        IAst *lpg_alias_segment;
 
-        IAst *getalias_segment() { return _alias_segment; };
-        void setalias_segment(IAst *_alias_segment) { this->_alias_segment = _alias_segment; }
+        IAst *getalias_segment() { return lpg_alias_segment; };
+        void setalias_segment(IAst *lpg_alias_segment) { this->lpg_alias_segment = lpg_alias_segment; }
 
         AliasSeg(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_alias_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_alias_segment = _alias_segment;
-            ((ASTNode*) _alias_segment)->setParent(this);
+                 IAst *lpg_alias_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_alias_segment = lpg_alias_segment;
+            ((ASTNode*) lpg_alias_segment)->setParent(this);
             initialize();
         }
 
@@ -577,7 +590,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_alias_segment);
+            list.push_back(lpg_alias_segment);
             return list;
         }
 
@@ -592,7 +605,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _alias_segment->accept(v);
+                lpg_alias_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -604,15 +617,15 @@
      */
     struct AstSeg :public ASTNode
     {
-        IAst *_ast_segment;
+        IAst *lpg_ast_segment;
 
-        IAst *getast_segment() { return _ast_segment; };
-        void setast_segment(IAst *_ast_segment) { this->_ast_segment = _ast_segment; }
+        IAst *getast_segment() { return lpg_ast_segment; };
+        void setast_segment(IAst *lpg_ast_segment) { this->lpg_ast_segment = lpg_ast_segment; }
 
         AstSeg(IToken* leftIToken, IToken* rightIToken,
-               IAst *_ast_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_ast_segment = _ast_segment;
-            ((ASTNode*) _ast_segment)->setParent(this);
+               IAst *lpg_ast_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_ast_segment = lpg_ast_segment;
+            ((ASTNode*) lpg_ast_segment)->setParent(this);
             initialize();
         }
 
@@ -622,7 +635,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_ast_segment);
+            list.push_back(lpg_ast_segment);
             return list;
         }
 
@@ -637,7 +650,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _ast_segment->accept(v);
+                lpg_ast_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -649,15 +662,15 @@
      */
     struct DefineSeg :public ASTNode
     {
-        IAst *_define_segment;
+        IAst *lpg_define_segment;
 
-        IAst *getdefine_segment() { return _define_segment; };
-        void setdefine_segment(IAst *_define_segment) { this->_define_segment = _define_segment; }
+        IAst *getdefine_segment() { return lpg_define_segment; };
+        void setdefine_segment(IAst *lpg_define_segment) { this->lpg_define_segment = lpg_define_segment; }
 
         DefineSeg(IToken* leftIToken, IToken* rightIToken,
-                  IAst *_define_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_define_segment = _define_segment;
-            ((ASTNode*) _define_segment)->setParent(this);
+                  IAst *lpg_define_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_define_segment = lpg_define_segment;
+            ((ASTNode*) lpg_define_segment)->setParent(this);
             initialize();
         }
 
@@ -667,7 +680,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_define_segment);
+            list.push_back(lpg_define_segment);
             return list;
         }
 
@@ -682,7 +695,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _define_segment->accept(v);
+                lpg_define_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -694,15 +707,15 @@
      */
     struct EofSeg :public ASTNode
     {
-        IAst *_eof_segment;
+        IAst *lpg_eof_segment;
 
-        IAst *geteof_segment() { return _eof_segment; };
-        void seteof_segment(IAst *_eof_segment) { this->_eof_segment = _eof_segment; }
+        IAst *geteof_segment() { return lpg_eof_segment; };
+        void seteof_segment(IAst *lpg_eof_segment) { this->lpg_eof_segment = lpg_eof_segment; }
 
         EofSeg(IToken* leftIToken, IToken* rightIToken,
-               IAst *_eof_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_eof_segment = _eof_segment;
-            ((ASTNode*) _eof_segment)->setParent(this);
+               IAst *lpg_eof_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_eof_segment = lpg_eof_segment;
+            ((ASTNode*) lpg_eof_segment)->setParent(this);
             initialize();
         }
 
@@ -712,7 +725,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_eof_segment);
+            list.push_back(lpg_eof_segment);
             return list;
         }
 
@@ -727,7 +740,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _eof_segment->accept(v);
+                lpg_eof_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -739,15 +752,15 @@
      */
     struct EolSeg :public ASTNode
     {
-        IAst *_eol_segment;
+        IAst *lpg_eol_segment;
 
-        IAst *geteol_segment() { return _eol_segment; };
-        void seteol_segment(IAst *_eol_segment) { this->_eol_segment = _eol_segment; }
+        IAst *geteol_segment() { return lpg_eol_segment; };
+        void seteol_segment(IAst *lpg_eol_segment) { this->lpg_eol_segment = lpg_eol_segment; }
 
         EolSeg(IToken* leftIToken, IToken* rightIToken,
-               IAst *_eol_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_eol_segment = _eol_segment;
-            ((ASTNode*) _eol_segment)->setParent(this);
+               IAst *lpg_eol_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_eol_segment = lpg_eol_segment;
+            ((ASTNode*) lpg_eol_segment)->setParent(this);
             initialize();
         }
 
@@ -757,7 +770,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_eol_segment);
+            list.push_back(lpg_eol_segment);
             return list;
         }
 
@@ -772,7 +785,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _eol_segment->accept(v);
+                lpg_eol_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -784,15 +797,15 @@
      */
     struct ErrorSeg :public ASTNode
     {
-        IAst *_error_segment;
+        IAst *lpg_error_segment;
 
-        IAst *geterror_segment() { return _error_segment; };
-        void seterror_segment(IAst *_error_segment) { this->_error_segment = _error_segment; }
+        IAst *geterror_segment() { return lpg_error_segment; };
+        void seterror_segment(IAst *lpg_error_segment) { this->lpg_error_segment = lpg_error_segment; }
 
         ErrorSeg(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_error_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_error_segment = _error_segment;
-            ((ASTNode*) _error_segment)->setParent(this);
+                 IAst *lpg_error_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_error_segment = lpg_error_segment;
+            ((ASTNode*) lpg_error_segment)->setParent(this);
             initialize();
         }
 
@@ -802,7 +815,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_error_segment);
+            list.push_back(lpg_error_segment);
             return list;
         }
 
@@ -817,7 +830,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _error_segment->accept(v);
+                lpg_error_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -829,15 +842,15 @@
      */
     struct ExportSeg :public ASTNode
     {
-        IAst *_export_segment;
+        IAst *lpg_export_segment;
 
-        IAst *getexport_segment() { return _export_segment; };
-        void setexport_segment(IAst *_export_segment) { this->_export_segment = _export_segment; }
+        IAst *getexport_segment() { return lpg_export_segment; };
+        void setexport_segment(IAst *lpg_export_segment) { this->lpg_export_segment = lpg_export_segment; }
 
         ExportSeg(IToken* leftIToken, IToken* rightIToken,
-                  IAst *_export_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_export_segment = _export_segment;
-            ((ASTNode*) _export_segment)->setParent(this);
+                  IAst *lpg_export_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_export_segment = lpg_export_segment;
+            ((ASTNode*) lpg_export_segment)->setParent(this);
             initialize();
         }
 
@@ -847,7 +860,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_export_segment);
+            list.push_back(lpg_export_segment);
             return list;
         }
 
@@ -862,7 +875,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _export_segment->accept(v);
+                lpg_export_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -874,15 +887,15 @@
      */
     struct GlobalsSeg :public ASTNode
     {
-        IAst *_globals_segment;
+        IAst *lpg_globals_segment;
 
-        IAst *getglobals_segment() { return _globals_segment; };
-        void setglobals_segment(IAst *_globals_segment) { this->_globals_segment = _globals_segment; }
+        IAst *getglobals_segment() { return lpg_globals_segment; };
+        void setglobals_segment(IAst *lpg_globals_segment) { this->lpg_globals_segment = lpg_globals_segment; }
 
         GlobalsSeg(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_globals_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_globals_segment = _globals_segment;
-            ((ASTNode*) _globals_segment)->setParent(this);
+                   IAst *lpg_globals_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_globals_segment = lpg_globals_segment;
+            ((ASTNode*) lpg_globals_segment)->setParent(this);
             initialize();
         }
 
@@ -892,7 +905,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_globals_segment);
+            list.push_back(lpg_globals_segment);
             return list;
         }
 
@@ -907,7 +920,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _globals_segment->accept(v);
+                lpg_globals_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -919,15 +932,15 @@
      */
     struct HeadersSeg :public ASTNode
     {
-        IAst *_headers_segment;
+        IAst *lpg_headers_segment;
 
-        IAst *getheaders_segment() { return _headers_segment; };
-        void setheaders_segment(IAst *_headers_segment) { this->_headers_segment = _headers_segment; }
+        IAst *getheaders_segment() { return lpg_headers_segment; };
+        void setheaders_segment(IAst *lpg_headers_segment) { this->lpg_headers_segment = lpg_headers_segment; }
 
         HeadersSeg(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_headers_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_headers_segment = _headers_segment;
-            ((ASTNode*) _headers_segment)->setParent(this);
+                   IAst *lpg_headers_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_headers_segment = lpg_headers_segment;
+            ((ASTNode*) lpg_headers_segment)->setParent(this);
             initialize();
         }
 
@@ -937,7 +950,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_headers_segment);
+            list.push_back(lpg_headers_segment);
             return list;
         }
 
@@ -952,7 +965,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _headers_segment->accept(v);
+                lpg_headers_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -964,15 +977,15 @@
      */
     struct IdentifierSeg :public ASTNode
     {
-        IAst *_identifier_segment;
+        IAst *lpg_identifier_segment;
 
-        IAst *getidentifier_segment() { return _identifier_segment; };
-        void setidentifier_segment(IAst *_identifier_segment) { this->_identifier_segment = _identifier_segment; }
+        IAst *getidentifier_segment() { return lpg_identifier_segment; };
+        void setidentifier_segment(IAst *lpg_identifier_segment) { this->lpg_identifier_segment = lpg_identifier_segment; }
 
         IdentifierSeg(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_identifier_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_identifier_segment = _identifier_segment;
-            ((ASTNode*) _identifier_segment)->setParent(this);
+                      IAst *lpg_identifier_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_identifier_segment = lpg_identifier_segment;
+            ((ASTNode*) lpg_identifier_segment)->setParent(this);
             initialize();
         }
 
@@ -982,7 +995,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_identifier_segment);
+            list.push_back(lpg_identifier_segment);
             return list;
         }
 
@@ -997,7 +1010,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _identifier_segment->accept(v);
+                lpg_identifier_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1009,15 +1022,15 @@
      */
     struct ImportSeg :public ASTNode
     {
-        IAst *_import_segment;
+        IAst *lpg_import_segment;
 
-        IAst *getimport_segment() { return _import_segment; };
-        void setimport_segment(IAst *_import_segment) { this->_import_segment = _import_segment; }
+        IAst *getimport_segment() { return lpg_import_segment; };
+        void setimport_segment(IAst *lpg_import_segment) { this->lpg_import_segment = lpg_import_segment; }
 
         ImportSeg(IToken* leftIToken, IToken* rightIToken,
-                  IAst *_import_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_import_segment = _import_segment;
-            ((ASTNode*) _import_segment)->setParent(this);
+                  IAst *lpg_import_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_import_segment = lpg_import_segment;
+            ((ASTNode*) lpg_import_segment)->setParent(this);
             initialize();
         }
 
@@ -1027,7 +1040,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_import_segment);
+            list.push_back(lpg_import_segment);
             return list;
         }
 
@@ -1042,7 +1055,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _import_segment->accept(v);
+                lpg_import_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1054,15 +1067,15 @@
      */
     struct IncludeSeg :public ASTNode
     {
-        IAst *_include_segment;
+        IAst *lpg_include_segment;
 
-        IAst *getinclude_segment() { return _include_segment; };
-        void setinclude_segment(IAst *_include_segment) { this->_include_segment = _include_segment; }
+        IAst *getinclude_segment() { return lpg_include_segment; };
+        void setinclude_segment(IAst *lpg_include_segment) { this->lpg_include_segment = lpg_include_segment; }
 
         IncludeSeg(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_include_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_include_segment = _include_segment;
-            ((ASTNode*) _include_segment)->setParent(this);
+                   IAst *lpg_include_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_include_segment = lpg_include_segment;
+            ((ASTNode*) lpg_include_segment)->setParent(this);
             initialize();
         }
 
@@ -1072,7 +1085,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_include_segment);
+            list.push_back(lpg_include_segment);
             return list;
         }
 
@@ -1087,7 +1100,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _include_segment->accept(v);
+                lpg_include_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1099,15 +1112,15 @@
      */
     struct KeywordsSeg :public ASTNode
     {
-        IAst *_keywords_segment;
+        IAst *lpg_keywords_segment;
 
-        IAst *getkeywords_segment() { return _keywords_segment; };
-        void setkeywords_segment(IAst *_keywords_segment) { this->_keywords_segment = _keywords_segment; }
+        IAst *getkeywords_segment() { return lpg_keywords_segment; };
+        void setkeywords_segment(IAst *lpg_keywords_segment) { this->lpg_keywords_segment = lpg_keywords_segment; }
 
         KeywordsSeg(IToken* leftIToken, IToken* rightIToken,
-                    IAst *_keywords_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_keywords_segment = _keywords_segment;
-            ((ASTNode*) _keywords_segment)->setParent(this);
+                    IAst *lpg_keywords_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_keywords_segment = lpg_keywords_segment;
+            ((ASTNode*) lpg_keywords_segment)->setParent(this);
             initialize();
         }
 
@@ -1117,7 +1130,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_keywords_segment);
+            list.push_back(lpg_keywords_segment);
             return list;
         }
 
@@ -1132,7 +1145,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _keywords_segment->accept(v);
+                lpg_keywords_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1144,15 +1157,15 @@
      */
     struct NamesSeg :public ASTNode
     {
-        IAst *_names_segment;
+        IAst *lpg_names_segment;
 
-        IAst *getnames_segment() { return _names_segment; };
-        void setnames_segment(IAst *_names_segment) { this->_names_segment = _names_segment; }
+        IAst *getnames_segment() { return lpg_names_segment; };
+        void setnames_segment(IAst *lpg_names_segment) { this->lpg_names_segment = lpg_names_segment; }
 
         NamesSeg(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_names_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_names_segment = _names_segment;
-            ((ASTNode*) _names_segment)->setParent(this);
+                 IAst *lpg_names_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_names_segment = lpg_names_segment;
+            ((ASTNode*) lpg_names_segment)->setParent(this);
             initialize();
         }
 
@@ -1162,7 +1175,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_names_segment);
+            list.push_back(lpg_names_segment);
             return list;
         }
 
@@ -1177,7 +1190,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _names_segment->accept(v);
+                lpg_names_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1189,15 +1202,15 @@
      */
     struct NoticeSeg :public ASTNode
     {
-        IAst *_notice_segment;
+        IAst *lpg_notice_segment;
 
-        IAst *getnotice_segment() { return _notice_segment; };
-        void setnotice_segment(IAst *_notice_segment) { this->_notice_segment = _notice_segment; }
+        IAst *getnotice_segment() { return lpg_notice_segment; };
+        void setnotice_segment(IAst *lpg_notice_segment) { this->lpg_notice_segment = lpg_notice_segment; }
 
         NoticeSeg(IToken* leftIToken, IToken* rightIToken,
-                  IAst *_notice_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_notice_segment = _notice_segment;
-            ((ASTNode*) _notice_segment)->setParent(this);
+                  IAst *lpg_notice_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_notice_segment = lpg_notice_segment;
+            ((ASTNode*) lpg_notice_segment)->setParent(this);
             initialize();
         }
 
@@ -1207,7 +1220,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_notice_segment);
+            list.push_back(lpg_notice_segment);
             return list;
         }
 
@@ -1222,7 +1235,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _notice_segment->accept(v);
+                lpg_notice_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1234,15 +1247,15 @@
      */
     struct RulesSeg :public ASTNode
     {
-        IAst *_rules_segment;
+        IAst *lpg_rules_segment;
 
-        IAst *getrules_segment() { return _rules_segment; };
-        void setrules_segment(IAst *_rules_segment) { this->_rules_segment = _rules_segment; }
+        IAst *getrules_segment() { return lpg_rules_segment; };
+        void setrules_segment(IAst *lpg_rules_segment) { this->lpg_rules_segment = lpg_rules_segment; }
 
         RulesSeg(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_rules_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_rules_segment = _rules_segment;
-            ((ASTNode*) _rules_segment)->setParent(this);
+                 IAst *lpg_rules_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_rules_segment = lpg_rules_segment;
+            ((ASTNode*) lpg_rules_segment)->setParent(this);
             initialize();
         }
 
@@ -1252,7 +1265,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_rules_segment);
+            list.push_back(lpg_rules_segment);
             return list;
         }
 
@@ -1267,7 +1280,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _rules_segment->accept(v);
+                lpg_rules_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1279,15 +1292,15 @@
      */
     struct SoftKeywordsSeg :public ASTNode
     {
-        IAst *_keywords_segment;
+        IAst *lpg_keywords_segment;
 
-        IAst *getkeywords_segment() { return _keywords_segment; };
-        void setkeywords_segment(IAst *_keywords_segment) { this->_keywords_segment = _keywords_segment; }
+        IAst *getkeywords_segment() { return lpg_keywords_segment; };
+        void setkeywords_segment(IAst *lpg_keywords_segment) { this->lpg_keywords_segment = lpg_keywords_segment; }
 
         SoftKeywordsSeg(IToken* leftIToken, IToken* rightIToken,
-                        IAst *_keywords_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_keywords_segment = _keywords_segment;
-            ((ASTNode*) _keywords_segment)->setParent(this);
+                        IAst *lpg_keywords_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_keywords_segment = lpg_keywords_segment;
+            ((ASTNode*) lpg_keywords_segment)->setParent(this);
             initialize();
         }
 
@@ -1297,7 +1310,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_keywords_segment);
+            list.push_back(lpg_keywords_segment);
             return list;
         }
 
@@ -1312,7 +1325,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _keywords_segment->accept(v);
+                lpg_keywords_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1324,15 +1337,15 @@
      */
     struct StartSeg :public ASTNode
     {
-        IAst *_start_segment;
+        IAst *lpg_start_segment;
 
-        IAst *getstart_segment() { return _start_segment; };
-        void setstart_segment(IAst *_start_segment) { this->_start_segment = _start_segment; }
+        IAst *getstart_segment() { return lpg_start_segment; };
+        void setstart_segment(IAst *lpg_start_segment) { this->lpg_start_segment = lpg_start_segment; }
 
         StartSeg(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_start_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_start_segment = _start_segment;
-            ((ASTNode*) _start_segment)->setParent(this);
+                 IAst *lpg_start_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_start_segment = lpg_start_segment;
+            ((ASTNode*) lpg_start_segment)->setParent(this);
             initialize();
         }
 
@@ -1342,7 +1355,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_start_segment);
+            list.push_back(lpg_start_segment);
             return list;
         }
 
@@ -1357,7 +1370,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _start_segment->accept(v);
+                lpg_start_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1369,15 +1382,15 @@
      */
     struct TerminalsSeg :public ASTNode
     {
-        IAst *_terminals_segment;
+        IAst *lpg_terminals_segment;
 
-        IAst *getterminals_segment() { return _terminals_segment; };
-        void setterminals_segment(IAst *_terminals_segment) { this->_terminals_segment = _terminals_segment; }
+        IAst *getterminals_segment() { return lpg_terminals_segment; };
+        void setterminals_segment(IAst *lpg_terminals_segment) { this->lpg_terminals_segment = lpg_terminals_segment; }
 
         TerminalsSeg(IToken* leftIToken, IToken* rightIToken,
-                     IAst *_terminals_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_terminals_segment = _terminals_segment;
-            ((ASTNode*) _terminals_segment)->setParent(this);
+                     IAst *lpg_terminals_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_terminals_segment = lpg_terminals_segment;
+            ((ASTNode*) lpg_terminals_segment)->setParent(this);
             initialize();
         }
 
@@ -1387,7 +1400,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_terminals_segment);
+            list.push_back(lpg_terminals_segment);
             return list;
         }
 
@@ -1402,7 +1415,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _terminals_segment->accept(v);
+                lpg_terminals_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1414,15 +1427,15 @@
      */
     struct TrailersSeg :public ASTNode
     {
-        IAst *_trailers_segment;
+        IAst *lpg_trailers_segment;
 
-        IAst *gettrailers_segment() { return _trailers_segment; };
-        void settrailers_segment(IAst *_trailers_segment) { this->_trailers_segment = _trailers_segment; }
+        IAst *gettrailers_segment() { return lpg_trailers_segment; };
+        void settrailers_segment(IAst *lpg_trailers_segment) { this->lpg_trailers_segment = lpg_trailers_segment; }
 
         TrailersSeg(IToken* leftIToken, IToken* rightIToken,
-                    IAst *_trailers_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_trailers_segment = _trailers_segment;
-            ((ASTNode*) _trailers_segment)->setParent(this);
+                    IAst *lpg_trailers_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_trailers_segment = lpg_trailers_segment;
+            ((ASTNode*) lpg_trailers_segment)->setParent(this);
             initialize();
         }
 
@@ -1432,7 +1445,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_trailers_segment);
+            list.push_back(lpg_trailers_segment);
             return list;
         }
 
@@ -1447,7 +1460,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _trailers_segment->accept(v);
+                lpg_trailers_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1459,15 +1472,15 @@
      */
     struct TypesSeg :public ASTNode
     {
-        IAst *_types_segment;
+        IAst *lpg_types_segment;
 
-        IAst *gettypes_segment() { return _types_segment; };
-        void settypes_segment(IAst *_types_segment) { this->_types_segment = _types_segment; }
+        IAst *gettypes_segment() { return lpg_types_segment; };
+        void settypes_segment(IAst *lpg_types_segment) { this->lpg_types_segment = lpg_types_segment; }
 
         TypesSeg(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_types_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_types_segment = _types_segment;
-            ((ASTNode*) _types_segment)->setParent(this);
+                 IAst *lpg_types_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_types_segment = lpg_types_segment;
+            ((ASTNode*) lpg_types_segment)->setParent(this);
             initialize();
         }
 
@@ -1477,7 +1490,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_types_segment);
+            list.push_back(lpg_types_segment);
             return list;
         }
 
@@ -1492,7 +1505,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _types_segment->accept(v);
+                lpg_types_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1504,15 +1517,15 @@
      */
     struct RecoverSeg :public ASTNode
     {
-        IAst *_recover_segment;
+        IAst *lpg_recover_segment;
 
-        IAst *getrecover_segment() { return _recover_segment; };
-        void setrecover_segment(IAst *_recover_segment) { this->_recover_segment = _recover_segment; }
+        IAst *getrecover_segment() { return lpg_recover_segment; };
+        void setrecover_segment(IAst *lpg_recover_segment) { this->lpg_recover_segment = lpg_recover_segment; }
 
         RecoverSeg(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_recover_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_recover_segment = _recover_segment;
-            ((ASTNode*) _recover_segment)->setParent(this);
+                   IAst *lpg_recover_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_recover_segment = lpg_recover_segment;
+            ((ASTNode*) lpg_recover_segment)->setParent(this);
             initialize();
         }
 
@@ -1522,7 +1535,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_recover_segment);
+            list.push_back(lpg_recover_segment);
             return list;
         }
 
@@ -1537,7 +1550,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _recover_segment->accept(v);
+                lpg_recover_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1549,15 +1562,15 @@
      */
     struct PredecessorSeg :public ASTNode
     {
-        IAst *_predecessor_segment;
+        IAst *lpg_predecessor_segment;
 
-        IAst *getpredecessor_segment() { return _predecessor_segment; };
-        void setpredecessor_segment(IAst *_predecessor_segment) { this->_predecessor_segment = _predecessor_segment; }
+        IAst *getpredecessor_segment() { return lpg_predecessor_segment; };
+        void setpredecessor_segment(IAst *lpg_predecessor_segment) { this->lpg_predecessor_segment = lpg_predecessor_segment; }
 
         PredecessorSeg(IToken* leftIToken, IToken* rightIToken,
-                       IAst *_predecessor_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_predecessor_segment = _predecessor_segment;
-            ((ASTNode*) _predecessor_segment)->setParent(this);
+                       IAst *lpg_predecessor_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_predecessor_segment = lpg_predecessor_segment;
+            ((ASTNode*) lpg_predecessor_segment)->setParent(this);
             initialize();
         }
 
@@ -1567,7 +1580,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_predecessor_segment);
+            list.push_back(lpg_predecessor_segment);
             return list;
         }
 
@@ -1582,7 +1595,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _predecessor_segment->accept(v);
+                lpg_predecessor_segment->accept(v);
             v->endVisit(this);
         }
     };
@@ -1600,15 +1613,15 @@
 {
         }
 
-        option_specList(IAst* _option_spec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _option_spec, leftRecursive)
+        option_specList(IAst* lpg_option_spec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_option_spec, leftRecursive)
         {
-            ((ASTNode*) _option_spec)->setParent(this);
+            ((ASTNode*) lpg_option_spec)->setParent(this);
         }
 
-        void addElement(IAst *_option_spec)
+        void addElement(IAst *lpg_option_spec)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _option_spec);
-            ((ASTNode*) _option_spec)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_option_spec);
+            ((ASTNode*) lpg_option_spec)->setParent(this);
         }
 
 
@@ -1642,15 +1655,15 @@
      */
     struct option_spec :public ASTNode
     {
-        IAst *_option_list;
+        IAst *lpg_option_list;
 
-        IAst *getoption_list() { return _option_list; };
-        void setoption_list(IAst *_option_list) { this->_option_list = _option_list; }
+        IAst *getoption_list() { return lpg_option_list; };
+        void setoption_list(IAst *lpg_option_list) { this->lpg_option_list = lpg_option_list; }
 
         option_spec(IToken* leftIToken, IToken* rightIToken,
-                    IAst *_option_list):ASTNode(leftIToken, rightIToken)    {
-            this->_option_list = _option_list;
-            ((ASTNode*) _option_list)->setParent(this);
+                    IAst *lpg_option_list):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_option_list = lpg_option_list;
+            ((ASTNode*) lpg_option_list)->setParent(this);
             initialize();
         }
 
@@ -1660,7 +1673,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_option_list);
+            list.push_back(lpg_option_list);
             return list;
         }
 
@@ -1675,7 +1688,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _option_list->accept(v);
+                lpg_option_list->accept(v);
             v->endVisit(this);
         }
     };
@@ -1693,15 +1706,15 @@
 {
         }
 
-        optionList(IAst* _option, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _option, leftRecursive)
+        optionList(IAst* lpg_option, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_option, leftRecursive)
         {
-            ((ASTNode*) _option)->setParent(this);
+            ((ASTNode*) lpg_option)->setParent(this);
         }
 
-        void addElement(IAst *_option)
+        void addElement(IAst *lpg_option)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _option);
-            ((ASTNode*) _option)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_option);
+            ((ASTNode*) lpg_option)->setParent(this);
         }
 
 
@@ -1735,24 +1748,24 @@
      */
     struct option :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_option_value;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_option_value;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
         /**
          * The value returned by <b>getoption_value</b> may be <b>nullptr</b>
          */
-        IAst *getoption_value() { return _option_value; };
-        void setoption_value(IAst *_option_value) { this->_option_value = _option_value; }
+        IAst *getoption_value() { return lpg_option_value; };
+        void setoption_value(IAst *lpg_option_value) { this->lpg_option_value = lpg_option_value; }
 
         option(IToken* leftIToken, IToken* rightIToken,
-               IAst *_SYMBOL,
-               IAst *_option_value):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_option_value = _option_value;
-            if (_option_value != nullptr) ((ASTNode*) _option_value)->setParent(this);
+               IAst *lpg_SYMBOL,
+               IAst *lpg_option_value):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_option_value = lpg_option_value;
+            if (lpg_option_value != nullptr) ((ASTNode*) lpg_option_value)->setParent(this);
             initialize();
         }
 
@@ -1762,8 +1775,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_option_value);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_option_value);
             return list;
         }
 
@@ -1779,8 +1792,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                if (_option_value != nullptr) _option_value->accept(v);
+                lpg_SYMBOL->accept(v);
+                if (lpg_option_value != nullptr) lpg_option_value->accept(v);
             }
             v->endVisit(this);
         }
@@ -1805,15 +1818,15 @@
 {
         }
 
-        SYMBOLList(IAst* _SYMBOL, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _SYMBOL, leftRecursive)
+        SYMBOLList(IAst* lpg_SYMBOL, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_SYMBOL, leftRecursive)
         {
-            ((ASTNode*) _SYMBOL)->setParent(this);
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
         }
 
-        void addElement(IAst *_SYMBOL)
+        void addElement(IAst *lpg_SYMBOL)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _SYMBOL);
-            ((ASTNode*) _SYMBOL)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_SYMBOL);
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
         }
 
 
@@ -1853,15 +1866,15 @@
 {
         }
 
-        aliasSpecList(IAst* _aliasSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _aliasSpec, leftRecursive)
+        aliasSpecList(IAst* lpg_aliasSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_aliasSpec, leftRecursive)
         {
-            ((ASTNode*) _aliasSpec)->setParent(this);
+            ((ASTNode*) lpg_aliasSpec)->setParent(this);
         }
 
-        void addElement(IAst *_aliasSpec)
+        void addElement(IAst *lpg_aliasSpec)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _aliasSpec);
-            ((ASTNode*) _aliasSpec)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_aliasSpec);
+            ((ASTNode*) lpg_aliasSpec)->setParent(this);
         }
 
 
@@ -1926,15 +1939,15 @@
 {
         }
 
-        defineSpecList(IAst* _defineSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _defineSpec, leftRecursive)
+        defineSpecList(IAst* lpg_defineSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_defineSpec, leftRecursive)
         {
-            ((ASTNode*) _defineSpec)->setParent(this);
+            ((ASTNode*) lpg_defineSpec)->setParent(this);
         }
 
-        void addElement(IAst *_defineSpec)
+        void addElement(IAst *lpg_defineSpec)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _defineSpec);
-            ((ASTNode*) _defineSpec)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_defineSpec);
+            ((ASTNode*) lpg_defineSpec)->setParent(this);
         }
 
 
@@ -1971,22 +1984,22 @@
         LPGParser* environment;
         LPGParser* getEnvironment() { return environment; }
 
-        IAst *_macro_name_symbol;
-        IAst *_macro_segment;
+        IAst *lpg_macro_name_symbol;
+        IAst *lpg_macro_segment;
 
-        IAst *getmacro_name_symbol() { return _macro_name_symbol; };
-        void setmacro_name_symbol(IAst *_macro_name_symbol) { this->_macro_name_symbol = _macro_name_symbol; }
-        IAst *getmacro_segment() { return _macro_segment; };
-        void setmacro_segment(IAst *_macro_segment) { this->_macro_segment = _macro_segment; }
+        IAst *getmacro_name_symbol() { return lpg_macro_name_symbol; };
+        void setmacro_name_symbol(IAst *lpg_macro_name_symbol) { this->lpg_macro_name_symbol = lpg_macro_name_symbol; }
+        IAst *getmacro_segment() { return lpg_macro_segment; };
+        void setmacro_segment(IAst *lpg_macro_segment) { this->lpg_macro_segment = lpg_macro_segment; }
 
         defineSpec(LPGParser *environment, IToken* leftIToken, IToken* rightIToken,
-                   IAst *_macro_name_symbol,
-                   IAst *_macro_segment):ASTNode(leftIToken, rightIToken)    {
+                   IAst *lpg_macro_name_symbol,
+                   IAst *lpg_macro_segment):ASTNode(leftIToken, rightIToken)    {
             this->environment = environment;
-            this->_macro_name_symbol = _macro_name_symbol;
-            ((ASTNode*) _macro_name_symbol)->setParent(this);
-            this->_macro_segment = _macro_segment;
-            ((ASTNode*) _macro_segment)->setParent(this);
+            this->lpg_macro_name_symbol = lpg_macro_name_symbol;
+            ((ASTNode*) lpg_macro_name_symbol)->setParent(this);
+            this->lpg_macro_segment = lpg_macro_segment;
+            ((ASTNode*) lpg_macro_segment)->setParent(this);
             initialize();
         }
 
@@ -1996,8 +2009,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_macro_name_symbol);
-            list.push_back(_macro_segment);
+            list.push_back(lpg_macro_name_symbol);
+            list.push_back(lpg_macro_segment);
             return list;
         }
 
@@ -2013,8 +2026,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _macro_name_symbol->accept(v);
-                _macro_segment->accept(v);
+                lpg_macro_name_symbol->accept(v);
+                lpg_macro_segment->accept(v);
             }
             v->endVisit(this);
         }
@@ -2064,15 +2077,15 @@
 {
         }
 
-        terminal_symbolList(IAst* _terminal_symbol, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _terminal_symbol, leftRecursive)
+        terminal_symbolList(IAst* lpg_terminal_symbol, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_terminal_symbol, leftRecursive)
         {
-            ((ASTNode*) _terminal_symbol)->setParent(this);
+            ((ASTNode*) lpg_terminal_symbol)->setParent(this);
         }
 
-        void addElement(IAst *_terminal_symbol)
+        void addElement(IAst *lpg_terminal_symbol)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _terminal_symbol);
-            ((ASTNode*) _terminal_symbol)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_terminal_symbol);
+            ((ASTNode*) lpg_terminal_symbol)->setParent(this);
         }
 
 
@@ -2114,15 +2127,15 @@
 {
         }
 
-        action_segmentList(IAst* _action_segment, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _action_segment, leftRecursive)
+        action_segmentList(IAst* lpg_action_segment, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_action_segment, leftRecursive)
         {
-            ((ASTNode*) _action_segment)->setParent(this);
+            ((ASTNode*) lpg_action_segment)->setParent(this);
         }
 
-        void addElement(IAst *_action_segment)
+        void addElement(IAst *lpg_action_segment)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _action_segment);
-            ((ASTNode*) _action_segment)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_action_segment);
+            ((ASTNode*) lpg_action_segment)->setParent(this);
         }
 
 
@@ -2156,21 +2169,21 @@
      */
     struct import_segment :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_drop_command_list;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_drop_command_list;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
-        IAst *getdrop_command_list() { return _drop_command_list; };
-        void setdrop_command_list(IAst *_drop_command_list) { this->_drop_command_list = _drop_command_list; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
+        IAst *getdrop_command_list() { return lpg_drop_command_list; };
+        void setdrop_command_list(IAst *lpg_drop_command_list) { this->lpg_drop_command_list = lpg_drop_command_list; }
 
         import_segment(IToken* leftIToken, IToken* rightIToken,
-                       IAst *_SYMBOL,
-                       IAst *_drop_command_list):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_drop_command_list = _drop_command_list;
-            ((ASTNode*) _drop_command_list)->setParent(this);
+                       IAst *lpg_SYMBOL,
+                       IAst *lpg_drop_command_list):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_drop_command_list = lpg_drop_command_list;
+            ((ASTNode*) lpg_drop_command_list)->setParent(this);
             initialize();
         }
 
@@ -2180,8 +2193,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_drop_command_list);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_drop_command_list);
             return list;
         }
 
@@ -2197,8 +2210,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                _drop_command_list->accept(v);
+                lpg_SYMBOL->accept(v);
+                lpg_drop_command_list->accept(v);
             }
             v->endVisit(this);
         }
@@ -2217,15 +2230,15 @@
 {
         }
 
-        drop_commandList(IAst* _drop_command, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _drop_command, leftRecursive)
+        drop_commandList(IAst* lpg_drop_command, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_drop_command, leftRecursive)
         {
-            ((ASTNode*) _drop_command)->setParent(this);
+            ((ASTNode*) lpg_drop_command)->setParent(this);
         }
 
-        void addElement(IAst *_drop_command)
+        void addElement(IAst *lpg_drop_command)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _drop_command);
-            ((ASTNode*) _drop_command)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_drop_command);
+            ((ASTNode*) lpg_drop_command)->setParent(this);
         }
 
 
@@ -2263,15 +2276,15 @@
 {
         }
 
-        drop_ruleList(IAst* _drop_rule, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _drop_rule, leftRecursive)
+        drop_ruleList(IAst* lpg_drop_rule, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_drop_rule, leftRecursive)
         {
-            ((ASTNode*) _drop_rule)->setParent(this);
+            ((ASTNode*) lpg_drop_rule)->setParent(this);
         }
 
-        void addElement(IAst *_drop_rule)
+        void addElement(IAst *lpg_drop_rule)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _drop_rule);
-            ((ASTNode*) _drop_rule)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_drop_rule);
+            ((ASTNode*) lpg_drop_rule)->setParent(this);
         }
 
 
@@ -2305,36 +2318,36 @@
      */
     struct drop_rule :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_optMacroName;
-        IAst *_produces;
-        IAst *_ruleList;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_optMacroName;
+        IAst *lpg_produces;
+        IAst *lpg_ruleList;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
         /**
          * The value returned by <b>getoptMacroName</b> may be <b>nullptr</b>
          */
-        IAst *getoptMacroName() { return _optMacroName; };
-        void setoptMacroName(IAst *_optMacroName) { this->_optMacroName = _optMacroName; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getruleList() { return _ruleList; };
-        void setruleList(IAst *_ruleList) { this->_ruleList = _ruleList; }
+        IAst *getoptMacroName() { return lpg_optMacroName; };
+        void setoptMacroName(IAst *lpg_optMacroName) { this->lpg_optMacroName = lpg_optMacroName; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getruleList() { return lpg_ruleList; };
+        void setruleList(IAst *lpg_ruleList) { this->lpg_ruleList = lpg_ruleList; }
 
         drop_rule(IToken* leftIToken, IToken* rightIToken,
-                  IAst *_SYMBOL,
-                  IAst *_optMacroName,
-                  IAst *_produces,
-                  IAst *_ruleList):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_optMacroName = _optMacroName;
-            if (_optMacroName != nullptr) ((ASTNode*) _optMacroName)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_ruleList = _ruleList;
-            ((ASTNode*) _ruleList)->setParent(this);
+                  IAst *lpg_SYMBOL,
+                  IAst *lpg_optMacroName,
+                  IAst *lpg_produces,
+                  IAst *lpg_ruleList):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_optMacroName = lpg_optMacroName;
+            if (lpg_optMacroName != nullptr) ((ASTNode*) lpg_optMacroName)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_ruleList = lpg_ruleList;
+            ((ASTNode*) lpg_ruleList)->setParent(this);
             initialize();
         }
 
@@ -2344,10 +2357,10 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_optMacroName);
-            list.push_back(_produces);
-            list.push_back(_ruleList);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_optMacroName);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_ruleList);
             return list;
         }
 
@@ -2363,10 +2376,10 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                if (_optMacroName != nullptr) _optMacroName->accept(v);
-                _produces->accept(v);
-                _ruleList->accept(v);
+                lpg_SYMBOL->accept(v);
+                if (lpg_optMacroName != nullptr) lpg_optMacroName->accept(v);
+                lpg_produces->accept(v);
+                lpg_ruleList->accept(v);
             }
             v->endVisit(this);
         }
@@ -2443,15 +2456,15 @@
 {
         }
 
-        keywordSpecList(IAst* _keywordSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _keywordSpec, leftRecursive)
+        keywordSpecList(IAst* lpg_keywordSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_keywordSpec, leftRecursive)
         {
-            ((ASTNode*) _keywordSpec)->setParent(this);
+            ((ASTNode*) lpg_keywordSpec)->setParent(this);
         }
 
-        void addElement(IAst *_keywordSpec)
+        void addElement(IAst *lpg_keywordSpec)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _keywordSpec);
-            ((ASTNode*) _keywordSpec)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_keywordSpec);
+            ((ASTNode*) lpg_keywordSpec)->setParent(this);
         }
 
 
@@ -2487,27 +2500,27 @@
      */
     struct keywordSpec :public ASTNode
     {
-        IAst *_terminal_symbol;
-        IAst *_produces;
-        IAst *_name;
+        IAst *lpg_terminal_symbol;
+        IAst *lpg_produces;
+        IAst *lpg_name;
 
-        IAst *getterminal_symbol() { return _terminal_symbol; };
-        void setterminal_symbol(IAst *_terminal_symbol) { this->_terminal_symbol = _terminal_symbol; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getname() { return _name; };
-        void setname(IAst *_name) { this->_name = _name; }
+        IAst *getterminal_symbol() { return lpg_terminal_symbol; };
+        void setterminal_symbol(IAst *lpg_terminal_symbol) { this->lpg_terminal_symbol = lpg_terminal_symbol; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getname() { return lpg_name; };
+        void setname(IAst *lpg_name) { this->lpg_name = lpg_name; }
 
         keywordSpec(IToken* leftIToken, IToken* rightIToken,
-                    IAst *_terminal_symbol,
-                    IAst *_produces,
-                    IAst *_name):ASTNode(leftIToken, rightIToken)    {
-            this->_terminal_symbol = _terminal_symbol;
-            ((ASTNode*) _terminal_symbol)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_name = _name;
-            ((ASTNode*) _name)->setParent(this);
+                    IAst *lpg_terminal_symbol,
+                    IAst *lpg_produces,
+                    IAst *lpg_name):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_terminal_symbol = lpg_terminal_symbol;
+            ((ASTNode*) lpg_terminal_symbol)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_name = lpg_name;
+            ((ASTNode*) lpg_name)->setParent(this);
             initialize();
         }
 
@@ -2517,9 +2530,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_terminal_symbol);
-            list.push_back(_produces);
-            list.push_back(_name);
+            list.push_back(lpg_terminal_symbol);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_name);
             return list;
         }
 
@@ -2535,9 +2548,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _terminal_symbol->accept(v);
-                _produces->accept(v);
-                _name->accept(v);
+                lpg_terminal_symbol->accept(v);
+                lpg_produces->accept(v);
+                lpg_name->accept(v);
             }
             v->endVisit(this);
         }
@@ -2556,15 +2569,15 @@
 {
         }
 
-        nameSpecList(IAst* _nameSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _nameSpec, leftRecursive)
+        nameSpecList(IAst* lpg_nameSpec, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_nameSpec, leftRecursive)
         {
-            ((ASTNode*) _nameSpec)->setParent(this);
+            ((ASTNode*) lpg_nameSpec)->setParent(this);
         }
 
-        void addElement(IAst *_nameSpec)
+        void addElement(IAst *lpg_nameSpec)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _nameSpec);
-            ((ASTNode*) _nameSpec)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_nameSpec);
+            ((ASTNode*) lpg_nameSpec)->setParent(this);
         }
 
 
@@ -2598,27 +2611,27 @@
      */
     struct nameSpec :public ASTNode
     {
-        IAst *_name;
-        IAst *_produces;
-        IAst *_name3;
+        IAst *lpg_name;
+        IAst *lpg_produces;
+        IAst *lpg_name3;
 
-        IAst *getname() { return _name; };
-        void setname(IAst *_name) { this->_name = _name; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getname3() { return _name3; };
-        void setname3(IAst *_name3) { this->_name3 = _name3; }
+        IAst *getname() { return lpg_name; };
+        void setname(IAst *lpg_name) { this->lpg_name = lpg_name; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getname3() { return lpg_name3; };
+        void setname3(IAst *lpg_name3) { this->lpg_name3 = lpg_name3; }
 
         nameSpec(IToken* leftIToken, IToken* rightIToken,
-                 IAst *_name,
-                 IAst *_produces,
-                 IAst *_name3):ASTNode(leftIToken, rightIToken)    {
-            this->_name = _name;
-            ((ASTNode*) _name)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_name3 = _name3;
-            ((ASTNode*) _name3)->setParent(this);
+                 IAst *lpg_name,
+                 IAst *lpg_produces,
+                 IAst *lpg_name3):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_name = lpg_name;
+            ((ASTNode*) lpg_name)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_name3 = lpg_name3;
+            ((ASTNode*) lpg_name3)->setParent(this);
             initialize();
         }
 
@@ -2628,9 +2641,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_name);
-            list.push_back(_produces);
-            list.push_back(_name3);
+            list.push_back(lpg_name);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_name3);
             return list;
         }
 
@@ -2646,9 +2659,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _name->accept(v);
-                _produces->accept(v);
-                _name3->accept(v);
+                lpg_name->accept(v);
+                lpg_produces->accept(v);
+                lpg_name3->accept(v);
             }
             v->endVisit(this);
         }
@@ -2661,21 +2674,21 @@
      */
     struct rules_segment :public ASTNode
     {
-        IAst *_action_segment_list;
-        IAst *_nonTermList;
+        IAst *lpg_action_segment_list;
+        IAst *lpg_nonTermList;
 
-        IAst *getaction_segment_list() { return _action_segment_list; };
-        void setaction_segment_list(IAst *_action_segment_list) { this->_action_segment_list = _action_segment_list; }
-        IAst *getnonTermList() { return _nonTermList; };
-        void setnonTermList(IAst *_nonTermList) { this->_nonTermList = _nonTermList; }
+        IAst *getaction_segment_list() { return lpg_action_segment_list; };
+        void setaction_segment_list(IAst *lpg_action_segment_list) { this->lpg_action_segment_list = lpg_action_segment_list; }
+        IAst *getnonTermList() { return lpg_nonTermList; };
+        void setnonTermList(IAst *lpg_nonTermList) { this->lpg_nonTermList = lpg_nonTermList; }
 
         rules_segment(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_action_segment_list,
-                      IAst *_nonTermList):ASTNode(leftIToken, rightIToken)    {
-            this->_action_segment_list = _action_segment_list;
-            ((ASTNode*) _action_segment_list)->setParent(this);
-            this->_nonTermList = _nonTermList;
-            ((ASTNode*) _nonTermList)->setParent(this);
+                      IAst *lpg_action_segment_list,
+                      IAst *lpg_nonTermList):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_action_segment_list = lpg_action_segment_list;
+            ((ASTNode*) lpg_action_segment_list)->setParent(this);
+            this->lpg_nonTermList = lpg_nonTermList;
+            ((ASTNode*) lpg_nonTermList)->setParent(this);
             initialize();
         }
 
@@ -2685,8 +2698,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_action_segment_list);
-            list.push_back(_nonTermList);
+            list.push_back(lpg_action_segment_list);
+            list.push_back(lpg_nonTermList);
             return list;
         }
 
@@ -2702,8 +2715,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _action_segment_list->accept(v);
-                _nonTermList->accept(v);
+                lpg_action_segment_list->accept(v);
+                lpg_nonTermList->accept(v);
             }
             v->endVisit(this);
         }
@@ -2722,15 +2735,15 @@
 {
         }
 
-        nonTermList(IAst* _nonTerm, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _nonTerm, leftRecursive)
+        nonTermList(IAst* lpg_nonTerm, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_nonTerm, leftRecursive)
         {
-            ((ASTNode*) _nonTerm)->setParent(this);
+            ((ASTNode*) lpg_nonTerm)->setParent(this);
         }
 
-        void addElement(IAst *_nonTerm)
+        void addElement(IAst *lpg_nonTerm)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _nonTerm);
-            ((ASTNode*) _nonTerm)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_nonTerm);
+            ((ASTNode*) lpg_nonTerm)->setParent(this);
         }
 
 
@@ -2767,28 +2780,28 @@
         LPGParser* environment;
         LPGParser* getEnvironment() { return environment; }
 
-        IAst *_ruleNameWithAttributes;
-        IAst *_produces;
-        IAst *_ruleList;
+        IAst *lpg_ruleNameWithAttributes;
+        IAst *lpg_produces;
+        IAst *lpg_ruleList;
 
-        IAst *getruleNameWithAttributes() { return _ruleNameWithAttributes; };
-        void setruleNameWithAttributes(IAst *_ruleNameWithAttributes) { this->_ruleNameWithAttributes = _ruleNameWithAttributes; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getruleList() { return _ruleList; };
-        void setruleList(IAst *_ruleList) { this->_ruleList = _ruleList; }
+        IAst *getruleNameWithAttributes() { return lpg_ruleNameWithAttributes; };
+        void setruleNameWithAttributes(IAst *lpg_ruleNameWithAttributes) { this->lpg_ruleNameWithAttributes = lpg_ruleNameWithAttributes; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getruleList() { return lpg_ruleList; };
+        void setruleList(IAst *lpg_ruleList) { this->lpg_ruleList = lpg_ruleList; }
 
         nonTerm(LPGParser *environment, IToken* leftIToken, IToken* rightIToken,
-                IAst *_ruleNameWithAttributes,
-                IAst *_produces,
-                IAst *_ruleList):ASTNode(leftIToken, rightIToken)    {
+                IAst *lpg_ruleNameWithAttributes,
+                IAst *lpg_produces,
+                IAst *lpg_ruleList):ASTNode(leftIToken, rightIToken)    {
             this->environment = environment;
-            this->_ruleNameWithAttributes = _ruleNameWithAttributes;
-            ((ASTNode*) _ruleNameWithAttributes)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_ruleList = _ruleList;
-            ((ASTNode*) _ruleList)->setParent(this);
+            this->lpg_ruleNameWithAttributes = lpg_ruleNameWithAttributes;
+            ((ASTNode*) lpg_ruleNameWithAttributes)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_ruleList = lpg_ruleList;
+            ((ASTNode*) lpg_ruleList)->setParent(this);
             initialize();
         }
 
@@ -2798,9 +2811,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_ruleNameWithAttributes);
-            list.push_back(_produces);
-            list.push_back(_ruleList);
+            list.push_back(lpg_ruleNameWithAttributes);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_ruleList);
             return list;
         }
 
@@ -2816,9 +2829,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _ruleNameWithAttributes->accept(v);
-                _produces->accept(v);
-                _ruleList->accept(v);
+                lpg_ruleNameWithAttributes->accept(v);
+                lpg_produces->accept(v);
+                lpg_ruleList->accept(v);
             }
             v->endVisit(this);
         }
@@ -2836,32 +2849,32 @@
      *</b>
      */
     struct RuleName :public  ASTNode    {
-        IAst *_SYMBOL;
-        IAst *_className;
-        IAst *_arrayElement;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_className;
+        IAst *lpg_arrayElement;
 
-        IAst *getSYMBOL() { return _SYMBOL; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; }
         /**
          * The value returned by <b>getclassName</b> may be <b>nullptr</b>
          */
-        IAst *getclassName() { return _className; }
+        IAst *getclassName() { return lpg_className; }
         /**
          * The value returned by <b>getarrayElement</b> may be <b>nullptr</b>
          */
-        IAst *getarrayElement() { return _arrayElement; }
+        IAst *getarrayElement() { return lpg_arrayElement; }
 
         RuleName(IToken *leftIToken, IToken *rightIToken,
-                 IAst *_SYMBOL,
-                 IAst *_className,
-                 IAst *_arrayElement)
+                 IAst *lpg_SYMBOL,
+                 IAst *lpg_className,
+                 IAst *lpg_arrayElement)
 :ASTNode    (leftIToken, rightIToken)
         {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_className = _className;
-            if (_className != nullptr) ((ASTNode*) _className)->setParent(this);
-            this->_arrayElement = _arrayElement;
-            if (_arrayElement != nullptr) ((ASTNode*) _arrayElement)->setParent(this);
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_className = lpg_className;
+            if (lpg_className != nullptr) ((ASTNode*) lpg_className)->setParent(this);
+            this->lpg_arrayElement = lpg_arrayElement;
+            if (lpg_arrayElement != nullptr) ((ASTNode*) lpg_arrayElement)->setParent(this);
             initialize();
         }
 
@@ -2871,9 +2884,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_className);
-            list.push_back(_arrayElement);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_className);
+            list.push_back(lpg_arrayElement);
             return list;
         }
 
@@ -2889,9 +2902,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                if (_className != nullptr) _className->accept(v);
-                if (_arrayElement != nullptr) _arrayElement->accept(v);
+                lpg_SYMBOL->accept(v);
+                if (lpg_className != nullptr) lpg_className->accept(v);
+                if (lpg_arrayElement != nullptr) lpg_arrayElement->accept(v);
             }
             v->endVisit(this);
         }
@@ -2910,15 +2923,15 @@
 {
         }
 
-        ruleList(IAst* _rule, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _rule, leftRecursive)
+        ruleList(IAst* lpg_rule, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_rule, leftRecursive)
         {
-            ((ASTNode*) _rule)->setParent(this);
+            ((ASTNode*) lpg_rule)->setParent(this);
         }
 
-        void addElement(IAst *_rule)
+        void addElement(IAst *lpg_rule)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _rule);
-            ((ASTNode*) _rule)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_rule);
+            ((ASTNode*) lpg_rule)->setParent(this);
         }
 
 
@@ -2952,24 +2965,24 @@
      */
     struct rule :public ASTNode
     {
-        IAst *_symWithAttrsList;
-        IAst *_opt_action_segment;
+        IAst *lpg_symWithAttrsList;
+        IAst *lpg_opt_action_segment;
 
-        IAst *getsymWithAttrsList() { return _symWithAttrsList; };
-        void setsymWithAttrsList(IAst *_symWithAttrsList) { this->_symWithAttrsList = _symWithAttrsList; }
+        IAst *getsymWithAttrsList() { return lpg_symWithAttrsList; };
+        void setsymWithAttrsList(IAst *lpg_symWithAttrsList) { this->lpg_symWithAttrsList = lpg_symWithAttrsList; }
         /**
          * The value returned by <b>getopt_action_segment</b> may be <b>nullptr</b>
          */
-        IAst *getopt_action_segment() { return _opt_action_segment; };
-        void setopt_action_segment(IAst *_opt_action_segment) { this->_opt_action_segment = _opt_action_segment; }
+        IAst *getopt_action_segment() { return lpg_opt_action_segment; };
+        void setopt_action_segment(IAst *lpg_opt_action_segment) { this->lpg_opt_action_segment = lpg_opt_action_segment; }
 
         rule(IToken* leftIToken, IToken* rightIToken,
-             IAst *_symWithAttrsList,
-             IAst *_opt_action_segment):ASTNode(leftIToken, rightIToken)    {
-            this->_symWithAttrsList = _symWithAttrsList;
-            ((ASTNode*) _symWithAttrsList)->setParent(this);
-            this->_opt_action_segment = _opt_action_segment;
-            if (_opt_action_segment != nullptr) ((ASTNode*) _opt_action_segment)->setParent(this);
+             IAst *lpg_symWithAttrsList,
+             IAst *lpg_opt_action_segment):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_symWithAttrsList = lpg_symWithAttrsList;
+            ((ASTNode*) lpg_symWithAttrsList)->setParent(this);
+            this->lpg_opt_action_segment = lpg_opt_action_segment;
+            if (lpg_opt_action_segment != nullptr) ((ASTNode*) lpg_opt_action_segment)->setParent(this);
             initialize();
         }
 
@@ -2979,8 +2992,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_symWithAttrsList);
-            list.push_back(_opt_action_segment);
+            list.push_back(lpg_symWithAttrsList);
+            list.push_back(lpg_opt_action_segment);
             return list;
         }
 
@@ -2996,8 +3009,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _symWithAttrsList->accept(v);
-                if (_opt_action_segment != nullptr) _opt_action_segment->accept(v);
+                lpg_symWithAttrsList->accept(v);
+                if (lpg_opt_action_segment != nullptr) lpg_opt_action_segment->accept(v);
             }
             v->endVisit(this);
         }
@@ -3016,15 +3029,15 @@
 {
         }
 
-        symWithAttrsList(IAst* _symWithAttrs, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _symWithAttrs, leftRecursive)
+        symWithAttrsList(IAst* lpg_symWithAttrs, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_symWithAttrs, leftRecursive)
         {
-            ((ASTNode*) _symWithAttrs)->setParent(this);
+            ((ASTNode*) lpg_symWithAttrs)->setParent(this);
         }
 
-        void addElement(IAst *_symWithAttrs)
+        void addElement(IAst *lpg_symWithAttrs)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _symWithAttrs);
-            ((ASTNode*) _symWithAttrs)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_symWithAttrs);
+            ((ASTNode*) lpg_symWithAttrs)->setParent(this);
         }
 
 
@@ -3056,19 +3069,19 @@
      *</b>
      */
     struct symAttrs :public  ASTNode    {
-        IAst *_MACRO_NAME;
+        IAst *lpg_MACRO_NAME;
 
         /**
          * The value returned by <b>getMACRO_NAME</b> may be <b>nullptr</b>
          */
-        IAst *getMACRO_NAME() { return _MACRO_NAME; }
+        IAst *getMACRO_NAME() { return lpg_MACRO_NAME; }
 
         symAttrs(IToken *leftIToken, IToken *rightIToken,
-                 IAst *_MACRO_NAME)
+                 IAst *lpg_MACRO_NAME)
 :ASTNode    (leftIToken, rightIToken)
         {
-            this->_MACRO_NAME = _MACRO_NAME;
-            if (_MACRO_NAME != nullptr) ((ASTNode*) _MACRO_NAME)->setParent(this);
+            this->lpg_MACRO_NAME = lpg_MACRO_NAME;
+            if (lpg_MACRO_NAME != nullptr) ((ASTNode*) lpg_MACRO_NAME)->setParent(this);
             initialize();
         }
 
@@ -3078,7 +3091,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_MACRO_NAME);
+            list.push_back(lpg_MACRO_NAME);
             return list;
         }
 
@@ -3093,7 +3106,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                if (_MACRO_NAME != nullptr) _MACRO_NAME->accept(v);
+                if (lpg_MACRO_NAME != nullptr) lpg_MACRO_NAME->accept(v);
             v->endVisit(this);
         }
     };
@@ -3147,15 +3160,15 @@
 {
         }
 
-        start_symbolList(IAst* _start_symbol, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _start_symbol, leftRecursive)
+        start_symbolList(IAst* lpg_start_symbol, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_start_symbol, leftRecursive)
         {
-            ((ASTNode*) _start_symbol)->setParent(this);
+            ((ASTNode*) lpg_start_symbol)->setParent(this);
         }
 
-        void addElement(IAst *_start_symbol)
+        void addElement(IAst *lpg_start_symbol)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _start_symbol);
-            ((ASTNode*) _start_symbol)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_start_symbol);
+            ((ASTNode*) lpg_start_symbol)->setParent(this);
         }
 
 
@@ -3193,15 +3206,15 @@
 {
         }
 
-        terminalList(IAst* _terminal, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _terminal, leftRecursive)
+        terminalList(IAst* lpg_terminal, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_terminal, leftRecursive)
         {
-            ((ASTNode*) _terminal)->setParent(this);
+            ((ASTNode*) lpg_terminal)->setParent(this);
         }
 
-        void addElement(IAst *_terminal)
+        void addElement(IAst *lpg_terminal)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _terminal);
-            ((ASTNode*) _terminal)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_terminal);
+            ((ASTNode*) lpg_terminal)->setParent(this);
         }
 
 
@@ -3238,25 +3251,25 @@
         LPGParser* environment;
         LPGParser* getEnvironment() { return environment; }
 
-        IAst *_terminal_symbol;
-        IAst *_optTerminalAlias;
+        IAst *lpg_terminal_symbol;
+        IAst *lpg_optTerminalAlias;
 
-        IAst *getterminal_symbol() { return _terminal_symbol; };
-        void setterminal_symbol(IAst *_terminal_symbol) { this->_terminal_symbol = _terminal_symbol; }
+        IAst *getterminal_symbol() { return lpg_terminal_symbol; };
+        void setterminal_symbol(IAst *lpg_terminal_symbol) { this->lpg_terminal_symbol = lpg_terminal_symbol; }
         /**
          * The value returned by <b>getoptTerminalAlias</b> may be <b>nullptr</b>
          */
-        IAst *getoptTerminalAlias() { return _optTerminalAlias; };
-        void setoptTerminalAlias(IAst *_optTerminalAlias) { this->_optTerminalAlias = _optTerminalAlias; }
+        IAst *getoptTerminalAlias() { return lpg_optTerminalAlias; };
+        void setoptTerminalAlias(IAst *lpg_optTerminalAlias) { this->lpg_optTerminalAlias = lpg_optTerminalAlias; }
 
         terminal(LPGParser *environment, IToken* leftIToken, IToken* rightIToken,
-                 IAst *_terminal_symbol,
-                 IAst *_optTerminalAlias):ASTNode(leftIToken, rightIToken)    {
+                 IAst *lpg_terminal_symbol,
+                 IAst *lpg_optTerminalAlias):ASTNode(leftIToken, rightIToken)    {
             this->environment = environment;
-            this->_terminal_symbol = _terminal_symbol;
-            ((ASTNode*) _terminal_symbol)->setParent(this);
-            this->_optTerminalAlias = _optTerminalAlias;
-            if (_optTerminalAlias != nullptr) ((ASTNode*) _optTerminalAlias)->setParent(this);
+            this->lpg_terminal_symbol = lpg_terminal_symbol;
+            ((ASTNode*) lpg_terminal_symbol)->setParent(this);
+            this->lpg_optTerminalAlias = lpg_optTerminalAlias;
+            if (lpg_optTerminalAlias != nullptr) ((ASTNode*) lpg_optTerminalAlias)->setParent(this);
             initialize();
         }
 
@@ -3266,8 +3279,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_terminal_symbol);
-            list.push_back(_optTerminalAlias);
+            list.push_back(lpg_terminal_symbol);
+            list.push_back(lpg_optTerminalAlias);
             return list;
         }
 
@@ -3283,8 +3296,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _terminal_symbol->accept(v);
-                if (_optTerminalAlias != nullptr) _optTerminalAlias->accept(v);
+                lpg_terminal_symbol->accept(v);
+                if (lpg_optTerminalAlias != nullptr) lpg_optTerminalAlias->accept(v);
             }
             v->endVisit(this);
         }
@@ -3305,21 +3318,21 @@
      */
     struct optTerminalAlias :public ASTNode
     {
-        IAst *_produces;
-        IAst *_name;
+        IAst *lpg_produces;
+        IAst *lpg_name;
 
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getname() { return _name; };
-        void setname(IAst *_name) { this->_name = _name; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getname() { return lpg_name; };
+        void setname(IAst *lpg_name) { this->lpg_name = lpg_name; }
 
         optTerminalAlias(IToken* leftIToken, IToken* rightIToken,
-                         IAst *_produces,
-                         IAst *_name):ASTNode(leftIToken, rightIToken)    {
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_name = _name;
-            ((ASTNode*) _name)->setParent(this);
+                         IAst *lpg_produces,
+                         IAst *lpg_name):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_name = lpg_name;
+            ((ASTNode*) lpg_name)->setParent(this);
             initialize();
         }
 
@@ -3329,8 +3342,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_produces);
-            list.push_back(_name);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_name);
             return list;
         }
 
@@ -3346,8 +3359,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _produces->accept(v);
-                _name->accept(v);
+                lpg_produces->accept(v);
+                lpg_name->accept(v);
             }
             v->endVisit(this);
         }
@@ -3366,15 +3379,15 @@
 {
         }
 
-        type_declarationsList(IAst* _type_declarations, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _type_declarations, leftRecursive)
+        type_declarationsList(IAst* lpg_type_declarations, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_type_declarations, leftRecursive)
         {
-            ((ASTNode*) _type_declarations)->setParent(this);
+            ((ASTNode*) lpg_type_declarations)->setParent(this);
         }
 
-        void addElement(IAst *_type_declarations)
+        void addElement(IAst *lpg_type_declarations)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _type_declarations);
-            ((ASTNode*) _type_declarations)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_type_declarations);
+            ((ASTNode*) lpg_type_declarations)->setParent(this);
         }
 
 
@@ -3408,27 +3421,27 @@
      */
     struct type_declarations :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_produces;
-        IAst *_barSymbolList;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_produces;
+        IAst *lpg_barSymbolList;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getbarSymbolList() { return _barSymbolList; };
-        void setbarSymbolList(IAst *_barSymbolList) { this->_barSymbolList = _barSymbolList; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getbarSymbolList() { return lpg_barSymbolList; };
+        void setbarSymbolList(IAst *lpg_barSymbolList) { this->lpg_barSymbolList = lpg_barSymbolList; }
 
         type_declarations(IToken* leftIToken, IToken* rightIToken,
-                          IAst *_SYMBOL,
-                          IAst *_produces,
-                          IAst *_barSymbolList):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_barSymbolList = _barSymbolList;
-            ((ASTNode*) _barSymbolList)->setParent(this);
+                          IAst *lpg_SYMBOL,
+                          IAst *lpg_produces,
+                          IAst *lpg_barSymbolList):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_barSymbolList = lpg_barSymbolList;
+            ((ASTNode*) lpg_barSymbolList)->setParent(this);
             initialize();
         }
 
@@ -3438,9 +3451,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_produces);
-            list.push_back(_barSymbolList);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_barSymbolList);
             return list;
         }
 
@@ -3456,9 +3469,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                _produces->accept(v);
-                _barSymbolList->accept(v);
+                lpg_SYMBOL->accept(v);
+                lpg_produces->accept(v);
+                lpg_barSymbolList->accept(v);
             }
             v->endVisit(this);
         }
@@ -3477,15 +3490,15 @@
 {
         }
 
-        symbol_pairList(IAst* _symbol_pair, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) _symbol_pair, leftRecursive)
+        symbol_pairList(IAst* lpg_symbol_pair, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_symbol_pair, leftRecursive)
         {
-            ((ASTNode*) _symbol_pair)->setParent(this);
+            ((ASTNode*) lpg_symbol_pair)->setParent(this);
         }
 
-        void addElement(IAst *_symbol_pair)
+        void addElement(IAst *lpg_symbol_pair)
         {
-            AbstractASTNodeList::addElement((ASTNode*) _symbol_pair);
-            ((ASTNode*) _symbol_pair)->setParent(this);
+            AbstractASTNodeList::addElement((ASTNode*) lpg_symbol_pair);
+            ((ASTNode*) lpg_symbol_pair)->setParent(this);
         }
 
 
@@ -3519,21 +3532,21 @@
      */
     struct symbol_pair :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_SYMBOL2;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_SYMBOL2;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
-        IAst *getSYMBOL2() { return _SYMBOL2; };
-        void setSYMBOL2(IAst *_SYMBOL2) { this->_SYMBOL2 = _SYMBOL2; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
+        IAst *getSYMBOL2() { return lpg_SYMBOL2; };
+        void setSYMBOL2(IAst *lpg_SYMBOL2) { this->lpg_SYMBOL2 = lpg_SYMBOL2; }
 
         symbol_pair(IToken* leftIToken, IToken* rightIToken,
-                    IAst *_SYMBOL,
-                    IAst *_SYMBOL2):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_SYMBOL2 = _SYMBOL2;
-            ((ASTNode*) _SYMBOL2)->setParent(this);
+                    IAst *lpg_SYMBOL,
+                    IAst *lpg_SYMBOL2):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_SYMBOL2 = lpg_SYMBOL2;
+            ((ASTNode*) lpg_SYMBOL2)->setParent(this);
             initialize();
         }
 
@@ -3543,8 +3556,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_SYMBOL2);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_SYMBOL2);
             return list;
         }
 
@@ -3560,8 +3573,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                _SYMBOL2->accept(v);
+                lpg_SYMBOL->accept(v);
+                lpg_SYMBOL2->accept(v);
             }
             v->endVisit(this);
         }
@@ -3641,15 +3654,15 @@
      */
     struct option_value0 :public ASTNode
     {
-        IAst *_SYMBOL;
+        IAst *lpg_SYMBOL;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
 
         option_value0(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_SYMBOL):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
+                      IAst *lpg_SYMBOL):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
             initialize();
         }
 
@@ -3659,7 +3672,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
+            list.push_back(lpg_SYMBOL);
             return list;
         }
 
@@ -3674,7 +3687,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _SYMBOL->accept(v);
+                lpg_SYMBOL->accept(v);
             v->endVisit(this);
         }
     };
@@ -3686,15 +3699,15 @@
      */
     struct option_value1 :public ASTNode
     {
-        IAst *_symbol_list;
+        IAst *lpg_symbol_list;
 
-        IAst *getsymbol_list() { return _symbol_list; };
-        void setsymbol_list(IAst *_symbol_list) { this->_symbol_list = _symbol_list; }
+        IAst *getsymbol_list() { return lpg_symbol_list; };
+        void setsymbol_list(IAst *lpg_symbol_list) { this->lpg_symbol_list = lpg_symbol_list; }
 
         option_value1(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_symbol_list):ASTNode(leftIToken, rightIToken)    {
-            this->_symbol_list = _symbol_list;
-            ((ASTNode*) _symbol_list)->setParent(this);
+                      IAst *lpg_symbol_list):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_symbol_list = lpg_symbol_list;
+            ((ASTNode*) lpg_symbol_list)->setParent(this);
             initialize();
         }
 
@@ -3704,7 +3717,7 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_symbol_list);
+            list.push_back(lpg_symbol_list);
             return list;
         }
 
@@ -3719,7 +3732,7 @@
         {
             bool checkChildren = v->visit(this);
             if (checkChildren)
-                _symbol_list->accept(v);
+                lpg_symbol_list->accept(v);
             v->endVisit(this);
         }
     };
@@ -3731,27 +3744,27 @@
      */
     struct aliasSpec0 :public ASTNode
     {
-        IAst *_ERROR_KEY;
-        IAst *_produces;
-        IAst *_alias_rhs;
+        IAst *lpg_ERROR_KEY;
+        IAst *lpg_produces;
+        IAst *lpg_alias_rhs;
 
-        IAst *getERROR_KEY() { return _ERROR_KEY; };
-        void setERROR_KEY(IAst *_ERROR_KEY) { this->_ERROR_KEY = _ERROR_KEY; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getalias_rhs() { return _alias_rhs; };
-        void setalias_rhs(IAst *_alias_rhs) { this->_alias_rhs = _alias_rhs; }
+        IAst *getERROR_KEY() { return lpg_ERROR_KEY; };
+        void setERROR_KEY(IAst *lpg_ERROR_KEY) { this->lpg_ERROR_KEY = lpg_ERROR_KEY; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getalias_rhs() { return lpg_alias_rhs; };
+        void setalias_rhs(IAst *lpg_alias_rhs) { this->lpg_alias_rhs = lpg_alias_rhs; }
 
         aliasSpec0(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_ERROR_KEY,
-                   IAst *_produces,
-                   IAst *_alias_rhs):ASTNode(leftIToken, rightIToken)    {
-            this->_ERROR_KEY = _ERROR_KEY;
-            ((ASTNode*) _ERROR_KEY)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_alias_rhs = _alias_rhs;
-            ((ASTNode*) _alias_rhs)->setParent(this);
+                   IAst *lpg_ERROR_KEY,
+                   IAst *lpg_produces,
+                   IAst *lpg_alias_rhs):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_ERROR_KEY = lpg_ERROR_KEY;
+            ((ASTNode*) lpg_ERROR_KEY)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_alias_rhs = lpg_alias_rhs;
+            ((ASTNode*) lpg_alias_rhs)->setParent(this);
             initialize();
         }
 
@@ -3761,9 +3774,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_ERROR_KEY);
-            list.push_back(_produces);
-            list.push_back(_alias_rhs);
+            list.push_back(lpg_ERROR_KEY);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_alias_rhs);
             return list;
         }
 
@@ -3779,9 +3792,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _ERROR_KEY->accept(v);
-                _produces->accept(v);
-                _alias_rhs->accept(v);
+                lpg_ERROR_KEY->accept(v);
+                lpg_produces->accept(v);
+                lpg_alias_rhs->accept(v);
             }
             v->endVisit(this);
         }
@@ -3794,27 +3807,27 @@
      */
     struct aliasSpec1 :public ASTNode
     {
-        IAst *_EOL_KEY;
-        IAst *_produces;
-        IAst *_alias_rhs;
+        IAst *lpg_EOL_KEY;
+        IAst *lpg_produces;
+        IAst *lpg_alias_rhs;
 
-        IAst *getEOL_KEY() { return _EOL_KEY; };
-        void setEOL_KEY(IAst *_EOL_KEY) { this->_EOL_KEY = _EOL_KEY; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getalias_rhs() { return _alias_rhs; };
-        void setalias_rhs(IAst *_alias_rhs) { this->_alias_rhs = _alias_rhs; }
+        IAst *getEOL_KEY() { return lpg_EOL_KEY; };
+        void setEOL_KEY(IAst *lpg_EOL_KEY) { this->lpg_EOL_KEY = lpg_EOL_KEY; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getalias_rhs() { return lpg_alias_rhs; };
+        void setalias_rhs(IAst *lpg_alias_rhs) { this->lpg_alias_rhs = lpg_alias_rhs; }
 
         aliasSpec1(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_EOL_KEY,
-                   IAst *_produces,
-                   IAst *_alias_rhs):ASTNode(leftIToken, rightIToken)    {
-            this->_EOL_KEY = _EOL_KEY;
-            ((ASTNode*) _EOL_KEY)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_alias_rhs = _alias_rhs;
-            ((ASTNode*) _alias_rhs)->setParent(this);
+                   IAst *lpg_EOL_KEY,
+                   IAst *lpg_produces,
+                   IAst *lpg_alias_rhs):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_EOL_KEY = lpg_EOL_KEY;
+            ((ASTNode*) lpg_EOL_KEY)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_alias_rhs = lpg_alias_rhs;
+            ((ASTNode*) lpg_alias_rhs)->setParent(this);
             initialize();
         }
 
@@ -3824,9 +3837,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_EOL_KEY);
-            list.push_back(_produces);
-            list.push_back(_alias_rhs);
+            list.push_back(lpg_EOL_KEY);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_alias_rhs);
             return list;
         }
 
@@ -3842,9 +3855,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _EOL_KEY->accept(v);
-                _produces->accept(v);
-                _alias_rhs->accept(v);
+                lpg_EOL_KEY->accept(v);
+                lpg_produces->accept(v);
+                lpg_alias_rhs->accept(v);
             }
             v->endVisit(this);
         }
@@ -3857,27 +3870,27 @@
      */
     struct aliasSpec2 :public ASTNode
     {
-        IAst *_EOF_KEY;
-        IAst *_produces;
-        IAst *_alias_rhs;
+        IAst *lpg_EOF_KEY;
+        IAst *lpg_produces;
+        IAst *lpg_alias_rhs;
 
-        IAst *getEOF_KEY() { return _EOF_KEY; };
-        void setEOF_KEY(IAst *_EOF_KEY) { this->_EOF_KEY = _EOF_KEY; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getalias_rhs() { return _alias_rhs; };
-        void setalias_rhs(IAst *_alias_rhs) { this->_alias_rhs = _alias_rhs; }
+        IAst *getEOF_KEY() { return lpg_EOF_KEY; };
+        void setEOF_KEY(IAst *lpg_EOF_KEY) { this->lpg_EOF_KEY = lpg_EOF_KEY; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getalias_rhs() { return lpg_alias_rhs; };
+        void setalias_rhs(IAst *lpg_alias_rhs) { this->lpg_alias_rhs = lpg_alias_rhs; }
 
         aliasSpec2(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_EOF_KEY,
-                   IAst *_produces,
-                   IAst *_alias_rhs):ASTNode(leftIToken, rightIToken)    {
-            this->_EOF_KEY = _EOF_KEY;
-            ((ASTNode*) _EOF_KEY)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_alias_rhs = _alias_rhs;
-            ((ASTNode*) _alias_rhs)->setParent(this);
+                   IAst *lpg_EOF_KEY,
+                   IAst *lpg_produces,
+                   IAst *lpg_alias_rhs):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_EOF_KEY = lpg_EOF_KEY;
+            ((ASTNode*) lpg_EOF_KEY)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_alias_rhs = lpg_alias_rhs;
+            ((ASTNode*) lpg_alias_rhs)->setParent(this);
             initialize();
         }
 
@@ -3887,9 +3900,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_EOF_KEY);
-            list.push_back(_produces);
-            list.push_back(_alias_rhs);
+            list.push_back(lpg_EOF_KEY);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_alias_rhs);
             return list;
         }
 
@@ -3905,9 +3918,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _EOF_KEY->accept(v);
-                _produces->accept(v);
-                _alias_rhs->accept(v);
+                lpg_EOF_KEY->accept(v);
+                lpg_produces->accept(v);
+                lpg_alias_rhs->accept(v);
             }
             v->endVisit(this);
         }
@@ -3920,27 +3933,27 @@
      */
     struct aliasSpec3 :public ASTNode
     {
-        IAst *_IDENTIFIER_KEY;
-        IAst *_produces;
-        IAst *_alias_rhs;
+        IAst *lpg_IDENTIFIER_KEY;
+        IAst *lpg_produces;
+        IAst *lpg_alias_rhs;
 
-        IAst *getIDENTIFIER_KEY() { return _IDENTIFIER_KEY; };
-        void setIDENTIFIER_KEY(IAst *_IDENTIFIER_KEY) { this->_IDENTIFIER_KEY = _IDENTIFIER_KEY; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getalias_rhs() { return _alias_rhs; };
-        void setalias_rhs(IAst *_alias_rhs) { this->_alias_rhs = _alias_rhs; }
+        IAst *getIDENTIFIER_KEY() { return lpg_IDENTIFIER_KEY; };
+        void setIDENTIFIER_KEY(IAst *lpg_IDENTIFIER_KEY) { this->lpg_IDENTIFIER_KEY = lpg_IDENTIFIER_KEY; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getalias_rhs() { return lpg_alias_rhs; };
+        void setalias_rhs(IAst *lpg_alias_rhs) { this->lpg_alias_rhs = lpg_alias_rhs; }
 
         aliasSpec3(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_IDENTIFIER_KEY,
-                   IAst *_produces,
-                   IAst *_alias_rhs):ASTNode(leftIToken, rightIToken)    {
-            this->_IDENTIFIER_KEY = _IDENTIFIER_KEY;
-            ((ASTNode*) _IDENTIFIER_KEY)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_alias_rhs = _alias_rhs;
-            ((ASTNode*) _alias_rhs)->setParent(this);
+                   IAst *lpg_IDENTIFIER_KEY,
+                   IAst *lpg_produces,
+                   IAst *lpg_alias_rhs):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_IDENTIFIER_KEY = lpg_IDENTIFIER_KEY;
+            ((ASTNode*) lpg_IDENTIFIER_KEY)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_alias_rhs = lpg_alias_rhs;
+            ((ASTNode*) lpg_alias_rhs)->setParent(this);
             initialize();
         }
 
@@ -3950,9 +3963,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_IDENTIFIER_KEY);
-            list.push_back(_produces);
-            list.push_back(_alias_rhs);
+            list.push_back(lpg_IDENTIFIER_KEY);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_alias_rhs);
             return list;
         }
 
@@ -3968,9 +3981,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _IDENTIFIER_KEY->accept(v);
-                _produces->accept(v);
-                _alias_rhs->accept(v);
+                lpg_IDENTIFIER_KEY->accept(v);
+                lpg_produces->accept(v);
+                lpg_alias_rhs->accept(v);
             }
             v->endVisit(this);
         }
@@ -3983,27 +3996,27 @@
      */
     struct aliasSpec4 :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_produces;
-        IAst *_alias_rhs;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_produces;
+        IAst *lpg_alias_rhs;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getalias_rhs() { return _alias_rhs; };
-        void setalias_rhs(IAst *_alias_rhs) { this->_alias_rhs = _alias_rhs; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getalias_rhs() { return lpg_alias_rhs; };
+        void setalias_rhs(IAst *lpg_alias_rhs) { this->lpg_alias_rhs = lpg_alias_rhs; }
 
         aliasSpec4(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_SYMBOL,
-                   IAst *_produces,
-                   IAst *_alias_rhs):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_alias_rhs = _alias_rhs;
-            ((ASTNode*) _alias_rhs)->setParent(this);
+                   IAst *lpg_SYMBOL,
+                   IAst *lpg_produces,
+                   IAst *lpg_alias_rhs):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_alias_rhs = lpg_alias_rhs;
+            ((ASTNode*) lpg_alias_rhs)->setParent(this);
             initialize();
         }
 
@@ -4013,9 +4026,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_produces);
-            list.push_back(_alias_rhs);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_alias_rhs);
             return list;
         }
 
@@ -4031,9 +4044,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                _produces->accept(v);
-                _alias_rhs->accept(v);
+                lpg_SYMBOL->accept(v);
+                lpg_produces->accept(v);
+                lpg_alias_rhs->accept(v);
             }
             v->endVisit(this);
         }
@@ -4046,27 +4059,27 @@
      */
     struct aliasSpec5 :public ASTNode
     {
-        IAst *_alias_lhs_macro_name;
-        IAst *_produces;
-        IAst *_alias_rhs;
+        IAst *lpg_alias_lhs_macro_name;
+        IAst *lpg_produces;
+        IAst *lpg_alias_rhs;
 
-        IAst *getalias_lhs_macro_name() { return _alias_lhs_macro_name; };
-        void setalias_lhs_macro_name(IAst *_alias_lhs_macro_name) { this->_alias_lhs_macro_name = _alias_lhs_macro_name; }
-        IAst *getproduces() { return _produces; };
-        void setproduces(IAst *_produces) { this->_produces = _produces; }
-        IAst *getalias_rhs() { return _alias_rhs; };
-        void setalias_rhs(IAst *_alias_rhs) { this->_alias_rhs = _alias_rhs; }
+        IAst *getalias_lhs_macro_name() { return lpg_alias_lhs_macro_name; };
+        void setalias_lhs_macro_name(IAst *lpg_alias_lhs_macro_name) { this->lpg_alias_lhs_macro_name = lpg_alias_lhs_macro_name; }
+        IAst *getproduces() { return lpg_produces; };
+        void setproduces(IAst *lpg_produces) { this->lpg_produces = lpg_produces; }
+        IAst *getalias_rhs() { return lpg_alias_rhs; };
+        void setalias_rhs(IAst *lpg_alias_rhs) { this->lpg_alias_rhs = lpg_alias_rhs; }
 
         aliasSpec5(IToken* leftIToken, IToken* rightIToken,
-                   IAst *_alias_lhs_macro_name,
-                   IAst *_produces,
-                   IAst *_alias_rhs):ASTNode(leftIToken, rightIToken)    {
-            this->_alias_lhs_macro_name = _alias_lhs_macro_name;
-            ((ASTNode*) _alias_lhs_macro_name)->setParent(this);
-            this->_produces = _produces;
-            ((ASTNode*) _produces)->setParent(this);
-            this->_alias_rhs = _alias_rhs;
-            ((ASTNode*) _alias_rhs)->setParent(this);
+                   IAst *lpg_alias_lhs_macro_name,
+                   IAst *lpg_produces,
+                   IAst *lpg_alias_rhs):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_alias_lhs_macro_name = lpg_alias_lhs_macro_name;
+            ((ASTNode*) lpg_alias_lhs_macro_name)->setParent(this);
+            this->lpg_produces = lpg_produces;
+            ((ASTNode*) lpg_produces)->setParent(this);
+            this->lpg_alias_rhs = lpg_alias_rhs;
+            ((ASTNode*) lpg_alias_rhs)->setParent(this);
             initialize();
         }
 
@@ -4076,9 +4089,9 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_alias_lhs_macro_name);
-            list.push_back(_produces);
-            list.push_back(_alias_rhs);
+            list.push_back(lpg_alias_lhs_macro_name);
+            list.push_back(lpg_produces);
+            list.push_back(lpg_alias_rhs);
             return list;
         }
 
@@ -4094,9 +4107,9 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _alias_lhs_macro_name->accept(v);
-                _produces->accept(v);
-                _alias_rhs->accept(v);
+                lpg_alias_lhs_macro_name->accept(v);
+                lpg_produces->accept(v);
+                lpg_alias_rhs->accept(v);
             }
             v->endVisit(this);
         }
@@ -4352,21 +4365,21 @@
      */
     struct drop_command0 :public ASTNode
     {
-        IAst *_DROPSYMBOLS_KEY;
-        IAst *_drop_symbols;
+        IAst *lpg_DROPSYMBOLS_KEY;
+        IAst *lpg_drop_symbols;
 
-        IAst *getDROPSYMBOLS_KEY() { return _DROPSYMBOLS_KEY; };
-        void setDROPSYMBOLS_KEY(IAst *_DROPSYMBOLS_KEY) { this->_DROPSYMBOLS_KEY = _DROPSYMBOLS_KEY; }
-        IAst *getdrop_symbols() { return _drop_symbols; };
-        void setdrop_symbols(IAst *_drop_symbols) { this->_drop_symbols = _drop_symbols; }
+        IAst *getDROPSYMBOLS_KEY() { return lpg_DROPSYMBOLS_KEY; };
+        void setDROPSYMBOLS_KEY(IAst *lpg_DROPSYMBOLS_KEY) { this->lpg_DROPSYMBOLS_KEY = lpg_DROPSYMBOLS_KEY; }
+        IAst *getdrop_symbols() { return lpg_drop_symbols; };
+        void setdrop_symbols(IAst *lpg_drop_symbols) { this->lpg_drop_symbols = lpg_drop_symbols; }
 
         drop_command0(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_DROPSYMBOLS_KEY,
-                      IAst *_drop_symbols):ASTNode(leftIToken, rightIToken)    {
-            this->_DROPSYMBOLS_KEY = _DROPSYMBOLS_KEY;
-            ((ASTNode*) _DROPSYMBOLS_KEY)->setParent(this);
-            this->_drop_symbols = _drop_symbols;
-            ((ASTNode*) _drop_symbols)->setParent(this);
+                      IAst *lpg_DROPSYMBOLS_KEY,
+                      IAst *lpg_drop_symbols):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_DROPSYMBOLS_KEY = lpg_DROPSYMBOLS_KEY;
+            ((ASTNode*) lpg_DROPSYMBOLS_KEY)->setParent(this);
+            this->lpg_drop_symbols = lpg_drop_symbols;
+            ((ASTNode*) lpg_drop_symbols)->setParent(this);
             initialize();
         }
 
@@ -4376,8 +4389,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_DROPSYMBOLS_KEY);
-            list.push_back(_drop_symbols);
+            list.push_back(lpg_DROPSYMBOLS_KEY);
+            list.push_back(lpg_drop_symbols);
             return list;
         }
 
@@ -4393,8 +4406,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _DROPSYMBOLS_KEY->accept(v);
-                _drop_symbols->accept(v);
+                lpg_DROPSYMBOLS_KEY->accept(v);
+                lpg_drop_symbols->accept(v);
             }
             v->endVisit(this);
         }
@@ -4407,21 +4420,21 @@
      */
     struct drop_command1 :public ASTNode
     {
-        IAst *_DROPRULES_KEY;
-        IAst *_drop_rules;
+        IAst *lpg_DROPRULES_KEY;
+        IAst *lpg_drop_rules;
 
-        IAst *getDROPRULES_KEY() { return _DROPRULES_KEY; };
-        void setDROPRULES_KEY(IAst *_DROPRULES_KEY) { this->_DROPRULES_KEY = _DROPRULES_KEY; }
-        IAst *getdrop_rules() { return _drop_rules; };
-        void setdrop_rules(IAst *_drop_rules) { this->_drop_rules = _drop_rules; }
+        IAst *getDROPRULES_KEY() { return lpg_DROPRULES_KEY; };
+        void setDROPRULES_KEY(IAst *lpg_DROPRULES_KEY) { this->lpg_DROPRULES_KEY = lpg_DROPRULES_KEY; }
+        IAst *getdrop_rules() { return lpg_drop_rules; };
+        void setdrop_rules(IAst *lpg_drop_rules) { this->lpg_drop_rules = lpg_drop_rules; }
 
         drop_command1(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_DROPRULES_KEY,
-                      IAst *_drop_rules):ASTNode(leftIToken, rightIToken)    {
-            this->_DROPRULES_KEY = _DROPRULES_KEY;
-            ((ASTNode*) _DROPRULES_KEY)->setParent(this);
-            this->_drop_rules = _drop_rules;
-            ((ASTNode*) _drop_rules)->setParent(this);
+                      IAst *lpg_DROPRULES_KEY,
+                      IAst *lpg_drop_rules):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_DROPRULES_KEY = lpg_DROPRULES_KEY;
+            ((ASTNode*) lpg_DROPRULES_KEY)->setParent(this);
+            this->lpg_drop_rules = lpg_drop_rules;
+            ((ASTNode*) lpg_drop_rules)->setParent(this);
             initialize();
         }
 
@@ -4431,8 +4444,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_DROPRULES_KEY);
-            list.push_back(_drop_rules);
+            list.push_back(lpg_DROPRULES_KEY);
+            list.push_back(lpg_drop_rules);
             return list;
         }
 
@@ -4448,8 +4461,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _DROPRULES_KEY->accept(v);
-                _drop_rules->accept(v);
+                lpg_DROPRULES_KEY->accept(v);
+                lpg_drop_rules->accept(v);
             }
             v->endVisit(this);
         }
@@ -4759,24 +4772,24 @@
      */
     struct symWithAttrs1 :public ASTNode
     {
-        IAst *_SYMBOL;
-        IAst *_optAttrList;
+        IAst *lpg_SYMBOL;
+        IAst *lpg_optAttrList;
 
-        IAst *getSYMBOL() { return _SYMBOL; };
-        void setSYMBOL(IAst *_SYMBOL) { this->_SYMBOL = _SYMBOL; }
+        IAst *getSYMBOL() { return lpg_SYMBOL; };
+        void setSYMBOL(IAst *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
         /**
          * The value returned by <b>getoptAttrList</b> may be <b>nullptr</b>
          */
-        IAst *getoptAttrList() { return _optAttrList; };
-        void setoptAttrList(IAst *_optAttrList) { this->_optAttrList = _optAttrList; }
+        IAst *getoptAttrList() { return lpg_optAttrList; };
+        void setoptAttrList(IAst *lpg_optAttrList) { this->lpg_optAttrList = lpg_optAttrList; }
 
         symWithAttrs1(IToken* leftIToken, IToken* rightIToken,
-                      IAst *_SYMBOL,
-                      IAst *_optAttrList):ASTNode(leftIToken, rightIToken)    {
-            this->_SYMBOL = _SYMBOL;
-            ((ASTNode*) _SYMBOL)->setParent(this);
-            this->_optAttrList = _optAttrList;
-            if (_optAttrList != nullptr) ((ASTNode*) _optAttrList)->setParent(this);
+                      IAst *lpg_SYMBOL,
+                      IAst *lpg_optAttrList):ASTNode(leftIToken, rightIToken)    {
+            this->lpg_SYMBOL = lpg_SYMBOL;
+            ((ASTNode*) lpg_SYMBOL)->setParent(this);
+            this->lpg_optAttrList = lpg_optAttrList;
+            if (lpg_optAttrList != nullptr) ((ASTNode*) lpg_optAttrList)->setParent(this);
             initialize();
         }
 
@@ -4786,8 +4799,8 @@
         std::vector<IAst*> getAllChildren()
         {
             std::vector<IAst*> list;
-            list.push_back(_SYMBOL);
-            list.push_back(_optAttrList);
+            list.push_back(lpg_SYMBOL);
+            list.push_back(lpg_optAttrList);
             return list;
         }
 
@@ -4803,8 +4816,8 @@
             bool checkChildren = v->visit(this);
             if (checkChildren)
             {
-                _SYMBOL->accept(v);
-                if (_optAttrList != nullptr) _optAttrList->accept(v);
+                lpg_SYMBOL->accept(v);
+                if (lpg_optAttrList != nullptr) lpg_optAttrList->accept(v);
             }
             v->endVisit(this);
         }
@@ -5558,218 +5571,218 @@
      virtual   bool visit(ASTNode *n)
         {
             if (dynamic_cast<ASTNodeToken*>(n) ) return visit((ASTNodeToken*) n);
-            else if (dynamic_cast<LPG*>(n) ) return visit((LPG*) n);
-            else if (dynamic_cast<LPG_itemList*>(n) ) return visit((LPG_itemList*) n);
-            else if (dynamic_cast<AliasSeg*>(n) ) return visit((AliasSeg*) n);
-            else if (dynamic_cast<AstSeg*>(n) ) return visit((AstSeg*) n);
-            else if (dynamic_cast<DefineSeg*>(n) ) return visit((DefineSeg*) n);
-            else if (dynamic_cast<EofSeg*>(n) ) return visit((EofSeg*) n);
-            else if (dynamic_cast<EolSeg*>(n) ) return visit((EolSeg*) n);
-            else if (dynamic_cast<ErrorSeg*>(n) ) return visit((ErrorSeg*) n);
-            else if (dynamic_cast<ExportSeg*>(n) ) return visit((ExportSeg*) n);
-            else if (dynamic_cast<GlobalsSeg*>(n) ) return visit((GlobalsSeg*) n);
-            else if (dynamic_cast<HeadersSeg*>(n) ) return visit((HeadersSeg*) n);
-            else if (dynamic_cast<IdentifierSeg*>(n) ) return visit((IdentifierSeg*) n);
-            else if (dynamic_cast<ImportSeg*>(n) ) return visit((ImportSeg*) n);
-            else if (dynamic_cast<IncludeSeg*>(n) ) return visit((IncludeSeg*) n);
-            else if (dynamic_cast<KeywordsSeg*>(n) ) return visit((KeywordsSeg*) n);
-            else if (dynamic_cast<NamesSeg*>(n) ) return visit((NamesSeg*) n);
-            else if (dynamic_cast<NoticeSeg*>(n) ) return visit((NoticeSeg*) n);
-            else if (dynamic_cast<RulesSeg*>(n) ) return visit((RulesSeg*) n);
-            else if (dynamic_cast<SoftKeywordsSeg*>(n) ) return visit((SoftKeywordsSeg*) n);
-            else if (dynamic_cast<StartSeg*>(n) ) return visit((StartSeg*) n);
-            else if (dynamic_cast<TerminalsSeg*>(n) ) return visit((TerminalsSeg*) n);
-            else if (dynamic_cast<TrailersSeg*>(n) ) return visit((TrailersSeg*) n);
-            else if (dynamic_cast<TypesSeg*>(n) ) return visit((TypesSeg*) n);
-            else if (dynamic_cast<RecoverSeg*>(n) ) return visit((RecoverSeg*) n);
-            else if (dynamic_cast<PredecessorSeg*>(n) ) return visit((PredecessorSeg*) n);
-            else if (dynamic_cast<option_specList*>(n) ) return visit((option_specList*) n);
-            else if (dynamic_cast<option_spec*>(n) ) return visit((option_spec*) n);
-            else if (dynamic_cast<optionList*>(n) ) return visit((optionList*) n);
-            else if (dynamic_cast<option*>(n) ) return visit((option*) n);
-            else if (dynamic_cast<SYMBOLList*>(n) ) return visit((SYMBOLList*) n);
-            else if (dynamic_cast<aliasSpecList*>(n) ) return visit((aliasSpecList*) n);
-            else if (dynamic_cast<alias_lhs_macro_name*>(n) ) return visit((alias_lhs_macro_name*) n);
-            else if (dynamic_cast<defineSpecList*>(n) ) return visit((defineSpecList*) n);
-            else if (dynamic_cast<defineSpec*>(n) ) return visit((defineSpec*) n);
-            else if (dynamic_cast<macro_segment*>(n) ) return visit((macro_segment*) n);
-            else if (dynamic_cast<terminal_symbolList*>(n) ) return visit((terminal_symbolList*) n);
-            else if (dynamic_cast<action_segmentList*>(n) ) return visit((action_segmentList*) n);
-            else if (dynamic_cast<import_segment*>(n) ) return visit((import_segment*) n);
-            else if (dynamic_cast<drop_commandList*>(n) ) return visit((drop_commandList*) n);
-            else if (dynamic_cast<drop_ruleList*>(n) ) return visit((drop_ruleList*) n);
-            else if (dynamic_cast<drop_rule*>(n) ) return visit((drop_rule*) n);
-            else if (dynamic_cast<optMacroName*>(n) ) return visit((optMacroName*) n);
-            else if (dynamic_cast<include_segment*>(n) ) return visit((include_segment*) n);
-            else if (dynamic_cast<keywordSpecList*>(n) ) return visit((keywordSpecList*) n);
-            else if (dynamic_cast<keywordSpec*>(n) ) return visit((keywordSpec*) n);
-            else if (dynamic_cast<nameSpecList*>(n) ) return visit((nameSpecList*) n);
-            else if (dynamic_cast<nameSpec*>(n) ) return visit((nameSpec*) n);
-            else if (dynamic_cast<rules_segment*>(n) ) return visit((rules_segment*) n);
-            else if (dynamic_cast<nonTermList*>(n) ) return visit((nonTermList*) n);
-            else if (dynamic_cast<nonTerm*>(n) ) return visit((nonTerm*) n);
-            else if (dynamic_cast<RuleName*>(n) ) return visit((RuleName*) n);
-            else if (dynamic_cast<ruleList*>(n) ) return visit((ruleList*) n);
-            else if (dynamic_cast<rule*>(n) ) return visit((rule*) n);
-            else if (dynamic_cast<symWithAttrsList*>(n) ) return visit((symWithAttrsList*) n);
-            else if (dynamic_cast<symAttrs*>(n) ) return visit((symAttrs*) n);
-            else if (dynamic_cast<action_segment*>(n) ) return visit((action_segment*) n);
-            else if (dynamic_cast<start_symbolList*>(n) ) return visit((start_symbolList*) n);
-            else if (dynamic_cast<terminalList*>(n) ) return visit((terminalList*) n);
-            else if (dynamic_cast<terminal*>(n) ) return visit((terminal*) n);
-            else if (dynamic_cast<optTerminalAlias*>(n) ) return visit((optTerminalAlias*) n);
-            else if (dynamic_cast<type_declarationsList*>(n) ) return visit((type_declarationsList*) n);
-            else if (dynamic_cast<type_declarations*>(n) ) return visit((type_declarations*) n);
-            else if (dynamic_cast<symbol_pairList*>(n) ) return visit((symbol_pairList*) n);
-            else if (dynamic_cast<symbol_pair*>(n) ) return visit((symbol_pair*) n);
-            else if (dynamic_cast<recover_symbol*>(n) ) return visit((recover_symbol*) n);
-            else if (dynamic_cast<END_KEY_OPT*>(n) ) return visit((END_KEY_OPT*) n);
-            else if (dynamic_cast<option_value0*>(n) ) return visit((option_value0*) n);
-            else if (dynamic_cast<option_value1*>(n) ) return visit((option_value1*) n);
-            else if (dynamic_cast<aliasSpec0*>(n) ) return visit((aliasSpec0*) n);
-            else if (dynamic_cast<aliasSpec1*>(n) ) return visit((aliasSpec1*) n);
-            else if (dynamic_cast<aliasSpec2*>(n) ) return visit((aliasSpec2*) n);
-            else if (dynamic_cast<aliasSpec3*>(n) ) return visit((aliasSpec3*) n);
-            else if (dynamic_cast<aliasSpec4*>(n) ) return visit((aliasSpec4*) n);
-            else if (dynamic_cast<aliasSpec5*>(n) ) return visit((aliasSpec5*) n);
-            else if (dynamic_cast<alias_rhs0*>(n) ) return visit((alias_rhs0*) n);
-            else if (dynamic_cast<alias_rhs1*>(n) ) return visit((alias_rhs1*) n);
-            else if (dynamic_cast<alias_rhs2*>(n) ) return visit((alias_rhs2*) n);
-            else if (dynamic_cast<alias_rhs3*>(n) ) return visit((alias_rhs3*) n);
-            else if (dynamic_cast<alias_rhs4*>(n) ) return visit((alias_rhs4*) n);
-            else if (dynamic_cast<alias_rhs5*>(n) ) return visit((alias_rhs5*) n);
-            else if (dynamic_cast<alias_rhs6*>(n) ) return visit((alias_rhs6*) n);
-            else if (dynamic_cast<macro_name_symbol0*>(n) ) return visit((macro_name_symbol0*) n);
-            else if (dynamic_cast<macro_name_symbol1*>(n) ) return visit((macro_name_symbol1*) n);
-            else if (dynamic_cast<drop_command0*>(n) ) return visit((drop_command0*) n);
-            else if (dynamic_cast<drop_command1*>(n) ) return visit((drop_command1*) n);
-            else if (dynamic_cast<name0*>(n) ) return visit((name0*) n);
-            else if (dynamic_cast<name1*>(n) ) return visit((name1*) n);
-            else if (dynamic_cast<name2*>(n) ) return visit((name2*) n);
-            else if (dynamic_cast<name3*>(n) ) return visit((name3*) n);
-            else if (dynamic_cast<name4*>(n) ) return visit((name4*) n);
-            else if (dynamic_cast<name5*>(n) ) return visit((name5*) n);
-            else if (dynamic_cast<produces0*>(n) ) return visit((produces0*) n);
-            else if (dynamic_cast<produces1*>(n) ) return visit((produces1*) n);
-            else if (dynamic_cast<produces2*>(n) ) return visit((produces2*) n);
-            else if (dynamic_cast<produces3*>(n) ) return visit((produces3*) n);
-            else if (dynamic_cast<symWithAttrs0*>(n) ) return visit((symWithAttrs0*) n);
-            else if (dynamic_cast<symWithAttrs1*>(n) ) return visit((symWithAttrs1*) n);
-            else if (dynamic_cast<start_symbol0*>(n) ) return visit((start_symbol0*) n);
-            else if (dynamic_cast<start_symbol1*>(n) ) return visit((start_symbol1*) n);
-            else if (dynamic_cast<terminal_symbol0*>(n) ) return visit((terminal_symbol0*) n);
-            else if (dynamic_cast<terminal_symbol1*>(n) ) return visit((terminal_symbol1*) n);
+            if (dynamic_cast<LPG*>(n) ) return visit((LPG*) n);
+            if (dynamic_cast<LPG_itemList*>(n) ) return visit((LPG_itemList*) n);
+            if (dynamic_cast<AliasSeg*>(n) ) return visit((AliasSeg*) n);
+            if (dynamic_cast<AstSeg*>(n) ) return visit((AstSeg*) n);
+            if (dynamic_cast<DefineSeg*>(n) ) return visit((DefineSeg*) n);
+            if (dynamic_cast<EofSeg*>(n) ) return visit((EofSeg*) n);
+            if (dynamic_cast<EolSeg*>(n) ) return visit((EolSeg*) n);
+            if (dynamic_cast<ErrorSeg*>(n) ) return visit((ErrorSeg*) n);
+            if (dynamic_cast<ExportSeg*>(n) ) return visit((ExportSeg*) n);
+            if (dynamic_cast<GlobalsSeg*>(n) ) return visit((GlobalsSeg*) n);
+            if (dynamic_cast<HeadersSeg*>(n) ) return visit((HeadersSeg*) n);
+            if (dynamic_cast<IdentifierSeg*>(n) ) return visit((IdentifierSeg*) n);
+            if (dynamic_cast<ImportSeg*>(n) ) return visit((ImportSeg*) n);
+            if (dynamic_cast<IncludeSeg*>(n) ) return visit((IncludeSeg*) n);
+            if (dynamic_cast<KeywordsSeg*>(n) ) return visit((KeywordsSeg*) n);
+            if (dynamic_cast<NamesSeg*>(n) ) return visit((NamesSeg*) n);
+            if (dynamic_cast<NoticeSeg*>(n) ) return visit((NoticeSeg*) n);
+            if (dynamic_cast<RulesSeg*>(n) ) return visit((RulesSeg*) n);
+            if (dynamic_cast<SoftKeywordsSeg*>(n) ) return visit((SoftKeywordsSeg*) n);
+            if (dynamic_cast<StartSeg*>(n) ) return visit((StartSeg*) n);
+            if (dynamic_cast<TerminalsSeg*>(n) ) return visit((TerminalsSeg*) n);
+            if (dynamic_cast<TrailersSeg*>(n) ) return visit((TrailersSeg*) n);
+            if (dynamic_cast<TypesSeg*>(n) ) return visit((TypesSeg*) n);
+            if (dynamic_cast<RecoverSeg*>(n) ) return visit((RecoverSeg*) n);
+            if (dynamic_cast<PredecessorSeg*>(n) ) return visit((PredecessorSeg*) n);
+            if (dynamic_cast<option_specList*>(n) ) return visit((option_specList*) n);
+            if (dynamic_cast<option_spec*>(n) ) return visit((option_spec*) n);
+            if (dynamic_cast<optionList*>(n) ) return visit((optionList*) n);
+            if (dynamic_cast<option*>(n) ) return visit((option*) n);
+            if (dynamic_cast<SYMBOLList*>(n) ) return visit((SYMBOLList*) n);
+            if (dynamic_cast<aliasSpecList*>(n) ) return visit((aliasSpecList*) n);
+            if (dynamic_cast<alias_lhs_macro_name*>(n) ) return visit((alias_lhs_macro_name*) n);
+            if (dynamic_cast<defineSpecList*>(n) ) return visit((defineSpecList*) n);
+            if (dynamic_cast<defineSpec*>(n) ) return visit((defineSpec*) n);
+            if (dynamic_cast<macro_segment*>(n) ) return visit((macro_segment*) n);
+            if (dynamic_cast<terminal_symbolList*>(n) ) return visit((terminal_symbolList*) n);
+            if (dynamic_cast<action_segmentList*>(n) ) return visit((action_segmentList*) n);
+            if (dynamic_cast<import_segment*>(n) ) return visit((import_segment*) n);
+            if (dynamic_cast<drop_commandList*>(n) ) return visit((drop_commandList*) n);
+            if (dynamic_cast<drop_ruleList*>(n) ) return visit((drop_ruleList*) n);
+            if (dynamic_cast<drop_rule*>(n) ) return visit((drop_rule*) n);
+            if (dynamic_cast<optMacroName*>(n) ) return visit((optMacroName*) n);
+            if (dynamic_cast<include_segment*>(n) ) return visit((include_segment*) n);
+            if (dynamic_cast<keywordSpecList*>(n) ) return visit((keywordSpecList*) n);
+            if (dynamic_cast<keywordSpec*>(n) ) return visit((keywordSpec*) n);
+            if (dynamic_cast<nameSpecList*>(n) ) return visit((nameSpecList*) n);
+            if (dynamic_cast<nameSpec*>(n) ) return visit((nameSpec*) n);
+            if (dynamic_cast<rules_segment*>(n) ) return visit((rules_segment*) n);
+            if (dynamic_cast<nonTermList*>(n) ) return visit((nonTermList*) n);
+            if (dynamic_cast<nonTerm*>(n) ) return visit((nonTerm*) n);
+            if (dynamic_cast<RuleName*>(n) ) return visit((RuleName*) n);
+            if (dynamic_cast<ruleList*>(n) ) return visit((ruleList*) n);
+            if (dynamic_cast<rule*>(n) ) return visit((rule*) n);
+            if (dynamic_cast<symWithAttrsList*>(n) ) return visit((symWithAttrsList*) n);
+            if (dynamic_cast<symAttrs*>(n) ) return visit((symAttrs*) n);
+            if (dynamic_cast<action_segment*>(n) ) return visit((action_segment*) n);
+            if (dynamic_cast<start_symbolList*>(n) ) return visit((start_symbolList*) n);
+            if (dynamic_cast<terminalList*>(n) ) return visit((terminalList*) n);
+            if (dynamic_cast<terminal*>(n) ) return visit((terminal*) n);
+            if (dynamic_cast<optTerminalAlias*>(n) ) return visit((optTerminalAlias*) n);
+            if (dynamic_cast<type_declarationsList*>(n) ) return visit((type_declarationsList*) n);
+            if (dynamic_cast<type_declarations*>(n) ) return visit((type_declarations*) n);
+            if (dynamic_cast<symbol_pairList*>(n) ) return visit((symbol_pairList*) n);
+            if (dynamic_cast<symbol_pair*>(n) ) return visit((symbol_pair*) n);
+            if (dynamic_cast<recover_symbol*>(n) ) return visit((recover_symbol*) n);
+            if (dynamic_cast<END_KEY_OPT*>(n) ) return visit((END_KEY_OPT*) n);
+            if (dynamic_cast<option_value0*>(n) ) return visit((option_value0*) n);
+            if (dynamic_cast<option_value1*>(n) ) return visit((option_value1*) n);
+            if (dynamic_cast<aliasSpec0*>(n) ) return visit((aliasSpec0*) n);
+            if (dynamic_cast<aliasSpec1*>(n) ) return visit((aliasSpec1*) n);
+            if (dynamic_cast<aliasSpec2*>(n) ) return visit((aliasSpec2*) n);
+            if (dynamic_cast<aliasSpec3*>(n) ) return visit((aliasSpec3*) n);
+            if (dynamic_cast<aliasSpec4*>(n) ) return visit((aliasSpec4*) n);
+            if (dynamic_cast<aliasSpec5*>(n) ) return visit((aliasSpec5*) n);
+            if (dynamic_cast<alias_rhs0*>(n) ) return visit((alias_rhs0*) n);
+            if (dynamic_cast<alias_rhs1*>(n) ) return visit((alias_rhs1*) n);
+            if (dynamic_cast<alias_rhs2*>(n) ) return visit((alias_rhs2*) n);
+            if (dynamic_cast<alias_rhs3*>(n) ) return visit((alias_rhs3*) n);
+            if (dynamic_cast<alias_rhs4*>(n) ) return visit((alias_rhs4*) n);
+            if (dynamic_cast<alias_rhs5*>(n) ) return visit((alias_rhs5*) n);
+            if (dynamic_cast<alias_rhs6*>(n) ) return visit((alias_rhs6*) n);
+            if (dynamic_cast<macro_name_symbol0*>(n) ) return visit((macro_name_symbol0*) n);
+            if (dynamic_cast<macro_name_symbol1*>(n) ) return visit((macro_name_symbol1*) n);
+            if (dynamic_cast<drop_command0*>(n) ) return visit((drop_command0*) n);
+            if (dynamic_cast<drop_command1*>(n) ) return visit((drop_command1*) n);
+            if (dynamic_cast<name0*>(n) ) return visit((name0*) n);
+            if (dynamic_cast<name1*>(n) ) return visit((name1*) n);
+            if (dynamic_cast<name2*>(n) ) return visit((name2*) n);
+            if (dynamic_cast<name3*>(n) ) return visit((name3*) n);
+            if (dynamic_cast<name4*>(n) ) return visit((name4*) n);
+            if (dynamic_cast<name5*>(n) ) return visit((name5*) n);
+            if (dynamic_cast<produces0*>(n) ) return visit((produces0*) n);
+            if (dynamic_cast<produces1*>(n) ) return visit((produces1*) n);
+            if (dynamic_cast<produces2*>(n) ) return visit((produces2*) n);
+            if (dynamic_cast<produces3*>(n) ) return visit((produces3*) n);
+            if (dynamic_cast<symWithAttrs0*>(n) ) return visit((symWithAttrs0*) n);
+            if (dynamic_cast<symWithAttrs1*>(n) ) return visit((symWithAttrs1*) n);
+            if (dynamic_cast<start_symbol0*>(n) ) return visit((start_symbol0*) n);
+            if (dynamic_cast<start_symbol1*>(n) ) return visit((start_symbol1*) n);
+            if (dynamic_cast<terminal_symbol0*>(n) ) return visit((terminal_symbol0*) n);
+            if (dynamic_cast<terminal_symbol1*>(n) ) return visit((terminal_symbol1*) n);
             throw UnsupportedOperationException("visit(" + n->to_utf8_string() + ")");
         }
       virtual  void endVisit(ASTNode *n)
         {
-            if (dynamic_cast<ASTNodeToken*>(n) ) endVisit((ASTNodeToken*) n);
-            else if (dynamic_cast<LPG*>(n) ) endVisit((LPG*) n);
-            else if (dynamic_cast<LPG_itemList*>(n) ) endVisit((LPG_itemList*) n);
-            else if (dynamic_cast<AliasSeg*>(n) ) endVisit((AliasSeg*) n);
-            else if (dynamic_cast<AstSeg*>(n) ) endVisit((AstSeg*) n);
-            else if (dynamic_cast<DefineSeg*>(n) ) endVisit((DefineSeg*) n);
-            else if (dynamic_cast<EofSeg*>(n) ) endVisit((EofSeg*) n);
-            else if (dynamic_cast<EolSeg*>(n) ) endVisit((EolSeg*) n);
-            else if (dynamic_cast<ErrorSeg*>(n) ) endVisit((ErrorSeg*) n);
-            else if (dynamic_cast<ExportSeg*>(n) ) endVisit((ExportSeg*) n);
-            else if (dynamic_cast<GlobalsSeg*>(n) ) endVisit((GlobalsSeg*) n);
-            else if (dynamic_cast<HeadersSeg*>(n) ) endVisit((HeadersSeg*) n);
-            else if (dynamic_cast<IdentifierSeg*>(n) ) endVisit((IdentifierSeg*) n);
-            else if (dynamic_cast<ImportSeg*>(n) ) endVisit((ImportSeg*) n);
-            else if (dynamic_cast<IncludeSeg*>(n) ) endVisit((IncludeSeg*) n);
-            else if (dynamic_cast<KeywordsSeg*>(n) ) endVisit((KeywordsSeg*) n);
-            else if (dynamic_cast<NamesSeg*>(n) ) endVisit((NamesSeg*) n);
-            else if (dynamic_cast<NoticeSeg*>(n) ) endVisit((NoticeSeg*) n);
-            else if (dynamic_cast<RulesSeg*>(n) ) endVisit((RulesSeg*) n);
-            else if (dynamic_cast<SoftKeywordsSeg*>(n) ) endVisit((SoftKeywordsSeg*) n);
-            else if (dynamic_cast<StartSeg*>(n) ) endVisit((StartSeg*) n);
-            else if (dynamic_cast<TerminalsSeg*>(n) ) endVisit((TerminalsSeg*) n);
-            else if (dynamic_cast<TrailersSeg*>(n) ) endVisit((TrailersSeg*) n);
-            else if (dynamic_cast<TypesSeg*>(n) ) endVisit((TypesSeg*) n);
-            else if (dynamic_cast<RecoverSeg*>(n) ) endVisit((RecoverSeg*) n);
-            else if (dynamic_cast<PredecessorSeg*>(n) ) endVisit((PredecessorSeg*) n);
-            else if (dynamic_cast<option_specList*>(n) ) endVisit((option_specList*) n);
-            else if (dynamic_cast<option_spec*>(n) ) endVisit((option_spec*) n);
-            else if (dynamic_cast<optionList*>(n) ) endVisit((optionList*) n);
-            else if (dynamic_cast<option*>(n) ) endVisit((option*) n);
-            else if (dynamic_cast<SYMBOLList*>(n) ) endVisit((SYMBOLList*) n);
-            else if (dynamic_cast<aliasSpecList*>(n) ) endVisit((aliasSpecList*) n);
-            else if (dynamic_cast<alias_lhs_macro_name*>(n) ) endVisit((alias_lhs_macro_name*) n);
-            else if (dynamic_cast<defineSpecList*>(n) ) endVisit((defineSpecList*) n);
-            else if (dynamic_cast<defineSpec*>(n) ) endVisit((defineSpec*) n);
-            else if (dynamic_cast<macro_segment*>(n) ) endVisit((macro_segment*) n);
-            else if (dynamic_cast<terminal_symbolList*>(n) ) endVisit((terminal_symbolList*) n);
-            else if (dynamic_cast<action_segmentList*>(n) ) endVisit((action_segmentList*) n);
-            else if (dynamic_cast<import_segment*>(n) ) endVisit((import_segment*) n);
-            else if (dynamic_cast<drop_commandList*>(n) ) endVisit((drop_commandList*) n);
-            else if (dynamic_cast<drop_ruleList*>(n) ) endVisit((drop_ruleList*) n);
-            else if (dynamic_cast<drop_rule*>(n) ) endVisit((drop_rule*) n);
-            else if (dynamic_cast<optMacroName*>(n) ) endVisit((optMacroName*) n);
-            else if (dynamic_cast<include_segment*>(n) ) endVisit((include_segment*) n);
-            else if (dynamic_cast<keywordSpecList*>(n) ) endVisit((keywordSpecList*) n);
-            else if (dynamic_cast<keywordSpec*>(n) ) endVisit((keywordSpec*) n);
-            else if (dynamic_cast<nameSpecList*>(n) ) endVisit((nameSpecList*) n);
-            else if (dynamic_cast<nameSpec*>(n) ) endVisit((nameSpec*) n);
-            else if (dynamic_cast<rules_segment*>(n) ) endVisit((rules_segment*) n);
-            else if (dynamic_cast<nonTermList*>(n) ) endVisit((nonTermList*) n);
-            else if (dynamic_cast<nonTerm*>(n) ) endVisit((nonTerm*) n);
-            else if (dynamic_cast<RuleName*>(n) ) endVisit((RuleName*) n);
-            else if (dynamic_cast<ruleList*>(n) ) endVisit((ruleList*) n);
-            else if (dynamic_cast<rule*>(n) ) endVisit((rule*) n);
-            else if (dynamic_cast<symWithAttrsList*>(n) ) endVisit((symWithAttrsList*) n);
-            else if (dynamic_cast<symAttrs*>(n) ) endVisit((symAttrs*) n);
-            else if (dynamic_cast<action_segment*>(n) ) endVisit((action_segment*) n);
-            else if (dynamic_cast<start_symbolList*>(n) ) endVisit((start_symbolList*) n);
-            else if (dynamic_cast<terminalList*>(n) ) endVisit((terminalList*) n);
-            else if (dynamic_cast<terminal*>(n) ) endVisit((terminal*) n);
-            else if (dynamic_cast<optTerminalAlias*>(n) ) endVisit((optTerminalAlias*) n);
-            else if (dynamic_cast<type_declarationsList*>(n) ) endVisit((type_declarationsList*) n);
-            else if (dynamic_cast<type_declarations*>(n) ) endVisit((type_declarations*) n);
-            else if (dynamic_cast<symbol_pairList*>(n) ) endVisit((symbol_pairList*) n);
-            else if (dynamic_cast<symbol_pair*>(n) ) endVisit((symbol_pair*) n);
-            else if (dynamic_cast<recover_symbol*>(n) ) endVisit((recover_symbol*) n);
-            else if (dynamic_cast<END_KEY_OPT*>(n) ) endVisit((END_KEY_OPT*) n);
-            else if (dynamic_cast<option_value0*>(n) ) endVisit((option_value0*) n);
-            else if (dynamic_cast<option_value1*>(n) ) endVisit((option_value1*) n);
-            else if (dynamic_cast<aliasSpec0*>(n) ) endVisit((aliasSpec0*) n);
-            else if (dynamic_cast<aliasSpec1*>(n) ) endVisit((aliasSpec1*) n);
-            else if (dynamic_cast<aliasSpec2*>(n) ) endVisit((aliasSpec2*) n);
-            else if (dynamic_cast<aliasSpec3*>(n) ) endVisit((aliasSpec3*) n);
-            else if (dynamic_cast<aliasSpec4*>(n) ) endVisit((aliasSpec4*) n);
-            else if (dynamic_cast<aliasSpec5*>(n) ) endVisit((aliasSpec5*) n);
-            else if (dynamic_cast<alias_rhs0*>(n) ) endVisit((alias_rhs0*) n);
-            else if (dynamic_cast<alias_rhs1*>(n) ) endVisit((alias_rhs1*) n);
-            else if (dynamic_cast<alias_rhs2*>(n) ) endVisit((alias_rhs2*) n);
-            else if (dynamic_cast<alias_rhs3*>(n) ) endVisit((alias_rhs3*) n);
-            else if (dynamic_cast<alias_rhs4*>(n) ) endVisit((alias_rhs4*) n);
-            else if (dynamic_cast<alias_rhs5*>(n) ) endVisit((alias_rhs5*) n);
-            else if (dynamic_cast<alias_rhs6*>(n) ) endVisit((alias_rhs6*) n);
-            else if (dynamic_cast<macro_name_symbol0*>(n) ) endVisit((macro_name_symbol0*) n);
-            else if (dynamic_cast<macro_name_symbol1*>(n) ) endVisit((macro_name_symbol1*) n);
-            else if (dynamic_cast<drop_command0*>(n) ) endVisit((drop_command0*) n);
-            else if (dynamic_cast<drop_command1*>(n) ) endVisit((drop_command1*) n);
-            else if (dynamic_cast<name0*>(n) ) endVisit((name0*) n);
-            else if (dynamic_cast<name1*>(n) ) endVisit((name1*) n);
-            else if (dynamic_cast<name2*>(n) ) endVisit((name2*) n);
-            else if (dynamic_cast<name3*>(n) ) endVisit((name3*) n);
-            else if (dynamic_cast<name4*>(n) ) endVisit((name4*) n);
-            else if (dynamic_cast<name5*>(n) ) endVisit((name5*) n);
-            else if (dynamic_cast<produces0*>(n) ) endVisit((produces0*) n);
-            else if (dynamic_cast<produces1*>(n) ) endVisit((produces1*) n);
-            else if (dynamic_cast<produces2*>(n) ) endVisit((produces2*) n);
-            else if (dynamic_cast<produces3*>(n) ) endVisit((produces3*) n);
-            else if (dynamic_cast<symWithAttrs0*>(n) ) endVisit((symWithAttrs0*) n);
-            else if (dynamic_cast<symWithAttrs1*>(n) ) endVisit((symWithAttrs1*) n);
-            else if (dynamic_cast<start_symbol0*>(n) ) endVisit((start_symbol0*) n);
-            else if (dynamic_cast<start_symbol1*>(n) ) endVisit((start_symbol1*) n);
-            else if (dynamic_cast<terminal_symbol0*>(n) ) endVisit((terminal_symbol0*) n);
-            else if (dynamic_cast<terminal_symbol1*>(n) ) endVisit((terminal_symbol1*) n);
+            if (dynamic_cast<ASTNodeToken*>(n) ) endVisit((ASTNodeToken*) n);return;
+            if (dynamic_cast<LPG*>(n) ) endVisit((LPG*) n);return;
+            if (dynamic_cast<LPG_itemList*>(n) ) endVisit((LPG_itemList*) n);return;
+            if (dynamic_cast<AliasSeg*>(n) ) endVisit((AliasSeg*) n);return;
+            if (dynamic_cast<AstSeg*>(n) ) endVisit((AstSeg*) n);return;
+            if (dynamic_cast<DefineSeg*>(n) ) endVisit((DefineSeg*) n);return;
+            if (dynamic_cast<EofSeg*>(n) ) endVisit((EofSeg*) n);return;
+            if (dynamic_cast<EolSeg*>(n) ) endVisit((EolSeg*) n);return;
+            if (dynamic_cast<ErrorSeg*>(n) ) endVisit((ErrorSeg*) n);return;
+            if (dynamic_cast<ExportSeg*>(n) ) endVisit((ExportSeg*) n);return;
+            if (dynamic_cast<GlobalsSeg*>(n) ) endVisit((GlobalsSeg*) n);return;
+            if (dynamic_cast<HeadersSeg*>(n) ) endVisit((HeadersSeg*) n);return;
+            if (dynamic_cast<IdentifierSeg*>(n) ) endVisit((IdentifierSeg*) n);return;
+            if (dynamic_cast<ImportSeg*>(n) ) endVisit((ImportSeg*) n);return;
+            if (dynamic_cast<IncludeSeg*>(n) ) endVisit((IncludeSeg*) n);return;
+            if (dynamic_cast<KeywordsSeg*>(n) ) endVisit((KeywordsSeg*) n);return;
+            if (dynamic_cast<NamesSeg*>(n) ) endVisit((NamesSeg*) n);return;
+            if (dynamic_cast<NoticeSeg*>(n) ) endVisit((NoticeSeg*) n);return;
+            if (dynamic_cast<RulesSeg*>(n) ) endVisit((RulesSeg*) n);return;
+            if (dynamic_cast<SoftKeywordsSeg*>(n) ) endVisit((SoftKeywordsSeg*) n);return;
+            if (dynamic_cast<StartSeg*>(n) ) endVisit((StartSeg*) n);return;
+            if (dynamic_cast<TerminalsSeg*>(n) ) endVisit((TerminalsSeg*) n);return;
+            if (dynamic_cast<TrailersSeg*>(n) ) endVisit((TrailersSeg*) n);return;
+            if (dynamic_cast<TypesSeg*>(n) ) endVisit((TypesSeg*) n);return;
+            if (dynamic_cast<RecoverSeg*>(n) ) endVisit((RecoverSeg*) n);return;
+            if (dynamic_cast<PredecessorSeg*>(n) ) endVisit((PredecessorSeg*) n);return;
+            if (dynamic_cast<option_specList*>(n) ) endVisit((option_specList*) n);return;
+            if (dynamic_cast<option_spec*>(n) ) endVisit((option_spec*) n);return;
+            if (dynamic_cast<optionList*>(n) ) endVisit((optionList*) n);return;
+            if (dynamic_cast<option*>(n) ) endVisit((option*) n);return;
+            if (dynamic_cast<SYMBOLList*>(n) ) endVisit((SYMBOLList*) n);return;
+            if (dynamic_cast<aliasSpecList*>(n) ) endVisit((aliasSpecList*) n);return;
+            if (dynamic_cast<alias_lhs_macro_name*>(n) ) endVisit((alias_lhs_macro_name*) n);return;
+            if (dynamic_cast<defineSpecList*>(n) ) endVisit((defineSpecList*) n);return;
+            if (dynamic_cast<defineSpec*>(n) ) endVisit((defineSpec*) n);return;
+            if (dynamic_cast<macro_segment*>(n) ) endVisit((macro_segment*) n);return;
+            if (dynamic_cast<terminal_symbolList*>(n) ) endVisit((terminal_symbolList*) n);return;
+            if (dynamic_cast<action_segmentList*>(n) ) endVisit((action_segmentList*) n);return;
+            if (dynamic_cast<import_segment*>(n) ) endVisit((import_segment*) n);return;
+            if (dynamic_cast<drop_commandList*>(n) ) endVisit((drop_commandList*) n);return;
+            if (dynamic_cast<drop_ruleList*>(n) ) endVisit((drop_ruleList*) n);return;
+            if (dynamic_cast<drop_rule*>(n) ) endVisit((drop_rule*) n);return;
+            if (dynamic_cast<optMacroName*>(n) ) endVisit((optMacroName*) n);return;
+            if (dynamic_cast<include_segment*>(n) ) endVisit((include_segment*) n);return;
+            if (dynamic_cast<keywordSpecList*>(n) ) endVisit((keywordSpecList*) n);return;
+            if (dynamic_cast<keywordSpec*>(n) ) endVisit((keywordSpec*) n);return;
+            if (dynamic_cast<nameSpecList*>(n) ) endVisit((nameSpecList*) n);return;
+            if (dynamic_cast<nameSpec*>(n) ) endVisit((nameSpec*) n);return;
+            if (dynamic_cast<rules_segment*>(n) ) endVisit((rules_segment*) n);return;
+            if (dynamic_cast<nonTermList*>(n) ) endVisit((nonTermList*) n);return;
+            if (dynamic_cast<nonTerm*>(n) ) endVisit((nonTerm*) n);return;
+            if (dynamic_cast<RuleName*>(n) ) endVisit((RuleName*) n);return;
+            if (dynamic_cast<ruleList*>(n) ) endVisit((ruleList*) n);return;
+            if (dynamic_cast<rule*>(n) ) endVisit((rule*) n);return;
+            if (dynamic_cast<symWithAttrsList*>(n) ) endVisit((symWithAttrsList*) n);return;
+            if (dynamic_cast<symAttrs*>(n) ) endVisit((symAttrs*) n);return;
+            if (dynamic_cast<action_segment*>(n) ) endVisit((action_segment*) n);return;
+            if (dynamic_cast<start_symbolList*>(n) ) endVisit((start_symbolList*) n);return;
+            if (dynamic_cast<terminalList*>(n) ) endVisit((terminalList*) n);return;
+            if (dynamic_cast<terminal*>(n) ) endVisit((terminal*) n);return;
+            if (dynamic_cast<optTerminalAlias*>(n) ) endVisit((optTerminalAlias*) n);return;
+            if (dynamic_cast<type_declarationsList*>(n) ) endVisit((type_declarationsList*) n);return;
+            if (dynamic_cast<type_declarations*>(n) ) endVisit((type_declarations*) n);return;
+            if (dynamic_cast<symbol_pairList*>(n) ) endVisit((symbol_pairList*) n);return;
+            if (dynamic_cast<symbol_pair*>(n) ) endVisit((symbol_pair*) n);return;
+            if (dynamic_cast<recover_symbol*>(n) ) endVisit((recover_symbol*) n);return;
+            if (dynamic_cast<END_KEY_OPT*>(n) ) endVisit((END_KEY_OPT*) n);return;
+            if (dynamic_cast<option_value0*>(n) ) endVisit((option_value0*) n);return;
+            if (dynamic_cast<option_value1*>(n) ) endVisit((option_value1*) n);return;
+            if (dynamic_cast<aliasSpec0*>(n) ) endVisit((aliasSpec0*) n);return;
+            if (dynamic_cast<aliasSpec1*>(n) ) endVisit((aliasSpec1*) n);return;
+            if (dynamic_cast<aliasSpec2*>(n) ) endVisit((aliasSpec2*) n);return;
+            if (dynamic_cast<aliasSpec3*>(n) ) endVisit((aliasSpec3*) n);return;
+            if (dynamic_cast<aliasSpec4*>(n) ) endVisit((aliasSpec4*) n);return;
+            if (dynamic_cast<aliasSpec5*>(n) ) endVisit((aliasSpec5*) n);return;
+            if (dynamic_cast<alias_rhs0*>(n) ) endVisit((alias_rhs0*) n);return;
+            if (dynamic_cast<alias_rhs1*>(n) ) endVisit((alias_rhs1*) n);return;
+            if (dynamic_cast<alias_rhs2*>(n) ) endVisit((alias_rhs2*) n);return;
+            if (dynamic_cast<alias_rhs3*>(n) ) endVisit((alias_rhs3*) n);return;
+            if (dynamic_cast<alias_rhs4*>(n) ) endVisit((alias_rhs4*) n);return;
+            if (dynamic_cast<alias_rhs5*>(n) ) endVisit((alias_rhs5*) n);return;
+            if (dynamic_cast<alias_rhs6*>(n) ) endVisit((alias_rhs6*) n);return;
+            if (dynamic_cast<macro_name_symbol0*>(n) ) endVisit((macro_name_symbol0*) n);return;
+            if (dynamic_cast<macro_name_symbol1*>(n) ) endVisit((macro_name_symbol1*) n);return;
+            if (dynamic_cast<drop_command0*>(n) ) endVisit((drop_command0*) n);return;
+            if (dynamic_cast<drop_command1*>(n) ) endVisit((drop_command1*) n);return;
+            if (dynamic_cast<name0*>(n) ) endVisit((name0*) n);return;
+            if (dynamic_cast<name1*>(n) ) endVisit((name1*) n);return;
+            if (dynamic_cast<name2*>(n) ) endVisit((name2*) n);return;
+            if (dynamic_cast<name3*>(n) ) endVisit((name3*) n);return;
+            if (dynamic_cast<name4*>(n) ) endVisit((name4*) n);return;
+            if (dynamic_cast<name5*>(n) ) endVisit((name5*) n);return;
+            if (dynamic_cast<produces0*>(n) ) endVisit((produces0*) n);return;
+            if (dynamic_cast<produces1*>(n) ) endVisit((produces1*) n);return;
+            if (dynamic_cast<produces2*>(n) ) endVisit((produces2*) n);return;
+            if (dynamic_cast<produces3*>(n) ) endVisit((produces3*) n);return;
+            if (dynamic_cast<symWithAttrs0*>(n) ) endVisit((symWithAttrs0*) n);return;
+            if (dynamic_cast<symWithAttrs1*>(n) ) endVisit((symWithAttrs1*) n);return;
+            if (dynamic_cast<start_symbol0*>(n) ) endVisit((start_symbol0*) n);return;
+            if (dynamic_cast<start_symbol1*>(n) ) endVisit((start_symbol1*) n);return;
+            if (dynamic_cast<terminal_symbol0*>(n) ) endVisit((terminal_symbol0*) n);return;
+            if (dynamic_cast<terminal_symbol1*>(n) ) endVisit((terminal_symbol1*) n);return;
             throw UnsupportedOperationException("visit(" + n->to_utf8_string() + ")");
         }
     };
 
-    //#line 351 "btParserTemplateF.gi
+    //#line 357 "btParserTemplateF.gi
 
  
      void ruleAction(int ruleNumber)
@@ -5784,7 +5797,7 @@
                //#line 43 "LPGParser.g"
                 setResult(
                     //#line 43 LPGParser.g
-                    ast_pool.Next()=new LPG(this, getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new LPG(this, getLeftIToken(), getRightIToken(),
                             //#line 43 LPGParser.g
                             (IAst*)getRhsSym(1),
                             //#line 43 LPGParser.g
@@ -5800,7 +5813,7 @@
                //#line 48 "LPGParser.g"
                 setResult(
                     //#line 48 LPGParser.g
-                    ast_pool.Next()=new LPG_itemList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new LPG_itemList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 48 LPGParser.g
                 );
             break;
@@ -5820,7 +5833,7 @@
                //#line 52 "LPGParser.g"
                 setResult(
                     //#line 52 LPGParser.g
-                    ast_pool.Next()=new AliasSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new AliasSeg(getLeftIToken(), getRightIToken(),
                                  //#line 52 LPGParser.g
                                  (IAst*)getRhsSym(2))
                 //#line 52 LPGParser.g
@@ -5834,7 +5847,7 @@
                //#line 53 "LPGParser.g"
                 setResult(
                     //#line 53 LPGParser.g
-                    ast_pool.Next()=new AstSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new AstSeg(getLeftIToken(), getRightIToken(),
                                //#line 53 LPGParser.g
                                (IAst*)getRhsSym(2))
                 //#line 53 LPGParser.g
@@ -5848,7 +5861,7 @@
                //#line 54 "LPGParser.g"
                 setResult(
                     //#line 54 LPGParser.g
-                    ast_pool.Next()=new DefineSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new DefineSeg(getLeftIToken(), getRightIToken(),
                                   //#line 54 LPGParser.g
                                   (IAst*)getRhsSym(2))
                 //#line 54 LPGParser.g
@@ -5862,7 +5875,7 @@
                //#line 55 "LPGParser.g"
                 setResult(
                     //#line 55 LPGParser.g
-                    ast_pool.Next()=new EofSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new EofSeg(getLeftIToken(), getRightIToken(),
                                //#line 55 LPGParser.g
                                (IAst*)getRhsSym(2))
                 //#line 55 LPGParser.g
@@ -5876,7 +5889,7 @@
                //#line 56 "LPGParser.g"
                 setResult(
                     //#line 56 LPGParser.g
-                    ast_pool.Next()=new EolSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new EolSeg(getLeftIToken(), getRightIToken(),
                                //#line 56 LPGParser.g
                                (IAst*)getRhsSym(2))
                 //#line 56 LPGParser.g
@@ -5890,7 +5903,7 @@
                //#line 57 "LPGParser.g"
                 setResult(
                     //#line 57 LPGParser.g
-                    ast_pool.Next()=new ErrorSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new ErrorSeg(getLeftIToken(), getRightIToken(),
                                  //#line 57 LPGParser.g
                                  (IAst*)getRhsSym(2))
                 //#line 57 LPGParser.g
@@ -5904,7 +5917,7 @@
                //#line 58 "LPGParser.g"
                 setResult(
                     //#line 58 LPGParser.g
-                    ast_pool.Next()=new ExportSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new ExportSeg(getLeftIToken(), getRightIToken(),
                                   //#line 58 LPGParser.g
                                   (IAst*)getRhsSym(2))
                 //#line 58 LPGParser.g
@@ -5918,7 +5931,7 @@
                //#line 59 "LPGParser.g"
                 setResult(
                     //#line 59 LPGParser.g
-                    ast_pool.Next()=new GlobalsSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new GlobalsSeg(getLeftIToken(), getRightIToken(),
                                    //#line 59 LPGParser.g
                                    (IAst*)getRhsSym(2))
                 //#line 59 LPGParser.g
@@ -5932,7 +5945,7 @@
                //#line 60 "LPGParser.g"
                 setResult(
                     //#line 60 LPGParser.g
-                    ast_pool.Next()=new HeadersSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new HeadersSeg(getLeftIToken(), getRightIToken(),
                                    //#line 60 LPGParser.g
                                    (IAst*)getRhsSym(2))
                 //#line 60 LPGParser.g
@@ -5946,7 +5959,7 @@
                //#line 61 "LPGParser.g"
                 setResult(
                     //#line 61 LPGParser.g
-                    ast_pool.Next()=new IdentifierSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new IdentifierSeg(getLeftIToken(), getRightIToken(),
                                       //#line 61 LPGParser.g
                                       (IAst*)getRhsSym(2))
                 //#line 61 LPGParser.g
@@ -5960,7 +5973,7 @@
                //#line 62 "LPGParser.g"
                 setResult(
                     //#line 62 LPGParser.g
-                    ast_pool.Next()=new ImportSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new ImportSeg(getLeftIToken(), getRightIToken(),
                                   //#line 62 LPGParser.g
                                   (IAst*)getRhsSym(2))
                 //#line 62 LPGParser.g
@@ -5974,7 +5987,7 @@
                //#line 63 "LPGParser.g"
                 setResult(
                     //#line 63 LPGParser.g
-                    ast_pool.Next()=new IncludeSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new IncludeSeg(getLeftIToken(), getRightIToken(),
                                    //#line 63 LPGParser.g
                                    (IAst*)getRhsSym(2))
                 //#line 63 LPGParser.g
@@ -5988,7 +6001,7 @@
                //#line 64 "LPGParser.g"
                 setResult(
                     //#line 64 LPGParser.g
-                    ast_pool.Next()=new KeywordsSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new KeywordsSeg(getLeftIToken(), getRightIToken(),
                                     //#line 64 LPGParser.g
                                     (IAst*)getRhsSym(2))
                 //#line 64 LPGParser.g
@@ -6002,7 +6015,7 @@
                //#line 65 "LPGParser.g"
                 setResult(
                     //#line 65 LPGParser.g
-                    ast_pool.Next()=new NamesSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new NamesSeg(getLeftIToken(), getRightIToken(),
                                  //#line 65 LPGParser.g
                                  (IAst*)getRhsSym(2))
                 //#line 65 LPGParser.g
@@ -6016,7 +6029,7 @@
                //#line 66 "LPGParser.g"
                 setResult(
                     //#line 66 LPGParser.g
-                    ast_pool.Next()=new NoticeSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new NoticeSeg(getLeftIToken(), getRightIToken(),
                                   //#line 66 LPGParser.g
                                   (IAst*)getRhsSym(2))
                 //#line 66 LPGParser.g
@@ -6030,7 +6043,7 @@
                //#line 67 "LPGParser.g"
                 setResult(
                     //#line 67 LPGParser.g
-                    ast_pool.Next()=new RulesSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new RulesSeg(getLeftIToken(), getRightIToken(),
                                  //#line 67 LPGParser.g
                                  (IAst*)getRhsSym(2))
                 //#line 67 LPGParser.g
@@ -6044,7 +6057,7 @@
                //#line 68 "LPGParser.g"
                 setResult(
                     //#line 68 LPGParser.g
-                    ast_pool.Next()=new SoftKeywordsSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new SoftKeywordsSeg(getLeftIToken(), getRightIToken(),
                                         //#line 68 LPGParser.g
                                         (IAst*)getRhsSym(2))
                 //#line 68 LPGParser.g
@@ -6058,7 +6071,7 @@
                //#line 69 "LPGParser.g"
                 setResult(
                     //#line 69 LPGParser.g
-                    ast_pool.Next()=new StartSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new StartSeg(getLeftIToken(), getRightIToken(),
                                  //#line 69 LPGParser.g
                                  (IAst*)getRhsSym(2))
                 //#line 69 LPGParser.g
@@ -6072,7 +6085,7 @@
                //#line 70 "LPGParser.g"
                 setResult(
                     //#line 70 LPGParser.g
-                    ast_pool.Next()=new TerminalsSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new TerminalsSeg(getLeftIToken(), getRightIToken(),
                                      //#line 70 LPGParser.g
                                      (IAst*)getRhsSym(2))
                 //#line 70 LPGParser.g
@@ -6086,7 +6099,7 @@
                //#line 71 "LPGParser.g"
                 setResult(
                     //#line 71 LPGParser.g
-                    ast_pool.Next()=new TrailersSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new TrailersSeg(getLeftIToken(), getRightIToken(),
                                     //#line 71 LPGParser.g
                                     (IAst*)getRhsSym(2))
                 //#line 71 LPGParser.g
@@ -6100,7 +6113,7 @@
                //#line 72 "LPGParser.g"
                 setResult(
                     //#line 72 LPGParser.g
-                    ast_pool.Next()=new TypesSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new TypesSeg(getLeftIToken(), getRightIToken(),
                                  //#line 72 LPGParser.g
                                  (IAst*)getRhsSym(2))
                 //#line 72 LPGParser.g
@@ -6114,7 +6127,7 @@
                //#line 73 "LPGParser.g"
                 setResult(
                     //#line 73 LPGParser.g
-                    ast_pool.Next()=new RecoverSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new RecoverSeg(getLeftIToken(), getRightIToken(),
                                    //#line 73 LPGParser.g
                                    (IAst*)getRhsSym(2))
                 //#line 73 LPGParser.g
@@ -6128,7 +6141,7 @@
                //#line 74 "LPGParser.g"
                 setResult(
                     //#line 74 LPGParser.g
-                    ast_pool.Next()=new PredecessorSeg(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new PredecessorSeg(getLeftIToken(), getRightIToken(),
                                        //#line 74 LPGParser.g
                                        (IAst*)getRhsSym(2))
                 //#line 74 LPGParser.g
@@ -6142,7 +6155,7 @@
                //#line 77 "LPGParser.g"
                 setResult(
                     //#line 77 LPGParser.g
-                    ast_pool.Next()=new option_specList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new option_specList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 77 LPGParser.g
                 );
             break;
@@ -6162,7 +6175,7 @@
                //#line 78 "LPGParser.g"
                 setResult(
                     //#line 78 LPGParser.g
-                    ast_pool.Next()=new option_spec(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new option_spec(getLeftIToken(), getRightIToken(),
                                     //#line 78 LPGParser.g
                                     (IAst*)getRhsSym(2))
                 //#line 78 LPGParser.g
@@ -6176,7 +6189,7 @@
                //#line 79 "LPGParser.g"
                 setResult(
                     //#line 79 LPGParser.g
-                    ast_pool.Next()=new optionList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new optionList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 79 LPGParser.g
                 );
             break;
@@ -6196,9 +6209,9 @@
                //#line 80 "LPGParser.g"
                 setResult(
                     //#line 80 LPGParser.g
-                    ast_pool.Next()=new option(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new option(getLeftIToken(), getRightIToken(),
                                //#line 80 LPGParser.g
-                               ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                               ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                //#line 80 LPGParser.g
                                (IAst*)getRhsSym(2))
                 //#line 80 LPGParser.g
@@ -6220,9 +6233,9 @@
                //#line 81 "LPGParser.g"
                 setResult(
                     //#line 81 LPGParser.g
-                    ast_pool.Next()=new option_value0(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new option_value0(getLeftIToken(), getRightIToken(),
                                       //#line 81 LPGParser.g
-                                      ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)))
+                                      ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(2)))
                 //#line 81 LPGParser.g
                 );
             break;
@@ -6234,7 +6247,7 @@
                //#line 81 "LPGParser.g"
                 setResult(
                     //#line 81 LPGParser.g
-                    ast_pool.Next()=new option_value1(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new option_value1(getLeftIToken(), getRightIToken(),
                                       //#line 81 LPGParser.g
                                       (IAst*)getRhsSym(3))
                 //#line 81 LPGParser.g
@@ -6248,7 +6261,7 @@
                //#line 83 "LPGParser.g"
                 setResult(
                     //#line 83 LPGParser.g
-                    ast_pool.Next()=new SYMBOLList(ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
+                    ast_pool.data.Next()=new SYMBOLList(ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
                 //#line 83 LPGParser.g
                 );
             break;
@@ -6258,7 +6271,7 @@
             //
             case 37: {
                //#line 84 "LPGParser.g"
-                ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.Next()=new ASTNodeToken(getRhsIToken(3)));
+                ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(3)));
             break;
             }
             //
@@ -6268,7 +6281,7 @@
                //#line 87 "LPGParser.g"
                 setResult(
                     //#line 87 LPGParser.g
-                    ast_pool.Next()=new aliasSpecList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new aliasSpecList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 87 LPGParser.g
                 );
             break;
@@ -6288,9 +6301,9 @@
                //#line 89 "LPGParser.g"
                 setResult(
                     //#line 89 LPGParser.g
-                    ast_pool.Next()=new aliasSpec0(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new aliasSpec0(getLeftIToken(), getRightIToken(),
                                    //#line 89 LPGParser.g
-                                   ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                   ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                    //#line 89 LPGParser.g
                                    (IAst*)getRhsSym(2),
                                    //#line 89 LPGParser.g
@@ -6306,9 +6319,9 @@
                //#line 90 "LPGParser.g"
                 setResult(
                     //#line 90 LPGParser.g
-                    ast_pool.Next()=new aliasSpec1(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new aliasSpec1(getLeftIToken(), getRightIToken(),
                                    //#line 90 LPGParser.g
-                                   ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                   ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                    //#line 90 LPGParser.g
                                    (IAst*)getRhsSym(2),
                                    //#line 90 LPGParser.g
@@ -6324,9 +6337,9 @@
                //#line 91 "LPGParser.g"
                 setResult(
                     //#line 91 LPGParser.g
-                    ast_pool.Next()=new aliasSpec2(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new aliasSpec2(getLeftIToken(), getRightIToken(),
                                    //#line 91 LPGParser.g
-                                   ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                   ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                    //#line 91 LPGParser.g
                                    (IAst*)getRhsSym(2),
                                    //#line 91 LPGParser.g
@@ -6342,9 +6355,9 @@
                //#line 92 "LPGParser.g"
                 setResult(
                     //#line 92 LPGParser.g
-                    ast_pool.Next()=new aliasSpec3(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new aliasSpec3(getLeftIToken(), getRightIToken(),
                                    //#line 92 LPGParser.g
-                                   ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                   ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                    //#line 92 LPGParser.g
                                    (IAst*)getRhsSym(2),
                                    //#line 92 LPGParser.g
@@ -6360,9 +6373,9 @@
                //#line 93 "LPGParser.g"
                 setResult(
                     //#line 93 LPGParser.g
-                    ast_pool.Next()=new aliasSpec4(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new aliasSpec4(getLeftIToken(), getRightIToken(),
                                    //#line 93 LPGParser.g
-                                   ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                   ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                    //#line 93 LPGParser.g
                                    (IAst*)getRhsSym(2),
                                    //#line 93 LPGParser.g
@@ -6378,7 +6391,7 @@
                //#line 94 "LPGParser.g"
                 setResult(
                     //#line 94 LPGParser.g
-                    ast_pool.Next()=new aliasSpec5(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new aliasSpec5(getLeftIToken(), getRightIToken(),
                                    //#line 94 LPGParser.g
                                    (IAst*)getRhsSym(1),
                                    //#line 94 LPGParser.g
@@ -6396,7 +6409,7 @@
                //#line 96 "LPGParser.g"
                 setResult(
                     //#line 96 LPGParser.g
-                    ast_pool.Next()=new alias_lhs_macro_name(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_lhs_macro_name(getRhsIToken(1))
                 //#line 96 LPGParser.g
                 );
             break;
@@ -6408,7 +6421,7 @@
                //#line 98 "LPGParser.g"
                 setResult(
                     //#line 98 LPGParser.g
-                    ast_pool.Next()=new alias_rhs0(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs0(getRhsIToken(1))
                 //#line 98 LPGParser.g
                 );
             break;
@@ -6420,7 +6433,7 @@
                //#line 99 "LPGParser.g"
                 setResult(
                     //#line 99 LPGParser.g
-                    ast_pool.Next()=new alias_rhs1(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs1(getRhsIToken(1))
                 //#line 99 LPGParser.g
                 );
             break;
@@ -6432,7 +6445,7 @@
                //#line 100 "LPGParser.g"
                 setResult(
                     //#line 100 LPGParser.g
-                    ast_pool.Next()=new alias_rhs2(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs2(getRhsIToken(1))
                 //#line 100 LPGParser.g
                 );
             break;
@@ -6444,7 +6457,7 @@
                //#line 101 "LPGParser.g"
                 setResult(
                     //#line 101 LPGParser.g
-                    ast_pool.Next()=new alias_rhs3(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs3(getRhsIToken(1))
                 //#line 101 LPGParser.g
                 );
             break;
@@ -6456,7 +6469,7 @@
                //#line 102 "LPGParser.g"
                 setResult(
                     //#line 102 LPGParser.g
-                    ast_pool.Next()=new alias_rhs4(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs4(getRhsIToken(1))
                 //#line 102 LPGParser.g
                 );
             break;
@@ -6468,7 +6481,7 @@
                //#line 103 "LPGParser.g"
                 setResult(
                     //#line 103 LPGParser.g
-                    ast_pool.Next()=new alias_rhs5(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs5(getRhsIToken(1))
                 //#line 103 LPGParser.g
                 );
             break;
@@ -6480,7 +6493,7 @@
                //#line 104 "LPGParser.g"
                 setResult(
                     //#line 104 LPGParser.g
-                    ast_pool.Next()=new alias_rhs6(getRhsIToken(1))
+                    ast_pool.data.Next()=new alias_rhs6(getRhsIToken(1))
                 //#line 104 LPGParser.g
                 );
             break;
@@ -6497,7 +6510,7 @@
                //#line 110 "LPGParser.g"
                 setResult(
                     //#line 110 LPGParser.g
-                    ast_pool.Next()=new defineSpecList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new defineSpecList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 110 LPGParser.g
                 );
             break;
@@ -6517,7 +6530,7 @@
                //#line 111 "LPGParser.g"
                 setResult(
                     //#line 111 LPGParser.g
-                    ast_pool.Next()=new defineSpec(this, getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new defineSpec(this, getLeftIToken(), getRightIToken(),
                                    //#line 111 LPGParser.g
                                    (IAst*)getRhsSym(1),
                                    //#line 111 LPGParser.g
@@ -6533,7 +6546,7 @@
                //#line 116 "LPGParser.g"
                 setResult(
                     //#line 116 LPGParser.g
-                    ast_pool.Next()=new macro_name_symbol0(getRhsIToken(1))
+                    ast_pool.data.Next()=new macro_name_symbol0(getRhsIToken(1))
                 //#line 116 LPGParser.g
                 );
             break;
@@ -6545,7 +6558,7 @@
                //#line 117 "LPGParser.g"
                 setResult(
                     //#line 117 LPGParser.g
-                    ast_pool.Next()=new macro_name_symbol1(getRhsIToken(1))
+                    ast_pool.data.Next()=new macro_name_symbol1(getRhsIToken(1))
                 //#line 117 LPGParser.g
                 );
             break;
@@ -6557,7 +6570,7 @@
                //#line 118 "LPGParser.g"
                 setResult(
                     //#line 118 LPGParser.g
-                    ast_pool.Next()=new macro_segment(getRhsIToken(1))
+                    ast_pool.data.Next()=new macro_segment(getRhsIToken(1))
                 //#line 118 LPGParser.g
                 );
             break;
@@ -6584,7 +6597,7 @@
                //#line 128 "LPGParser.g"
                 setResult(
                     //#line 128 LPGParser.g
-                    ast_pool.Next()=new terminal_symbolList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new terminal_symbolList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 128 LPGParser.g
                 );
             break;
@@ -6604,7 +6617,7 @@
                //#line 131 "LPGParser.g"
                 setResult(
                     //#line 131 LPGParser.g
-                    ast_pool.Next()=new action_segmentList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new action_segmentList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 131 LPGParser.g
                 );
             break;
@@ -6634,9 +6647,9 @@
                //#line 140 "LPGParser.g"
                 setResult(
                     //#line 140 LPGParser.g
-                    ast_pool.Next()=new import_segment(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new import_segment(getLeftIToken(), getRightIToken(),
                                        //#line 140 LPGParser.g
-                                       ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                       ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                        //#line 140 LPGParser.g
                                        (IAst*)getRhsSym(2))
                 //#line 140 LPGParser.g
@@ -6650,7 +6663,7 @@
                //#line 142 "LPGParser.g"
                 setResult(
                     //#line 142 LPGParser.g
-                    ast_pool.Next()=new drop_commandList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new drop_commandList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 142 LPGParser.g
                 );
             break;
@@ -6670,9 +6683,9 @@
                //#line 144 "LPGParser.g"
                 setResult(
                     //#line 144 LPGParser.g
-                    ast_pool.Next()=new drop_command0(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new drop_command0(getLeftIToken(), getRightIToken(),
                                       //#line 144 LPGParser.g
-                                      ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                      ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                       //#line 144 LPGParser.g
                                       (IAst*)getRhsSym(2))
                 //#line 144 LPGParser.g
@@ -6686,9 +6699,9 @@
                //#line 145 "LPGParser.g"
                 setResult(
                     //#line 145 LPGParser.g
-                    ast_pool.Next()=new drop_command1(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new drop_command1(getLeftIToken(), getRightIToken(),
                                       //#line 145 LPGParser.g
-                                      ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                      ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                       //#line 145 LPGParser.g
                                       (IAst*)getRhsSym(2))
                 //#line 145 LPGParser.g
@@ -6702,7 +6715,7 @@
                //#line 147 "LPGParser.g"
                 setResult(
                     //#line 147 LPGParser.g
-                    ast_pool.Next()=new SYMBOLList(ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
+                    ast_pool.data.Next()=new SYMBOLList(ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
                 //#line 147 LPGParser.g
                 );
             break;
@@ -6712,7 +6725,7 @@
             //
             case 76: {
                //#line 148 "LPGParser.g"
-                ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)));
+                ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(2)));
             break;
             }
             //
@@ -6722,7 +6735,7 @@
                //#line 149 "LPGParser.g"
                 setResult(
                     //#line 149 LPGParser.g
-                    ast_pool.Next()=new drop_ruleList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new drop_ruleList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 149 LPGParser.g
                 );
             break;
@@ -6742,9 +6755,9 @@
                //#line 152 "LPGParser.g"
                 setResult(
                     //#line 152 LPGParser.g
-                    ast_pool.Next()=new drop_rule(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new drop_rule(getLeftIToken(), getRightIToken(),
                                   //#line 152 LPGParser.g
-                                  ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                  ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                   //#line 152 LPGParser.g
                                   (IAst*)getRhsSym(2),
                                   //#line 152 LPGParser.g
@@ -6770,7 +6783,7 @@
                //#line 154 "LPGParser.g"
                 setResult(
                     //#line 154 LPGParser.g
-                    ast_pool.Next()=new optMacroName(getRhsIToken(1))
+                    ast_pool.data.Next()=new optMacroName(getRhsIToken(1))
                 //#line 154 LPGParser.g
                 );
             break;
@@ -6782,7 +6795,7 @@
                //#line 157 "LPGParser.g"
                 setResult(
                     //#line 157 LPGParser.g
-                    ast_pool.Next()=new include_segment(getRhsIToken(1))
+                    ast_pool.data.Next()=new include_segment(getRhsIToken(1))
                 //#line 157 LPGParser.g
                 );
             break;
@@ -6794,7 +6807,7 @@
                //#line 160 "LPGParser.g"
                 setResult(
                     //#line 160 LPGParser.g
-                    ast_pool.Next()=new keywordSpecList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new keywordSpecList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 160 LPGParser.g
                 );
             break;
@@ -6819,7 +6832,7 @@
                //#line 162 "LPGParser.g"
                 setResult(
                     //#line 162 LPGParser.g
-                    ast_pool.Next()=new keywordSpec(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new keywordSpec(getLeftIToken(), getRightIToken(),
                                     //#line 162 LPGParser.g
                                     (IAst*)getRhsSym(1),
                                     //#line 162 LPGParser.g
@@ -6837,7 +6850,7 @@
                //#line 165 "LPGParser.g"
                 setResult(
                     //#line 165 LPGParser.g
-                    ast_pool.Next()=new nameSpecList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new nameSpecList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 165 LPGParser.g
                 );
             break;
@@ -6857,7 +6870,7 @@
                //#line 166 "LPGParser.g"
                 setResult(
                     //#line 166 LPGParser.g
-                    ast_pool.Next()=new nameSpec(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new nameSpec(getLeftIToken(), getRightIToken(),
                                  //#line 166 LPGParser.g
                                  (IAst*)getRhsSym(1),
                                  //#line 166 LPGParser.g
@@ -6875,7 +6888,7 @@
                //#line 168 "LPGParser.g"
                 setResult(
                     //#line 168 LPGParser.g
-                    ast_pool.Next()=new name0(getRhsIToken(1))
+                    ast_pool.data.Next()=new name0(getRhsIToken(1))
                 //#line 168 LPGParser.g
                 );
             break;
@@ -6887,7 +6900,7 @@
                //#line 169 "LPGParser.g"
                 setResult(
                     //#line 169 LPGParser.g
-                    ast_pool.Next()=new name1(getRhsIToken(1))
+                    ast_pool.data.Next()=new name1(getRhsIToken(1))
                 //#line 169 LPGParser.g
                 );
             break;
@@ -6899,7 +6912,7 @@
                //#line 170 "LPGParser.g"
                 setResult(
                     //#line 170 LPGParser.g
-                    ast_pool.Next()=new name2(getRhsIToken(1))
+                    ast_pool.data.Next()=new name2(getRhsIToken(1))
                 //#line 170 LPGParser.g
                 );
             break;
@@ -6911,7 +6924,7 @@
                //#line 171 "LPGParser.g"
                 setResult(
                     //#line 171 LPGParser.g
-                    ast_pool.Next()=new name3(getRhsIToken(1))
+                    ast_pool.data.Next()=new name3(getRhsIToken(1))
                 //#line 171 LPGParser.g
                 );
             break;
@@ -6923,7 +6936,7 @@
                //#line 172 "LPGParser.g"
                 setResult(
                     //#line 172 LPGParser.g
-                    ast_pool.Next()=new name4(getRhsIToken(1))
+                    ast_pool.data.Next()=new name4(getRhsIToken(1))
                 //#line 172 LPGParser.g
                 );
             break;
@@ -6935,7 +6948,7 @@
                //#line 173 "LPGParser.g"
                 setResult(
                     //#line 173 LPGParser.g
-                    ast_pool.Next()=new name5(getRhsIToken(1))
+                    ast_pool.data.Next()=new name5(getRhsIToken(1))
                 //#line 173 LPGParser.g
                 );
             break;
@@ -6947,7 +6960,7 @@
                //#line 176 "LPGParser.g"
                 setResult(
                     //#line 176 LPGParser.g
-                    ast_pool.Next()=new action_segmentList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new action_segmentList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 176 LPGParser.g
                 );
             break;
@@ -6967,7 +6980,7 @@
                //#line 179 "LPGParser.g"
                 setResult(
                     //#line 179 LPGParser.g
-                    ast_pool.Next()=new rules_segment(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new rules_segment(getLeftIToken(), getRightIToken(),
                                       //#line 179 LPGParser.g
                                       (IAst*)getRhsSym(1),
                                       //#line 179 LPGParser.g
@@ -6983,7 +6996,7 @@
                //#line 181 "LPGParser.g"
                 setResult(
                     //#line 181 LPGParser.g
-                    ast_pool.Next()=new nonTermList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new nonTermList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 181 LPGParser.g
                 );
             break;
@@ -7003,7 +7016,7 @@
                //#line 183 "LPGParser.g"
                 setResult(
                     //#line 183 LPGParser.g
-                    ast_pool.Next()=new nonTerm(this, getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new nonTerm(this, getLeftIToken(), getRightIToken(),
                                 //#line 183 LPGParser.g
                                 (IAst*)getRhsSym(1),
                                 //#line 183 LPGParser.g
@@ -7021,9 +7034,9 @@
                //#line 189 "LPGParser.g"
                 setResult(
                     //#line 189 LPGParser.g
-                    ast_pool.Next()=new RuleName(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new RuleName(getLeftIToken(), getRightIToken(),
                                  //#line 189 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                  //#line 189 LPGParser.g
                                  nullptr,
                                  //#line 189 LPGParser.g
@@ -7039,11 +7052,11 @@
                //#line 190 "LPGParser.g"
                 setResult(
                     //#line 190 LPGParser.g
-                    ast_pool.Next()=new RuleName(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new RuleName(getLeftIToken(), getRightIToken(),
                                  //#line 190 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                  //#line 190 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)),
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(2)),
                                  //#line 190 LPGParser.g
                                  nullptr)
                 //#line 190 LPGParser.g
@@ -7057,13 +7070,13 @@
                //#line 191 "LPGParser.g"
                 setResult(
                     //#line 191 LPGParser.g
-                    ast_pool.Next()=new RuleName(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new RuleName(getLeftIToken(), getRightIToken(),
                                  //#line 191 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                  //#line 191 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)),
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(2)),
                                  //#line 191 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(3)))
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(3)))
                 //#line 191 LPGParser.g
                 );
             break;
@@ -7075,7 +7088,7 @@
                //#line 205 "LPGParser.g"
                 setResult(
                     //#line 205 LPGParser.g
-                    ast_pool.Next()=new ruleList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new ruleList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 205 LPGParser.g
                 );
             break;
@@ -7095,7 +7108,7 @@
                //#line 207 "LPGParser.g"
                 setResult(
                     //#line 207 LPGParser.g
-                    ast_pool.Next()=new produces0(getRhsIToken(1))
+                    ast_pool.data.Next()=new produces0(getRhsIToken(1))
                 //#line 207 LPGParser.g
                 );
             break;
@@ -7107,7 +7120,7 @@
                //#line 208 "LPGParser.g"
                 setResult(
                     //#line 208 LPGParser.g
-                    ast_pool.Next()=new produces1(getRhsIToken(1))
+                    ast_pool.data.Next()=new produces1(getRhsIToken(1))
                 //#line 208 LPGParser.g
                 );
             break;
@@ -7119,7 +7132,7 @@
                //#line 209 "LPGParser.g"
                 setResult(
                     //#line 209 LPGParser.g
-                    ast_pool.Next()=new produces2(getRhsIToken(1))
+                    ast_pool.data.Next()=new produces2(getRhsIToken(1))
                 //#line 209 LPGParser.g
                 );
             break;
@@ -7131,7 +7144,7 @@
                //#line 210 "LPGParser.g"
                 setResult(
                     //#line 210 LPGParser.g
-                    ast_pool.Next()=new produces3(getRhsIToken(1))
+                    ast_pool.data.Next()=new produces3(getRhsIToken(1))
                 //#line 210 LPGParser.g
                 );
             break;
@@ -7143,7 +7156,7 @@
                //#line 212 "LPGParser.g"
                 setResult(
                     //#line 212 LPGParser.g
-                    ast_pool.Next()=new rule(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new rule(getLeftIToken(), getRightIToken(),
                              //#line 212 LPGParser.g
                              (IAst*)getRhsSym(1),
                              //#line 212 LPGParser.g
@@ -7159,7 +7172,7 @@
                //#line 214 "LPGParser.g"
                 setResult(
                     //#line 214 LPGParser.g
-                    ast_pool.Next()=new symWithAttrsList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new symWithAttrsList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 214 LPGParser.g
                 );
             break;
@@ -7179,7 +7192,7 @@
                //#line 216 "LPGParser.g"
                 setResult(
                     //#line 216 LPGParser.g
-                    ast_pool.Next()=new symWithAttrs0(getRhsIToken(1))
+                    ast_pool.data.Next()=new symWithAttrs0(getRhsIToken(1))
                 //#line 216 LPGParser.g
                 );
             break;
@@ -7191,9 +7204,9 @@
                //#line 217 "LPGParser.g"
                 setResult(
                     //#line 217 LPGParser.g
-                    ast_pool.Next()=new symWithAttrs1(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new symWithAttrs1(getLeftIToken(), getRightIToken(),
                                       //#line 217 LPGParser.g
-                                      ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                      ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                       //#line 217 LPGParser.g
                                       (IAst*)getRhsSym(2))
                 //#line 217 LPGParser.g
@@ -7207,7 +7220,7 @@
                //#line 220 "LPGParser.g"
                 setResult(
                     //#line 220 LPGParser.g
-                    ast_pool.Next()=new symAttrs(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new symAttrs(getLeftIToken(), getRightIToken(),
                                  //#line 220 LPGParser.g
                                  nullptr)
                 //#line 220 LPGParser.g
@@ -7221,9 +7234,9 @@
                //#line 221 "LPGParser.g"
                 setResult(
                     //#line 221 LPGParser.g
-                    ast_pool.Next()=new symAttrs(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new symAttrs(getLeftIToken(), getRightIToken(),
                                  //#line 221 LPGParser.g
-                                 ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)))
+                                 ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)))
                 //#line 221 LPGParser.g
                 );
             break;
@@ -7248,7 +7261,7 @@
                //#line 225 "LPGParser.g"
                 setResult(
                     //#line 225 LPGParser.g
-                    ast_pool.Next()=new action_segment(this, getRhsIToken(1))
+                    ast_pool.data.Next()=new action_segment(this, getRhsIToken(1))
                 //#line 225 LPGParser.g
                 );
             break;
@@ -7260,7 +7273,7 @@
                //#line 231 "LPGParser.g"
                 setResult(
                     //#line 231 LPGParser.g
-                    ast_pool.Next()=new start_symbolList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new start_symbolList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 231 LPGParser.g
                 );
             break;
@@ -7280,7 +7293,7 @@
                //#line 232 "LPGParser.g"
                 setResult(
                     //#line 232 LPGParser.g
-                    ast_pool.Next()=new start_symbol0(getRhsIToken(1))
+                    ast_pool.data.Next()=new start_symbol0(getRhsIToken(1))
                 //#line 232 LPGParser.g
                 );
             break;
@@ -7292,7 +7305,7 @@
                //#line 233 "LPGParser.g"
                 setResult(
                     //#line 233 LPGParser.g
-                    ast_pool.Next()=new start_symbol1(getRhsIToken(1))
+                    ast_pool.data.Next()=new start_symbol1(getRhsIToken(1))
                 //#line 233 LPGParser.g
                 );
             break;
@@ -7304,7 +7317,7 @@
                //#line 236 "LPGParser.g"
                 setResult(
                     //#line 236 LPGParser.g
-                    ast_pool.Next()=new terminalList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new terminalList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 236 LPGParser.g
                 );
             break;
@@ -7324,7 +7337,7 @@
                //#line 239 "LPGParser.g"
                 setResult(
                     //#line 239 LPGParser.g
-                    ast_pool.Next()=new terminal(this, getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new terminal(this, getLeftIToken(), getRightIToken(),
                                  //#line 239 LPGParser.g
                                  (IAst*)getRhsSym(1),
                                  //#line 239 LPGParser.g
@@ -7348,7 +7361,7 @@
                //#line 243 "LPGParser.g"
                 setResult(
                     //#line 243 LPGParser.g
-                    ast_pool.Next()=new optTerminalAlias(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new optTerminalAlias(getLeftIToken(), getRightIToken(),
                                          //#line 243 LPGParser.g
                                          (IAst*)getRhsSym(1),
                                          //#line 243 LPGParser.g
@@ -7364,7 +7377,7 @@
                //#line 245 "LPGParser.g"
                 setResult(
                     //#line 245 LPGParser.g
-                    ast_pool.Next()=new terminal_symbol0(this, getRhsIToken(1))
+                    ast_pool.data.Next()=new terminal_symbol0(this, getRhsIToken(1))
                 //#line 245 LPGParser.g
                 );
             break;
@@ -7376,7 +7389,7 @@
                //#line 249 "LPGParser.g"
                 setResult(
                     //#line 249 LPGParser.g
-                    ast_pool.Next()=new terminal_symbol1(getRhsIToken(1))
+                    ast_pool.data.Next()=new terminal_symbol1(getRhsIToken(1))
                 //#line 249 LPGParser.g
                 );
             break;
@@ -7393,7 +7406,7 @@
                //#line 255 "LPGParser.g"
                 setResult(
                     //#line 255 LPGParser.g
-                    ast_pool.Next()=new type_declarationsList((IAst*)getRhsSym(1), true /* left recursive */)
+                    ast_pool.data.Next()=new type_declarationsList((IAst*)getRhsSym(1), true /* left recursive */)
                 //#line 255 LPGParser.g
                 );
             break;
@@ -7413,9 +7426,9 @@
                //#line 257 "LPGParser.g"
                 setResult(
                     //#line 257 LPGParser.g
-                    ast_pool.Next()=new type_declarations(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new type_declarations(getLeftIToken(), getRightIToken(),
                                           //#line 257 LPGParser.g
-                                          ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                          ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                           //#line 257 LPGParser.g
                                           (IAst*)getRhsSym(2),
                                           //#line 257 LPGParser.g
@@ -7431,7 +7444,7 @@
                //#line 258 "LPGParser.g"
                 setResult(
                     //#line 258 LPGParser.g
-                    ast_pool.Next()=new SYMBOLList(ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
+                    ast_pool.data.Next()=new SYMBOLList(ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)), true /* left recursive */)
                 //#line 258 LPGParser.g
                 );
             break;
@@ -7441,7 +7454,7 @@
             //
             case 137: {
                //#line 258 "LPGParser.g"
-                ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.Next()=new ASTNodeToken(getRhsIToken(3)));
+                ((SYMBOLList*)getRhsSym(1))->addElement(ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(3)));
             break;
             }
             //
@@ -7451,7 +7464,7 @@
                //#line 261 "LPGParser.g"
                 setResult(
                     //#line 261 LPGParser.g
-                    ast_pool.Next()=new symbol_pairList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new symbol_pairList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 261 LPGParser.g
                 );
             break;
@@ -7471,11 +7484,11 @@
                //#line 263 "LPGParser.g"
                 setResult(
                     //#line 263 LPGParser.g
-                    ast_pool.Next()=new symbol_pair(getLeftIToken(), getRightIToken(),
+                    ast_pool.data.Next()=new symbol_pair(getLeftIToken(), getRightIToken(),
                                     //#line 263 LPGParser.g
-                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(1)),
+                                    ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(1)),
                                     //#line 263 LPGParser.g
-                                    ast_pool.Next()=new ASTNodeToken(getRhsIToken(2)))
+                                    ast_pool.data.Next()=new ASTNodeToken(getRhsIToken(2)))
                 //#line 263 LPGParser.g
                 );
             break;
@@ -7487,7 +7500,7 @@
                //#line 266 "LPGParser.g"
                 setResult(
                     //#line 266 LPGParser.g
-                    ast_pool.Next()=new SYMBOLList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new SYMBOLList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 266 LPGParser.g
                 );
             break;
@@ -7507,7 +7520,7 @@
                //#line 268 "LPGParser.g"
                 setResult(
                     //#line 268 LPGParser.g
-                    ast_pool.Next()=new recover_symbol(this, getRhsIToken(1))
+                    ast_pool.data.Next()=new recover_symbol(this, getRhsIToken(1))
                 //#line 268 LPGParser.g
                 );
             break;
@@ -7527,7 +7540,7 @@
                //#line 274 "LPGParser.g"
                 setResult(
                     //#line 274 LPGParser.g
-                    ast_pool.Next()=new END_KEY_OPT(getRhsIToken(1))
+                    ast_pool.data.Next()=new END_KEY_OPT(getRhsIToken(1))
                 //#line 274 LPGParser.g
                 );
             break;
@@ -7539,7 +7552,7 @@
                //#line 276 "LPGParser.g"
                 setResult(
                     //#line 276 LPGParser.g
-                    ast_pool.Next()=new action_segmentList(getLeftIToken(), getRightIToken(), true /* left recursive */)
+                    ast_pool.data.Next()=new action_segmentList(getLeftIToken(), getRightIToken(), true /* left recursive */)
                 //#line 276 LPGParser.g
                 );
             break;
@@ -7552,7 +7565,7 @@
                 ((action_segmentList*)getRhsSym(1))->addElement((IAst*)getRhsSym(2));
             break;
             }
-    //#line 355 "btParserTemplateF.gi
+    //#line 361 "btParserTemplateF.gi
 
     
             default:

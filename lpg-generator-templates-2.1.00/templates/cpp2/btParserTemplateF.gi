@@ -179,6 +179,7 @@
 #include "PrsStream.h"
 #include "RuleAction.h"
 #include "IcuUtil.h"
+
     ./
 %End
 
@@ -186,9 +187,12 @@
     /.
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
-        struct $ast_class;
-         PrsStream* prsStream = nullptr;
-        
+       
+        PrsStream* prsStream = nullptr;
+        ~$action_type (){
+            delete prsStream;
+            delete btParser;
+        }
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
 
          inline static ParseTable* prsTable = new $prs_type();
@@ -230,6 +234,7 @@
 
          void reset(ILexStream* lexStream)
         {
+            delete prsStream;
             prsStream = new PrsStream(lexStream);
             btParser->reset(prsStream);
 
