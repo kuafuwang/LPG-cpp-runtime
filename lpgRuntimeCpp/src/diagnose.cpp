@@ -1,6 +1,7 @@
 #include "diagnose.h"
 
 #include <chrono>
+#include <iostream>
 
 #include "ConfigurationElement.h"
 #include "ConfigurationStack.h"
@@ -2107,46 +2108,294 @@ void DiagnoseParser::secondaryDiagnosis(SecondaryRepairInfo& repair)
 	return;
 }
 
+
+//
+// This procedure is invoked to form a secondary error message.
+// The parameter k identifies the error to be processed.  The
+// global variable: msg, is used to store the message.
+//
+std::wstring DiagnoseParser::PrintSecondaryMessage(int msg_code,
+	int name_index,
+	int left_token_loc,
+	int right_token_loc,
+	int scope_name_index)
+{
+	//using std::wcout;
+	std::wstringstream wstringstream;
+	std::wstring name_str;
+	int i,
+		len = 0;
+
+	if (name_index >= 0)
+	{
+	
+		name_str = name(name_index);
+		len =name_str.size();
+	}
+
+	/*int left_line_no = tokStream->getLine(left_token_loc),
+		left_column_no = tokStream->getColumn(left_token_loc),
+		right_line_no = tokStream->getEndLine(right_token_loc),
+		right_column_no = tokStream->getEndColumn(right_token_loc),
+		left_location = left_token_loc,
+		right_location = right_token_loc;
+
+	wstringstream << tokStream->getFileName()
+		<< ':' << left_line_no << ':' << left_column_no
+		<< ':' << right_line_no << ':' << right_column_no
+		<< ':' << left_location << ':' << right_location
+		<< ": ";*/
+
+	switch (msg_code)
+	{
+	case MISPLACED_CODE:
+		wstringstream << "Misplaced construct(s)";
+		break;
+	case SCOPE_CODE:
+		wstringstream << '\"';
+		for (i = scopeSuffix(-(int)name_index);
+			scopeRhs(i) != 0; i++)
+		{
+			len = name(scopeRhs(i)).size();
+			name_str = name(scopeRhs(i)).c_str();
+			for (int j = 0; j < len; j++)
+				wstringstream << name_str[j];
+			if (scopeRhs(i + 1)) // any more symbols to print?
+				wstringstream << ' ';
+		}
+		wstringstream << '\"';
+		wstringstream << " inserted to complete scope";
+		//
+		// TODO: This should not be an option
+		//
+		if (scope_name_index)
+		{
+			name_str = name(scope_name_index);
+			len = name_str.size();
+			for (int j = 0; j < len; j++) // any more symbols to print?
+				wstringstream << name_str[j];
+		}
+		else wstringstream << "phrase";
+		break;
+	case  MANUAL_CODE:
+		wstringstream << '\"';
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		wstringstream << "\" inserted to complete structure";
+		break;
+	case MERGE_CODE:
+		wstringstream << "Symbols merged to form ";
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		break;
+	default:
+		if (msg_code == DELETION_CODE || len == 0)
+			wstringstream << "Unexpected input discarded";
+		else
+		{
+			for (i = 0; i < len; i++)
+				wstringstream << name_str[i];
+			wstringstream << " expected instead";
+		}
+	}
+
+	return  wstringstream.str();
+
+
+}
+
+
+
+//
+// This procedure is invoked to form a primary error message. The
+// parameter k identifies the error to be processed.  The global
+// variable: msg, is used to store the message.
+//
+std::wstring DiagnoseParser::PrintPrimaryMessage(int msg_code,
+	int name_index,
+	int left_token_loc,
+	int right_token_loc,
+	int scope_name_index)
+{
+	std::wstringstream wstringstream;
+	std::wstring name_str ;
+	
+	int i,
+		len = 0;
+	/*int left_line_no = tokStream->getLine(left_token_loc),
+	left_column_no = tokStream->getColumn(left_token_loc),
+	right_line_no = tokStream->getEndLine(right_token_loc),
+	right_column_no = tokStream->getEndColumn(right_token_loc),
+	left_location = left_token_loc,
+	right_location = right_token_loc;
+
+wstringstream << tokStream->getFileName()
+	<< ':' << left_line_no << ':' << left_column_no
+	<< ':' << right_line_no << ':' << right_column_no
+	<< ':' << left_location << ':' << right_location
+	<< ": ";*/
+	if (name_index >= 0)
+	{
+		name_str = name(name_index);
+		len = name_str.size();
+	
+	}
+
+	switch (msg_code)
+	{
+	case ERROR_CODE:
+		wstringstream << "Parsing terminated at this token";
+		break;
+	case BEFORE_CODE:
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		wstringstream << " inserted before this token";
+		break;
+	case INSERTION_CODE:
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		wstringstream << " expected after this token";
+		break;
+	case DELETION_CODE:
+		if (left_token_loc == right_token_loc)
+			wstringstream << "Unexpected symbol ignored";
+		else wstringstream << "Unexpected symbols ignored";
+		break;
+	case INVALID_CODE:
+		if (len == 0)
+			wstringstream << "Unexpected input discarded";
+		else
+		{
+			wstringstream << "Invalid ";
+			for (i = 0; i < len; i++)
+				wstringstream << name_str[i];
+		}
+		break;
+	case SUBSTITUTION_CODE:
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		wstringstream << " expected instead of this token";
+		break;
+	case SCOPE_CODE:
+		wstringstream << '\"';
+		for (i = scopeSuffix(-(int)name_index);
+			scopeRhs(i) != 0; i++)
+		{
+			len = name(scopeRhs(i)).size();
+			name_str = name(scopeRhs(i)).c_str();
+			for (int j = 0; j < len; j++)
+				wstringstream << name_str[j];
+			if (scopeRhs(i + 1)) // any more symbols to print?
+				wstringstream << ' ';
+		}
+		wstringstream << '\"';
+		wstringstream << " inserted to complete scope";
+		//
+		// TODO: This should not be an option
+		//
+		if (scope_name_index)
+		{
+			name_str = name(scope_name_index);
+			len = name_str.size();
+			for (int j = 0; j < len; j++) // any more symbols to print?
+				wstringstream << name_str[j];
+		}
+		else wstringstream << "scope";
+		break;
+	case MANUAL_CODE:
+		wstringstream << '\"';
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		wstringstream << "\" inserted to complete structure";
+		break;
+	case MERGE_CODE:
+		wstringstream << "symbols merged to form ";
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		break;
+	case EOF_CODE:
+		for (i = 0; i < len; i++)
+			wstringstream << name_str[i];
+		wstringstream << " reached after this token";
+		break;
+	default:
+		if (msg_code == MISPLACED_CODE)
+			wstringstream << "misplaced construct(s)";
+		else if (len == 0)
+			wstringstream << "unexpected input discarded";
+		else
+		{
+			for (i = 0; i < len; i++)
+				wstringstream << name_str[i];
+			wstringstream << " expected instead";
+		}
+		break;
+	}
+
+	wstringstream << '\n';
+	return  wstringstream.str();
+}
 void DiagnoseParser::emitError(int msg_code, int name_index, int left_token, int right_token, int scope_name_index)
 {
 	int left_token_loc = (left_token > right_token ? right_token : left_token),
 		right_token_loc = right_token;
-	std::wstringex temp_name;
-	if (name_index >= 0)
-	{
-		temp_name = name(name_index);	
-	}
+
+
+	std::wstring token_name;
+	if (left_token_loc < right_token_loc)
+		token_name=PrintSecondaryMessage(msg_code,
+			name_index,
+			left_token_loc,
+			right_token_loc,
+			scope_name_index);
+	else
+		token_name =PrintPrimaryMessage(msg_code,
+		name_index,
+		left_token_loc,
+		right_token_loc,
+		scope_name_index);
+
 	
-	std::wstringex upper_name = temp_name;
-	upper_name.toupper();
-	std::wstring token_name = (name_index >= 0 &&
-		!(upper_name == (L"ERROR"))
-		? L"\"" + temp_name + L"\""
-		: L"");
 
-	if (msg_code == INVALID_CODE)
-		msg_code = token_name.length() == 0 ? INVALID_CODE : INVALID_TOKEN_CODE;
-
-	if (msg_code == SCOPE_CODE)
+	if(token_name.empty())
 	{
-		token_name = L"\"";
-		for (int i = scopeSuffix(-(int)name_index); scopeRhs(i) != 0; i++)
+		std::wstringex temp_name;
+		if (name_index >= 0)
 		{
-			if (!isNullable(scopeRhs(i)))
+			temp_name = name(name_index);
+		}
+		std::wstringex upper_name = temp_name;
+		upper_name.toupper();
+		token_name = (name_index >= 0 &&
+			!(upper_name == (L"ERROR"))
+			? L"\"" + temp_name + L"\""
+			: L"");
+
+		if (msg_code == INVALID_CODE)
+			msg_code = token_name.length() == 0 ? INVALID_CODE : INVALID_TOKEN_CODE;
+
+		if (msg_code == SCOPE_CODE)
+		{
+			token_name = L"\"";
+			for (int i = scopeSuffix(-(int)name_index); scopeRhs(i) != 0; i++)
 			{
-				int symbol_index = (scopeRhs(i) > NT_OFFSET
-					? nonterminalIndex(scopeRhs(i) - NT_OFFSET)
-					: terminalIndex(scopeRhs(i)));
-				if (name(symbol_index).length() > 0)
+				if (!isNullable(scopeRhs(i)))
 				{
-					if (token_name.length() > 1) // Not just starting quote?
-						token_name += L" "; // add a space separator
-					token_name += name(symbol_index);
+					int symbol_index = (scopeRhs(i) > NT_OFFSET
+						? nonterminalIndex(scopeRhs(i) - NT_OFFSET)
+						: terminalIndex(scopeRhs(i)));
+					if (name(symbol_index).length() > 0)
+					{
+						if (token_name.length() > 1) // Not just starting quote?
+							token_name += L" "; // add a space separator
+						token_name += name(symbol_index);
+					}
 				}
 			}
+			token_name += L"\"";
 		}
-		token_name += L"\"";
 	}
+	
 
 	tokStream->reportError(msg_code, left_token, right_token, token_name);
 

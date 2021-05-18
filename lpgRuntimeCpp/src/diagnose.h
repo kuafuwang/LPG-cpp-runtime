@@ -446,6 +446,10 @@ struct DiagnoseParser :public ParseErrorCodes
     // secondary substitution or a secondary deletion.
     //
     void secondaryDiagnosis(SecondaryRepairInfo& repair);
+    std::wstring PrintSecondaryMessage(int msg_code, int name_index, int left_token_loc, int right_token_loc,
+                               int scope_name_index);
+    std::wstring PrintPrimaryMessage(int msg_code, int name_index, int left_token_loc, int right_token_loc,
+                             int scope_name_index);
 
 
     //
