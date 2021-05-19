@@ -252,6 +252,7 @@ public:
 
     Blocks &ActionBlocks() { return action_blocks; }
     BlockSymbol *DefaultBlock(void) { return default_block; }
+    BlockSymbol* AstBlock(void) { return ast_block; }
     ActionFileSymbol *DefaultActionFile(void) { return default_action_file; }
     const char *DefaultActionPrefix(void) { return default_action_prefix; }
 
@@ -296,10 +297,16 @@ private:
     static const char *default_block_begin;
     static const char *default_block_end;
 
+
+    const char* default_ast_block_begin;
+    const  char* default_ast_block_end;
+
+	
     InputFileSymbol *input_file_symbol;
     const char *buffer_ptr,
                *parm_ptr;
 
+    BlockSymbol* ast_block;
     BlockSymbol *default_block;
     ActionFileSymbol *default_action_file;
     const char *default_action_prefix;

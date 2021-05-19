@@ -18,7 +18,7 @@
     <ClCompile Include="JavaExample.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="JavaParser_Action.cpp">
+    <ClCompile Include="JavaParser.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>

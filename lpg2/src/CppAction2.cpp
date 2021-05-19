@@ -879,13 +879,15 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
 	
 
     ProcessCodeActions(initial_actions, typestring, processed_rule_map);
+
+    auto  ast_Allocation_symbol = option->AstBlock()->ActionfileSymbol();
+    TextBuffer& ast_ast_Allocation_symbol_buffer = *(ast_Allocation_symbol->BodyBuffer());
+
     if (option->automatic_ast == Option::TOPLEVEL)
     {
-        
-       
-        ast_buffer.Put("using namespace ");
-        ast_buffer.Put(option->top_level_ast_file_prefix);
-        ast_buffer.Put(";\n");
+        ast_ast_Allocation_symbol_buffer.Put("using namespace ");
+        ast_ast_Allocation_symbol_buffer.Put(option->top_level_ast_file_prefix);
+        ast_ast_Allocation_symbol_buffer.Put(";\n");
 
         TextBuffer& _buffer = *(top_level_ast_file_symbol->BodyBuffer());
         _buffer.Put("\n};");
@@ -894,6 +896,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
 
     int count = 0;
     {
+      
         //
         // Note that the start rules are skipped as no AST node is allocated for them.
         //
@@ -919,33 +922,33 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
 
                 if (count % option->max_cases == 0)
                 {
-                    ProcessMacro(&ast_buffer, "SplitActions", rule_no);
+                    ProcessMacro(&ast_ast_Allocation_symbol_buffer, "SplitActions", rule_no);
                     count++;
                 }
 
-                ProcessMacro(&ast_buffer, "BeginAction", rule_no);
+                ProcessMacro(&ast_ast_Allocation_symbol_buffer, "BeginAction", rule_no);
 
                 if (rule_allocation_map[rule_no].list_kind != RuleAllocationElement::NOT_A_LIST)
                 {
                     GenerateListAllocation(ctc,
-                        ast_buffer,
+                        ast_ast_Allocation_symbol_buffer,
                         rule_no,
                         rule_allocation_map[rule_no]);
                 }
                 else
                 {
                     if (user_specified_null_ast[rule_no] || (grammar->RhsSize(rule_no) == 0 && rule_allocation_map[rule_no].name == NULL))
-                        GenerateNullAstAllocation(ast_buffer, rule_no);
+                        GenerateNullAstAllocation(ast_ast_Allocation_symbol_buffer, rule_no);
                     else GenerateAstAllocation(ctc,
-                        ast_buffer,
+                        ast_ast_Allocation_symbol_buffer,
                         rule_allocation_map[rule_no],
                         processed_rule_map[rule_no],
                         typestring,
                         rule_no);
                 }
 
-                GenerateCode(&ast_buffer, "\n    ", rule_no);
-                ProcessMacro(&ast_buffer, "EndAction", rule_no);
+                GenerateCode(&ast_ast_Allocation_symbol_buffer, "\n    ", rule_no);
+                ProcessMacro(&ast_ast_Allocation_symbol_buffer, "EndAction", rule_no);
             }
             else
             {
@@ -961,7 +964,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
                     return_code = 12;
                 }
 
-                ProcessMacro(&ast_buffer, "NoAction", rule_no);
+                ProcessMacro(&ast_ast_Allocation_symbol_buffer, "NoAction", rule_no);
             }
         }
     }
@@ -3143,7 +3146,7 @@ void CppAction2::GenerateAstAllocation(CTC &ctc,
     GenerateCode(&ast_buffer, space, rule_no);
     GenerateCode(&ast_buffer, space4, rule_no);
     
-    ast_buffer.Put("ast_pool.data.Next()=");
+    ast_buffer.Put(" _automatic_ast_pool << ");
     GenerateCode(&ast_buffer, newkey, rule_no);
     GenerateCode(&ast_buffer, classname, rule_no);
     GenerateCode(&ast_buffer, lparen, rule_no);
@@ -3201,7 +3204,7 @@ void CppAction2::GenerateAstAllocation(CTC &ctc,
                             GenerateCode(&ast_buffer, actual_type, rule_no);
                             GenerateCode(&ast_buffer, rparen, rule_no);
                         }
-                        ast_buffer.Put("ast_pool.data.Next()=");
+                        ast_buffer.Put(" _automatic_ast_pool << ");
                         GenerateCode(&ast_buffer, newkey, rule_no);
                        
                         GenerateCode(&ast_buffer, grammar -> Get_ast_token_classname(), rule_no);
@@ -3278,7 +3281,7 @@ void CppAction2::GenerateListAllocation(CTC &ctc,
         GenerateCode(&ast_buffer, space, rule_no);
         GenerateCode(&ast_buffer, space4, rule_no);
 
-        ast_buffer.Put("ast_pool.data.Next()=");
+        ast_buffer.Put(" _automatic_ast_pool << ");
         GenerateCode(&ast_buffer, newkey, rule_no);
         GenerateCode(&ast_buffer, allocation_element.name, rule_no);
         GenerateCode(&ast_buffer, lparen, rule_no);
@@ -3305,7 +3308,7 @@ void CppAction2::GenerateListAllocation(CTC &ctc,
 
             if (grammar -> IsTerminal(allocation_element.element_symbol))
             {
-                ast_buffer.Put("ast_pool.data.Next()=");
+                ast_buffer.Put(" _automatic_ast_pool << ");
                 GenerateCode(&ast_buffer, newkey, rule_no);
                 GenerateCode(&ast_buffer, grammar -> Get_ast_token_classname(), rule_no);
                 GenerateCode(&ast_buffer, lparen, rule_no);
@@ -3356,7 +3359,7 @@ void CppAction2::GenerateListAllocation(CTC &ctc,
             GenerateCode(&ast_buffer, "))->addElement(", rule_no);
             if (grammar -> IsTerminal(allocation_element.element_symbol))
             {
-                ast_buffer.Put("ast_pool.data.Next()=");
+                ast_buffer.Put(" _automatic_ast_pool << ");
                 GenerateCode(&ast_buffer, newkey, rule_no);          
                 GenerateCode(&ast_buffer, grammar -> Get_ast_token_classname(), rule_no);
                 GenerateCode(&ast_buffer, lparen, rule_no);

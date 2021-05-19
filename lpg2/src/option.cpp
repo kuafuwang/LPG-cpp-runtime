@@ -21,7 +21,7 @@ Option::Option(int argc_, const char **argv_)
 : argc(argc_), argv(argv_)
 {
     syslis = NULL;
-    
+    ast_block = NULL;
     dat_directory_location = NULL;
     out_directory_location = NULL;
     ast_directory_location = NULL;
@@ -130,7 +130,19 @@ Option::Option(int argc_, const char **argv_)
     action_type = NULL;
     default_action_prefix = NULL;
     default_action_file = NULL;
-    
+
+    auto temp  = NewString(3);
+
+    memcpy(temp, "//.", 2);
+    temp[2] = 0x00;
+    default_ast_block_begin = temp;
+
+    temp = NewString(3);
+    memcpy(temp, ".//", 2);
+    temp[2] = 0x00;
+    default_ast_block_end = temp;
+
+	
     for (int c = 0; c < 128; c++)
         classify_option[c] = &Option::ClassifyBadOption;
     
@@ -501,7 +513,7 @@ const char *Option::ClassifyA(const char *start, bool flag)
 {
     if (flag)
     {
-        int i = OptionMatch(start, "action", "block");
+        int i = OptionMatch(start, "ast", "block");
         if (start[i + 1] == '=' || IsDelimiter(start[i + 1]))
         {
             const char *p = start + i + 1,
@@ -509,17 +521,16 @@ const char *Option::ClassifyA(const char *start, bool flag)
             if (q == NULL)
             {
                 return (i > 0
-                          ? ReportMissingValue(start, "ACTION_BLOCK")
-                          : ReportAmbiguousOption(start, "ACTION_BLOCK, AST_DIRECTORY, AST_TYPE, ATTRIBUTES, AUTOMATIC_AST"));
+                          ? ReportMissingValue(start, "AST_BLOCK")
+                          : ReportAmbiguousOption(start, "AST_BLOCK,ACTION_BLOCK, AST_DIRECTORY, AST_TYPE, ATTRIBUTES, AUTOMATIC_AST"));
             }
             else
             {
                 if (*q == '(')
                 {
-                    const char *filename;
-                    p = GetStringValue(q + 1, filename);
+                 
                     const char *block_begin;
-                    p = GetStringValue(CleanUp(p), block_begin);
+                    p = GetStringValue(q+1 , block_begin);
                     const char *block_end;
                     p = GetStringValue(CleanUp(p), block_end);
 
@@ -541,7 +552,59 @@ const char *Option::ClassifyA(const char *start, bool flag)
                         p++;
                         if (*block_end != '\0') // the block-end symbol cannot be the null string
                         {
-                            action_options.Next().Set(GetTokenLocation(start, p - start), filename, block_begin, block_end);
+                            default_ast_block_begin = block_begin;
+                            default_ast_block_end = block_end;
+                            return p;
+                        }
+                    }
+
+                    InvalidTripletValueError(start, p - start, "AST_BLOCK", "(begin_block_marker,end_block_marker)");
+
+                    return p;
+                }
+            }
+        }
+        i = OptionMatch(start, "action", "block");  
+        if (start[i + 1] == '=' || IsDelimiter(start[i + 1]))
+        {
+            const char* p = start + i + 1,
+                * q = ValuedOption(p);
+            if (q == NULL)
+            {
+                return (i > 0
+                    ? ReportMissingValue(start, "ACTION_BLOCK")
+                    : ReportAmbiguousOption(start, "ACTION_BLOCK, AST_DIRECTORY, AST_TYPE, ATTRIBUTES, AUTOMATIC_AST"));
+            }
+            else
+            {
+                if (*q == '(')
+                {
+                    const char* filename;
+                    p = GetStringValue(q + 1, filename);
+                    const char* block_begin;
+                    p = GetStringValue(CleanUp(p), block_begin);
+                    const char* block_end;
+                    p = GetStringValue(CleanUp(p), block_end);
+
+                    //
+                    // Problem: When a quoted symbol is specified on the command line, the Windows OS
+                    // remove the surrounding quotes. Without the quote to delimit the block_end, GetStringValue
+                    // will stop after the ")". In this case, we remove the closing paren here and reset
+                    // the pointer so that it can be processed properly.
+                    //
+                    char* tail = (char*)&(block_end[strlen(block_end) - 1]);
+                    if (*tail == ')')
+                    {
+                        *tail = '\0'; // remove the trailing ")" from the block_end
+                        p--; // move the pointer back to process the ")"
+                    }
+                    p = CleanUp(p);
+                    if (*p == ')')
+                    {
+                        p++;
+                        if (*block_end != '\0') // the block-end symbol cannot be the null string
+                        {
+                           action_options.Next().Set(GetTokenLocation(start, p - start), filename, block_begin, block_end);
                             return p;
                         }
                     }
@@ -3067,6 +3130,7 @@ void Option::CompleteOptionProcessing()
             ProcessTrailer(trailer_options[i]);
     }
 
+	
     //
     // If no action block was specified for the default
     // action filename and the default block-begin marker,
@@ -3081,10 +3145,23 @@ void Option::CompleteOptionProcessing()
         ProcessBlock(default_info);
         default_block = action_blocks.FindBlockname(default_block_begin, strlen(default_block_begin));
     }
+	
     default_action_file = default_block -> ActionfileSymbol();
     default_action_prefix = GetPrefix(default_action_file -> Name());
     action_type = GetType(default_action_file -> Name());
 
+
+    ast_block = action_blocks.FindBlockname(default_ast_block_begin, strlen(default_ast_block_begin));
+    if (ast_block == NULL)
+    {
+        assert(action_blocks.FindFilename("", 0) == 0);
+        BlockInfo default_info;
+        default_info.Set(lex_stream->GetTokenReference(0), "", default_ast_block_begin, default_ast_block_end);
+        ProcessBlock(default_info);
+        ast_block = action_blocks.FindBlockname(default_ast_block_begin, strlen(default_ast_block_begin));
+    }
+
+	
     //
     //
     //

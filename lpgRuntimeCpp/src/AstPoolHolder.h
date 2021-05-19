@@ -13,4 +13,12 @@ struct pool_holder
 			delete data[i];
 		}
 	}
+	template <class T>
+	T* operator << (T* a)
+	{
+		data.Next() = a;
+		return  a;
+	}
 };
+
+

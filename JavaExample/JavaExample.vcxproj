@@ -145,7 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="JavaExample.cpp" />
-    <ClCompile Include="JavaParser_Action.cpp" />
+    <ClCompile Include="JavaParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

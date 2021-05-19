@@ -18,6 +18,9 @@
     <ClCompile Include="LpgExample.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LPGParser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LPGKWLexer.h">

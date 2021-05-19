@@ -1,8 +1,24 @@
+//
+// This is the grammar specification from the Final Draft of the generic spec.
+//
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2007 IBM Corporation.
+// All rights reserved. This program and the accompanying materials
+// are made available under the terms of the Eclipse Public License v1.0
+// which accompanies this distribution, and is available at
+// http://www.eclipse.org/legal/epl-v10.html
+//
+//Contributors:
+//    Philippe Charles (pcharles@us.ibm.com) - initial API and implementation
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+    //#line 163 "btParserTemplateF.gi
 
 #pragma once
 
 #include <iostream>
-
 #include "AstPoolHolder.h"
 #include "BacktrackingParser.h"
 #include "DeterministicParser.h"
@@ -26,17 +42,15 @@
 
 
 
-    //#line 187 "btParserTemplateF.gi
+    //#line 189 "btParserTemplateF.gi
 
-
-namespace ExprParser_top_level_ast {
+namespace JavaParser_top_level_ast {
 	struct Ast;
 }
 
  struct JavaParser :public Object ,public RuleAction
 {
-
-
+   
     PrsStream* prsStream = nullptr;
     ~JavaParser (){
         delete prsStream;
@@ -160,28 +174,28 @@ namespace ExprParser_top_level_ast {
      */
      PrsStream* getParseStream() { return prsStream; }
 
-    ExprParser_top_level_ast::Ast* parser()
+    JavaParser_top_level_ast::Ast* parser()
     {
         return parser(nullptr, 0);
     }
-
-    ExprParser_top_level_ast::Ast* parser(Monitor* monitor)
+    
+    JavaParser_top_level_ast::Ast* parser(Monitor* monitor)
     {
         return parser(monitor, 0);
     }
     
-    ExprParser_top_level_ast::Ast * parser(int error_repair_count)
+    JavaParser_top_level_ast::Ast * parser(int error_repair_count)
     {
         return parser(nullptr, error_repair_count);
     }
 
-    ExprParser_top_level_ast::Ast * parser(Monitor* monitor, int error_repair_count)
+    JavaParser_top_level_ast::Ast * parser(Monitor* monitor, int error_repair_count)
     {
         btParser->setMonitor(monitor);
         
         try
         {
-            return (ExprParser_top_level_ast::Ast *) btParser->fuzzyParse(error_repair_count);
+            return (JavaParser_top_level_ast::Ast *) btParser->fuzzyParse(error_repair_count);
         }
         catch (BadParseException& e)
         {
@@ -193,33 +207,33 @@ namespace ExprParser_top_level_ast {
 
         return nullptr;
     }
-
+     void ruleAction(int ruleNumber);
     //
     // Additional entry points, if any
     //
     
-    ExprParser_top_level_ast::Ast * parseClassBodyDeclarationsopt()
+     JavaParser_top_level_ast::Ast * parseClassBodyDeclarationsopt()
     {
         return parseClassBodyDeclarationsopt(nullptr, 0);
     }
         
-    ExprParser_top_level_ast::Ast * parseClassBodyDeclarationsopt(Monitor* monitor)
+     JavaParser_top_level_ast::Ast * parseClassBodyDeclarationsopt(Monitor* monitor)
     {
         return parseClassBodyDeclarationsopt(monitor, 0);
     }
         
-    ExprParser_top_level_ast::Ast * parseClassBodyDeclarationsopt(int error_repair_count)
+     JavaParser_top_level_ast::Ast * parseClassBodyDeclarationsopt(int error_repair_count)
     {
         return parseClassBodyDeclarationsopt(nullptr, error_repair_count);
     }
         
-    ExprParser_top_level_ast::Ast * parseClassBodyDeclarationsopt(Monitor *monitor, int error_repair_count)
+     JavaParser_top_level_ast::Ast * parseClassBodyDeclarationsopt(Monitor *monitor, int error_repair_count)
     {
         btParser->setMonitor(monitor);
         
         try
         {
-            return (ExprParser_top_level_ast::Ast *) btParser->fuzzyParseEntry(JavaParsersym::TK_ClassBodyDeclarationsoptMarker, error_repair_count);
+            return (JavaParser_top_level_ast::Ast *) btParser->fuzzyParseEntry(JavaParsersym::TK_ClassBodyDeclarationsoptMarker, error_repair_count);
         }
         catch (BadParseException& e)
         {
@@ -232,28 +246,28 @@ namespace ExprParser_top_level_ast {
         return nullptr;
     }
 
-    ExprParser_top_level_ast::Ast * parseLPGUserAction()
+     JavaParser_top_level_ast::Ast * parseLPGUserAction()
     {
         return parseLPGUserAction(nullptr, 0);
     }
         
-    ExprParser_top_level_ast::Ast * parseLPGUserAction(Monitor* monitor)
+     JavaParser_top_level_ast::Ast * parseLPGUserAction(Monitor* monitor)
     {
         return parseLPGUserAction(monitor, 0);
     }
         
-    ExprParser_top_level_ast::Ast * parseLPGUserAction(int error_repair_count)
+     JavaParser_top_level_ast::Ast * parseLPGUserAction(int error_repair_count)
     {
         return parseLPGUserAction(nullptr, error_repair_count);
     }
         
-    ExprParser_top_level_ast::Ast * parseLPGUserAction(Monitor *monitor, int error_repair_count)
+     JavaParser_top_level_ast::Ast * parseLPGUserAction(Monitor *monitor, int error_repair_count)
     {
         btParser->setMonitor(monitor);
         
         try
         {
-            return (ExprParser_top_level_ast::Ast *) btParser->fuzzyParseEntry(JavaParsersym::TK_LPGUserActionMarker, error_repair_count);
+            return (JavaParser_top_level_ast::Ast *) btParser->fuzzyParseEntry(JavaParsersym::TK_LPGUserActionMarker, error_repair_count);
         }
         catch (BadParseException& e)
         {
@@ -266,9 +280,8 @@ namespace ExprParser_top_level_ast {
         return nullptr;
     }
 
-	
-   pool_holder ast_pool;
-   void ruleAction(int ruleNumber);
-    //#line 357 "btParserTemplateF.gi
 
- };
+    //#line 363 "btParserTemplateF.gi
+
+};
+

@@ -49,7 +49,10 @@ public:
         return block;
     }
 
-    BlockSymbol *FindBlockname(const char *block_begin, int block_begin_length) { return block_table.FindName(block_begin, block_begin_length); }
+    BlockSymbol *FindBlockname(const char *block_begin, int block_begin_length)
+    {
+	    return block_table.FindName(block_begin, block_begin_length);
+    }
 
     BlockSymbol *FindOrInsertIgnoredBlock(const char *block_begin, int block_begin_length)
     {

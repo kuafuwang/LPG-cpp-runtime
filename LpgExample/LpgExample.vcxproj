@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="LpgExample.cpp" />
+    <ClCompile Include="LPGParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LPGKWLexer.h" />

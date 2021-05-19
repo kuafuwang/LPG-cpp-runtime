@@ -177,7 +177,7 @@
 #include "AstPoolHolder.h"
      struct $action_type :public PrsStream ,public RuleAction$additional_interfaces
     {
-	   pool_holder ast_pool;
+	 
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
           struct  $ast_class ;
 

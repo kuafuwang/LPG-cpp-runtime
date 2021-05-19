@@ -14,7 +14,7 @@ int main()
 	
 	LPGParser parser(lexer.getILexStream()); // Create the parser
 	lexer.lexer(nullptr, parser.getIPrsStream());
-	LPGParser::ASTNode* ast = (LPGParser::ASTNode*)parser.parser();
+	LPGParser::ASTNode* ast = (LPGParser::ASTNode*)parser.parser(nullptr,100000);
     std::cout << "Hello World!\n";
 }
 

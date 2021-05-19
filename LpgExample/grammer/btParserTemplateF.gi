@@ -10,7 +10,8 @@
 %Options table,error_maps,scopes
 %options prefix=TK_
 %options action-block=("*.h", "/.", "./")
-
+%options action-block=("*.cpp", "/!", "!/")
+%options ast-block=("/!", "!/")
 %options ParseTable=ParseTable
 %options nt-check
 
@@ -36,43 +37,43 @@
                 ./
 
     $BeginAction
-    /.$Header$case $rule_number: {
-                   //#line $next_line "$input_file$"./
+    /!$Header$case $rule_number: {
+                   //#line $next_line "$input_file$"!/
 
     $EndAction
-    /.            break;
-                }./
+    /!            break;
+                }!/
 
     $BeginJava
-    /.$Header$case $rule_number: {
+    /!$Header$case $rule_number: {
                     $symbol_declarations
-                    //#line $next_line "$input_file$"./
+                    //#line $next_line "$input_file$"!/
 
-    $EndJava /.$EndAction./
+    $EndJava /!$EndAction!/
 
     $NoAction
-    /.$Header$case $rule_number:
-                    break;./
+    /!$Header$case $rule_number:
+                    break;!/
 
     $BadAction
-    /.$Header$case $rule_number:
-                    throw  std::exception("No action specified for rule " + $rule_number);./
+    /!$Header$case $rule_number:
+                    throw  std::exception("No action specified for rule " + $rule_number);!/
 
     $NullAction
-    /.$Header$case $rule_number:
+    /!$Header$case $rule_number:
                     setResult(nullptr);
-                    break;./
+                    break;!/
 
     $BeginActions
-    /.
-     
-         void ruleAction(int ruleNumber)
+    /!
+         #include "$action_type.h"
+         void $action_type::ruleAction(int ruleNumber)
         {
             switch (ruleNumber)
-            {./
+            {!/
 
     $SplitActions
-    /.
+    /!
                     default:
                         ruleAction$rule_number(ruleNumber);
                         break;
@@ -84,15 +85,15 @@
             {
                 switch (ruleNumber)
                 {
-                    //#line $next_line "$input_file$"./
+                    //#line $next_line "$input_file$"!/
 
     $EndActions
-    /.
+    /!
                 default:
                     break;
             }
             return;
-        }./
+        }!/
 
     $entry_declarations
     /.
@@ -188,7 +189,7 @@
     /.
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
-          pool_holder ast_pool;
+       
         PrsStream* prsStream = nullptr;
         ~$action_type (){
             delete prsStream;
@@ -345,7 +346,7 @@
 
             return nullptr;
         }
-
+         void ruleAction(int ruleNumber);
         //
         // Additional entry points, if any
         //
@@ -355,14 +356,17 @@
 %End
 
 %Rules
-    /.$BeginActions./
+    /!$BeginActions!/
 %End
 
 %Trailers
     /.
-        $EndActions
     };
     ./
+
+     /!
+        $EndActions
+    !/
 %End
 
 --
