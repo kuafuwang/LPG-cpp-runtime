@@ -65,38 +65,47 @@ inline static char _isNullable[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0
         };
+char * get_isNullable_data(){ return  _isNullable;}
       bool isNullable(int index) { return _isNullable[index] != 0; }
-inline static signed char _prosthesesIndex[] = {0,
+inline static signed int _prosthesesIndex[] = {0,
             2,3,4,1
         };
+signed int * get_prosthesesIndex_data(){ return  _prosthesesIndex;}
       int prosthesesIndex(int index) { return _prosthesesIndex[index]; }
 inline static char _isKeyword[] = {0,
             0,0,0,0,0,0,0,0
         };
+char * get_isKeyword_data(){ return  _isKeyword;}
       bool isKeyword(int index) { return _isKeyword[index] != 0; }
-inline static signed char _baseCheck[] = {0,
+inline static signed int _baseCheck[] = {0,
             1,1,1,1,1,1,1,2,1,2
         };
+signed int * get_baseCheck_data(){ return  _baseCheck;}
       int baseCheck(int index) { return _baseCheck[index]; }
-inline      static signed char*  _rhs = _baseCheck;
+inline      static signed int*  _rhs = _baseCheck;
      int rhs(int index) { return _rhs[index]; };
-inline static signed char _baseAction[] = {
+signed int*  get_rhs_data(){ return _rhs;}
+inline static signed int _baseAction[] = {
             1,1,1,1,1,1,1,2,2,3,
             3,1,15,17,16,9,10,13,20,20
         };
+signed int * get_baseAction_data(){ return  _baseAction;}
       int baseAction(int index) { return _baseAction[index]; }
- inline     static signed char * _lhs = _baseAction;
+ inline     static signed int * _lhs = _baseAction;
      int lhs(int index) { return _lhs[index]; };
-inline static signed char _termCheck[] = {0,
+signed int*  get_lhs_data(){ return _lhs;}
+inline static signed int _termCheck[] = {0,
             0,1,2,0,4,5,6,7,0,0,
             1,3,0,0,2,0,0,0,0,0,
             0
         };
+signed int * get_termCheck_data(){ return  _termCheck;}
       int termCheck(int index) { return _termCheck[index]; }
-inline static signed char _termAction[] = {0,
+inline static signed int _termAction[] = {0,
             20,29,27,20,22,23,24,25,20,6,
             30,19,1,20,28
         };
+signed int * get_termAction_data(){ return  _termAction;}
       int termAction(int index) { return _termAction[index]; }
      int asb(int index) { return 0; }
      int asr(int index) { return 0; }

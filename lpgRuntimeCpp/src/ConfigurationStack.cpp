@@ -2,9 +2,10 @@
 
 #include "ConfigurationElement.h"
 #include "ParseTable.h"
+#include "ParseTableProxy.h"
 #include "StateElement.h"
 
-ConfigurationStack::ConfigurationStack(ParseTable* _prs): table(TABLE_SIZE), configuration_stack(1 << 12),
+ConfigurationStack::ConfigurationStack(ParseTableProxy* _prs): table(TABLE_SIZE), configuration_stack(1 << 12),
                                                          max_configuration_size(0),
                                                          stacks_size(0), state_element_size(0), prs(_prs)
 {
@@ -15,7 +16,7 @@ ConfigurationStack::ConfigurationStack(ParseTable* _prs): table(TABLE_SIZE), con
 	state_root->parent = nullptr;
 	state_root->siblings = nullptr;
 	state_root->children = nullptr;
-	state_root->number = prs->getStartState();
+	state_root->number = prs->START_STATE;
 	state_pool.push_back(state_root);
 }
 

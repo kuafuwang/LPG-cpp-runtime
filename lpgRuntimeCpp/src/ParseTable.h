@@ -101,4 +101,24 @@ struct ParseTable
     virtual bool isValidForParser() = 0;
 
     virtual bool getBacktrack() = 0;
+	
+    virtual int getIdentifier_SYMBOL() = 0;
+
+	
+  virtual   char* get_isNullable_data() = 0;
+
+  virtual  signed int* get_prosthesesIndex_data() = 0;
+
+  virtual   char* get_isKeyword_data() = 0;
+
+  virtual  signed int* get_baseCheck_data() = 0;
+
+  virtual   signed int* get_rhs_data()=0;
+  virtual   signed int* get_baseAction_data() = 0;
+
+  virtual signed int* get_lhs_data() = 0;
+
+  virtual  signed int* get_termCheck_data() = 0;
+
+  virtual   signed int* get_termAction_data() = 0;
 };

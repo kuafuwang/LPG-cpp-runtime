@@ -75,8 +75,9 @@ inline static char _isNullable[] = {0,
             0,0,0,1,1,0,0,1,0,1,
             1,0,0,0,0
         };
+char * get_isNullable_data(){ return  _isNullable;}
       bool isNullable(int index) { return _isNullable[index] != 0; }
-inline static signed char _prosthesesIndex[] = {0,
+inline static signed int _prosthesesIndex[] = {0,
             7,35,42,43,36,52,38,51,57,58,
             19,31,34,37,39,40,48,50,53,62,
             63,65,2,3,4,5,6,8,9,10,
@@ -85,6 +86,7 @@ inline static signed char _prosthesesIndex[] = {0,
             33,41,44,45,46,47,49,54,55,56,
             59,60,61,64,66,67,68,1
         };
+signed int * get_prosthesesIndex_data(){ return  _prosthesesIndex;}
       int prosthesesIndex(int index) { return _prosthesesIndex[index]; }
 inline static char _isKeyword[] = {0,
             0,0,0,0,0,0,0,0,0,0,
@@ -93,8 +95,9 @@ inline static char _isKeyword[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0
         };
+char * get_isKeyword_data(){ return  _isKeyword;}
       bool isKeyword(int index) { return _isKeyword[index] != 0; }
-inline static signed char _baseCheck[] = {0,
+inline static signed int _baseCheck[] = {0,
             2,0,2,3,3,3,3,3,3,3,
             3,3,3,3,3,3,3,3,3,3,
             3,3,3,3,3,3,0,2,2,1,
@@ -141,10 +144,12 @@ inline static signed char _baseCheck[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0
         };
+signed int * get_baseCheck_data(){ return  _baseCheck;}
       int baseCheck(int index) { return _baseCheck[index]; }
-inline      static signed char*  _rhs = _baseCheck;
+inline      static signed int*  _rhs = _baseCheck;
      int rhs(int index) { return _rhs[index]; };
-inline static unsigned short _baseAction[] = {
+signed int*  get_rhs_data(){ return _rhs;}
+inline static signed int _baseAction[] = {
             23,23,25,25,26,26,26,26,26,26,
             26,26,26,26,26,26,26,26,26,26,
             26,26,26,26,26,26,26,24,24,48,
@@ -191,10 +196,12 @@ inline static unsigned short _baseAction[] = {
             392,450,450,450,450,450,450,450,450,383,
             450,450,450,450,450,450,450,115,450,450
         };
+signed int * get_baseAction_data(){ return  _baseAction;}
       int baseAction(int index) { return _baseAction[index]; }
- inline     static unsigned short * _lhs = _baseAction;
+ inline     static signed int * _lhs = _baseAction;
      int lhs(int index) { return _lhs[index]; };
-inline static signed char _termCheck[] = {0,
+signed int*  get_lhs_data(){ return _lhs;}
+inline static signed int _termCheck[] = {0,
             0,1,2,3,0,1,2,3,8,9,
             10,11,12,13,14,15,16,17,18,19,
             20,21,22,23,24,25,26,27,28,29,
@@ -230,8 +237,9 @@ inline static signed char _termCheck[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0
         };
+signed int * get_termCheck_data(){ return  _termCheck;}
       int termCheck(int index) { return _termCheck[index]; }
-inline static unsigned short _termAction[] = {0,
+inline static signed int _termAction[] = {0,
             118,384,635,384,144,580,581,595,384,384,
             384,384,384,384,384,384,384,384,384,384,
             384,384,384,384,384,384,384,384,384,384,
@@ -263,8 +271,9 @@ inline static unsigned short _termAction[] = {0,
             74,382,80,79,531,73,526,450,487,116,
             450,567,292,450,450,450,450,292
         };
+signed int * get_termAction_data(){ return  _termAction;}
       int termAction(int index) { return _termAction[index]; }
-inline static unsigned short _asb[] = {0,
+inline static signed int _asb[] = {0,
             132,189,132,166,128,103,103,128,68,34,
             34,34,67,93,1,34,128,128,34,68,
             93,34,34,34,34,34,68,30,131,130,
@@ -277,8 +286,9 @@ inline static unsigned short _asb[] = {0,
             197,128,37,191,162,191,162,128,39,159,
             192,159,158,159,161
         };
+signed int * get_asb_data(){ return  _asb;}
       int asb(int index) { return _asb[index]; }
-inline static signed char _asr[] = {0,
+inline static signed int _asr[] = {0,
             1,2,12,9,10,11,0,15,16,17,
             18,21,22,23,24,25,26,27,28,29,
             30,31,32,33,34,35,36,3,12,9,
@@ -300,8 +310,9 @@ inline static signed char _asr[] = {0,
             30,31,32,33,34,35,29,18,36,0,
             2,4,5,6,7,0,40,37,0
         };
+signed int * get_asr_data(){ return  _asr;}
       int asr(int index) { return _asr[index]; }
-inline static signed char _nasb[] = {0,
+inline static signed int _nasb[] = {0,
             30,29,35,82,38,72,87,40,47,14,
             42,14,47,51,1,14,89,91,53,47,
             57,55,49,59,64,7,47,4,29,93,
@@ -314,8 +325,9 @@ inline static signed char _nasb[] = {0,
             29,29,20,29,111,113,29,29,29,32,
             70,20,115,20,29
         };
+signed int * get_nasb_data(){ return  _nasb;}
       int nasb(int index) { return _nasb[index]; }
-inline static signed char _nasr[] = {0,
+inline static signed int _nasr[] = {0,
             6,39,0,14,27,0,16,29,0,1,
             67,0,1,3,0,1,19,6,0,10,
             0,16,1,15,0,14,13,1,0,24,
@@ -329,16 +341,18 @@ inline static signed char _nasr[] = {0,
             65,0,54,0,51,0,5,0,55,0,
             17,0,57,0,63,0
         };
+signed int * get_nasr_data(){ return  _nasr;}
       int nasr(int index) { return _nasr[index]; }
-inline static signed char _terminalIndex[] = {0,
+inline static signed int _terminalIndex[] = {0,
             45,44,21,1,2,3,4,46,22,23,
             28,20,24,5,14,15,16,17,18,19,
             25,26,27,29,30,31,32,33,35,36,
             37,38,39,40,41,42,7,6,8,9,
             34,10,11,12,43,47,48
         };
+signed int * get_terminalIndex_data(){ return  _terminalIndex;}
       int terminalIndex(int index) { return _terminalIndex[index]; }
-inline static signed char _nonterminalIndex[] = {0,
+inline static signed int _nonterminalIndex[] = {0,
             0,71,77,78,72,84,0,83,0,0,
             60,68,70,73,74,75,82,0,85,89,
             90,91,0,0,0,49,50,0,51,52,
@@ -347,6 +361,7 @@ inline static signed char _nonterminalIndex[] = {0,
             69,76,0,79,80,81,0,0,86,87,
             0,88,0,0,92,93,94,0
         };
+signed int * get_nonterminalIndex_data(){ return  _nonterminalIndex;}
       int nonterminalIndex(int index) { return _nonterminalIndex[index]; }
   inline    static int* _scopePrefix = NULL;
      int scopePrefix(int index) { return 0;}

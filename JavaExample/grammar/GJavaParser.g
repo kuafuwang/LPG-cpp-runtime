@@ -4,7 +4,7 @@
 %options automatic_ast=topLevel
 %options fp=JavaParser
 %options verbose
-%options template=dtParserTemplateF.gi
+%options template=btParserTemplateF.gi
 %options import_terminals=GJavaLexer.gi
 
 %Notice

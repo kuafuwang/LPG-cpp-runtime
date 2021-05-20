@@ -15,6 +15,8 @@ RecoveryParser::RecoveryParser(BacktrackingParser* parser, IntSegmentedTuple& _a
 
 }
 
+
+
 void RecoveryParser::reallocateStacks()
 {
 	DiagnoseParser::reallocateStacks();
@@ -90,7 +92,7 @@ bool RecoveryParser::fixError(int start_token, int error_token)
 	//
 	// Clear the configuration stack.
 	//
-	main_configuration_stack = std::make_shared<ConfigurationStack>(prs);
+	main_configuration_stack = std::make_shared<ConfigurationStack>(this);
 
 	//
 	// Keep parsing until we reach the end of file and succeed or

@@ -8,14 +8,15 @@
 #include <limits>
 
 #include "ConfigurationStack.h"
+#include "ParseTableProxy.h"
 #include "TokenStream.h"
-#include "TokenStream.h"
+
 struct ParseTable;
 
 struct Monitor;
 
 
-struct DiagnoseParser :public ParseErrorCodes
+struct DiagnoseParser :public ParseErrorCodes,public  ParseTableProxy
 {
     //
    //
@@ -80,19 +81,19 @@ struct DiagnoseParser :public ParseErrorCodes
 	
     Monitor* monitor = nullptr;
     TokenStream* tokStream = nullptr;
-    ParseTable* prs = nullptr;
-    int ERROR_SYMBOL,
-        SCOPE_SIZE,
-        MAX_NAME_LENGTH,
-        NT_OFFSET,
-        LA_STATE_OFFSET,
-        NUM_RULES,
-        NUM_SYMBOLS,
-        START_STATE,
-        EOFT_SYMBOL,
-        EOLT_SYMBOL,
-        ACCEPT_ACTION,
-        ERROR_ACTION;
+  //  ParseTable* prs = nullptr;
+    //int ERROR_SYMBOL,
+    //    SCOPE_SIZE,
+    //    MAX_NAME_LENGTH,
+    //    NT_OFFSET,
+    //    LA_STATE_OFFSET,
+    //    NUM_RULES,
+    //    NUM_SYMBOLS,
+    //    START_STATE,
+    //    EOFT_SYMBOL,
+    //    EOLT_SYMBOL,
+    //    ACCEPT_ACTION,
+    //    ERROR_ACTION;
 
    
 
@@ -118,30 +119,6 @@ struct DiagnoseParser :public ParseErrorCodes
         static constexpr int  INFINITY_ = std::numeric_limits<int>::max(); // should be much bigger than MAX_DISTANCE !!!
 
 
-    int rhs(int index) { return prs->rhs(index); }
-
-    int baseAction(int index) { return prs->baseAction(index); }
-
-    int baseCheck(int index) { return prs->baseCheck(index); }
-
-    int lhs(int index) { return prs->lhs(index); }
-
-    int termCheck(int index) { return prs->termCheck(index); }
-
-    int termAction(int index) { return prs->termAction(index); }
-
-    int asb(int index) { return prs->asb(index); }
-
-    int asr(int index) { return prs->asr(index); }
-
-    int nasb(int index) { return prs->nasb(index); }
-
-    int nasr(int index) { return prs->nasr(index); }
-
-    int terminalIndex(int index) { return prs->terminalIndex(index); }
-
-    int nonterminalIndex(int index) { return prs->nonterminalIndex(index); }
-
     int symbolIndex(int index)
     {
         return index > NT_OFFSET
@@ -149,36 +126,7 @@ struct DiagnoseParser :public ParseErrorCodes
             : terminalIndex(index);
     }
 
-    int scopePrefix(int index) { return prs->scopePrefix(index); }
-
-    int scopeSuffix(int index) { return prs->scopeSuffix(index); }
-
-    int scopeLhs(int index) { return prs->scopeLhs(index); }
-
-    int scopeLa(int index) { return prs->scopeLa(index); }
-
-    int scopeStateSet(int index) { return prs->scopeStateSet(index); }
-
-    int scopeRhs(int index) { return prs->scopeRhs(index); }
-
-    int scopeState(int index) { return prs->scopeState(index); }
-
-    int inSymb(int index) { return prs->inSymb(index); }
-
-    std::wstring name(int index) { return prs->name(index); }
-
-    int originalState(int state) { return prs->originalState(state); }
-
-    int asi(int state) { return prs->asi(state); }
-
-    int nasi(int state) { return prs->nasi(state); }
-
-    int inSymbol(int state) { return prs->inSymbol(state); }
-
-    int ntAction(int state, int sym) { return prs->ntAction(state, sym); }
-
-    bool isNullable(int symbol) { return prs->isNullable(symbol); }
-
+ 
     Array<int> locationStack;
 
 
@@ -473,7 +421,7 @@ struct DiagnoseParser :public ParseErrorCodes
     //
     int lookahead(int act, int token)
     {
-        act = prs->lookAhead(act - LA_STATE_OFFSET, tokStream->getKind(token));
+        act = ParseTableProxy::lookAhead(act - LA_STATE_OFFSET, tokStream->getKind(token));
         return (act > LA_STATE_OFFSET
             ? lookahead(act, tokStream->getNext(token))
             : act);
@@ -487,7 +435,7 @@ struct DiagnoseParser :public ParseErrorCodes
     //
     int tAction(int act, int sym)
     {
-        act = prs->tAction(act, sym);
+        act = ParseTableProxy::tAction(act, sym);
         return  (act > LA_STATE_OFFSET
             ? lookahead(act, tokStream->peek())
             : act);

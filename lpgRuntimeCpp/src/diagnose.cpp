@@ -27,7 +27,7 @@ DiagnoseParser::StateInfo::StateInfo()
 {
 }
 
-DiagnoseParser::DiagnoseParser(TokenStream* tokStream, ParseTable* prs, Monitor* monitor, int maxErrors, long maxTime):
+DiagnoseParser::DiagnoseParser(TokenStream* tokStream, ParseTable* prs, Monitor* monitor, int maxErrors, long maxTime):ParseTableProxy(prs),
 	stateStackTop(0),
 	tempStackTop(0),
 	prevStackTop(0),
@@ -35,25 +35,25 @@ DiagnoseParser::DiagnoseParser(TokenStream* tokStream, ParseTable* prs, Monitor*
 	scopeStackTop(0),
 	statePool(256, 4)
 {
-	main_configuration_stack = std::make_shared<ConfigurationStack>(prs),
+	main_configuration_stack = std::make_shared<ConfigurationStack>(this);
 		this->monitor = monitor;
 	this->maxErrors = maxErrors;
 	this->maxTime = maxTime;
 	this->tokStream = tokStream;
-	this->prs = prs;
+	
 
-	ERROR_SYMBOL = prs->getErrorSymbol();
-	SCOPE_SIZE = prs->getScopeSize();
-	MAX_NAME_LENGTH = prs->getMaxNameLength();
-	NT_OFFSET = prs->getNtOffset();
-	LA_STATE_OFFSET = prs->getLaStateOffset();
-	NUM_RULES = prs->getNumRules();
-	NUM_SYMBOLS = prs->getNumSymbols();
-	START_STATE = prs->getStartState();
-	EOFT_SYMBOL = prs->getEoftSymbol();
-	EOLT_SYMBOL = prs->getEoltSymbol();
-	ACCEPT_ACTION = prs->getAcceptAction();
-	ERROR_ACTION = prs->getErrorAction();
+	//ERROR_SYMBOL = prs->getErrorSymbol();
+	//SCOPE_SIZE = prs->getScopeSize();
+	//MAX_NAME_LENGTH = prs->getMaxNameLength();
+	//NT_OFFSET = prs->getNtOffset();
+	//LA_STATE_OFFSET = prs->getLaStateOffset();
+	//NUM_RULES = prs->getNumRules();
+	//NUM_SYMBOLS = prs->getNumSymbols();
+	//START_STATE = prs->getStartState();
+	//EOFT_SYMBOL = prs->getEoftSymbol();
+	//EOLT_SYMBOL = prs->getEoltSymbol();
+	//ACCEPT_ACTION = prs->getAcceptAction();
+	//ERROR_ACTION = prs->getErrorAction();
 
 	buffer.Resize(BUFF_SIZE);
 	list.Resize(NUM_SYMBOLS + 1);
@@ -398,7 +398,7 @@ int DiagnoseParser::parseForError(int current_kind)
 	//
 	// Allocate configuration stack.
 	//
-	ConfigurationStack configuration_stack(prs);
+	ConfigurationStack configuration_stack(this);
 
 	//
 	// Keep parsing until we reach the end of file and succeed or
@@ -495,7 +495,7 @@ void DiagnoseParser::parseUpToError(IntTuple& action, int current_kind, int erro
 	//
 	// Allocate configuration stack.
 	//
-	ConfigurationStack configuration_stack(prs);
+	ConfigurationStack configuration_stack(this);
 
 	//
 	// Keep parsing until we reach the end of file and succeed or
@@ -599,7 +599,7 @@ int DiagnoseParser::parseCheck(Array<int>& stack, int stack_top, int first_symbo
 	for (int i = 0; i <= stack_top; i++)
 		local_stack[i] = stack[i];
 
-	ConfigurationStack configuration_stack(prs);
+	ConfigurationStack configuration_stack(this);
 
 	//
 	// If the first symbol is a nonterminal, process it here.

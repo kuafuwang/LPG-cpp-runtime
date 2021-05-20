@@ -81,6 +81,14 @@ void CppTable2::Print(IntArrayInfo &array_info)
     prs_buffer.Put("        };\n");
 
     
+ 
+    prs_buffer.Put(type);
+    prs_buffer.Put(" * get_");
+    prs_buffer.Put(name);
+    prs_buffer.Put("_data(){ return ");
+    prs_buffer.Put(" _");
+    prs_buffer.Put(name);
+    prs_buffer.Put(";}\n");
 
     //
     // Generate a function with the same name as the array.
@@ -1160,6 +1168,9 @@ void CppTable2::print_source_tables(void)
                 prs_buffer.Put(";\n"
                                "     int rhs(int index) { return _rhs[index]; };\n");
 
+                prs_buffer.Put(type_name[array_info.type_id]);
+                prs_buffer.Put("*  get_rhs_data(){ return _rhs;}\n");
+        	
                 break;
             case BASE_ACTION:
                 prs_buffer.Put(" inline     static ");
@@ -1168,6 +1179,9 @@ void CppTable2::print_source_tables(void)
                 prs_buffer.Put(array_name[array_info.name_id]);
                 prs_buffer.Put(";\n"
                                "     int lhs(int index) { return _lhs[index]; };\n");
+
+                prs_buffer.Put(type_name[array_info.type_id]);
+                prs_buffer.Put("*  get_lhs_data(){ return _lhs;}\n");
                 break;
             default:
                 break;

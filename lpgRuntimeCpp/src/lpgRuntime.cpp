@@ -4,10 +4,11 @@
 #include "IcuUtil.h"
 #include "ConfigurationElement.h"
 #include "IAst.h"
+#include "ParseTableProxy.h"
 #include "ParseErrorCodes.h"
 #include "StateElement.h"
 #include "TokenStream.h"
-
+#include "ParseTable.h"
 #include "tuple.h"
 const  std::vector< std::wstring> ParseErrorCodes::errorMsgText =
 {
@@ -49,3 +50,37 @@ const  std::vector< std::wstring> ParseErrorCodes::errorMsgText =
  {
       return IcuUtil::ws2s(toString(startOffset, endOffset));
  }
+
+
+
+
+  ParseTableProxy::ParseTableProxy(ParseTable* prs) : _prs(prs), ERROR_SYMBOL(prs->getErrorSymbol()),
+                                                      SCOPE_UBOUND(prs->getScopeUbound()),
+                                                      SCOPE_SIZE(prs->getScopeSize()),
+                                                      MAX_NAME_LENGTH(prs->getMaxNameLength()),
+                                                      NUM_STATES(prs->getNumStates()),
+                                                      NT_OFFSET(prs->getNtOffset()),
+                                                      LA_STATE_OFFSET(prs->getLaStateOffset()),
+                                                      MAX_LA(prs->getMaxLa()),
+                                                      NUM_RULES(prs->getNumRules()),
+                                                      NUM_NONTERMINALS(prs->getNumNonterminals()),
+                                                      NUM_SYMBOLS(prs->getNumSymbols()),
+                                                      START_STATE(prs->getStartState()),
+                                                      IDENTIFIER_SYMBOL(prs->getIdentifier_SYMBOL()),
+                                                      EOFT_SYMBOL(prs->getEoftSymbol()),
+                                                      EOLT_SYMBOL(prs->getEoltSymbol()),
+                                                      ACCEPT_ACTION(prs->getAcceptAction()),
+                                                      ERROR_ACTION(prs->getErrorAction()),
+                                                      BACKTRACK(prs->getBacktrack()),
+                                                      isValidForParser(prs->isValidForParser()),
+                                                      _isNullable(prs->get_isNullable_data()),
+                                                      _prosthesesIndex(prs->get_prosthesesIndex_data()),
+                                                      _isKeyword(prs->get_isKeyword_data()),
+                                                      _baseCheck(prs->get_baseCheck_data()), _rhs(prs->get_rhs_data()),
+                                                      _baseAction(prs->get_baseAction_data()), _lhs(prs->get_lhs_data()),
+                                                      _termCheck(prs->get_termCheck_data()),
+                                                      _termAction(prs->get_termAction_data())
+
+  {
+  }
+

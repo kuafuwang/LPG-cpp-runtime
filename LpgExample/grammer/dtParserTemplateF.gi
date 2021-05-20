@@ -114,7 +114,7 @@
             
          void resetParse$entry_name()
         {
-            dtParser->resetParserEntry($sym_type.$entry_marker);
+            dtParser->resetParserEntry($sym_type::$entry_marker);
         }
         
          $ast_class * parse$entry_name(Monitor* monitor, int error_repair_count)
@@ -123,14 +123,14 @@
             
             try
             {
-                return ($ast_class *) dtParser->parseEntry($sym_type.$entry_marker);
+                return ($ast_class *) dtParser->parseEntry($sym_type::$entry_marker);
             }
-            catch (BadParseException e)
+            catch (BadParseException& e)
             {
                 prsStream->reset(e.error_token); // point to error token
 
-                DiagnoseParser diagnoseParser = new DiagnoseParser(prsStream, prsTable);
-                diagnoseParser.diagnoseEntry($sym_type.$entry_marker, e.error_token);
+                std::shared_ptr< DiagnoseParser> diagnoseParser = std::make_shared<DiagnoseParser>(prsStream, prsTable);
+                diagnoseParser->diagnoseEntry($sym_type::$entry_marker, e.error_token);
             }
 
             return nullptr;
@@ -261,7 +261,7 @@
             catch(UndefinedEofSymbolException& e)
             {
                 std::string str = "The Lexer does not implement the Eof symbol ";
-                str += IcuUtil::ws2s(LPGParsersym::orderedTerminalSymbols[prsTable->getEoftSymbol()]);
+                str += IcuUtil::ws2s($sym_type::orderedTerminalSymbols[prsTable->getEoftSymbol()]);
                 throw  UndefinedEofSymbolException(str);
             }
         }
@@ -332,7 +332,7 @@
             {
                 prsStream->reset(e.error_token); // point to error token
 
-                auto diagnoseParser = new DiagnoseParser(prsStream, prsTable);
+                std::shared_ptr< DiagnoseParser> diagnoseParser = std::make_shared<DiagnoseParser>(prsStream, prsTable);
                 diagnoseParser->diagnose(e.error_token);
             }
 

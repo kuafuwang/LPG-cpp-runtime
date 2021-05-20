@@ -3,7 +3,7 @@
 #include "tuple.h"
 
 
-
+class ParseTableProxy;
 struct ParseTable;
 struct RuleAction;
 struct TokenStream;
@@ -34,9 +34,9 @@ struct DeterministicParser :
     std::shared_ptr< IntTuple> action ;
 
     TokenStream*  tokStream=nullptr;
-    ParseTable* prs = nullptr;
+   
     RuleAction*  ra = nullptr;
-
+    ParseTableProxy* prs = nullptr;
     //
     // keep looking ahead until we compute a valid action
     //

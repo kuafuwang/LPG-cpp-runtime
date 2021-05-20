@@ -184,6 +184,7 @@
     <ClInclude Include="src\IMessageHandler.h" />
     <ClInclude Include="src\IPrsStream.h" />
     <ClInclude Include="src\IToken.h" />
+    <ClInclude Include="src\ParseTableProxy.h" />
     <ClInclude Include="src\LexParser.h" />
     <ClInclude Include="src\LexStream.h" />
     <ClInclude Include="src\LpgLexStream.h" />

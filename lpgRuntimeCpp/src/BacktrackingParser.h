@@ -2,6 +2,7 @@
 #include "ObjectTuple.h"
 #include "Stacks.h"
 
+class ParseTableProxy;
 struct IPrsStream;
 struct RuleAction;
 struct ParseTable;
@@ -25,7 +26,7 @@ BacktrackingParser :
     int lastToken,
         currentAction;
     TokenStream* tokStream = nullptr;
-    ParseTable* prs = nullptr;
+    ParseTableProxy* prs = nullptr;
     RuleAction* ra = nullptr;
     IntSegmentedTuple* action = new IntSegmentedTuple(10, 1024); // IntTuple(1 << 20),
     std::shared_ptr< IntTuple>  tokens = nullptr;
@@ -68,7 +69,7 @@ BacktrackingParser :
     {
         reset(nullptr, tokStream, prs, ra);
     }
-        ~BacktrackingParser();
+    ~BacktrackingParser();
     BacktrackingParser();
 
     BacktrackingParser(TokenStream* tokStream, ParseTable* prs, RuleAction* ra);

@@ -115,8 +115,9 @@ inline static char _isNullable[] = {0,
             1,0,1,0,1,0,1,0,0,1,
             1,0,0,0,1,0,0,0
         };
+char * get_isNullable_data(){ return  _isNullable;}
       bool isNullable(int index) { return _isNullable[index] != 0; }
-inline static unsigned short _prosthesesIndex[] = {0,
+inline static signed int _prosthesesIndex[] = {0,
             7,19,18,16,15,10,12,13,14,9,
             11,17,22,36,37,38,117,199,200,222,
             223,224,225,226,227,197,198,233,195,196,
@@ -143,6 +144,7 @@ inline static unsigned short _prosthesesIndex[] = {0,
             148,150,151,156,157,162,163,164,165,201,
             202,203,204,208,218,219,220,249,1
         };
+signed int * get_prosthesesIndex_data(){ return  _prosthesesIndex;}
       int prosthesesIndex(int index) { return _prosthesesIndex[index]; }
 inline static char _isKeyword[] = {0,
             0,0,0,0,1,1,1,1,1,1,
@@ -158,8 +160,9 @@ inline static char _isKeyword[] = {0,
             1,0,0,0,0,0,0,0,0,0,
             1,0,0,0,0,0,0,0,0
         };
+char * get_isKeyword_data(){ return  _isKeyword;}
       bool isKeyword(int index) { return _isKeyword[index] != 0; }
-inline static signed short _baseCheck[] = {0,
+inline static signed int _baseCheck[] = {0,
             2,2,1,1,3,3,1,1,1,1,
             1,1,1,1,1,1,1,1,1,1,
             1,1,1,1,1,1,2,2,1,3,
@@ -908,10 +911,12 @@ inline static signed short _baseCheck[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0
         };
+signed int * get_baseCheck_data(){ return  _baseCheck;}
       int baseCheck(int index) { return _baseCheck[index]; }
-inline      static signed short*  _rhs = _baseCheck;
+inline      static signed int*  _rhs = _baseCheck;
      int rhs(int index) { return _rhs[index]; };
-inline static unsigned short _baseAction[] = {
+signed int*  get_rhs_data(){ return _rhs;}
+inline static signed int _baseAction[] = {
             189,189,189,1,190,190,190,190,190,190,
             10,10,6,6,7,7,8,8,8,8,
             8,9,9,11,11,11,5,3,107,2,
@@ -1701,10 +1706,12 @@ inline static unsigned short _baseAction[] = {
             208,215,0,80,188,215,0,652,214,0,
             49,307,0
         };
+signed int * get_baseAction_data(){ return  _baseAction;}
       int baseAction(int index) { return _baseAction[index]; }
- inline     static unsigned short * _lhs = _baseAction;
+ inline     static signed int * _lhs = _baseAction;
      int lhs(int index) { return _lhs[index]; };
-inline static signed char _termCheck[] = {0,
+signed int*  get_lhs_data(){ return _lhs;}
+inline static signed int _termCheck[] = {0,
             0,1,2,3,4,5,6,7,8,9,
             10,11,12,13,14,15,16,17,18,19,
             0,0,22,2,0,25,26,27,28,29,
@@ -1957,8 +1964,9 @@ inline static signed char _termCheck[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0
         };
+signed int * get_termCheck_data(){ return  _termCheck;}
       int termCheck(int index) { return _termCheck[index]; }
-inline static unsigned short _termAction[] = {0,
+inline static signed int _termAction[] = {0,
             522,652,7420,4345,8157,7423,7438,7426,7441,7444,
             7432,7429,7953,7435,7955,7954,7957,7956,7959,709,
             109,7873,1050,7481,7873,1098,3344,892,3254,625,
@@ -2204,8 +2212,9 @@ inline static unsigned short _termAction[] = {0,
             7873,7873,7873,7873,7873,7873,7873,7873,7873,7873,
             7873,7873,7873,7873,7873,6329,6329,1672,1672
         };
+signed int * get_termAction_data(){ return  _termAction;}
       int termAction(int index) { return _termAction[index]; }
-inline static unsigned short _asb[] = {0,
+inline static signed int _asb[] = {0,
             1014,1030,1017,1,876,116,498,114,1018,980,
             1017,63,118,791,488,488,490,480,480,296,
             304,690,690,690,183,791,715,662,429,429,
@@ -2255,8 +2264,9 @@ inline static unsigned short _asb[] = {0,
             791,656,573,731,791,791,368,498,735,194,
             368,391,313,368,791,791,537,791,194
         };
+signed int * get_asb_data(){ return  _asb;}
       int asb(int index) { return _asb[index]; }
-inline static signed char _asr[] = {0,
+inline static signed int _asr[] = {0,
             31,41,85,66,65,52,63,59,58,60,
             64,57,27,62,56,61,12,15,14,17,
             16,18,104,106,108,109,110,4,19,1,
@@ -2362,8 +2372,9 @@ inline static signed char _asr[] = {0,
             12,15,14,17,16,19,18,4,1,85,
             0
         };
+signed int * get_asr_data(){ return  _asr;}
       int asr(int index) { return _asr[index]; }
-inline static unsigned short _nasb[] = {0,
+inline static signed int _nasb[] = {0,
             205,60,17,50,172,60,9,76,199,59,
             26,50,50,60,76,150,59,60,60,176,
             60,60,60,60,50,60,39,57,60,60,
@@ -2413,8 +2424,9 @@ inline static unsigned short _nasb[] = {0,
             60,60,135,57,60,60,60,83,53,86,
             60,107,45,60,60,60,132,60,86
         };
+signed int * get_nasb_data(){ return  _nasb;}
       int nasb(int index) { return _nasb[index]; }
-inline static unsigned short _nasr[] = {0,
+inline static signed int _nasr[] = {0,
             4,0,54,0,240,0,86,6,2,0,
             145,0,247,0,245,0,203,0,217,0,
             179,178,0,206,0,161,0,119,0,167,
@@ -2438,8 +2450,9 @@ inline static unsigned short _nasr[] = {0,
             0,41,162,0,53,200,0,150,53,99,
             0
         };
+signed int * get_nasr_data(){ return  _nasr;}
       int nasr(int index) { return _nasr[index]; }
-inline static unsigned short _terminalIndex[] = {0,
+inline static signed int _terminalIndex[] = {0,
             23,119,12,21,67,69,72,78,85,92,
             94,101,103,99,100,104,65,105,83,13,
             93,115,24,36,106,1,28,34,96,109,
@@ -2453,8 +2466,9 @@ inline static unsigned short _terminalIndex[] = {0,
             111,57,58,49,50,51,52,53,54,55,
             89,43,44,45,46,47,74,87,120
         };
+signed int * get_terminalIndex_data(){ return  _terminalIndex;}
       int terminalIndex(int index) { return _terminalIndex[index]; }
-inline static unsigned short _nonterminalIndex[] = {0,
+inline static signed int _nonterminalIndex[] = {0,
             121,128,127,126,125,123,0,0,0,122,
             124,0,130,138,139,140,183,217,218,229,
             0,0,230,231,0,215,216,236,0,0,
@@ -2481,8 +2495,9 @@ inline static unsigned short _nonterminalIndex[] = {0,
             199,0,0,0,202,0,206,0,207,219,
             0,0,220,224,226,0,227,251,0
         };
+signed int * get_nonterminalIndex_data(){ return  _nonterminalIndex;}
       int nonterminalIndex(int index) { return _nonterminalIndex[index]; }
-inline static unsigned short _scopePrefix[] = {
+inline static signed int _scopePrefix[] = {
             32,62,132,132,23,41,48,292,74,364,
             318,114,177,238,238,143,143,224,278,287,
             352,395,381,386,13,19,55,91,211,274,
@@ -2493,8 +2508,9 @@ inline static unsigned short _scopePrefix[] = {
             264,332,264,419,346,406,264,443,311,357,
             311,299,357,371
         };
+signed int * get_scopePrefix_data(){ return  _scopePrefix;}
       int scopePrefix(int index) { return _scopePrefix[index]; }
-inline static unsigned short _scopeSuffix[] = {
+inline static signed int _scopeSuffix[] = {
             30,71,140,120,30,30,30,109,71,183,
             109,120,183,244,256,149,165,109,30,30,
             215,30,183,183,17,17,30,95,215,215,
@@ -2505,8 +2521,9 @@ inline static unsigned short _scopeSuffix[] = {
             266,266,416,421,348,408,412,445,313,359,
             337,301,452,373
         };
+signed int * get_scopeSuffix_data(){ return  _scopeSuffix;}
       int scopeSuffix(int index) { return _scopeSuffix[index]; }
-inline static unsigned short _scopeLhs[] = {
+inline static signed int _scopeLhs[] = {
             18,19,105,74,18,18,18,177,19,216,
             176,75,67,103,60,105,74,65,44,42,
             217,212,216,216,24,24,18,73,240,111,
@@ -2517,8 +2534,9 @@ inline static unsigned short _scopeLhs[] = {
             95,138,99,172,152,127,150,128,92,79,
             91,177,78,216
         };
+signed int * get_scopeLhs_data(){ return  _scopeLhs;}
       int scopeLhs(int index) { return _scopeLhs[index]; }
-inline static signed char _scopeLa[] = {
+inline static signed int _scopeLa[] = {
             20,20,20,20,20,20,20,4,20,20,
             4,20,20,94,94,4,4,4,20,20,
             45,20,20,20,53,53,20,98,45,45,
@@ -2529,8 +2547,9 @@ inline static signed char _scopeLa[] = {
             6,6,6,43,2,24,6,6,1,41,
             21,6,31,42
         };
+signed int * get_scopeLa_data(){ return  _scopeLa;}
       int scopeLa(int index) { return _scopeLa[index]; }
-inline static unsigned short _scopeStateSet[] = {
+inline static signed int _scopeStateSet[] = {
             151,151,144,227,151,151,151,15,151,74,
             3,227,227,144,227,144,227,227,259,259,
             32,60,74,74,151,151,151,227,30,39,
@@ -2541,8 +2560,9 @@ inline static unsigned short _scopeStateSet[] = {
             248,13,53,57,24,302,56,302,296,288,
             296,15,288,74
         };
+signed int * get_scopeStateSet_data(){ return  _scopeStateSet;}
       int scopeStateSet(int index) { return _scopeStateSet[index]; }
-inline static unsigned short _scopeRhs[] = {0,
+inline static signed int _scopeRhs[] = {0,
             154,0,367,170,0,171,91,169,0,50,
             168,0,171,23,139,0,53,0,171,23,
             133,0,206,3,120,204,42,121,0,20,
@@ -2591,8 +2611,9 @@ inline static unsigned short _scopeRhs[] = {0,
             0,31,120,227,325,286,241,0,314,24,
             0,44,0
         };
+signed int * get_scopeRhs_data(){ return  _scopeRhs;}
       int scopeRhs(int index) { return _scopeRhs[index]; }
-inline static unsigned short _scopeState[] = {0,
+inline static signed int _scopeState[] = {0,
             1153,0,7035,6911,0,3044,3043,2369,2037,0,
             1947,0,7035,6911,7091,6966,0,872,1106,2052,
             5861,6035,0,5435,2060,5431,0,1897,0,592,
@@ -2625,8 +2646,9 @@ inline static unsigned short _scopeState[] = {0,
             1226,892,785,678,540,7035,6911,7091,6966,7200,
             7146,6181,6119,6580,5897,0
         };
+signed int * get_scopeState_data(){ return  _scopeState;}
       int scopeState(int index) { return _scopeState[index]; }
-inline static unsigned short _inSymb[] = {0,
+inline static signed int _inSymb[] = {0,
             0,308,319,103,102,240,1,172,320,99,
             322,106,104,214,172,203,202,19,160,200,
             199,61,56,62,27,174,154,3,22,134,
@@ -2676,6 +2698,7 @@ inline static unsigned short _inSymb[] = {0,
             274,220,20,3,20,20,3,288,4,94,
             206,20,289,301,20,351,67,268,20
         };
+signed int * get_inSymb_data(){ return  _inSymb;}
       int inSymb(int index) { return _inSymb[index]; }
 inline static std::wstring _name[] = {
             L"",

@@ -2,7 +2,8 @@
 #include <vector>
 
 #include "ObjectTuple.h"
-struct ParseTable;
+class ParseTableProxy;
+
 struct StateElement;
 struct ConfigurationElement;
 
@@ -19,9 +20,9 @@ struct ConfigurationStack
         stacks_size,
         state_element_size;
 
-     ParseTable* prs;
+     ParseTableProxy* prs;
 
-     ConfigurationStack(ParseTable* _prs);
+     ConfigurationStack(ParseTableProxy* _prs);
      ~ConfigurationStack();
 	
      StateElement* makeStateList(StateElement* parent, Array<int>& stack, int index, int stack_top);

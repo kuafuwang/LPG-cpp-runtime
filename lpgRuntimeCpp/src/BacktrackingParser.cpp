@@ -92,8 +92,9 @@ void BacktrackingParser::reset(Monitor* monitor, TokenStream* tokStream)
 void BacktrackingParser::reset(Monitor* monitor, TokenStream* tokStream, ParseTable* prs, RuleAction* ra)
 {
 	reset(monitor, tokStream);
-
-	this->prs = prs;
+	
+	delete this->prs;
+	this->prs = new ParseTableProxy(prs);
 	this->ra = ra;
 
 	START_STATE = prs->getStartState();
@@ -112,6 +113,7 @@ void BacktrackingParser::reset(Monitor* monitor, TokenStream* tokStream, ParseTa
 BacktrackingParser::~BacktrackingParser()
 {
 	delete action;
+	delete prs;
 
 }
 
@@ -276,7 +278,7 @@ Object* BacktrackingParser::fuzzyParseEntry(int marker_kind, int max_error_count
 		{
 			throw TokenStreamNotIPrsStreamException();
 		}
-		std::unique_ptr<RecoveryParser> recovery_parser = std::make_unique<RecoveryParser>(this,  *action, *tokens, (IPrsStream*)tokStream, prs,
+		std::unique_ptr<RecoveryParser> recovery_parser = std::make_unique<RecoveryParser>(this,  *action, *tokens, (IPrsStream*)tokStream, prs->_prs,
 			monitor, max_error_count, 0);
 		start_token = recovery_parser->recover(marker_token, error_token);
 	}

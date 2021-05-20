@@ -3,6 +3,7 @@
 #include "Exception.h"
 #include "Monitor.h"
 #include "ParseTable.h"
+#include "ParseTableProxy.h"
 #include "RuleAction.h"
 #include "TokenStream.h"
 
@@ -110,8 +111,8 @@ void DeterministicParser::reset(Monitor* monitor, TokenStream* tokStream,
                                 ParseTable* prs, RuleAction* ra)
 {
 	reset(monitor, tokStream);
-
-	this->prs = prs;
+	delete this->prs;
+	this->prs = new  ParseTableProxy(prs);
 	this->ra = ra;
 
 	START_STATE = prs->getStartState();

@@ -75,13 +75,18 @@ public:
         type_name[U8] = type_name[U16] = "wchar_t";
         type_name[I32] = "int";*/
 
+        //type_name[B] = "char"; // recall that "bool" doesn't work in C
+        //type_name[I8] = "signed char";
+        //type_name[U8] = "unsigned char";
+        //type_name[I16] = "signed short";
+        //type_name[U16] = "unsigned short";
+        //type_name[I32] = "signed int";
         type_name[B] = "char"; // recall that "bool" doesn't work in C
-        type_name[I8] = "signed char";
-        type_name[U8] = "unsigned char";
-        type_name[I16] = "signed short";
-        type_name[U16] = "unsigned short";
+        type_name[I8] = "signed int";
+        type_name[U8] = "signed int";
+        type_name[I16] = "signed int";
+        type_name[U16] = "signed int";
         type_name[I32] = "signed int";
-
 
     	
         array_name[NULLABLES] = "isNullable";
