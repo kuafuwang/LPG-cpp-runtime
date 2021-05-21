@@ -65,7 +65,7 @@
 
     $BeginActions
     /!
-         #include "$action_type.h"
+        
          void $action_type::ruleAction(int ruleNumber)
         {
             switch (ruleNumber)
@@ -160,30 +160,35 @@
 
 %Globals
     /.
-    #pragma once
-
-#include <iostream>
-#include "AstPoolHolder.h"
-#include "DeterministicParser.h"
-#include "diagnose.h"
-#include "ErrorToken.h"
-#include "Exception.h"
-#include "IAbstractArrayList.h"
-#include "IAst.h"
-#include "IAstVisitor.h"
-#include "ILexStream.h"
-#include "$sym_type.h"
-#include "$prs_type.h"
-#include "Object.h"
-#include "ParseTable.h"
-#include "PrsStream.h"
-#include "RuleAction.h"
-#include "IcuUtil.h"
     ./
 %End
 
 %Headers
+    /! 
+    #include "$action_type.h"
+     ParseTable* $action_type::prsTable = new $prs_type();
+    !/
+
     /.
+
+    #pragma once
+    #include <iostream>
+    #include "AstPoolHolder.h"
+    #include "DeterministicParser.h"
+    #include "diagnose.h"
+    #include "ErrorToken.h"
+    #include "Exception.h"
+    #include "IAbstractArrayList.h"
+    #include "IAst.h"
+    #include "IAstVisitor.h"
+    #include "ILexStream.h"
+    #include "$sym_type.h"
+    #include "$prs_type.h"
+    #include "Object.h"
+    #include "ParseTable.h"
+    #include "PrsStream.h"
+    #include "RuleAction.h"
+    #include "IcuUtil.h"
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
       
@@ -194,7 +199,7 @@
         }
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
 
-        inline static ParseTable* prsTable = new $prs_type();
+         static ParseTable* prsTable ;
          ParseTable* getParseTable() { return prsTable; }
 
          DeterministicParser* dtParser = nullptr;

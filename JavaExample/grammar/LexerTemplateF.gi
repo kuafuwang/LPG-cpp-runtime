@@ -14,6 +14,7 @@
 %Options programming_language=rt_cpp,margin=4
 %Options table
 %options action-block=("*.h", "/.", "./")
+%options action-block=("*.cpp", "/!", "!/")
 %options ParseTable=ParseTable
 %Options prefix=Char_
 
@@ -121,25 +122,29 @@
 
 %Globals
     /.
-
-#pragma once  
-#include <iostream>
-#include "IPrsStream.h"
-#include "Object.h"
-#include "ParseTable.h"
-#include "RuleAction.h"
-#include "stringex.h"
-#include "Token.h"
-#include "$sym_type.h"
-#include "$prs_type.h"
-#include "$kw_lexer_class.h"
-#include "LexParser.h"
-#include "LpgLexStream.h"
     ./
 %End
 
 %Headers
+    /!
+    #include "$action_type.h"
+    ParseTable* $action_type::prs = new $prs_type();
+    !/
     /.
+
+    #pragma once  
+    #include <iostream>
+    #include "IPrsStream.h"
+    #include "Object.h"
+    #include "ParseTable.h"
+    #include "RuleAction.h"
+    #include "stringex.h"
+    #include "Token.h"
+    #include "$sym_type.h"
+    #include "$prs_type.h"
+    #include "$kw_lexer_class.h"
+    #include "LexParser.h"
+    #include "LpgLexStream.h"
      struct $action_type :public $super_class ,public RuleAction$additional_interfaces
     {
          struct  $super_stream_class;
@@ -150,7 +155,7 @@
             delete lexParser;
         }
 
-         inline  static ParseTable* prs = new $prs_type();
+        static ParseTable* prs;
          ParseTable* getParseTable() { return prs; }
 
          LexParser* lexParser = new LexParser();

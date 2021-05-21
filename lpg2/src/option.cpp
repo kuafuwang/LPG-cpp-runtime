@@ -130,16 +130,17 @@ Option::Option(int argc_, const char **argv_)
     action_type = NULL;
     default_action_prefix = NULL;
     default_action_file = NULL;
+    int len = strlen(default_block_begin);
+    auto temp = NewString(len+1);
 
-    auto temp  = NewString(3);
-
-    memcpy(temp, "/.", 2);
-    temp[2] = 0x00;
+    memcpy(temp, default_block_begin, len);
+    temp[len] = 0x00;
     default_ast_block_begin = temp;
-
-    temp = NewString(3);
-    memcpy(temp, "./", 2);
-    temp[2] = 0x00;
+	
+    len = strlen(default_block_end);
+    temp = NewString(len+1);
+    memcpy(temp, default_block_end, len);
+    temp[len] = 0x00;
     default_ast_block_end = temp;
 
 	
