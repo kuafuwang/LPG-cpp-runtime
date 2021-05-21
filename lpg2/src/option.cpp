@@ -133,12 +133,12 @@ Option::Option(int argc_, const char **argv_)
 
     auto temp  = NewString(3);
 
-    memcpy(temp, "//.", 2);
+    memcpy(temp, "/.", 2);
     temp[2] = 0x00;
     default_ast_block_begin = temp;
 
     temp = NewString(3);
-    memcpy(temp, ".//", 2);
+    memcpy(temp, "./", 2);
     temp[2] = 0x00;
     default_ast_block_end = temp;
 
