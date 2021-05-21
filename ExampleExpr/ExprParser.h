@@ -20,7 +20,9 @@
 #include "PrsStream.h"
 #include "RuleAction.h"
 #include "AstPoolHolder.h"
- struct ExprParser :public PrsStream ,public RuleAction
+#include "ExprParser_top_level_ast.h"
+
+    struct ExprParser :public PrsStream ,public RuleAction
 {
  
      bool unimplementedSymbolsWarning = false;
@@ -162,7 +164,72 @@
     {
         switch (ruleNumber)
         {
-
+using namespace ExprParser_top_level_ast;
+ 
+            //
+            // Rule 1:  E ::= E + T
+            //
+            case 1: {
+                setResult(
+                    //#line 13 ExprParser.g
+                     _automatic_ast_pool << new E(getLeftIToken(), getRightIToken(),
+                          //#line 13 ExprParser.g
+                          (IAst*)getRhsSym(1),
+                          //#line 13 ExprParser.g
+                          (IAst*)getRhsSym(3))
+                //#line 13 ExprParser.g
+                );
+          break;
+            } 
+            //
+            // Rule 2:  E ::= T
+            //
+            case 2:
+                break; 
+            //
+            // Rule 3:  T ::= T * F
+            //
+            case 3: {
+                setResult(
+                    //#line 15 ExprParser.g
+                     _automatic_ast_pool << new T(getLeftIToken(), getRightIToken(),
+                          //#line 15 ExprParser.g
+                          (IAst*)getRhsSym(1),
+                          //#line 15 ExprParser.g
+                          (IAst*)getRhsSym(3))
+                //#line 15 ExprParser.g
+                );
+          break;
+            } 
+            //
+            // Rule 4:  T ::= F
+            //
+            case 4:
+                break; 
+            //
+            // Rule 5:  F ::= IntegerLiteral
+            //
+            case 5: {
+                setResult(
+                    //#line 17 ExprParser.g
+                     _automatic_ast_pool << new F(getRhsIToken(1))
+                //#line 17 ExprParser.g
+                );
+          break;
+            } 
+            //
+            // Rule 6:  F ::= ( E )
+            //
+            case 6: {
+                setResult(
+                    //#line 18 ExprParser.g
+                     _automatic_ast_pool << new ParenExpr(getLeftIToken(), getRightIToken(),
+                                  //#line 18 ExprParser.g
+                                  (IAst*)getRhsSym(2))
+                //#line 18 ExprParser.g
+                );
+          break;
+            }
     //#line 322 "dtParserTemplateD.g
 
     
