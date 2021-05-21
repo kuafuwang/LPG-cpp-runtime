@@ -90,13 +90,14 @@ namespace IcuUtil
 		if (!pFile)
 			return  false;
 		
-		struct _stat64i32 statbuf;
-		_wstat64i32(fileName, &statbuf);
+		struct _stat32 statbuf;
+		_wstat32(fileName, &statbuf);
 		const auto bufsize = statbuf.st_size;
 		std::vector<char> holder( bufsize, 0);
 		
 		uint32_t count = fread(&holder[0], 1, bufsize, pFile);
 		fclose(pFile);
+		holder.resize(count);
 		const pair<string, int> detectResult = detectTextEncoding(&holder[0], count);
 		std::string strEncoding;
 		if (detectResult.second > 70)
@@ -115,14 +116,14 @@ namespace IcuUtil
 
 		
 		const char* in_source = &holder[0];
-		UChar* out_buf = (UChar*)content.data();
-		const auto tmp_buf = out_buf;
+		UChar* tmp_target = (UChar*)content.data();
+		const auto tmp_buf = tmp_target;
 		
-		ucnv_toUnicode(pFromCnv, &out_buf, out_buf + content.size(), &in_source, in_source + holder.size(), NULL, flush, &inerr);
+		ucnv_toUnicode(pFromCnv, &tmp_target, tmp_target + content.size(), &in_source, in_source + holder.size(), NULL, flush, &inerr);
 		if (U_FAILURE(inerr))
 			return false;
-		
-		content.resize(out_buf - tmp_buf);
+	    count = tmp_target - tmp_buf;
+		content.resize(count);
 		
 		return true;
 	}
