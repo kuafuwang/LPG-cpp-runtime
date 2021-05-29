@@ -11,6 +11,7 @@
 //
 // Wrapper for a simple array
 //
+#ifdef  _DEBUG
 
 template <class T>
 class Array
@@ -124,9 +125,9 @@ public:
     {
     	if(OutOfRange(i))
     	{
-           throw  std::out_of_range("invalid vector subscript");
+           throw  std::out_of_range("invalid index subscript");
     	}
-        return  operator[](i);
+        return info[i];
     }
     //
     // Return the ith element of the array
@@ -147,7 +148,141 @@ public:
         return info[i];
     }
 };
+#else
 
+//
+// Wrapper for a simple array
+//
+template <class T>
+class Array
+{
+    int size;
+    T* info;
+
+public:
+    Array() : size(0),
+        info(NULL)
+    {}
+
+    Array(int size_) : size(size_)
+    {
+        info = new T[size];
+    }
+
+    Array(int size_, T value) : size(size_)
+    {
+        info = new T[size];
+        Initialize(value);
+
+        return;
+    }
+
+    ~Array()
+    {
+        delete[] info;
+    }
+
+    void Initialize(T init_value)
+    {
+        for (int i = 0; i < size; i++)
+            info[i] = init_value;
+    }
+
+    void Resize(int new_size)
+    {
+        if (new_size > size)
+        {
+            T* old_info = info;
+            info = (T*)memmove(new T[new_size], old_info, size * sizeof(T));
+            delete[] old_info;
+        }
+        size = new_size;
+
+        return;
+    }
+
+    void Reallocate(int new_size)
+    {
+        if (new_size > size)
+        {
+            T* old_info = info;
+            info = (T*) new T[new_size];
+            delete[] old_info;
+        }
+        size = new_size;
+
+        return;
+    }
+
+    //
+    // Set all fields in the array to val.
+    //
+    void Memset(int val = 0)
+    {
+        memset(info, val, size * sizeof(T));
+    }
+
+    //
+    // Set all field in the array to 0 starting at index i.
+    //
+    void MemReset(int i = 0)
+    {
+        if (size == 0)
+            return;
+
+        //
+        // Use this code when debugging to force a crash instead of
+        // allowing the assertion to be raised.
+        //
+        //if (i < 0 || i >= size)
+        //{
+        //    Array<T> *a = NULL;
+        //    a -> size = 0;
+        //}
+        assert(!OutOfRange(i));
+
+        int length = size - i;
+        memset(&info[i], 0, length * sizeof(T));
+    }
+
+    int Size() { return size; }
+
+    //
+    // Can the array be indexed with i?
+    //
+    inline bool OutOfRange(const int i) { return (i < 0 || i >= size); }
+
+    //
+    // Return the ith element of the array
+    //
+    T& operator[](const int i)
+    {
+        //
+        // Use this code when debugging to force a crash instead of
+        // allowing the assertion to be raised.
+        //
+        //if (i < 0 || i >= size)
+        //{
+        //    Array<T> *a = NULL;
+        //    a -> size = 0;
+        //}
+        assert(!OutOfRange(i));
+
+        return info[i];
+    }
+
+    T& at(const int i)
+    {
+        if(OutOfRange(i))
+        {
+           throw  std::out_of_range("invalid index subscript");
+        }
+         return info[i];
+       
+    }
+};
+
+#endif
 //
 // This Tuple template class can be used to construct a dynamic
 // array of arbitrary objects. The space for the array is allocated
@@ -822,18 +957,18 @@ public:
         return  *this;
     }
 	
-    int size()
+    int size()const
     {
 	    return _data->size();
     }
-    T* data()
+    T* data()const
     {
         return &_data->operator[](0);
     }
     //
     // Return the ith element of the array
     //
-    T& operator[](const int i)
+    T& operator[](const int i)const
     {
         return   _data->operator[](i);
     }
@@ -848,6 +983,133 @@ public:
     }
 };
 
+template <class T>
+class shared_ptr_basic_string
+{
+    using  string_type = std::basic_string<T>;
+	
+   
+
+public:
+    std::shared_ptr < string_type > _data;
+    string_type& get_string_type() const {
+        return *_data.get();
+    }
+    shared_ptr_basic_string() : _data(new string_type())
+    {
+
+    }
+    shared_ptr_basic_string(T* start, int length) :_data(new string_type(start, start + length))
+    {
+
+    }
+    shared_ptr_basic_string(T* start, T* end) :_data(new std::vector<T>(start, end))
+    {
+
+    }
+    shared_ptr_basic_string(typename string_type::const_iterator start,
+        typename string_type::const_iterator end) :_data(new string_type(start, end))
+    {
+
+    }
+
+    shared_ptr_basic_string(string_type&& buf) :_data(new string_type(std::move(buf)))
+    {
+
+    }
+    shared_ptr_basic_string(const string_type& buf) :_data(new string_type(buf))
+    {
+
+    }
+
+    shared_ptr_basic_string(int size_) : _data(new string_type(size_, {}))
+    {
+
+    }
+
+    shared_ptr_basic_string(int size_, T value) : _data(new string_type(size_, value))
+    {
+
+    }
+    shared_ptr_basic_string(const shared_ptr_basic_string& rhs) :_data(rhs._data)
+    {
+    }
+
+    shared_ptr_basic_string(shared_ptr_basic_string&& rhs) noexcept :_data(rhs._data)
+    {
+    }
+
+    ~shared_ptr_basic_string()
+    {
+
+    }
+    void swap(shared_ptr_basic_string& other) noexcept {
+        _data.swap(other);
+    }
+    shared_ptr_basic_string& operator=(const shared_ptr_basic_string& rhs)
+    {
+        _data = rhs._data;
+        return  *this;
+    }
+    shared_ptr_basic_string& operator=(shared_ptr_basic_string&& right) noexcept { // take resource from _Right
+        _data.swap(right._data);
+        return *this;
+    }
+
+    shared_ptr_basic_string& operator=(string_type&& buf)
+    {
+        _data->swap(buf);
+        return  *this;
+    }
+
+    shared_ptr_basic_string& operator=(const string_type& buf)
+    {
+        (*_data) = buf;
+        return  *this;
+    }
+
+    int size()const
+    {
+        return _data->size();
+    }
+	int length() const
+    {
+        return  _data->length();
+    }
+    T* data() const 
+    {
+        return &_data->operator[](0);
+    }
+    //
+    // Return the ith element of the array
+    //
+    T& operator[](const int i)const
+    {
+        return   _data->operator[](i);
+    }
+    T& at(const int i)const
+    {
+        return   _data->at(i);
+    }
+    bool operator!() const
+    {
+        return  !operator()();
+    }
+    bool operator()() const
+    {
+        if (!_data) return false;
+        return (!_data->empty());
+    }
+    string_type substr(const size_t _Off = 0, const size_t _Count = string_type::npos) const {
+        // return [_Off, _Off + _Count) as new string
+        return _data->substr(_Off, _Count);
+    }
+
+};
+
+
+using shared_ptr_string = shared_ptr_basic_string<char>;
+using shared_ptr_wstring = shared_ptr_basic_string<wchar_t>;
 
 namespace System
 {

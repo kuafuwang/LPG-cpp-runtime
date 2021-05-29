@@ -161,9 +161,9 @@ struct IPrsStream :public  TokenStream
 
     virtual    Tuple<IToken*> incrementalResetAtCharacterOffset(int damage_offset)=0;
 
-    virtual    shared_ptr_array<wchar_t> getInputChars()=0;
+    virtual    shared_ptr_wstring getInputChars()=0;
 
-    virtual   shared_ptr_array<char>  getInputBytes()=0;
+    virtual   shared_ptr_string  getInputBytes()=0;
 
     virtual   std::wstring toString(int first_token, int last_token)=0;
 

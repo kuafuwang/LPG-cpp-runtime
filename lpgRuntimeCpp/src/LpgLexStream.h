@@ -38,7 +38,7 @@ struct LpgLexStream :public  LexStream
      * @param inputChars
      * @param fileName
      */
-    LpgLexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name):LexStream(inputChars, file_name) {
+    LpgLexStream(shared_ptr_wstring inputChars, const std::wstring& file_name):LexStream(inputChars, file_name) {
         
     }
 
@@ -47,7 +47,7 @@ struct LpgLexStream :public  LexStream
      * @param inputLength
      * @param fileName
      */
-    LpgLexStream(shared_ptr_array<wchar_t>  inputChars, int inputLength, const std::wstring& file_name)
+    LpgLexStream(shared_ptr_wstring  inputChars, int inputLength, const std::wstring& file_name)
 	:LexStream(inputChars, inputLength, file_name){
      
     }
@@ -57,7 +57,7 @@ struct LpgLexStream :public  LexStream
      * @param inputChars
      * @param fileName
      */
-    LpgLexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars,
+    LpgLexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars,
         const std::wstring& file_name):LexStream(lineOffsets, inputChars, file_name) {
         
     }
@@ -68,7 +68,7 @@ struct LpgLexStream :public  LexStream
      * @param inputLength
      * @param fileName
      */
-    LpgLexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
+    LpgLexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, int inputLength,
         const std::wstring& file_name):LexStream(lineOffsets,inputChars, inputLength,file_name) {
       
     }
@@ -78,7 +78,7 @@ struct LpgLexStream :public  LexStream
      * @param fileName
      * @param tab
      */
-    LpgLexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name, int tab):LexStream(inputChars,file_name,tab)
+    LpgLexStream(shared_ptr_wstring inputChars, const std::wstring& file_name, int tab):LexStream(inputChars,file_name,tab)
 	{
       
     }
@@ -89,7 +89,7 @@ struct LpgLexStream :public  LexStream
      * @param fileName
      * @param tab
      */
-    LpgLexStream(shared_ptr_array<wchar_t> inputChars, int inputLength, const std::wstring& fileName, int tab) :LexStream(inputChars,inputLength,fileName,tab){
+    LpgLexStream(shared_ptr_wstring inputChars, int inputLength, const std::wstring& fileName, int tab) :LexStream(inputChars,inputLength,fileName,tab){
       
     }
 

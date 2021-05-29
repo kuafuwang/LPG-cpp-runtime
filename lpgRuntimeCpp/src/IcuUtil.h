@@ -43,6 +43,7 @@ int convert(const char *toConverterName,
 // 
 const string getCheckedEncoding(const pair<string, int> &encoding);
 
-bool getFileUnicodeContent(const wchar_t* fileName, std::vector<wchar_t>& content);
+bool getFileUnicodeContent(const wchar_t* fileName, std::wstring& content);
+bool getFileRawContent(const wchar_t* fileName, std::string& content);
 }
 #endif

@@ -15,6 +15,8 @@
     //#line 123 "LexerTemplateF.gi
 
 
+    //#line 128 "LexerTemplateF.gi
+
 #pragma once  
 #include <iostream>
 #include "IPrsStream.h"
@@ -28,9 +30,6 @@
 #include "JavaKWLexer.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
-
-    //#line 142 "LexerTemplateF.gi
-
  struct JavaLexer :public Object ,public RuleAction
 {
      struct  JavaLexerLpgLexStream;
@@ -58,7 +57,7 @@
     {
         if (kwLexer == nullptr)
               this->kwLexer = new JavaKWLexer(lexStream->getInputChars(), JavaParsersym::TK_IDENTIFIER);
-        else this->kwLexer->setInputChars(lexStream->getInputChars());
+        else this->kwLexer->setInput(lexStream->getInputChars());
     }
 
      void reset(const std::wstring& filename, int tab) 
@@ -69,12 +68,12 @@
         resetKeywordLexer();
     }
 
-     void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename)
+     void reset(shared_ptr_wstring input_chars, const std::wstring& filename)
     {
         reset(input_chars, filename, 1);
     }
     
-     void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
+     void reset(shared_ptr_wstring input_chars, const std::wstring& filename, int tab)
     {
          delete lexStream;
         lexStream = new JavaLexerLpgLexStream(input_chars, filename, tab);
@@ -87,12 +86,12 @@
         reset(filename, tab);
     }
 
-     JavaLexer(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
+     JavaLexer(shared_ptr_wstring input_chars, const std::wstring& filename, int tab)
     {
         reset(input_chars, filename, tab);
     }
 
-     JavaLexer(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename)
+     JavaLexer(shared_ptr_wstring input_chars, const std::wstring& filename)
     {
         reset(input_chars, filename, 1);
     }
@@ -148,7 +147,7 @@
         addEOF(prsStream, (end_offset >= lexStream->getStreamIndex() ? lexStream->getStreamIndex() : end_offset + 1));
     }
     
-     IPrsStream::Range *incrementalLexer(shared_ptr_array<wchar_t> input_chars, int start_change_offset, int end_change_offset) {
+     IPrsStream::Range *incrementalLexer(shared_ptr_wstring input_chars, int start_change_offset, int end_change_offset) {
         int offset_adjustment = input_chars.size() - lexStream->getStreamLength();
 //*System.out.println("The offset adjustment is " + offset_adjustment);
         if (start_change_offset <= 0 && start_change_offset < input_chars.size())
@@ -319,7 +318,7 @@
     /**
      * @deprecated function replaced by {@link #reset(char [] content, const std::wstring& filename)}
      */
-     void initialize(shared_ptr_array<wchar_t> content, const std::wstring& filename)
+     void initialize(shared_ptr_wstring content, const std::wstring& filename)
     {
         reset(content, filename);
     }
@@ -538,18 +537,18 @@
         
     }
 
-     JavaLexerLpgLexStream(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab):LpgLexStream(input_chars, filename, tab)
+     JavaLexerLpgLexStream(shared_ptr_wstring input_chars, const std::wstring& filename, int tab):LpgLexStream(input_chars, filename, tab)
     {
        
     }
 
-     JavaLexerLpgLexStream(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename):LpgLexStream(input_chars, filename, 1)
+     JavaLexerLpgLexStream(shared_ptr_wstring input_chars, const std::wstring& filename):LpgLexStream(input_chars, filename, 1)
     {
         
     }
     };
 
-    //#line 413 "LexerTemplateF.gi
+    //#line 412 "LexerTemplateF.gi
 
      void ruleAction(int ruleNumber)
     {
@@ -972,7 +971,7 @@
                   break;
             }
     
-    //#line 417 "LexerTemplateF.gi
+    //#line 416 "LexerTemplateF.gi
 
     
             default:

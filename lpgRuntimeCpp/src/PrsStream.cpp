@@ -10,6 +10,7 @@
 #include "ErrorToken.h"
 #include "LexStream.h"
 #include "Token.h"
+#include "Utf8LexStream.h"
 
 PrsStream::~PrsStream()
 {
@@ -334,18 +335,18 @@ void PrsStream::addTokensInRangeToList(std::vector<IToken*>& list, IToken* start
 	return;
 }
 
-shared_ptr_array<wchar_t> PrsStream::getInputChars()
+shared_ptr_wstring PrsStream::getInputChars()
 {
 	if (dynamic_cast<LexStream*>(iLexStream))
-		return  ((LexStream*)iLexStream)->getInputChars();
+		return  static_cast<LexStream*>(iLexStream)->getInputChars();
 	return {};
 }
 
-shared_ptr_array<char> PrsStream::getInputBytes()
+shared_ptr_string PrsStream::getInputBytes()
 {
-	//  return (iLexStream instanceof Utf8LexStream
-	//        ? ((Utf8LexStream) iLexStream).getInputBytes()
-	//        : nullptr);
+
+	if (dynamic_cast<Utf8LexStream*>(iLexStream))
+		return  static_cast<Utf8LexStream*>(iLexStream)->getInputBytes();
 	return {};
 }
 

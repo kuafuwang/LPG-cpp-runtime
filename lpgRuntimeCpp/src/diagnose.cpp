@@ -469,15 +469,12 @@ int DiagnoseParser::parseForError(int current_kind)
 		}
 		else break; // assert(act == ACCEPT_ACTION);
 
-		try
-		{
-			tempStack.at(++tempStackTop) = act;
-		}
-		catch (std::exception& e)
+
+		if (++tempStackTop >= tempStack.Size())
 		{
 			reallocateStacks();
-			tempStack[tempStackTop] = act;
 		}
+		tempStack[tempStackTop] = act;
 		act = tAction(act, current_kind);
 	}
 
@@ -571,16 +568,11 @@ void DiagnoseParser::parseUpToError(IntTuple& action, int current_kind, int erro
 		}
 		else break; // assert(act == ACCEPT_ACTION);
 
-		try
-		{
-		
-			tempStack.at(++tempStackTop) = act;
-		}
-		catch (std::exception& e)
+		if(++tempStackTop >= tempStack.Size())
 		{
 			reallocateStacks();
-			tempStack[tempStackTop] = act;
 		}
+		tempStack[tempStackTop] = act;
 		act = tAction(act, current_kind);
 	}
 

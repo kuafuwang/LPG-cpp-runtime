@@ -175,7 +175,7 @@
         {
             prsStream->reset(e.error_token); // point to error token
 
-            auto diagnoseParser = new DiagnoseParser(prsStream, prsTable);
+            std::shared_ptr< DiagnoseParser> diagnoseParser = std::make_shared<DiagnoseParser>(prsStream, prsTable);
             diagnoseParser->diagnose(e.error_token);
         }
 

@@ -14,7 +14,6 @@
 %Options programming_language=rt_cpp,margin=4
 %Options table
 %options action-block=("*.h", "/.", "./")
-%options action-block=("*.cpp", "/!", "!/")
 %options ParseTable=ParseTable
 %Options prefix=Char_
 
@@ -126,12 +125,7 @@
 %End
 
 %Headers
-    /!
-    #include "$action_type.h"
-    ParseTable* $action_type::prs = new $prs_type();
-    !/
     /.
-
     #pragma once  
     #include <iostream>
     #include "IPrsStream.h"
@@ -155,7 +149,7 @@
             delete lexParser;
         }
 
-        static ParseTable* prs;
+         inline  static ParseTable* prs = new $prs_type();
          ParseTable* getParseTable() { return prs; }
 
          LexParser* lexParser = new LexParser();
@@ -172,7 +166,7 @@
         {
             if (kwLexer == nullptr)
                   this->kwLexer = new $kw_lexer_class(lexStream->getInputChars(), $_IDENTIFIER);
-            else this->kwLexer->setInputChars(lexStream->getInputChars());
+            else this->kwLexer->setInput(lexStream->getInputChars());
         }
   
          void reset(const std::wstring& filename, int tab) 
@@ -183,12 +177,12 @@
             resetKeywordLexer();
         }
 
-         void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename)
+         void reset(shared_ptr_wstring input_chars, const std::wstring& filename)
         {
             reset(input_chars, filename, 1);
         }
         
-         void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
+         void reset(shared_ptr_wstring input_chars, const std::wstring& filename, int tab)
         {
              delete lexStream;
             lexStream = new $super_stream_class(input_chars, filename, tab);
@@ -201,12 +195,12 @@
             reset(filename, tab);
         }
 
-         $action_type(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
+         $action_type(shared_ptr_wstring input_chars, const std::wstring& filename, int tab)
         {
             reset(input_chars, filename, tab);
         }
 
-         $action_type(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename)
+         $action_type(shared_ptr_wstring input_chars, const std::wstring& filename)
         {
             reset(input_chars, filename, 1);
         }
@@ -262,7 +256,7 @@
             addEOF(prsStream, (end_offset >= lexStream->getStreamIndex() ? lexStream->getStreamIndex() : end_offset + 1));
         }
         
-         IPrsStream::Range *incrementalLexer(shared_ptr_array<wchar_t> input_chars, int start_change_offset, int end_change_offset) {
+         IPrsStream::Range *incrementalLexer(shared_ptr_wstring input_chars, int start_change_offset, int end_change_offset) {
             int offset_adjustment = input_chars.size() - lexStream->getStreamLength();
 //*System.out.println("The offset adjustment is " + offset_adjustment);
             if (start_change_offset <= 0 && start_change_offset < input_chars.size())

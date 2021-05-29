@@ -53,12 +53,48 @@ namespace IcuUtil
 
 	std::string ws2s(std::wstring const& wstr)
 	{
-		return  {};
+
+		UErrorCode errcode = U_ZERO_ERROR;
+		std::string out(wstr.size()*2,0);
+		
+		UConverter* pToUcnv = ucnv_open("utf8", &errcode);
+		if (!pToUcnv) return {};
+		const UChar* to_from = reinterpret_cast<const UChar*>(&wstr[0]);
+		bool out_flush = false;
+		UErrorCode out_err = U_ZERO_ERROR;
+		
+		char* to_target = &out[0];
+		const auto to_buf = to_target;
+		auto to_limit = to_target + out.size();
+		ucnv_fromUnicode(pToUcnv, &to_target, to_limit, &to_from, to_from + wstr.size(), NULL, out_flush, &out_err);
+		if (U_FAILURE(out_err))
+		{
+			return  {};
+		}
+		out.resize(to_target - to_buf);
+		return  out;
 	}
 
 	std::wstring s2ws(std::string const& str)
 	{
-		return  {};
+		// convert UTF16 to utf8
+		bool flush = false;
+		UErrorCode errcode = U_ZERO_ERROR;
+		UConverter* pFromCnv = ucnv_open("utf8", &errcode);
+		if (U_FAILURE(errcode)) return {};
+		UErrorCode inerr = U_ZERO_ERROR;
+
+		std::wstring content(str.size(), 0);
+		const char* in_source = &str[0];
+		auto  tmp_target = reinterpret_cast<UChar*>(content.data());
+		const auto tmp_buf = tmp_target;
+
+		ucnv_toUnicode(pFromCnv, &tmp_target, tmp_target + content.size(), &in_source, in_source + str.size(), NULL, flush, &inerr);
+		if (U_FAILURE(inerr))
+			return {};
+		int count = tmp_target - tmp_buf;
+		content.resize(count);
+		return  content;
 	}
 
 	std::pair<std::string, int> detectFileEncoding(const wchar_t* fileName)
@@ -69,8 +105,8 @@ namespace IcuUtil
 		assert(pFile);
 		if (!pFile)
 			return  encoding;
-		struct _stat64i32 statbuf;
-		_wstat64i32(fileName, &statbuf);
+		struct _stat32 statbuf;
+		_wstat32(fileName, &statbuf);
 		const auto bufsize = statbuf.st_size;
 		char* buf = new char[bufsize];
 
@@ -82,7 +118,7 @@ namespace IcuUtil
 		delete[] buf;
 		return encoding;
 	}
-	bool getFileUnicodeContent(const wchar_t* fileName,vector<wchar_t>& content)
+	bool getFileUnicodeContent(const wchar_t* fileName, std::wstring& content)
 	{
 		FILE* pFile = nullptr;
 		_wfopen_s(&pFile,fileName, L"r");
@@ -127,6 +163,26 @@ namespace IcuUtil
 		
 		return true;
 	}
+
+	bool getFileRawContent(const wchar_t* fileName, std::string& content)
+	{
+		FILE* pFile = nullptr;
+		_wfopen_s(&pFile, fileName, L"r");
+
+		if (!pFile)
+			return  false;
+
+		struct _stat32 statbuf;
+		_wstat32(fileName, &statbuf);
+		const auto bufsize = statbuf.st_size;
+		content.resize(bufsize);
+
+		uint32_t count = fread(&content[0], 1, bufsize, pFile);
+		fclose(pFile);
+		content.resize(count);
+		return true;
+	}
+
 	/*
 	 * toConverterName,      ×ª»»ºóµÄ×Ö·û±àÂë
 	 * fromConverterName,    ×ª»»Ç°µÄ×Ö·û±àÂë

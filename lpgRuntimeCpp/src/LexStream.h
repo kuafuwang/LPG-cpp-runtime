@@ -18,7 +18,7 @@ struct LexStream :
     int index = -1;
     int streamLength_ = 0;
 
-    shared_ptr_array<wchar_t>  inputChars_;
+    shared_ptr_wstring  inputChars_;
     std::wstring fileName_;
 	
     std::shared_ptr<IntSegmentedTuple>  lineOffsets = std::make_shared<IntSegmentedTuple>();
@@ -40,38 +40,38 @@ struct LexStream :
         initialize(file_name);
     }
 
-    LexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name)
+    LexStream(shared_ptr_wstring inputChars, const std::wstring& file_name)
     {
         this_init();
         initialize(inputChars, inputChars.size(), file_name);
     }
 
-    LexStream(shared_ptr_array<wchar_t>  inputChars, int inputLength, const std::wstring& file_name)
+    LexStream(shared_ptr_wstring  inputChars, int inputLength, const std::wstring& file_name)
     {
         this_init();
         initialize(inputChars, inputLength, file_name);
     }
 
-    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name);
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, const std::wstring& file_name);
 
-    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, int inputLength,
               const std::wstring& file_name);
 
-    LexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name, int tab);
+    LexStream(shared_ptr_wstring inputChars, const std::wstring& file_name, int tab);
 
-    LexStream(shared_ptr_array<wchar_t> inputChars, int inputLength,const std::wstring& fileName, int tab)
+    LexStream(shared_ptr_wstring inputChars, int inputLength,const std::wstring& fileName, int tab)
     {
         this_tab(tab);
         initialize(inputChars, inputLength, fileName);
     }
 
-    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName, int tab)
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, const std::wstring& fileName, int tab)
     {
         this_tab(tab);
         initialize(lineOffsets, inputChars, inputChars.size(), fileName);
     }
 
-    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, std::vector<wchar_t> inputChars, int inputLength, const std::wstring& fileName, int tab)
+    LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, int inputLength, const std::wstring& fileName, int tab)
     {
         this_tab(tab);
         initialize(lineOffsets, inputChars, inputLength, fileName);
@@ -79,12 +79,12 @@ struct LexStream :
 
     void initialize(const std::wstring& file_name);
 
-    void initialize(shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName)
+    void initialize(shared_ptr_wstring inputChars, const std::wstring& fileName)
     {
         initialize(inputChars, inputChars.size(), fileName);
     }
 
-    void initialize(shared_ptr_array<wchar_t> inputChars, int inputLength, const std::wstring& fileName)
+    void initialize(shared_ptr_wstring inputChars, int inputLength, const std::wstring& fileName)
     {
         setInputChars(inputChars);
         setStreamLength(inputLength);
@@ -92,12 +92,12 @@ struct LexStream :
         computeLineOffsets();
     }
 
-    void initialize(std::shared_ptr< IntSegmentedTuple>& lineOffsets_, shared_ptr_array<wchar_t> inputChars, const std::wstring& fileName)
+    void initialize(std::shared_ptr< IntSegmentedTuple>& lineOffsets_, shared_ptr_wstring inputChars, const std::wstring& fileName)
     {
         initialize(lineOffsets_, inputChars, inputChars.size(), fileName);
     }
 
-    void initialize(std::shared_ptr< IntSegmentedTuple>& lineOffsets_, shared_ptr_array<wchar_t> inputChars, int inputLength, const std::wstring& fileName)
+    void initialize(std::shared_ptr< IntSegmentedTuple>& lineOffsets_, shared_ptr_wstring inputChars, int inputLength, const std::wstring& fileName)
     {
         this->lineOffsets = lineOffsets_;
         setInputChars(inputChars);
@@ -122,13 +122,13 @@ struct LexStream :
      */
     void computeLineOffsets(int offset);
 
-    void setInputChars(shared_ptr_array<wchar_t> inputChars)
+    void setInputChars(shared_ptr_wstring inputChars)
     {
         this->inputChars_ = inputChars;
         index = -1; // reset the start index to the beginning of the input
     }
 
-    shared_ptr_array<wchar_t> getInputChars() { return inputChars_; }
+    shared_ptr_wstring getInputChars() { return inputChars_; }
 
     void setFileName(std::wstring fileName) { this->fileName_ = fileName; }
 

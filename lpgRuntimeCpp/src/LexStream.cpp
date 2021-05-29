@@ -19,20 +19,20 @@ void LexStream::this_tab(int tab)
 	this_init();
 }
 
-LexStream::LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name)
+LexStream::LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, const std::wstring& file_name)
 {
 	this_init();
 	initialize(lineOffsets, inputChars, inputChars.size(), file_name);
 }
 
-LexStream::LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_array<wchar_t> inputChars, int inputLength,
+LexStream::LexStream(std::shared_ptr< IntSegmentedTuple>& lineOffsets, shared_ptr_wstring inputChars, int inputLength,
                      const std::wstring& file_name)
 {
 	this_init();
 	initialize(lineOffsets, inputChars, inputLength, file_name);
 }
 
-LexStream::LexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& file_name, int tab)
+LexStream::LexStream(shared_ptr_wstring inputChars, const std::wstring& file_name, int tab)
 {
 	this_tab(tab);
 	initialize(inputChars, inputChars.size(), file_name);
@@ -40,10 +40,10 @@ LexStream::LexStream(shared_ptr_array<wchar_t> inputChars, const std::wstring& f
 
 void LexStream::initialize(const std::wstring& file_name)
 {
-	std::vector<wchar_t> buffer;
+	std::wstring buffer;
 	if(IcuUtil::getFileUnicodeContent(file_name.c_str(), buffer))
 	{
-		shared_ptr_array<wchar_t> inputChars(std::move(buffer));
+		shared_ptr_wstring inputChars(std::move(buffer));
 		initialize(inputChars, inputChars.size(), file_name);
 	}
 	else

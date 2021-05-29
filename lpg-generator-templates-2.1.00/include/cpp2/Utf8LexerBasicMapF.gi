@@ -7,7 +7,7 @@
         // The Lexer contains an array of characters as the input stream to be parsed.
         // There are methods to retrieve and classify characters.
         // The lexparser "token" is implemented simply as the index of the next character in the array.
-        // The Lexer extends the abstract class LpgLexStream with an implementation of the abstract
+        // The Lexer extends the abstract class Utf8LpgLexStream with an implementation of the abstract
         // method getKind.  The template defines the Lexer class and the lexer() method.
         // A driver creates the action class, "Lexer", passing an Option object to the constructor.
         //
@@ -22,7 +22,7 @@
         /**
          * @deprecated function replaced by {@link #reset(char [] content, const std::wstring& filename)}
          */
-         void initialize(shared_ptr_wstring content, const std::wstring& filename)
+         void initialize(shared_ptr_string content, const std::wstring& filename)
         {
             reset(content, filename);
         }
@@ -79,7 +79,7 @@
         
          void printValue(int startOffset, int endOffset)
         {
-           auto  input = lexStream->getInputChars().data();
+           auto  input = lexStream->getInputBytes().data();
             std::wstring s(input + startOffset,input + startOffset+  endOffset - startOffset + 1);
             std::wcout << (s) << std::endl ;
         }
@@ -87,7 +87,7 @@
         //
         //
         //
-         struct $super_stream_class :public LpgLexStream
+         struct $super_stream_class :public Utf8LpgLexStream
         {
          inline static int tokenKind[] =
         {
@@ -236,17 +236,17 @@
 
         std::vector<std::wstring> orderedExportedSymbols() { return $exp_type::orderedTerminalSymbols; }
 
-         $super_stream_class(const std::wstring& filename, int tab):LpgLexStream(filename, tab)
+         $super_stream_class(const std::wstring& filename, int tab):Utf8LpgLexStream(filename, tab)
         {
             
         }
 
-         $super_stream_class(shared_ptr_wstring input_chars, const std::wstring& filename, int tab):LpgLexStream(input_chars, filename, tab)
+         $super_stream_class(shared_ptr_string input_chars, const std::wstring& filename, int tab):Utf8LpgLexStream(input_chars, filename, tab)
         {
            
         }
     
-         $super_stream_class(shared_ptr_wstring input_chars, const std::wstring& filename):LpgLexStream(input_chars, filename, 1)
+         $super_stream_class(shared_ptr_string input_chars, const std::wstring& filename):Utf8LpgLexStream(input_chars, filename, 1)
         {
             
         }

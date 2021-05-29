@@ -2,6 +2,8 @@
 #include <exception>
 #include <string>
 
+#include "stringex.h"
+
 struct UnsupportedOperationException :public std::exception
 {
     /**
@@ -250,6 +252,7 @@ struct UnknownStreamType :public std::exception
     {
         this->str = str;
     }
+	
     std::string toString() { return str; }
 };
 struct BadParseException :public std::exception
@@ -257,10 +260,35 @@ struct BadParseException :public std::exception
     /**
      *
      */
-
+    std::string  str = "error_token index is: ";
     int error_token = 0;
     BadParseException(int _error_token)
     {
         error_token = _error_token;
+        std::stringex format;
+        format.format("%d", error_token);
+        str += format;
+    }
+    char const* what() const override
+    {
+
+        return  str.c_str();
+    }
+};
+
+struct StringIndexOutOfBoundsException: public std::exception
+{
+    std::string str;
+    StringIndexOutOfBoundsException(int index):exception("String index out of range: " + index)
+    {
+        str = "String index out of range: ";
+        std::stringex format;
+        format.format("%d", index);
+        str += format;
+    }
+
+    char const* what() const override
+    {
+        return  str.c_str();
     }
 };

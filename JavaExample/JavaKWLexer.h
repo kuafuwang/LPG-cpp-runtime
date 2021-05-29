@@ -15,25 +15,24 @@
     //#line 58 "KeywordTemplateF.gi
 
 
-
     //#line 100 "GJavaKWLexer.gi
 
 #include "JavaKWLexersym.h"
 #include "JavaKWLexerprs.h"
 
-    //#line 64 "KeywordTemplateF.gi
+    //#line 63 "KeywordTemplateF.gi
 
 #include "JavaParsersym.h"
 #include "tuple.h"
  struct  JavaKWLexer :public JavaKWLexerprs
 {
-	 shared_ptr_array<wchar_t> inputChars;
+	 shared_ptr_wstring inputChars;
+     shared_ptr_string inputBytes;
 	 static  constexpr int  keywordKindLenth = 88 + 1;
 	 int keywordKind[keywordKindLenth]={};
 	 int* getKeywordKinds() { return keywordKind; }
-
-	 int lexer(int curtok, int lasttok)
-	 {
+    int lexer_Wchart(int curtok, int lasttok)
+	{
 		 int current_kind = getKind(inputChars[curtok]),
 			 act;
 
@@ -55,9 +54,51 @@
 
 		 return keywordKind[act == ERROR_ACTION || curtok <= lasttok ? 0 : act];
 	 }
+     int lexer(int curtok, int lasttok){
+        if(inputBytes.size()){
+            return lexerBytes(curtok,lasttok);
+        }
+        else if(inputChars.size()){
+             return lexer_Wchart(curtok,lasttok);
+        }
+        else{
+            return 0;
+        }
+     }
+	 int lexerBytes(int curtok, int lasttok)
+	 {
+		 int current_kind = getKind(inputBytes[curtok]),
+			 act;
 
-	 void setInputChars(shared_ptr_array<wchar_t> inputChars) { this->inputChars = inputChars; }
+		 for (act = tAction(START_STATE, current_kind);
+			 act > NUM_RULES && act < ACCEPT_ACTION;
+			 act = tAction(act, current_kind))
+		 {
+			 curtok++;
+			 current_kind = (curtok > lasttok
+				 ? JavaKWLexersym::Char_EOF
+				 : getKind(inputBytes[curtok]));
+		 }
 
+		 if (act > ERROR_ACTION)
+		 {
+			 curtok++;
+			 act -= ERROR_ACTION;
+		 }
+
+		 return keywordKind[act == ERROR_ACTION || curtok <= lasttok ? 0 : act];
+	 }
+
+	 void setInput(shared_ptr_wstring inputChars) { this->inputChars = inputChars; }
+	 void setInput(shared_ptr_string inputBytes) { this->inputBytes = inputBytes; }
+    JavaKWLexer(shared_ptr_wstring inputChars, int identifierKind){
+         this->inputChars = inputChars;
+         initialize(identifierKind);
+    }
+    JavaKWLexer(shared_ptr_string input, int identifierKind){
+         this->inputBytes = input;
+         initialize(identifierKind);
+    }
 
     //#line 10 "KWLexerMapF.gi
 
@@ -131,12 +172,12 @@
     }
 
 
-    //#line 103 "KeywordTemplateF.gi
+    //#line 144 "KeywordTemplateF.gi
 
 
-     JavaKWLexer(shared_ptr_array<wchar_t> inputChars, int identifierKind)
+    void initialize(int identifierKind)
     {
-        this->inputChars = inputChars;
+       
         keywordKind[0] = identifierKind;
 
         //
@@ -559,7 +600,7 @@
         keywordKind[60] = (JavaParsersym::TK_BadAction);
       
     
-    //#line 113 "KeywordTemplateF.gi
+    //#line 154 "KeywordTemplateF.gi
 
         for (int i = 0; i < keywordKindLenth; i++)
         {

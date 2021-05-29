@@ -6,6 +6,7 @@
 #include "ILexStream.h"
 #include "IPrsStream.h"
 #include "LexStream.h"
+#include "Utf8LexStream.h"
 
 std::wstring DifferLines::Line::toString()
 {
@@ -116,30 +117,43 @@ void DifferLines::getBuffer(IPrsStream* prsStream, std::vector<ILine*>& buffer)
 #include <sstream>
 void DifferLines::printLines(IPrsStream* prs_stream, int first_line, int last_line)
 {
-	if ( dynamic_cast<LexStream*>(prs_stream->getILexStream()))
+	shared_ptr_wstring wchar_buffer;
+	shared_ptr_string  byte_buffer;
+	auto lex_stream =prs_stream->getILexStream();
+	if ( dynamic_cast<LexStream*>(lex_stream))
 	{
-		LexStream* lex_stream = (LexStream*)prs_stream->getILexStream();
-		auto buffer = lex_stream->getInputChars();
-
-		for (int line_no = first_line; line_no <= last_line; line_no++)
-		{
-			int start = lex_stream->getLineOffset(line_no - 1) + 1,
-			    end = lex_stream->getLineOffset(line_no);
-			std::wostringstream str_stream;
-			str_stream << line_no << L" ";
-			str_stream.clear();
-			std::wstring num = str_stream.str();
-			for (int i = 0; i < (7 - num.size()); i++)
-				num.push_back (' ');
-			
-			
-			std::wstring  line = num + std::wstring(buffer.data(), start, end - start);
-			std::wcout << (line);
-		}
+		wchar_buffer = static_cast<LexStream*>(lex_stream)->getInputChars();
 	}
-
+	else if (dynamic_cast<Utf8LexStream*>(lex_stream))
+	{
+		byte_buffer = static_cast<Utf8LexStream*>(lex_stream)->getInputBytes();
+	}
 	else
 	throw  UnknownStreamType("Unknown stream type ");
+
+
+	for (int line_no = first_line; line_no <= last_line; line_no++)
+	{
+		int start = lex_stream->getLineOffset(line_no - 1) + 1,
+			end = lex_stream->getLineOffset(line_no);
+		std::wostringstream str_stream;
+		str_stream << line_no << L" ";
+		str_stream.clear();
+		std::wstring num = str_stream.str();
+		for (int i = 0; i < (7 - num.size()); i++)
+			num.push_back(' ');
+
+		std::wstring  line;
+		if(wchar_buffer.size())
+		{
+			line = num + std::wstring(wchar_buffer.data(), start, end - start);
+		}
+		else if(byte_buffer.size())
+		{
+			line = num + std::wstring(byte_buffer.data()+start, byte_buffer.data() + end);
+		}
+		std::wcout << (line);
+	}
 }
 
 void DifferLines::outputInsert(Change* element)

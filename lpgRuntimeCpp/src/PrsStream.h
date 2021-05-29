@@ -124,10 +124,10 @@ struct PrsStream :public IPrsStream, public ParseErrorCodes
     void addTokensInRangeToList(std::vector<IToken*>& list, IToken* start_token, IToken* end_token) ;
 
     // TODO: should this function throw an exception instead of returning nullptr?
-    shared_ptr_array<wchar_t> getInputChars();
+    shared_ptr_wstring getInputChars();
 
     // TODO: should this function throw an exception instead of returning nullptr?
-    shared_ptr_array<char> getInputBytes();
+    shared_ptr_string getInputBytes();
 
     std::wstring toString(int first_token, int last_token);
 

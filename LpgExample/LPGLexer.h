@@ -15,6 +15,12 @@
     //#line 123 "LexerTemplateF.gi
 
 
+    //#line 7 "LPGLexer.gi
+
+
+
+    //#line 128 "LexerTemplateF.gi
+
 #pragma once  
 #include <iostream>
 #include "IPrsStream.h"
@@ -28,13 +34,6 @@
 #include "LPGKWLexer.h"
 #include "LexParser.h"
 #include "LpgLexStream.h"
-
-    //#line 7 "LPGLexer.gi
-
-
-
-    //#line 142 "LexerTemplateF.gi
-
  struct LPGLexer :public Object ,public RuleAction
 {
      struct  LPGLexerLpgLexStream;
@@ -62,7 +61,7 @@
     {
         if (kwLexer == nullptr)
               this->kwLexer = new LPGKWLexer(lexStream->getInputChars(), LPGParsersym::TK_MACRO_NAME);
-        else this->kwLexer->setInputChars(lexStream->getInputChars());
+        else this->kwLexer->setInput(lexStream->getInputChars());
     }
 
      void reset(const std::wstring& filename, int tab) 
@@ -73,12 +72,12 @@
         resetKeywordLexer();
     }
 
-     void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename)
+     void reset(shared_ptr_wstring input_chars, const std::wstring& filename)
     {
         reset(input_chars, filename, 1);
     }
     
-     void reset(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
+     void reset(shared_ptr_wstring input_chars, const std::wstring& filename, int tab)
     {
          delete lexStream;
         lexStream = new LPGLexerLpgLexStream(input_chars, filename, tab);
@@ -91,12 +90,12 @@
         reset(filename, tab);
     }
 
-     LPGLexer(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab)
+     LPGLexer(shared_ptr_wstring input_chars, const std::wstring& filename, int tab)
     {
         reset(input_chars, filename, tab);
     }
 
-     LPGLexer(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename)
+     LPGLexer(shared_ptr_wstring input_chars, const std::wstring& filename)
     {
         reset(input_chars, filename, 1);
     }
@@ -152,7 +151,7 @@
         addEOF(prsStream, (end_offset >= lexStream->getStreamIndex() ? lexStream->getStreamIndex() : end_offset + 1));
     }
     
-     IPrsStream::Range *incrementalLexer(shared_ptr_array<wchar_t> input_chars, int start_change_offset, int end_change_offset) {
+     IPrsStream::Range *incrementalLexer(shared_ptr_wstring input_chars, int start_change_offset, int end_change_offset) {
         int offset_adjustment = input_chars.size() - lexStream->getStreamLength();
 //*System.out.println("The offset adjustment is " + offset_adjustment);
         if (start_change_offset <= 0 && start_change_offset < input_chars.size())
@@ -323,7 +322,7 @@
     /**
      * @deprecated function replaced by {@link #reset(char [] content, const std::wstring& filename)}
      */
-     void initialize(shared_ptr_array<wchar_t> content, const std::wstring& filename)
+     void initialize(shared_ptr_wstring content, const std::wstring& filename)
     {
         reset(content, filename);
     }
@@ -542,18 +541,18 @@
         
     }
 
-     LPGLexerLpgLexStream(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename, int tab):LpgLexStream(input_chars, filename, tab)
+     LPGLexerLpgLexStream(shared_ptr_wstring input_chars, const std::wstring& filename, int tab):LpgLexStream(input_chars, filename, tab)
     {
        
     }
 
-     LPGLexerLpgLexStream(shared_ptr_array<wchar_t> input_chars, const std::wstring& filename):LpgLexStream(input_chars, filename, 1)
+     LPGLexerLpgLexStream(shared_ptr_wstring input_chars, const std::wstring& filename):LpgLexStream(input_chars, filename, 1)
     {
         
     }
     };
 
-    //#line 413 "LexerTemplateF.gi
+    //#line 412 "LexerTemplateF.gi
 
      void ruleAction(int ruleNumber)
     {
@@ -1666,7 +1665,7 @@
               makeToken(getRhsFirstTokenIndex(2), getRhsLastTokenIndex(2), LPGParsersym::TK_SYMBOL);             break;
             } 
 
-    //#line 417 "LexerTemplateF.gi
+    //#line 416 "LexerTemplateF.gi
 
     
             default:

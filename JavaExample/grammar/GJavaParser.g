@@ -6,7 +6,7 @@
 %options verbose
 %options template=btParserTemplateF.gi
 %options import_terminals=GJavaLexer.gi
-
+%options la=4
 %Notice
     /.//
     // This is the grammar specification from the Final Draft of the generic spec.

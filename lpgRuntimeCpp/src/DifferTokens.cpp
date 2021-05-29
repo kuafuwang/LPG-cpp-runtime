@@ -8,6 +8,7 @@
 #include "ILexStream.h"
 #include "LexStream.h"
 #include "stringex.h"
+#include "Utf8LexStream.h"
 
 DifferTokens::~DifferTokens()
 {
@@ -69,11 +70,15 @@ void DifferTokens::printLines(IPrsStream* prs_stream, int first_token, int last_
 		end_line = prs_stream->getLine(last_token);
 	auto lex_stream = prs_stream->getILexStream();
 
-	shared_ptr_array<wchar_t> char_buffer;
-	
+	shared_ptr_wstring char_buffer;
+	shared_ptr_string byte_buffer;
 	if ( dynamic_cast<LexStream*>(lex_stream))
 	{
-		char_buffer = ((LexStream*)lex_stream)->getInputChars();
+		char_buffer = static_cast<LexStream*>(lex_stream)->getInputChars();
+	}
+	else if(dynamic_cast<Utf8LexStream*>(lex_stream))
+	{
+		byte_buffer = static_cast<Utf8LexStream*>(lex_stream)->getInputBytes();
 	}
 	else
 	{
@@ -94,8 +99,15 @@ void DifferTokens::printLines(IPrsStream* prs_stream, int first_token, int last_
 	
 		for (int i = 0; i < (6 - format.length()); i++)
 			std::wcout << (' ');
-		auto  line = std::wstring(char_buffer.data(), start, end - start);
-		
+		std::wstring  line;
+		if (char_buffer.size())
+		{
+			line = std::wstring(char_buffer.data(), start, end - start);
+		}
+		else if(byte_buffer.size())
+		{
+			line = std::wstring(byte_buffer.data() + start, byte_buffer.data() + end);
+		}
 		std::wcout << start_line << " " << line << std::endl;
 
 		std::wcout << ("       "); // 7 spaces: 6 for number and 1 blank.
@@ -133,7 +145,17 @@ void DifferTokens::printLines(IPrsStream* prs_stream, int first_token, int last_
 	
 			for (int i = 0; i < (6 - format.length()); i++)
 				std::wcout << (' ');
-			auto  line = std::wstring(char_buffer.data(), start, end - start);
+			
+			std::wstring  line;
+			if (char_buffer.size())
+			{
+				line = std::wstring(char_buffer.data(), start, end - start);
+			}
+			else if (byte_buffer.size())
+			{
+				line = std::wstring(byte_buffer.data() + start, byte_buffer.data() + end);
+			}
+			
 			std::wcout << line_no << " " << line << std::endl;
 		}
 

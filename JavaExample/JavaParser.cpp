@@ -14,13 +14,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-    //#line 359 "btParserTemplateF.gi
-
-     #include "JavaParser.h"
+    //#line 169 "btParserTemplateF.gi
+ 
+#include "JavaParser.h"
 
 #include "JavaParser_top_level_ast.h"
+ParseTable* JavaParser::prsTable = new JavaParserprs();
 
-void JavaParser::ruleAction(int ruleNumber)
+    //#line 364 "btParserTemplateF.gi
+
+   
+     void JavaParser::ruleAction(int ruleNumber)
     {
         switch (ruleNumber)
         {
@@ -6057,7 +6061,7 @@ using namespace JavaParser_top_level_ast;
             //
             case 539:
                 break;
-    //#line 367 "btParserTemplateF.gi
+    //#line 372 "btParserTemplateF.gi
 
     
             default:

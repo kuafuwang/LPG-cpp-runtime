@@ -6,7 +6,7 @@
 %options single_productions
 %options template=LexerTemplateF.gi
 %options filter=GJavaKWLexer.gi
-
+%options lalr=4
 $Define
     --
     -- Definition of macro used in the included file LexerBasicMapB.g

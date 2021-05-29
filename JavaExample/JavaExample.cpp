@@ -16,7 +16,7 @@ int main()
 
     JavaParser parser(lexer.getILexStream()); // Create the parser
     lexer.lexer(nullptr, parser.getIPrsStream());
-    JavaParser_top_level_ast::Ast* ast = (JavaParser_top_level_ast::Ast*)parser.parser(nullptr, 100000);
+    JavaParser_top_level_ast::Ast* ast = (JavaParser_top_level_ast::Ast*)parser.parser(nullptr);
     std::cout << "Hello World!\n";
 }
 
