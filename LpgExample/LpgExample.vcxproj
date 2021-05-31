@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="LpgExample.cpp" />
     <ClCompile Include="LPGParser.cpp" />
+    <ClCompile Include="LPGParser_top_level_ast.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LPGKWLexer.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="LPGParser.h" />
     <ClInclude Include="LPGParserprs.h" />
     <ClInclude Include="LPGParsersym.h" />
+    <ClInclude Include="LPGParser_top_level_ast.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

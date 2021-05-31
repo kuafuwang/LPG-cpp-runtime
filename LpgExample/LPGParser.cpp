@@ -2,10 +2,13 @@
     //#line 351 "dtParserTemplateF.gi
 
      #include "LPGParser.h"
+#include "LPGParser_top_level_ast.h"
+using namespace LPGParser_top_level_ast;
      void LPGParser::ruleAction(int ruleNumber)
     {
         switch (ruleNumber)
         {
+
 
             //
             // Rule 1:  LPG ::= options_segment LPG_INPUT

@@ -1,5 +1,5 @@
 %options la=6
-%options automatic_ast,ast_type=ASTNode,visitor=preorder,parent_saved
+%options automatic_ast=topLevel,ast_type=ASTNode,visitor=preorder,parent_saved
 %options template=dtParserTemplateF.gi
 %options import_terminals=LPGLexer.gi
 

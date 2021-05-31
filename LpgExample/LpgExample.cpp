@@ -5,7 +5,8 @@
 
 #include "LPGLexer.h"
 #include "LPGParser.h"
-
+#include "LPGParser_top_level_ast.h"
+using namespace  LPGParser_top_level_ast;
 int main()
 {
 	LPGLexer lexer; // Create the lexer
@@ -14,7 +15,7 @@ int main()
 	
 	LPGParser parser(lexer.getILexStream()); // Create the parser
 	lexer.lexer(nullptr, parser.getIPrsStream());
-	LPGParser::ASTNode* ast = (LPGParser::ASTNode*)parser.parser(nullptr,100000);
+	ASTNode* ast = (ASTNode*)parser.parser(nullptr,100000);
     std::cout << "Hello World!\n";
 }
 

@@ -21,6 +21,9 @@
     <ClCompile Include="LPGParser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LPGParser_top_level_ast.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LPGKWLexer.h">
@@ -48,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="LPGParsersym.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LPGParser_top_level_ast.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
