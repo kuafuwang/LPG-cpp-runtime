@@ -3,24 +3,31 @@
 
 #include <iostream>
 #include "AstPoolHolder.h"
-
+#include "DeterministicParser.h"
+#include "diagnose.h"
 #include "ErrorToken.h"
 #include "Exception.h"
 #include "IAbstractArrayList.h"
 #include "IAst.h"
 #include "IAstVisitor.h"
 #include "ILexStream.h"
+#include "LPGParsersym.h"
+#include "LPGParserprs.h"
 #include "Object.h"
 #include "ParseTable.h"
+#include "PrsStream.h"
+#include "RuleAction.h"
 #include "IcuUtil.h"
 
+
+    #include <unordered_map>
+ 
+#pragma once
 #include "IAbstractArrayList.h"
 #include "IAst.h"
-
 struct LPGParser;
 
-namespace LPGParser_top_level_ast
-{
+namespace LPGParser_top_level_ast{
   struct Visitor;
   struct ASTNode;
   struct AbstractASTNodeList;
@@ -645,7 +652,8 @@ struct LPG :public ASTNode
 
     //#line 44 "LPGParser.g
 
-  
+    std::unordered_map<std::wstring, IAst*>* symbolTable;
+    void initialize();
  };
 
 /**
@@ -1840,8 +1848,8 @@ struct optionList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+        
 };
 
 /**
@@ -2060,8 +2068,8 @@ struct defineSpecList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+
 };
 
 /**
@@ -2122,9 +2130,9 @@ struct defineSpec :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 112 "LPGParser.g
+    //#line 115 "LPGParser.g
 
-   
+    void initialize();
  };
 
 /**
@@ -2235,8 +2243,8 @@ struct action_segmentList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+    
 };
 
 /**
@@ -2371,8 +2379,8 @@ struct drop_ruleList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+
 };
 
 /**
@@ -2651,8 +2659,8 @@ struct nameSpecList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+
 };
 
 /**
@@ -2804,8 +2812,8 @@ struct nonTermList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+
 };
 
 /**
@@ -2874,10 +2882,12 @@ struct nonTerm :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 184 "LPGParser.g
+    //#line 189 "LPGParser.g
 
- 
+    void initialize();
  };
+
+
 
 /**
  *<b>
@@ -2979,11 +2989,9 @@ struct ruleList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+    
 };
-
-
 
 /**
  *<b>
@@ -3169,7 +3177,7 @@ struct action_segment :public ASTNodeToken
         v->endVisit(this);
     }
 
-    //#line 226 "LPGParser.g
+    //#line 233 "LPGParser.g
 
 
 };
@@ -3251,11 +3259,9 @@ struct terminalList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+
 };
-
-
 
 /**
  *<b>
@@ -3318,10 +3324,12 @@ struct terminal :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 240 "LPGParser.g
+    //#line 247 "LPGParser.g
 
- 
+    void initialize();
  };
+
+
 
 /**
  *<em>
@@ -3413,11 +3421,9 @@ struct type_declarationsList :public AbstractASTNodeList{
         enter((Visitor*) v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+   
 };
-
-
 
 /**
  *<b>
@@ -3488,33 +3494,33 @@ struct type_declarations :public ASTNode
  *<li>Rule 139:  predecessor_segment ::= predecessor_segment symbol_pair
  *</b>
  */
-struct symbol_pairList :public AbstractASTNodeList{
-    IAst* getsymbol_pairAt(int i) { return (IAst*) getElementAt(i); }
+struct symbol_pairList :public AbstractASTNodeList {
+    IAst* getsymbol_pairAt(int i) { return (IAst*)getElementAt(i); }
 
-    symbol_pairList(IToken* leftIToken, IToken* rightIToken, bool leftRecursive):AbstractASTNodeList(leftIToken, rightIToken, leftRecursive)
-{
+    symbol_pairList(IToken* leftIToken, IToken* rightIToken, bool leftRecursive) :AbstractASTNodeList(leftIToken, rightIToken, leftRecursive)
+    {
     }
 
-    symbol_pairList(IAst* lpg_symbol_pair, bool leftRecursive):AbstractASTNodeList        ((ASTNode*) lpg_symbol_pair, leftRecursive)
+    symbol_pairList(IAst* lpg_symbol_pair, bool leftRecursive) :AbstractASTNodeList((ASTNode*)lpg_symbol_pair, leftRecursive)
     {
-        ((ASTNode*) lpg_symbol_pair)->setParent(this);
+        ((ASTNode*)lpg_symbol_pair)->setParent(this);
     }
 
-    void addElement(IAst *lpg_symbol_pair)
+    void addElement(IAst* lpg_symbol_pair)
     {
-        AbstractASTNodeList::addElement((ASTNode*) lpg_symbol_pair);
-        ((ASTNode*) lpg_symbol_pair)->setParent(this);
+        AbstractASTNodeList::addElement((ASTNode*)lpg_symbol_pair);
+        ((ASTNode*)lpg_symbol_pair)->setParent(this);
     }
 
 
     void accept(IAstVisitor* v)
     {
-        if (! v->preVisit(this)) return;
-        enter((Visitor*) v);
+        if (!v->preVisit(this)) return;
+        enter((Visitor*)v);
         v->postVisit(this);
     }
-
     void enter(Visitor* v);
+
 };
 
 /**
@@ -3603,9 +3609,9 @@ struct recover_symbol :public ASTNodeToken
         v->endVisit(this);
     }
 
-    //#line 269 "LPGParser.g
+    //#line 280 "LPGParser.g
 
-   
+    void initialize();
  };
 
 /**
@@ -4900,9 +4906,9 @@ struct terminal_symbol0 :public ASTNodeToken
         v->endVisit(this);
     }
 
-    //#line 246 "LPGParser.g
+    //#line 255 "LPGParser.g
 
-  
+    void initialize();
  };
 
 /**

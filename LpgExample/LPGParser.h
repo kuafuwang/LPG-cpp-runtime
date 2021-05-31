@@ -23,7 +23,7 @@
 
     //#line 7 "LPGParser.g
 
-
+    #include <unordered_map>
  
     //#line 186 "dtParserTemplateF.gi
 
@@ -189,7 +189,7 @@
 
     //#line 37 "LPGParser.g
 
-    
+     std::unordered_map<std::wstring, IAst*> symtab;
  
     //#line 355 "dtParserTemplateF.gi
 

@@ -5,7 +5,7 @@
 
 %Globals
     /.
-
+        #include <unordered_map>
      ./
 %End
 
@@ -35,14 +35,17 @@
 
 %Headers
     /.
-        
+         std::unordered_map<std::wstring, IAst*> symtab;
      ./
 %End
 
 %Rules
     LPG ::= options_segment LPG_INPUT
     /.
-      
+        std::unordered_map<std::wstring, IAst*>* symbolTable;
+        void initialize() {
+             symbolTable = &(environment->symtab); 
+        }
      ./
 
     LPG_INPUT$$LPG_item ::= %empty
@@ -110,7 +113,9 @@
     define_segment$$defineSpec ::= defineSpec | define_segment defineSpec
     defineSpec ::= macro_name_symbol macro_segment
     /.
-       
+        void initialize() {
+             environment->symtab.insert({getmacro_name_symbol()->toString(), this});
+        }
      ./
 
     macro_name_symbol ::= MACRO_NAME
@@ -182,7 +187,10 @@
 
     nonTerm ::= ruleNameWithAttributes produces ruleList
     /.
-     
+        void initialize() {
+             auto temp = ((RuleName*)getruleNameWithAttributes())->getSYMBOL()->toString();
+             environment->symtab.insert({temp, this});
+        }
      ./
 
     -- TODO Rename to nonTermNameWithAttributes
@@ -224,7 +232,7 @@
 
     action_segment ::= BLOCK 
     /.
-    
+
     ./
 
     -- $start
@@ -238,13 +246,17 @@
 
     terminal ::= terminal_symbol optTerminalAlias
     /.
-     
+        void initialize() {
+             environment->symtab.insert({getterminal_symbol()->toString(), this});
+        }
      ./
     optTerminalAlias ::= %empty | produces name
 
     terminal_symbol ::= SYMBOL
     /.
-      
+        void initialize() {
+             environment->symtab.insert({getSYMBOL()->toString(), this});
+        }
      ./
     terminal_symbol ::= MACRO_NAME -- warning: escape prefix used in symbol
 
@@ -267,7 +279,9 @@
     
     recover_symbol ::= SYMBOL
     /.
-       
+        void initialize() {
+             environment->symtab.insert({getSYMBOL()->toString(), this});
+        }
      ./
 
     END_KEY_OPT ::= %empty

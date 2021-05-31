@@ -1,5 +1,7 @@
 #include "LPGParser_top_level_ast.h"
 
+#include "LPGParser.h"
+
 void LPGParser_top_level_ast::option_specList::enter(Visitor* v)
 {
 	bool checkChildren = v->visit(this);
@@ -48,6 +50,11 @@ void LPGParser_top_level_ast::defineSpecList::enter(Visitor* v)
 	v->endVisit(this);
 }
 
+void LPGParser_top_level_ast::defineSpec::initialize()
+{
+	environment->symtab.insert({getmacro_name_symbol()->toString(), this});
+}
+
 void LPGParser_top_level_ast::action_segmentList::enter(Visitor* v)
 {
 	bool checkChildren = v->visit(this);
@@ -79,7 +86,11 @@ void LPGParser_top_level_ast::drop_ruleList::enter(Visitor* v)
 	}
 	v->endVisit(this);
 }
-
+ void LPGParser_top_level_ast::nonTerm::initialize()
+{
+	 auto temp = ((RuleName*)getruleNameWithAttributes())->getSYMBOL()->toString();
+	 environment->symtab.insert({ temp, this });
+}
 void LPGParser_top_level_ast::nameSpecList::enter(Visitor* v)
 {
 	bool checkChildren = v->visit(this);
@@ -157,6 +168,21 @@ void LPGParser_top_level_ast::symbol_pairList::enter(Visitor* v)
 	}
 	v->endVisit(this);
 }
+
+void LPGParser_top_level_ast::recover_symbol::initialize()
+{
+	environment->symtab.insert({getSYMBOL()->toString(), this});
+}
+
+void LPGParser_top_level_ast::terminal_symbol0::initialize()
+{
+	environment->symtab.insert({getSYMBOL()->toString(), this});
+}
+
+ void LPGParser_top_level_ast::terminal::initialize()
+{
+	environment->symtab.insert({ getterminal_symbol()->toString(), this });
+}
  void LPGParser_top_level_ast::type_declarationsList::enter(Visitor* v)
 {
 	bool checkChildren = v->visit(this);
@@ -172,3 +198,9 @@ void LPGParser_top_level_ast::symbol_pairList::enter(Visitor* v)
 	}
 	v->endVisit(this);
 }
+
+void LPGParser_top_level_ast::LPG::initialize()
+{
+	symbolTable = &(environment->symtab);
+}
+
