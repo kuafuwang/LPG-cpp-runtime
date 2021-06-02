@@ -1554,7 +1554,8 @@ void Grammar::ProcessRules(Tuple<int> &declared_terminals)
     action -> ProcessCodeActions(trailer_actions, typestring, processed_rule_map);
     if (option -> warnings)
         action -> CheckExportMacros();
-    action_blocks -> Flush(); // Print out all action buffers and close action files.
+	
+	action_blocks -> Flush(); // Print out all action buffers and close action files.
 
     return;
 }

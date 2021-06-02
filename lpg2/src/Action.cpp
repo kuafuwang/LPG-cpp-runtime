@@ -6,7 +6,39 @@
 #include "LexStream.h"
 #include "Action.h"
 #include "spell.h"
+namespace BuildInMacroName
+{
+    const char* entry_declarations_string = "$entry_declarations";
+    const char* rule_number_string = "rule_number";
+    const char* rule_text_string = "rule_text";
+    const char* rule_size_string = "rule_size";
+    const char* input_file_string = "input_file";
+    const char* current_line_string = "current_line";
+    const char* next_line_string = "next_line";
+    const char* identifier_string = "#identifier";
+    const char* symbol_declarations_string = "symbol_declarations";
+    const char* num_rules_string = "num_rules";
+    const char* num_terminals_string = "num_terminals";
+    const char* num_nonterminals_string = "num_nonterminals";
+    const char* num_non_terminals_string = "num_non_terminals";
+    const char* num_symbols_string = "num_symbols";
+    const char* template_string = "template";
+    const char* file_prefix_string = "file_prefix";
+    const char* package_string = "package";
+    const char* ast_package_string = "ast_package";
+    const char* ast_type_string = "ast_type";
+    const char* exp_type_string = "exp_type";
+    const char* prs_type_string = "prs_type";
+    const char* sym_type_string = "sym_type";
+    const char* action_type_string = "action_type";
+    const char* visitor_type_string = "visitor_type";
+    const char* prefix_string = "prefix";
+    const char* suffix_string = "suffix";
 
+    const char* entry_name_string = "entry_name";
+    const char* entry_marker_string = "entry_marker";
+
+}
 //
 //
 //
@@ -161,44 +193,44 @@ void Action::CheckMacrosForConsistency()
 
 void Action::SetupBuiltinMacros()
 {
-    const char *entry_declarations_string = "$entry_declarations";
+    using namespace BuildInMacroName;
     entry_declarations_macro = FindUserDefinedMacro(entry_declarations_string, strlen(entry_declarations_string));
 
     //
     // First, insert local macros. Then, process all actions
     //
-    rule_number_macro = InsertLocalMacro("rule_number");
-    rule_text_macro = InsertLocalMacro("rule_text");
-    rule_size_macro = InsertLocalMacro("rule_size");
-    input_file_macro = InsertLocalMacro("input_file");
-    current_line_macro = InsertLocalMacro("current_line");
-    next_line_macro = InsertLocalMacro("next_line");
-    identifier_macro = InsertLocalMacro("#identifier",
+    rule_number_macro = InsertLocalMacro(rule_number_string);
+    rule_text_macro = InsertLocalMacro(rule_text_string);
+    rule_size_macro = InsertLocalMacro(rule_size_string);
+    input_file_macro = InsertLocalMacro(input_file_string);
+    current_line_macro = InsertLocalMacro(current_line_string);
+    next_line_macro = InsertLocalMacro(next_line_string);
+    identifier_macro = InsertLocalMacro(identifier_string,
                                         (grammar -> parser.identifier_index == 0
                                                   ? NULL
                                                   : lex_stream -> GetVariableSymbol(grammar -> parser.identifier_index) -> Name()));
-    symbol_declarations_macro = InsertLocalMacro("symbol_declarations", "");
+    symbol_declarations_macro = InsertLocalMacro(symbol_declarations_string, "");
 
-    (void) InsertLocalMacro("num_rules", grammar -> num_rules);
-    (void) InsertLocalMacro("num_terminals", grammar -> num_terminals);
-    (void) InsertLocalMacro("num_nonterminals", grammar -> num_nonterminals);
-    (void) InsertLocalMacro("num_non_terminals", grammar -> num_nonterminals); // for upward compatibility with old version
-    (void) InsertLocalMacro("num_symbols", grammar -> num_symbols);
-    (void) InsertLocalMacro("template", option -> template_name);
-    (void) InsertLocalMacro("file_prefix", option -> file_prefix);
-    (void) InsertLocalMacro("package", option -> package);
-    (void) InsertLocalMacro("ast_package", option -> ast_package);
-    (void) InsertLocalMacro("ast_type", option -> ast_type);
-    (void) InsertLocalMacro("exp_type", option -> exp_type);
-    (void) InsertLocalMacro("prs_type", option -> prs_type);
-    (void) InsertLocalMacro("sym_type", option -> sym_type);
-    (void) InsertLocalMacro("action_type", option -> action_type);
-    (void) InsertLocalMacro("visitor_type", option -> visitor_type);
-    (void) InsertLocalMacro("prefix", option -> prefix);
-    (void) InsertLocalMacro("suffix", option -> suffix);
+    (void) InsertLocalMacro(num_rules_string, grammar -> num_rules);
+    (void) InsertLocalMacro(num_terminals_string, grammar -> num_terminals);
+    (void) InsertLocalMacro(num_nonterminals_string, grammar -> num_nonterminals);
+    (void) InsertLocalMacro(num_non_terminals_string, grammar -> num_nonterminals); // for upward compatibility with old version
+    (void) InsertLocalMacro(num_symbols_string, grammar -> num_symbols);
+    (void) InsertLocalMacro(template_string, option -> template_name);
+    (void) InsertLocalMacro(file_prefix_string, option -> file_prefix);
+    (void) InsertLocalMacro(package_string, option -> package);
+    (void) InsertLocalMacro(ast_package_string , option -> ast_package);
+    (void) InsertLocalMacro(ast_type_string, option -> ast_type);
+    (void) InsertLocalMacro(exp_type_string, option -> exp_type);
+    (void) InsertLocalMacro(prs_type_string, option -> prs_type);
+    (void) InsertLocalMacro(sym_type_string, option -> sym_type);
+    (void) InsertLocalMacro(action_type_string, option -> action_type);
+    (void) InsertLocalMacro(visitor_type_string, option -> visitor_type);
+    (void) InsertLocalMacro(prefix_string, option -> prefix);
+    (void) InsertLocalMacro(suffix_string, option -> suffix);
 
-    entry_name_macro = InsertLocalMacro("entry_name"); // Reserved macro. Prevent user redefinition
-    entry_marker_macro = InsertLocalMacro("entry_marker"); // Reserved macro. Prevent user redefinition
+    entry_name_macro = InsertLocalMacro(entry_name_string); // Reserved macro. Prevent user redefinition
+    entry_marker_macro = InsertLocalMacro(entry_marker_string); // Reserved macro. Prevent user redefinition
 
     //
     // Process filters macros 
@@ -1100,7 +1132,7 @@ void Action::ProcessActionBlock(ActionBlockElement &action, bool add_location_di
     {
         const char *line_header = "    //#line $current_line \"$input_file$\"";
         buffer -> PutChar('\n');
-        ProcessActionLine(action.location,
+        ProcessActionLine(block,action.location,
                           buffer,
                           lex_stream -> FileName(action.block_token),
                           &(line_header[0]),
@@ -1140,7 +1172,7 @@ void Action::ProcessActionBlock(ActionBlockElement &action, bool add_location_di
         for (head = cursor; (cursor < tail) && (*cursor != '\n'); cursor++)
             ;
         if (cursor > head)
-            ProcessActionLine(action.location,
+            ProcessActionLine(block, action.location,
                               buffer,
                               lex_stream -> FileName(action.block_token),
                               head,
@@ -1167,6 +1199,7 @@ void Action::ProcessActionBlock(ActionBlockElement &action, bool add_location_di
 //
 void Action::ProcessMacroBlock(int location, MacroSymbol *macro, TextBuffer *default_buffer, int rule_number, const char *source_filename, int source_line_no)
 {
+    BlockSymbol* scope_block = nullptr;
     int block_token = macro -> Block();
     BlockSymbol *block = lex_stream -> GetBlockSymbol(block_token);
     assert(block);
@@ -1222,7 +1255,7 @@ void Action::ProcessMacroBlock(int location, MacroSymbol *macro, TextBuffer *def
             // of the macros $next_line or $input_file, then the macro should be expanded as if they were
             // specified in the containing Action block.
             //
-            ProcessActionLine(location,
+            ProcessActionLine( scope_block, location,
                               buffer,
                               lex_stream -> FileName(block_token),
                               head,
@@ -1253,13 +1286,13 @@ void Action::ProcessMacro(TextBuffer *buffer, const char *name, int rule_no)
     char *macroname = new char[length + 1];
     macroname[0] = option -> escape;
     strcpy(&macroname[1], name);
-
+    BlockSymbol* scope_block = nullptr;
     if (FindUserDefinedMacro(macroname, length))
     {
         const char *filename = lex_stream -> FileName(grammar -> rules[rule_no].first_token_index);
         int line_offset = lex_stream -> Line(grammar -> rules[rule_no].first_token_index) - 1;
 
-        ProcessActionLine(ActionBlockElement::BODY,
+        ProcessActionLine(scope_block,ActionBlockElement::BODY,
                           buffer,
                           filename,
                           macroname,
@@ -1464,7 +1497,8 @@ Symbol *Action::FindClosestMatchForMacro(const char *filename, const char *curso
 // stituted for the name. The modified action text is then printed out in
 // the action file.
 //
-void Action::ProcessActionLine(int location,
+void Action::ProcessActionLine(BlockSymbol* scope_block,
+							   int location,
                                TextBuffer *buffer,
                                const char *filename,
                                const char *cursor,
@@ -1513,8 +1547,10 @@ void Action::ProcessActionLine(int location,
             // Next, check to see if it is a Local macro, a filter macro, an export_symbol macro
             // Finally, check to see if it is a user-defined macro
             //
-            SimpleMacroSymbol *simple_macro;
-            MacroSymbol *macro;
+            std::string marcro_name(cursor, end_cursor);
+            SimpleMacroSymbol *simple_macro = nullptr;
+            Symbol* define_symbol = nullptr;
+            MacroSymbol *macro = nullptr;
             if ((simple_macro = FindRuleMacro(cursor, end_cursor - cursor)) != NULL)
             {
                 char *value = simple_macro -> Value();
@@ -1525,6 +1561,7 @@ void Action::ProcessActionLine(int location,
             }
             else if ((simple_macro = FindLocalMacro(cursor, end_cursor - cursor)) != NULL)
             {
+            	
                 char *value = simple_macro -> Value();
                 if (value)
                 {
@@ -1537,7 +1574,7 @@ void Action::ProcessActionLine(int location,
                             for (q = p + 1; *q && *q != '\n'; q++)
                                 ;
 
-                            ProcessActionLine(location,
+                            ProcessActionLine(scope_block,location,
                                               buffer,
                                               filename,
                                               p,
@@ -1629,8 +1666,10 @@ void Action::ProcessActionLine(int location,
             }
             else if ((simple_macro = FindUndeclaredMacro(cursor, end_cursor - cursor)) != NULL) // just skip undeclared macro
             {
+            	
                   cursor = end_cursor + (*end_cursor == option -> escape ? 1 : 0);
             }
+
             else if ((macro = FindUserDefinedMacro(cursor, end_cursor - cursor)) != NULL)
             {
                 int block_token = macro -> Block();
@@ -1659,7 +1698,7 @@ void Action::ProcessActionLine(int location,
                     }
                     else // A perfect substitution (except for case difference) was found. Use it.
                     {
-                        ProcessActionLine(location,
+                        ProcessActionLine(scope_block,location,
                                           buffer,
                                           filename,
                                           symbol -> Name(),
@@ -1696,13 +1735,13 @@ void Action::ProcessActionLine(int location,
                         {
                             local_macro_table.Push(); // prepare to insert special macros for this environment
 
-                            assert(InsertLocalMacro("entry_name", grammar -> RetrieveString(grammar -> start_symbol[i] -> SymbolIndex())));
+                            assert(InsertLocalMacro(BuildInMacroName::entry_name_string, grammar -> RetrieveString(grammar -> start_symbol[i] -> SymbolIndex())));
                             const char *marker = grammar -> RetrieveString(grammar -> declared_terminals[i]);
                             char *str = new char[strlen(option -> prefix) + strlen(marker) + strlen(option -> suffix) + 1];
                             strcpy(str, option -> prefix);
                             strcat(str, marker);
                             strcat(str, option -> suffix);
-                            assert(InsertLocalMacro("entry_marker", str));
+                            assert(InsertLocalMacro(BuildInMacroName::entry_marker_string, str));
                             delete [] str;
 
                             ProcessMacroBlock(location, macro, buffer, rule_no, source_filename, source_line_no);
@@ -1738,7 +1777,8 @@ void Action::ProcessActionLine(int location,
                 }
                 else // A perfect substitution (except for case difference) was found. Use it.
                 {
-                    ProcessActionLine(location,
+                    define_symbol = symbol;
+                    ProcessActionLine(scope_block, location,
                                       buffer,
                                       filename,
                                       symbol -> Name(),
@@ -1748,6 +1788,18 @@ void Action::ProcessActionLine(int location,
                                       source_line_no);
                     cursor = end_cursor + (*end_cursor == option -> escape ? 1 : 0);
                 }
+            }
+
+            if (scope_block)
+            {
+            	if(!define_symbol)
+            	{
+                    if (simple_macro)
+                        define_symbol = simple_macro;
+                    else 
+                        define_symbol= macro;
+            	}
+                scope_block->AddReference(new ReferenceSymbol(marcro_name, source_line_no, define_symbol));
             }
         }
     }
@@ -1765,7 +1817,7 @@ void Action::GenerateCode(TextBuffer *ast_buffer, const char *code, int rule_no)
     const char *start_cursor_location = &(lex_stream -> InputBuffer(separator_token)[start]),
                *end_cursor_location = &(lex_stream -> InputBuffer(separator_token)[end]);
 
-    ProcessActionLine(ActionBlockElement::BODY,
+    ProcessActionLine(nullptr, ActionBlockElement::BODY,
                       ast_buffer,
                       lex_stream -> FileName(separator_token),
                       code,

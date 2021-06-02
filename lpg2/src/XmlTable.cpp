@@ -171,7 +171,7 @@ void XmlTable::PrintTables(void)
         Table::Exit(12);
     }
 
-    cout << "***Xml tables not yet implemented\n";
+    std::cout << "***Xml tables not yet implemented\n";
     Table::Exit(12);
 
     tab_buffer.Put('S');

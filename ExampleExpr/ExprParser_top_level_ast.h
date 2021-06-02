@@ -2,6 +2,7 @@
 
 
 #pragma once
+#include "Any.h"
 #include "Exception.h"
 #include "IAbstractArrayList.h"
 #include "IAst.h"
@@ -43,23 +44,23 @@ struct ArgumentVisitor
 };
 struct ResultVisitor
 {
-  virtual  Object* visit(AstToken *n)=0;
-  virtual  Object* visit(E *n)=0;
-  virtual  Object* visit(T *n)=0;
-  virtual  Object* visit(F *n)=0;
-  virtual  Object* visit(ParenExpr *n)=0;
+  virtual  lpg::Any visit(AstToken *n)=0;
+  virtual  lpg::Any visit(E *n)=0;
+  virtual  lpg::Any visit(T *n)=0;
+  virtual  lpg::Any visit(F *n)=0;
+  virtual  lpg::Any visit(ParenExpr *n)=0;
 
-  virtual  Object* visit(Ast *n)=0;
+  virtual  lpg::Any visit(Ast *n)=0;
 };
 struct ResultArgumentVisitor
 {
-  virtual  Object* visit(AstToken *n, Object* o)=0;
-  virtual  Object* visit(E *n, Object* o)=0;
-  virtual  Object* visit(T *n, Object* o)=0;
-  virtual  Object* visit(F *n, Object* o)=0;
-  virtual  Object* visit(ParenExpr *n, Object* o)=0;
+  virtual  lpg::Any visit(AstToken *n, Object* o)=0;
+  virtual  lpg::Any visit(E *n, Object* o)=0;
+  virtual  lpg::Any visit(T *n, Object* o)=0;
+  virtual  lpg::Any visit(F *n, Object* o)=0;
+  virtual  lpg::Any visit(ParenExpr *n, Object* o)=0;
 
-  virtual  Object* visit(Ast *n, Object* o)=0;
+  virtual  lpg::Any visit(Ast *n, Object* o)=0;
 };
 struct Ast :public IAst
 {
@@ -98,8 +99,8 @@ struct Ast :public IAst
 
      virtual void accept(Visitor* v)=0;
      virtual void accept(ArgumentVisitor *v, Object* o)=0;
-     virtual Object* accept(ResultVisitor *v)=0;
-     virtual Object* accept(ResultArgumentVisitor *v, Object* o)=0;
+     virtual lpg::Any accept(ResultVisitor *v)=0;
+     virtual lpg::Any accept(ResultArgumentVisitor *v, Object* o)=0;
     void accept(IAstVisitor* v) {}
 };
 
@@ -164,8 +165,8 @@ struct AstToken :public  Ast
 
     void accept(Visitor *v) { v->visit(this); }
     void accept(ArgumentVisitor *v, Object* o) { v->visit(this, o); }
-    Object* accept(ResultVisitor *v) { return v->visit(this); }
-    Object* accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
+    lpg::Any accept(ResultVisitor *v) { return v->visit(this); }
+    lpg::Any accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
 };
 
 /**
@@ -179,17 +180,17 @@ struct AstToken :public  Ast
  */
 struct E :public Ast
 {
-    IAst *lpg_E;
-    IAst *lpg_T;
+    Ast *lpg_E;
+    Ast *lpg_T;
 
-    IAst *getE() { return lpg_E; };
-    void setE(IAst *lpg_E) { this->lpg_E = lpg_E; }
-    IAst *getT() { return lpg_T; };
-    void setT(IAst *lpg_T) { this->lpg_T = lpg_T; }
+    Ast *getE() { return lpg_E; };
+    void setE(Ast *lpg_E) { this->lpg_E = lpg_E; }
+    Ast *getT() { return lpg_T; };
+    void setT(Ast *lpg_T) { this->lpg_T = lpg_T; }
 
     E(IToken* leftIToken, IToken* rightIToken,
-      IAst *lpg_E,
-      IAst *lpg_T):Ast(leftIToken, rightIToken)    {
+      Ast *lpg_E,
+      Ast *lpg_T):Ast(leftIToken, rightIToken)    {
         this->lpg_E = lpg_E;
         this->lpg_T = lpg_T;
         initialize();
@@ -197,8 +198,8 @@ struct E :public Ast
 
     void accept(Visitor *v) { v->visit(this); }
     void accept(ArgumentVisitor *v, Object* o) { v->visit(this, o); }
-    Object* accept(ResultVisitor *v) { return v->visit(this); }
-    Object* accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
+    lpg::Any accept(ResultVisitor *v) { return v->visit(this); }
+    lpg::Any accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
 };
 
 /**
@@ -212,17 +213,17 @@ struct E :public Ast
  */
 struct T :public Ast
 {
-    IAst *lpg_T;
-    IAst *lpg_F;
+    Ast *lpg_T;
+    Ast *lpg_F;
 
-    IAst *getT() { return lpg_T; };
-    void setT(IAst *lpg_T) { this->lpg_T = lpg_T; }
-    IAst *getF() { return lpg_F; };
-    void setF(IAst *lpg_F) { this->lpg_F = lpg_F; }
+    Ast *getT() { return lpg_T; };
+    void setT(Ast *lpg_T) { this->lpg_T = lpg_T; }
+    Ast *getF() { return lpg_F; };
+    void setF(Ast *lpg_F) { this->lpg_F = lpg_F; }
 
     T(IToken* leftIToken, IToken* rightIToken,
-      IAst *lpg_T,
-      IAst *lpg_F):Ast(leftIToken, rightIToken)    {
+      Ast *lpg_T,
+      Ast *lpg_F):Ast(leftIToken, rightIToken)    {
         this->lpg_T = lpg_T;
         this->lpg_F = lpg_F;
         initialize();
@@ -230,8 +231,8 @@ struct T :public Ast
 
     void accept(Visitor *v) { v->visit(this); }
     void accept(ArgumentVisitor *v, Object* o) { v->visit(this, o); }
-    Object* accept(ResultVisitor *v) { return v->visit(this); }
-    Object* accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
+    lpg::Any accept(ResultVisitor *v) { return v->visit(this); }
+    lpg::Any accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
 };
 
 /**
@@ -247,8 +248,8 @@ struct F :public AstToken
 
     void accept(Visitor *v) { v->visit(this); }
     void accept(ArgumentVisitor *v, Object* o) { v->visit(this, o); }
-    Object* accept(ResultVisitor *v) { return v->visit(this); }
-    Object* accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
+    lpg::Any accept(ResultVisitor *v) { return v->visit(this); }
+    lpg::Any accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
 };
 
 /**
@@ -258,21 +259,21 @@ struct F :public AstToken
  */
 struct ParenExpr :public Ast
 {
-    IAst *lpg_E;
+    Ast *lpg_E;
 
-    IAst *getE() { return lpg_E; };
-    void setE(IAst *lpg_E) { this->lpg_E = lpg_E; }
+    Ast *getE() { return lpg_E; };
+    void setE(Ast *lpg_E) { this->lpg_E = lpg_E; }
 
     ParenExpr(IToken* leftIToken, IToken* rightIToken,
-              IAst *lpg_E):Ast(leftIToken, rightIToken)    {
+              Ast *lpg_E):Ast(leftIToken, rightIToken)    {
         this->lpg_E = lpg_E;
         initialize();
     }
 
     void accept(Visitor *v) { v->visit(this); }
     void accept(ArgumentVisitor *v, Object* o) { v->visit(this, o); }
-    Object* accept(ResultVisitor *v) { return v->visit(this); }
-    Object* accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
+    lpg::Any accept(ResultVisitor *v) { return v->visit(this); }
+    lpg::Any accept(ResultArgumentVisitor *v, Object* o) { return v->visit(this, o); }
 };
 
 struct AbstractVisitor :public Visitor, public ArgumentVisitor
@@ -316,25 +317,25 @@ struct AbstractVisitor :public Visitor, public ArgumentVisitor
 };
 struct AbstractResultVisitor :public ResultVisitor,public ResultArgumentVisitor
 {
-    virtual Object* unimplementedVisitor(const std::string& s);
+    virtual lpg::Any unimplementedVisitor(const std::string& s);
 
-    Object* visit(AstToken *n) { return unimplementedVisitor("visit(AstToken)"); }
-    Object* visit(AstToken *n, Object* o) { return  unimplementedVisitor("visit(AstToken, Object)"); }
+    lpg::Any visit(AstToken *n) { return unimplementedVisitor("visit(AstToken)"); }
+    lpg::Any visit(AstToken *n, Object* o) { return  unimplementedVisitor("visit(AstToken, Object)"); }
 
-    Object* visit(E *n) { return unimplementedVisitor("visit(E)"); }
-    Object* visit(E *n, Object* o) { return  unimplementedVisitor("visit(E, Object)"); }
+    lpg::Any visit(E *n) { return unimplementedVisitor("visit(E)"); }
+    lpg::Any visit(E *n, Object* o) { return  unimplementedVisitor("visit(E, Object)"); }
 
-    Object* visit(T *n) { return unimplementedVisitor("visit(T)"); }
-    Object* visit(T *n, Object* o) { return  unimplementedVisitor("visit(T, Object)"); }
+    lpg::Any visit(T *n) { return unimplementedVisitor("visit(T)"); }
+    lpg::Any visit(T *n, Object* o) { return  unimplementedVisitor("visit(T, Object)"); }
 
-    Object* visit(F *n) { return unimplementedVisitor("visit(F)"); }
-    Object* visit(F *n, Object* o) { return  unimplementedVisitor("visit(F, Object)"); }
+    lpg::Any visit(F *n) { return unimplementedVisitor("visit(F)"); }
+    lpg::Any visit(F *n, Object* o) { return  unimplementedVisitor("visit(F, Object)"); }
 
-    Object* visit(ParenExpr *n) { return unimplementedVisitor("visit(ParenExpr)"); }
-    Object* visit(ParenExpr *n, Object* o) { return  unimplementedVisitor("visit(ParenExpr, Object)"); }
+    lpg::Any visit(ParenExpr *n) { return unimplementedVisitor("visit(ParenExpr)"); }
+    lpg::Any visit(ParenExpr *n, Object* o) { return  unimplementedVisitor("visit(ParenExpr, Object)"); }
 
 
-    Object* visit(Ast *n)
+    lpg::Any visit(Ast *n)
     {
         if (dynamic_cast<AstToken*>(n) ) return visit((AstToken*) n);
         if (dynamic_cast<E*>(n) ) return visit((E*) n);
@@ -343,7 +344,7 @@ struct AbstractResultVisitor :public ResultVisitor,public ResultArgumentVisitor
         if (dynamic_cast<ParenExpr*>(n) ) return visit((ParenExpr*) n);
         throw UnsupportedOperationException("visit(" + n->to_utf8_string() + ")");
     }
-    Object* visit(Ast *n, Object *o)
+    lpg::Any visit(Ast *n, Object *o)
     {
         if (dynamic_cast<AstToken*>(n) ) return visit((AstToken*) n, o);
         if (dynamic_cast<E*>(n) ) return visit((E*) n, o);

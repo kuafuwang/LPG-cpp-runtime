@@ -114,7 +114,7 @@ protected:
            return U8;
         if (min < 0 && min >= SHRT_MIN && max <= SHRT_MAX)
             return I16;
-        if (min >= 0 && max <= USHRT_MAX);
+        if (min >= 0 && max <= USHRT_MAX)
             return U16;
         return I32;
     }

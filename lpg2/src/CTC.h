@@ -110,6 +110,7 @@ public:
     bool IsTerminalClass(int interface)
     {
         bool is_terminal_class = true;
+    	
         for (int k = 0; k < interface_map[interface].Length(); k++)
         {
             int class_index = interface_map[interface][k];
@@ -118,7 +119,15 @@ public:
 
         return is_terminal_class;
     }
-
+    const char* FindUniqueTypeFor(int interface,const char* default_type)
+    {
+        auto temp_type = FindUniqueTypeFor(interface);
+    	if(!temp_type)
+    	{
+            temp_type = default_type;
+    	}
+        return  temp_type;
+    }
     const char *FindUniqueTypeFor(int interface)
     {
         if (interface == 0) // Not a grammar symbol?

@@ -165,7 +165,7 @@
            
         }
 
-         $action_type(shared_ptr_array<wchar_t>& input_chars, const std::wstring& filename, int tab=1)
+         $action_type(shared_ptr_wstring& input_chars, const std::wstring& filename, int tab=1)
          : $super_stream_class (input_chars, filename, tab)
         {
            

@@ -122,6 +122,7 @@ public:
          soft_keywords,
          table;
 
+    bool for_parser;
     int lalr_level,
         margin,
         max_cases,
@@ -298,8 +299,8 @@ private:
     static const char *default_block_end;
 
 
-    const char* default_ast_block_begin;
-    const  char* default_ast_block_end;
+    const  char* default_ast_block_begin;
+    const   char* default_ast_block_end;
 
 	
     InputFileSymbol *input_file_symbol;

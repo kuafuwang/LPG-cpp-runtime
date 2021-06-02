@@ -35,6 +35,7 @@
 #include "RuleAction.h"
 #include "IcuUtil.h"
 #include "stringex.h"
+#include "Any.h"
 
 
 
@@ -1353,20 +1354,20 @@ struct PrimitiveType :public AstToken
  */
 struct ClassType :public Ast
 {
-    IAst *lpg_TypeName;
-    IAst *lpg_TypeArgumentsopt;
+    Ast *lpg_TypeName;
+    TypeArguments *lpg_TypeArgumentsopt;
 
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
 
     ClassType(IToken* leftIToken, IToken* rightIToken,
-              IAst *lpg_TypeName,
-              IAst *lpg_TypeArgumentsopt):Ast(leftIToken, rightIToken)    {
+              Ast *lpg_TypeName,
+              TypeArguments *lpg_TypeArgumentsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeName = lpg_TypeName;
         ((Ast*) lpg_TypeName)->setParent(this);
         this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt;
@@ -1380,8 +1381,8 @@ struct ClassType :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
         return list;
     }
 
@@ -1397,8 +1398,8 @@ struct ClassType :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeName->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1411,20 +1412,20 @@ struct ClassType :public Ast
  */
 struct InterfaceType :public Ast
 {
-    IAst *lpg_TypeName;
-    IAst *lpg_TypeArgumentsopt;
+    Ast *lpg_TypeName;
+    TypeArguments *lpg_TypeArgumentsopt;
 
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
 
     InterfaceType(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_TypeName,
-                  IAst *lpg_TypeArgumentsopt):Ast(leftIToken, rightIToken)    {
+                  Ast *lpg_TypeName,
+                  TypeArguments *lpg_TypeArgumentsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeName = lpg_TypeName;
         ((Ast*) lpg_TypeName)->setParent(this);
         this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt;
@@ -1438,8 +1439,8 @@ struct InterfaceType :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
         return list;
     }
 
@@ -1455,8 +1456,8 @@ struct InterfaceType :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeName->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1473,21 +1474,21 @@ struct InterfaceType :public Ast
  */
 struct TypeName :public Ast
 {
-    IAst *lpg_TypeName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_TypeName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     TypeName(IToken* leftIToken, IToken* rightIToken,
-             IAst *lpg_TypeName,
-             IAst *lpg_DOT,
-             IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+             Ast *lpg_TypeName,
+             AstToken *lpg_DOT,
+             identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeName = lpg_TypeName;
         ((Ast*) lpg_TypeName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -1503,9 +1504,9 @@ struct TypeName :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -1521,9 +1522,9 @@ struct TypeName :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1536,21 +1537,21 @@ struct TypeName :public Ast
  */
 struct ArrayType :public Ast
 {
-    IAst *lpg_Type;
-    IAst *lpg_LBRACKET;
-    IAst *lpg_RBRACKET;
+    Ast *lpg_Type;
+    AstToken *lpg_LBRACKET;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     ArrayType(IToken* leftIToken, IToken* rightIToken,
-              IAst *lpg_Type,
-              IAst *lpg_LBRACKET,
-              IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+              Ast *lpg_Type,
+              AstToken *lpg_LBRACKET,
+              AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_Type = lpg_Type;
         ((Ast*) lpg_Type)->setParent(this);
         this->lpg_LBRACKET = lpg_LBRACKET;
@@ -1566,9 +1567,9 @@ struct ArrayType :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Type);
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -1584,9 +1585,9 @@ struct ArrayType :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Type->accept(v);
-            lpg_LBRACKET->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1599,20 +1600,20 @@ struct ArrayType :public Ast
  */
 struct TypeParameter :public Ast
 {
-    IAst *lpg_TypeVariable;
-    IAst *lpg_TypeBoundopt;
+    identifier *lpg_TypeVariable;
+    TypeBound *lpg_TypeBoundopt;
 
-    IAst *getTypeVariable() { return lpg_TypeVariable; };
-    void setTypeVariable(IAst *lpg_TypeVariable) { this->lpg_TypeVariable = lpg_TypeVariable; }
+    identifier *getTypeVariable() { return lpg_TypeVariable; };
+    void setTypeVariable(identifier *lpg_TypeVariable) { this->lpg_TypeVariable = lpg_TypeVariable; }
     /**
      * The value returned by <b>getTypeBoundopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeBoundopt() { return lpg_TypeBoundopt; };
-    void setTypeBoundopt(IAst *lpg_TypeBoundopt) { this->lpg_TypeBoundopt = lpg_TypeBoundopt; }
+    TypeBound *getTypeBoundopt() { return lpg_TypeBoundopt; };
+    void setTypeBoundopt(TypeBound *lpg_TypeBoundopt) { this->lpg_TypeBoundopt = lpg_TypeBoundopt; }
 
     TypeParameter(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_TypeVariable,
-                  IAst *lpg_TypeBoundopt):Ast(leftIToken, rightIToken)    {
+                  identifier *lpg_TypeVariable,
+                  TypeBound *lpg_TypeBoundopt):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeVariable = lpg_TypeVariable;
         ((Ast*) lpg_TypeVariable)->setParent(this);
         this->lpg_TypeBoundopt = lpg_TypeBoundopt;
@@ -1626,8 +1627,8 @@ struct TypeParameter :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeVariable);
-        list.push_back(lpg_TypeBoundopt);
+        list.push_back((IAst*)lpg_TypeVariable);
+        list.push_back((IAst*)lpg_TypeBoundopt);
         return list;
     }
 
@@ -1643,8 +1644,8 @@ struct TypeParameter :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeVariable->accept(v);
-            if (lpg_TypeBoundopt != nullptr) lpg_TypeBoundopt->accept(v);
+            ((IAst*)lpg_TypeVariable)->accept(v);
+            if (lpg_TypeBoundopt != nullptr) ((IAst*)lpg_TypeBoundopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1657,24 +1658,24 @@ struct TypeParameter :public Ast
  */
 struct TypeBound :public Ast
 {
-    IAst *lpg_extends;
-    IAst *lpg_ClassOrInterfaceType;
-    IAst *lpg_AdditionalBoundListopt;
+    AstToken *lpg_extends;
+    ClassType *lpg_ClassOrInterfaceType;
+    Ast *lpg_AdditionalBoundListopt;
 
-    IAst *getextends() { return lpg_extends; };
-    void setextends(IAst *lpg_extends) { this->lpg_extends = lpg_extends; }
-    IAst *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
-    void setClassOrInterfaceType(IAst *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
+    AstToken *getextends() { return lpg_extends; };
+    void setextends(AstToken *lpg_extends) { this->lpg_extends = lpg_extends; }
+    ClassType *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
+    void setClassOrInterfaceType(ClassType *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
     /**
      * The value returned by <b>getAdditionalBoundListopt</b> may be <b>nullptr</b>
      */
-    IAst *getAdditionalBoundListopt() { return lpg_AdditionalBoundListopt; };
-    void setAdditionalBoundListopt(IAst *lpg_AdditionalBoundListopt) { this->lpg_AdditionalBoundListopt = lpg_AdditionalBoundListopt; }
+    Ast *getAdditionalBoundListopt() { return lpg_AdditionalBoundListopt; };
+    void setAdditionalBoundListopt(Ast *lpg_AdditionalBoundListopt) { this->lpg_AdditionalBoundListopt = lpg_AdditionalBoundListopt; }
 
     TypeBound(IToken* leftIToken, IToken* rightIToken,
-              IAst *lpg_extends,
-              IAst *lpg_ClassOrInterfaceType,
-              IAst *lpg_AdditionalBoundListopt):Ast(leftIToken, rightIToken)    {
+              AstToken *lpg_extends,
+              ClassType *lpg_ClassOrInterfaceType,
+              Ast *lpg_AdditionalBoundListopt):Ast(leftIToken, rightIToken)    {
         this->lpg_extends = lpg_extends;
         ((Ast*) lpg_extends)->setParent(this);
         this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType;
@@ -1690,9 +1691,9 @@ struct TypeBound :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_extends);
-        list.push_back(lpg_ClassOrInterfaceType);
-        list.push_back(lpg_AdditionalBoundListopt);
+        list.push_back((IAst*)lpg_extends);
+        list.push_back((IAst*)lpg_ClassOrInterfaceType);
+        list.push_back((IAst*)lpg_AdditionalBoundListopt);
         return list;
     }
 
@@ -1708,9 +1709,9 @@ struct TypeBound :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_extends->accept(v);
-            lpg_ClassOrInterfaceType->accept(v);
-            if (lpg_AdditionalBoundListopt != nullptr) lpg_AdditionalBoundListopt->accept(v);
+            ((IAst*)lpg_extends)->accept(v);
+            ((IAst*)lpg_ClassOrInterfaceType)->accept(v);
+            if (lpg_AdditionalBoundListopt != nullptr) ((IAst*)lpg_AdditionalBoundListopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1727,17 +1728,17 @@ struct TypeBound :public Ast
  */
 struct AdditionalBoundList :public Ast
 {
-    IAst *lpg_AdditionalBoundList;
-    IAst *lpg_AdditionalBound;
+    Ast *lpg_AdditionalBoundList;
+    AdditionalBound *lpg_AdditionalBound;
 
-    IAst *getAdditionalBoundList() { return lpg_AdditionalBoundList; };
-    void setAdditionalBoundList(IAst *lpg_AdditionalBoundList) { this->lpg_AdditionalBoundList = lpg_AdditionalBoundList; }
-    IAst *getAdditionalBound() { return lpg_AdditionalBound; };
-    void setAdditionalBound(IAst *lpg_AdditionalBound) { this->lpg_AdditionalBound = lpg_AdditionalBound; }
+    Ast *getAdditionalBoundList() { return lpg_AdditionalBoundList; };
+    void setAdditionalBoundList(Ast *lpg_AdditionalBoundList) { this->lpg_AdditionalBoundList = lpg_AdditionalBoundList; }
+    AdditionalBound *getAdditionalBound() { return lpg_AdditionalBound; };
+    void setAdditionalBound(AdditionalBound *lpg_AdditionalBound) { this->lpg_AdditionalBound = lpg_AdditionalBound; }
 
     AdditionalBoundList(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_AdditionalBoundList,
-                        IAst *lpg_AdditionalBound):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_AdditionalBoundList,
+                        AdditionalBound *lpg_AdditionalBound):Ast(leftIToken, rightIToken)    {
         this->lpg_AdditionalBoundList = lpg_AdditionalBoundList;
         ((Ast*) lpg_AdditionalBoundList)->setParent(this);
         this->lpg_AdditionalBound = lpg_AdditionalBound;
@@ -1751,8 +1752,8 @@ struct AdditionalBoundList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AdditionalBoundList);
-        list.push_back(lpg_AdditionalBound);
+        list.push_back((IAst*)lpg_AdditionalBoundList);
+        list.push_back((IAst*)lpg_AdditionalBound);
         return list;
     }
 
@@ -1768,8 +1769,8 @@ struct AdditionalBoundList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AdditionalBoundList->accept(v);
-            lpg_AdditionalBound->accept(v);
+            ((IAst*)lpg_AdditionalBoundList)->accept(v);
+            ((IAst*)lpg_AdditionalBound)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1782,17 +1783,17 @@ struct AdditionalBoundList :public Ast
  */
 struct AdditionalBound :public Ast
 {
-    IAst *lpg_AND;
-    IAst *lpg_InterfaceType;
+    AstToken *lpg_AND;
+    InterfaceType *lpg_InterfaceType;
 
-    IAst *getAND() { return lpg_AND; };
-    void setAND(IAst *lpg_AND) { this->lpg_AND = lpg_AND; }
-    IAst *getInterfaceType() { return lpg_InterfaceType; };
-    void setInterfaceType(IAst *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
+    AstToken *getAND() { return lpg_AND; };
+    void setAND(AstToken *lpg_AND) { this->lpg_AND = lpg_AND; }
+    InterfaceType *getInterfaceType() { return lpg_InterfaceType; };
+    void setInterfaceType(InterfaceType *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
 
     AdditionalBound(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_AND,
-                    IAst *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_AND,
+                    InterfaceType *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
         this->lpg_AND = lpg_AND;
         ((Ast*) lpg_AND)->setParent(this);
         this->lpg_InterfaceType = lpg_InterfaceType;
@@ -1806,8 +1807,8 @@ struct AdditionalBound :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AND);
-        list.push_back(lpg_InterfaceType);
+        list.push_back((IAst*)lpg_AND);
+        list.push_back((IAst*)lpg_InterfaceType);
         return list;
     }
 
@@ -1823,8 +1824,8 @@ struct AdditionalBound :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AND->accept(v);
-            lpg_InterfaceType->accept(v);
+            ((IAst*)lpg_AND)->accept(v);
+            ((IAst*)lpg_InterfaceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1837,21 +1838,21 @@ struct AdditionalBound :public Ast
  */
 struct TypeArguments :public Ast
 {
-    IAst *lpg_LESS;
-    IAst *lpg_ActualTypeArgumentList;
-    IAst *lpg_GREATER;
+    AstToken *lpg_LESS;
+    Ast *lpg_ActualTypeArgumentList;
+    AstToken *lpg_GREATER;
 
-    IAst *getLESS() { return lpg_LESS; };
-    void setLESS(IAst *lpg_LESS) { this->lpg_LESS = lpg_LESS; }
-    IAst *getActualTypeArgumentList() { return lpg_ActualTypeArgumentList; };
-    void setActualTypeArgumentList(IAst *lpg_ActualTypeArgumentList) { this->lpg_ActualTypeArgumentList = lpg_ActualTypeArgumentList; }
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getLESS() { return lpg_LESS; };
+    void setLESS(AstToken *lpg_LESS) { this->lpg_LESS = lpg_LESS; }
+    Ast *getActualTypeArgumentList() { return lpg_ActualTypeArgumentList; };
+    void setActualTypeArgumentList(Ast *lpg_ActualTypeArgumentList) { this->lpg_ActualTypeArgumentList = lpg_ActualTypeArgumentList; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
 
     TypeArguments(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_LESS,
-                  IAst *lpg_ActualTypeArgumentList,
-                  IAst *lpg_GREATER):Ast(leftIToken, rightIToken)    {
+                  AstToken *lpg_LESS,
+                  Ast *lpg_ActualTypeArgumentList,
+                  AstToken *lpg_GREATER):Ast(leftIToken, rightIToken)    {
         this->lpg_LESS = lpg_LESS;
         ((Ast*) lpg_LESS)->setParent(this);
         this->lpg_ActualTypeArgumentList = lpg_ActualTypeArgumentList;
@@ -1867,9 +1868,9 @@ struct TypeArguments :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LESS);
-        list.push_back(lpg_ActualTypeArgumentList);
-        list.push_back(lpg_GREATER);
+        list.push_back((IAst*)lpg_LESS);
+        list.push_back((IAst*)lpg_ActualTypeArgumentList);
+        list.push_back((IAst*)lpg_GREATER);
         return list;
     }
 
@@ -1885,9 +1886,9 @@ struct TypeArguments :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LESS->accept(v);
-            lpg_ActualTypeArgumentList->accept(v);
-            lpg_GREATER->accept(v);
+            ((IAst*)lpg_LESS)->accept(v);
+            ((IAst*)lpg_ActualTypeArgumentList)->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1904,21 +1905,21 @@ struct TypeArguments :public Ast
  */
 struct ActualTypeArgumentList :public Ast
 {
-    IAst *lpg_ActualTypeArgumentList;
-    IAst *lpg_COMMA;
-    IAst *lpg_ActualTypeArgument;
+    Ast *lpg_ActualTypeArgumentList;
+    AstToken *lpg_COMMA;
+    Ast *lpg_ActualTypeArgument;
 
-    IAst *getActualTypeArgumentList() { return lpg_ActualTypeArgumentList; };
-    void setActualTypeArgumentList(IAst *lpg_ActualTypeArgumentList) { this->lpg_ActualTypeArgumentList = lpg_ActualTypeArgumentList; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getActualTypeArgument() { return lpg_ActualTypeArgument; };
-    void setActualTypeArgument(IAst *lpg_ActualTypeArgument) { this->lpg_ActualTypeArgument = lpg_ActualTypeArgument; }
+    Ast *getActualTypeArgumentList() { return lpg_ActualTypeArgumentList; };
+    void setActualTypeArgumentList(Ast *lpg_ActualTypeArgumentList) { this->lpg_ActualTypeArgumentList = lpg_ActualTypeArgumentList; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getActualTypeArgument() { return lpg_ActualTypeArgument; };
+    void setActualTypeArgument(Ast *lpg_ActualTypeArgument) { this->lpg_ActualTypeArgument = lpg_ActualTypeArgument; }
 
     ActualTypeArgumentList(IToken* leftIToken, IToken* rightIToken,
-                           IAst *lpg_ActualTypeArgumentList,
-                           IAst *lpg_COMMA,
-                           IAst *lpg_ActualTypeArgument):Ast(leftIToken, rightIToken)    {
+                           Ast *lpg_ActualTypeArgumentList,
+                           AstToken *lpg_COMMA,
+                           Ast *lpg_ActualTypeArgument):Ast(leftIToken, rightIToken)    {
         this->lpg_ActualTypeArgumentList = lpg_ActualTypeArgumentList;
         ((Ast*) lpg_ActualTypeArgumentList)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -1934,9 +1935,9 @@ struct ActualTypeArgumentList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ActualTypeArgumentList);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_ActualTypeArgument);
+        list.push_back((IAst*)lpg_ActualTypeArgumentList);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_ActualTypeArgument);
         return list;
     }
 
@@ -1952,9 +1953,9 @@ struct ActualTypeArgumentList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ActualTypeArgumentList->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_ActualTypeArgument->accept(v);
+            ((IAst*)lpg_ActualTypeArgumentList)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_ActualTypeArgument)->accept(v);
         }
         v->endVisit(this);
     }
@@ -1967,20 +1968,20 @@ struct ActualTypeArgumentList :public Ast
  */
 struct Wildcard :public Ast
 {
-    IAst *lpg_QUESTION;
-    IAst *lpg_WildcardBoundsOpt;
+    AstToken *lpg_QUESTION;
+    Ast *lpg_WildcardBoundsOpt;
 
-    IAst *getQUESTION() { return lpg_QUESTION; };
-    void setQUESTION(IAst *lpg_QUESTION) { this->lpg_QUESTION = lpg_QUESTION; }
+    AstToken *getQUESTION() { return lpg_QUESTION; };
+    void setQUESTION(AstToken *lpg_QUESTION) { this->lpg_QUESTION = lpg_QUESTION; }
     /**
      * The value returned by <b>getWildcardBoundsOpt</b> may be <b>nullptr</b>
      */
-    IAst *getWildcardBoundsOpt() { return lpg_WildcardBoundsOpt; };
-    void setWildcardBoundsOpt(IAst *lpg_WildcardBoundsOpt) { this->lpg_WildcardBoundsOpt = lpg_WildcardBoundsOpt; }
+    Ast *getWildcardBoundsOpt() { return lpg_WildcardBoundsOpt; };
+    void setWildcardBoundsOpt(Ast *lpg_WildcardBoundsOpt) { this->lpg_WildcardBoundsOpt = lpg_WildcardBoundsOpt; }
 
     Wildcard(IToken* leftIToken, IToken* rightIToken,
-             IAst *lpg_QUESTION,
-             IAst *lpg_WildcardBoundsOpt):Ast(leftIToken, rightIToken)    {
+             AstToken *lpg_QUESTION,
+             Ast *lpg_WildcardBoundsOpt):Ast(leftIToken, rightIToken)    {
         this->lpg_QUESTION = lpg_QUESTION;
         ((Ast*) lpg_QUESTION)->setParent(this);
         this->lpg_WildcardBoundsOpt = lpg_WildcardBoundsOpt;
@@ -1994,8 +1995,8 @@ struct Wildcard :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_QUESTION);
-        list.push_back(lpg_WildcardBoundsOpt);
+        list.push_back((IAst*)lpg_QUESTION);
+        list.push_back((IAst*)lpg_WildcardBoundsOpt);
         return list;
     }
 
@@ -2011,8 +2012,8 @@ struct Wildcard :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_QUESTION->accept(v);
-            if (lpg_WildcardBoundsOpt != nullptr) lpg_WildcardBoundsOpt->accept(v);
+            ((IAst*)lpg_QUESTION)->accept(v);
+            if (lpg_WildcardBoundsOpt != nullptr) ((IAst*)lpg_WildcardBoundsOpt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2029,21 +2030,21 @@ struct Wildcard :public Ast
  */
 struct PackageName :public Ast
 {
-    IAst *lpg_PackageName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_PackageName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getPackageName() { return lpg_PackageName; };
-    void setPackageName(IAst *lpg_PackageName) { this->lpg_PackageName = lpg_PackageName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getPackageName() { return lpg_PackageName; };
+    void setPackageName(Ast *lpg_PackageName) { this->lpg_PackageName = lpg_PackageName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     PackageName(IToken* leftIToken, IToken* rightIToken,
-                IAst *lpg_PackageName,
-                IAst *lpg_DOT,
-                IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                Ast *lpg_PackageName,
+                AstToken *lpg_DOT,
+                identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_PackageName = lpg_PackageName;
         ((Ast*) lpg_PackageName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -2059,9 +2060,9 @@ struct PackageName :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PackageName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_PackageName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -2077,9 +2078,9 @@ struct PackageName :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PackageName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_PackageName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2096,21 +2097,21 @@ struct PackageName :public Ast
  */
 struct ExpressionName :public Ast
 {
-    IAst *lpg_AmbiguousName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_AmbiguousName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getAmbiguousName() { return lpg_AmbiguousName; };
-    void setAmbiguousName(IAst *lpg_AmbiguousName) { this->lpg_AmbiguousName = lpg_AmbiguousName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getAmbiguousName() { return lpg_AmbiguousName; };
+    void setAmbiguousName(Ast *lpg_AmbiguousName) { this->lpg_AmbiguousName = lpg_AmbiguousName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     ExpressionName(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_AmbiguousName,
-                   IAst *lpg_DOT,
-                   IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                   Ast *lpg_AmbiguousName,
+                   AstToken *lpg_DOT,
+                   identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_AmbiguousName = lpg_AmbiguousName;
         ((Ast*) lpg_AmbiguousName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -2126,9 +2127,9 @@ struct ExpressionName :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AmbiguousName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_AmbiguousName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -2144,9 +2145,9 @@ struct ExpressionName :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AmbiguousName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_AmbiguousName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2163,21 +2164,21 @@ struct ExpressionName :public Ast
  */
 struct MethodName :public Ast
 {
-    IAst *lpg_AmbiguousName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_AmbiguousName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getAmbiguousName() { return lpg_AmbiguousName; };
-    void setAmbiguousName(IAst *lpg_AmbiguousName) { this->lpg_AmbiguousName = lpg_AmbiguousName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getAmbiguousName() { return lpg_AmbiguousName; };
+    void setAmbiguousName(Ast *lpg_AmbiguousName) { this->lpg_AmbiguousName = lpg_AmbiguousName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     MethodName(IToken* leftIToken, IToken* rightIToken,
-               IAst *lpg_AmbiguousName,
-               IAst *lpg_DOT,
-               IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+               Ast *lpg_AmbiguousName,
+               AstToken *lpg_DOT,
+               identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_AmbiguousName = lpg_AmbiguousName;
         ((Ast*) lpg_AmbiguousName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -2193,9 +2194,9 @@ struct MethodName :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AmbiguousName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_AmbiguousName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -2211,9 +2212,9 @@ struct MethodName :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AmbiguousName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_AmbiguousName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2230,21 +2231,21 @@ struct MethodName :public Ast
  */
 struct PackageOrTypeName :public Ast
 {
-    IAst *lpg_PackageOrTypeName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_PackageOrTypeName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getPackageOrTypeName() { return lpg_PackageOrTypeName; };
-    void setPackageOrTypeName(IAst *lpg_PackageOrTypeName) { this->lpg_PackageOrTypeName = lpg_PackageOrTypeName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getPackageOrTypeName() { return lpg_PackageOrTypeName; };
+    void setPackageOrTypeName(Ast *lpg_PackageOrTypeName) { this->lpg_PackageOrTypeName = lpg_PackageOrTypeName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     PackageOrTypeName(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_PackageOrTypeName,
-                      IAst *lpg_DOT,
-                      IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_PackageOrTypeName,
+                      AstToken *lpg_DOT,
+                      identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_PackageOrTypeName = lpg_PackageOrTypeName;
         ((Ast*) lpg_PackageOrTypeName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -2260,9 +2261,9 @@ struct PackageOrTypeName :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PackageOrTypeName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_PackageOrTypeName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -2278,9 +2279,9 @@ struct PackageOrTypeName :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PackageOrTypeName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_PackageOrTypeName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2297,21 +2298,21 @@ struct PackageOrTypeName :public Ast
  */
 struct AmbiguousName :public Ast
 {
-    IAst *lpg_AmbiguousName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_AmbiguousName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getAmbiguousName() { return lpg_AmbiguousName; };
-    void setAmbiguousName(IAst *lpg_AmbiguousName) { this->lpg_AmbiguousName = lpg_AmbiguousName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getAmbiguousName() { return lpg_AmbiguousName; };
+    void setAmbiguousName(Ast *lpg_AmbiguousName) { this->lpg_AmbiguousName = lpg_AmbiguousName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     AmbiguousName(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_AmbiguousName,
-                  IAst *lpg_DOT,
-                  IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                  Ast *lpg_AmbiguousName,
+                  AstToken *lpg_DOT,
+                  identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_AmbiguousName = lpg_AmbiguousName;
         ((Ast*) lpg_AmbiguousName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -2327,9 +2328,9 @@ struct AmbiguousName :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AmbiguousName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_AmbiguousName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -2345,9 +2346,9 @@ struct AmbiguousName :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AmbiguousName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_AmbiguousName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2360,30 +2361,30 @@ struct AmbiguousName :public Ast
  */
 struct CompilationUnit :public Ast
 {
-    IAst *lpg_PackageDeclarationopt;
-    IAst *lpg_ImportDeclarationsopt;
-    IAst *lpg_TypeDeclarationsopt;
+    PackageDeclaration *lpg_PackageDeclarationopt;
+    Ast *lpg_ImportDeclarationsopt;
+    Ast *lpg_TypeDeclarationsopt;
 
     /**
      * The value returned by <b>getPackageDeclarationopt</b> may be <b>nullptr</b>
      */
-    IAst *getPackageDeclarationopt() { return lpg_PackageDeclarationopt; };
-    void setPackageDeclarationopt(IAst *lpg_PackageDeclarationopt) { this->lpg_PackageDeclarationopt = lpg_PackageDeclarationopt; }
+    PackageDeclaration *getPackageDeclarationopt() { return lpg_PackageDeclarationopt; };
+    void setPackageDeclarationopt(PackageDeclaration *lpg_PackageDeclarationopt) { this->lpg_PackageDeclarationopt = lpg_PackageDeclarationopt; }
     /**
      * The value returned by <b>getImportDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getImportDeclarationsopt() { return lpg_ImportDeclarationsopt; };
-    void setImportDeclarationsopt(IAst *lpg_ImportDeclarationsopt) { this->lpg_ImportDeclarationsopt = lpg_ImportDeclarationsopt; }
+    Ast *getImportDeclarationsopt() { return lpg_ImportDeclarationsopt; };
+    void setImportDeclarationsopt(Ast *lpg_ImportDeclarationsopt) { this->lpg_ImportDeclarationsopt = lpg_ImportDeclarationsopt; }
     /**
      * The value returned by <b>getTypeDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeDeclarationsopt() { return lpg_TypeDeclarationsopt; };
-    void setTypeDeclarationsopt(IAst *lpg_TypeDeclarationsopt) { this->lpg_TypeDeclarationsopt = lpg_TypeDeclarationsopt; }
+    Ast *getTypeDeclarationsopt() { return lpg_TypeDeclarationsopt; };
+    void setTypeDeclarationsopt(Ast *lpg_TypeDeclarationsopt) { this->lpg_TypeDeclarationsopt = lpg_TypeDeclarationsopt; }
 
     CompilationUnit(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_PackageDeclarationopt,
-                    IAst *lpg_ImportDeclarationsopt,
-                    IAst *lpg_TypeDeclarationsopt):Ast(leftIToken, rightIToken)    {
+                    PackageDeclaration *lpg_PackageDeclarationopt,
+                    Ast *lpg_ImportDeclarationsopt,
+                    Ast *lpg_TypeDeclarationsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_PackageDeclarationopt = lpg_PackageDeclarationopt;
         if (lpg_PackageDeclarationopt != nullptr) ((Ast*) lpg_PackageDeclarationopt)->setParent(this);
         this->lpg_ImportDeclarationsopt = lpg_ImportDeclarationsopt;
@@ -2399,9 +2400,9 @@ struct CompilationUnit :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PackageDeclarationopt);
-        list.push_back(lpg_ImportDeclarationsopt);
-        list.push_back(lpg_TypeDeclarationsopt);
+        list.push_back((IAst*)lpg_PackageDeclarationopt);
+        list.push_back((IAst*)lpg_ImportDeclarationsopt);
+        list.push_back((IAst*)lpg_TypeDeclarationsopt);
         return list;
     }
 
@@ -2417,9 +2418,9 @@ struct CompilationUnit :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_PackageDeclarationopt != nullptr) lpg_PackageDeclarationopt->accept(v);
-            if (lpg_ImportDeclarationsopt != nullptr) lpg_ImportDeclarationsopt->accept(v);
-            if (lpg_TypeDeclarationsopt != nullptr) lpg_TypeDeclarationsopt->accept(v);
+            if (lpg_PackageDeclarationopt != nullptr) ((IAst*)lpg_PackageDeclarationopt)->accept(v);
+            if (lpg_ImportDeclarationsopt != nullptr) ((IAst*)lpg_ImportDeclarationsopt)->accept(v);
+            if (lpg_TypeDeclarationsopt != nullptr) ((IAst*)lpg_TypeDeclarationsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2436,17 +2437,17 @@ struct CompilationUnit :public Ast
  */
 struct ImportDeclarations :public Ast
 {
-    IAst *lpg_ImportDeclarations;
-    IAst *lpg_ImportDeclaration;
+    Ast *lpg_ImportDeclarations;
+    Ast *lpg_ImportDeclaration;
 
-    IAst *getImportDeclarations() { return lpg_ImportDeclarations; };
-    void setImportDeclarations(IAst *lpg_ImportDeclarations) { this->lpg_ImportDeclarations = lpg_ImportDeclarations; }
-    IAst *getImportDeclaration() { return lpg_ImportDeclaration; };
-    void setImportDeclaration(IAst *lpg_ImportDeclaration) { this->lpg_ImportDeclaration = lpg_ImportDeclaration; }
+    Ast *getImportDeclarations() { return lpg_ImportDeclarations; };
+    void setImportDeclarations(Ast *lpg_ImportDeclarations) { this->lpg_ImportDeclarations = lpg_ImportDeclarations; }
+    Ast *getImportDeclaration() { return lpg_ImportDeclaration; };
+    void setImportDeclaration(Ast *lpg_ImportDeclaration) { this->lpg_ImportDeclaration = lpg_ImportDeclaration; }
 
     ImportDeclarations(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_ImportDeclarations,
-                       IAst *lpg_ImportDeclaration):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_ImportDeclarations,
+                       Ast *lpg_ImportDeclaration):Ast(leftIToken, rightIToken)    {
         this->lpg_ImportDeclarations = lpg_ImportDeclarations;
         ((Ast*) lpg_ImportDeclarations)->setParent(this);
         this->lpg_ImportDeclaration = lpg_ImportDeclaration;
@@ -2460,8 +2461,8 @@ struct ImportDeclarations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ImportDeclarations);
-        list.push_back(lpg_ImportDeclaration);
+        list.push_back((IAst*)lpg_ImportDeclarations);
+        list.push_back((IAst*)lpg_ImportDeclaration);
         return list;
     }
 
@@ -2477,8 +2478,8 @@ struct ImportDeclarations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ImportDeclarations->accept(v);
-            lpg_ImportDeclaration->accept(v);
+            ((IAst*)lpg_ImportDeclarations)->accept(v);
+            ((IAst*)lpg_ImportDeclaration)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2495,17 +2496,17 @@ struct ImportDeclarations :public Ast
  */
 struct TypeDeclarations :public Ast
 {
-    IAst *lpg_TypeDeclarations;
-    IAst *lpg_TypeDeclaration;
+    Ast *lpg_TypeDeclarations;
+    Ast *lpg_TypeDeclaration;
 
-    IAst *getTypeDeclarations() { return lpg_TypeDeclarations; };
-    void setTypeDeclarations(IAst *lpg_TypeDeclarations) { this->lpg_TypeDeclarations = lpg_TypeDeclarations; }
-    IAst *getTypeDeclaration() { return lpg_TypeDeclaration; };
-    void setTypeDeclaration(IAst *lpg_TypeDeclaration) { this->lpg_TypeDeclaration = lpg_TypeDeclaration; }
+    Ast *getTypeDeclarations() { return lpg_TypeDeclarations; };
+    void setTypeDeclarations(Ast *lpg_TypeDeclarations) { this->lpg_TypeDeclarations = lpg_TypeDeclarations; }
+    Ast *getTypeDeclaration() { return lpg_TypeDeclaration; };
+    void setTypeDeclaration(Ast *lpg_TypeDeclaration) { this->lpg_TypeDeclaration = lpg_TypeDeclaration; }
 
     TypeDeclarations(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_TypeDeclarations,
-                     IAst *lpg_TypeDeclaration):Ast(leftIToken, rightIToken)    {
+                     Ast *lpg_TypeDeclarations,
+                     Ast *lpg_TypeDeclaration):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeDeclarations = lpg_TypeDeclarations;
         ((Ast*) lpg_TypeDeclarations)->setParent(this);
         this->lpg_TypeDeclaration = lpg_TypeDeclaration;
@@ -2519,8 +2520,8 @@ struct TypeDeclarations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeDeclarations);
-        list.push_back(lpg_TypeDeclaration);
+        list.push_back((IAst*)lpg_TypeDeclarations);
+        list.push_back((IAst*)lpg_TypeDeclaration);
         return list;
     }
 
@@ -2536,8 +2537,8 @@ struct TypeDeclarations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeDeclarations->accept(v);
-            lpg_TypeDeclaration->accept(v);
+            ((IAst*)lpg_TypeDeclarations)->accept(v);
+            ((IAst*)lpg_TypeDeclaration)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2550,28 +2551,28 @@ struct TypeDeclarations :public Ast
  */
 struct PackageDeclaration :public Ast
 {
-    IAst *lpg_Annotationsopt;
-    IAst *lpg_package;
-    IAst *lpg_PackageName;
-    IAst *lpg_SEMICOLON;
+    Ast *lpg_Annotationsopt;
+    AstToken *lpg_package;
+    Ast *lpg_PackageName;
+    AstToken *lpg_SEMICOLON;
 
     /**
      * The value returned by <b>getAnnotationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getAnnotationsopt() { return lpg_Annotationsopt; };
-    void setAnnotationsopt(IAst *lpg_Annotationsopt) { this->lpg_Annotationsopt = lpg_Annotationsopt; }
-    IAst *getpackage() { return lpg_package; };
-    void setpackage(IAst *lpg_package) { this->lpg_package = lpg_package; }
-    IAst *getPackageName() { return lpg_PackageName; };
-    void setPackageName(IAst *lpg_PackageName) { this->lpg_PackageName = lpg_PackageName; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getAnnotationsopt() { return lpg_Annotationsopt; };
+    void setAnnotationsopt(Ast *lpg_Annotationsopt) { this->lpg_Annotationsopt = lpg_Annotationsopt; }
+    AstToken *getpackage() { return lpg_package; };
+    void setpackage(AstToken *lpg_package) { this->lpg_package = lpg_package; }
+    Ast *getPackageName() { return lpg_PackageName; };
+    void setPackageName(Ast *lpg_PackageName) { this->lpg_PackageName = lpg_PackageName; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     PackageDeclaration(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_Annotationsopt,
-                       IAst *lpg_package,
-                       IAst *lpg_PackageName,
-                       IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_Annotationsopt,
+                       AstToken *lpg_package,
+                       Ast *lpg_PackageName,
+                       AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_Annotationsopt = lpg_Annotationsopt;
         if (lpg_Annotationsopt != nullptr) ((Ast*) lpg_Annotationsopt)->setParent(this);
         this->lpg_package = lpg_package;
@@ -2589,10 +2590,10 @@ struct PackageDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Annotationsopt);
-        list.push_back(lpg_package);
-        list.push_back(lpg_PackageName);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_Annotationsopt);
+        list.push_back((IAst*)lpg_package);
+        list.push_back((IAst*)lpg_PackageName);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -2608,10 +2609,10 @@ struct PackageDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_Annotationsopt != nullptr) lpg_Annotationsopt->accept(v);
-            lpg_package->accept(v);
-            lpg_PackageName->accept(v);
-            lpg_SEMICOLON->accept(v);
+            if (lpg_Annotationsopt != nullptr) ((IAst*)lpg_Annotationsopt)->accept(v);
+            ((IAst*)lpg_package)->accept(v);
+            ((IAst*)lpg_PackageName)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2624,21 +2625,21 @@ struct PackageDeclaration :public Ast
  */
 struct SingleTypeImportDeclaration :public Ast
 {
-    IAst *lpg_import;
-    IAst *lpg_TypeName;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_import;
+    Ast *lpg_TypeName;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getimport() { return lpg_import; };
-    void setimport(IAst *lpg_import) { this->lpg_import = lpg_import; }
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getimport() { return lpg_import; };
+    void setimport(AstToken *lpg_import) { this->lpg_import = lpg_import; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     SingleTypeImportDeclaration(IToken* leftIToken, IToken* rightIToken,
-                                IAst *lpg_import,
-                                IAst *lpg_TypeName,
-                                IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                AstToken *lpg_import,
+                                Ast *lpg_TypeName,
+                                AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_import = lpg_import;
         ((Ast*) lpg_import)->setParent(this);
         this->lpg_TypeName = lpg_TypeName;
@@ -2654,9 +2655,9 @@ struct SingleTypeImportDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_import);
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_import);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -2672,9 +2673,9 @@ struct SingleTypeImportDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_import->accept(v);
-            lpg_TypeName->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_import)->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2687,29 +2688,29 @@ struct SingleTypeImportDeclaration :public Ast
  */
 struct TypeImportOnDemandDeclaration :public Ast
 {
-    IAst *lpg_import;
-    IAst *lpg_PackageOrTypeName;
-    IAst *lpg_DOT;
-    IAst *lpg_MULTIPLY;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_import;
+    Ast *lpg_PackageOrTypeName;
+    AstToken *lpg_DOT;
+    AstToken *lpg_MULTIPLY;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getimport() { return lpg_import; };
-    void setimport(IAst *lpg_import) { this->lpg_import = lpg_import; }
-    IAst *getPackageOrTypeName() { return lpg_PackageOrTypeName; };
-    void setPackageOrTypeName(IAst *lpg_PackageOrTypeName) { this->lpg_PackageOrTypeName = lpg_PackageOrTypeName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getMULTIPLY() { return lpg_MULTIPLY; };
-    void setMULTIPLY(IAst *lpg_MULTIPLY) { this->lpg_MULTIPLY = lpg_MULTIPLY; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getimport() { return lpg_import; };
+    void setimport(AstToken *lpg_import) { this->lpg_import = lpg_import; }
+    Ast *getPackageOrTypeName() { return lpg_PackageOrTypeName; };
+    void setPackageOrTypeName(Ast *lpg_PackageOrTypeName) { this->lpg_PackageOrTypeName = lpg_PackageOrTypeName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getMULTIPLY() { return lpg_MULTIPLY; };
+    void setMULTIPLY(AstToken *lpg_MULTIPLY) { this->lpg_MULTIPLY = lpg_MULTIPLY; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     TypeImportOnDemandDeclaration(IToken* leftIToken, IToken* rightIToken,
-                                  IAst *lpg_import,
-                                  IAst *lpg_PackageOrTypeName,
-                                  IAst *lpg_DOT,
-                                  IAst *lpg_MULTIPLY,
-                                  IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                  AstToken *lpg_import,
+                                  Ast *lpg_PackageOrTypeName,
+                                  AstToken *lpg_DOT,
+                                  AstToken *lpg_MULTIPLY,
+                                  AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_import = lpg_import;
         ((Ast*) lpg_import)->setParent(this);
         this->lpg_PackageOrTypeName = lpg_PackageOrTypeName;
@@ -2729,11 +2730,11 @@ struct TypeImportOnDemandDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_import);
-        list.push_back(lpg_PackageOrTypeName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_MULTIPLY);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_import);
+        list.push_back((IAst*)lpg_PackageOrTypeName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_MULTIPLY);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -2749,11 +2750,11 @@ struct TypeImportOnDemandDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_import->accept(v);
-            lpg_PackageOrTypeName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_MULTIPLY->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_import)->accept(v);
+            ((IAst*)lpg_PackageOrTypeName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_MULTIPLY)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2766,33 +2767,33 @@ struct TypeImportOnDemandDeclaration :public Ast
  */
 struct SingleStaticImportDeclaration :public Ast
 {
-    IAst *lpg_import;
-    IAst *lpg_static;
-    IAst *lpg_TypeName;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_import;
+    AstToken *lpg_static;
+    Ast *lpg_TypeName;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getimport() { return lpg_import; };
-    void setimport(IAst *lpg_import) { this->lpg_import = lpg_import; }
-    IAst *getstatic() { return lpg_static; };
-    void setstatic(IAst *lpg_static) { this->lpg_static = lpg_static; }
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getimport() { return lpg_import; };
+    void setimport(AstToken *lpg_import) { this->lpg_import = lpg_import; }
+    AstToken *getstatic() { return lpg_static; };
+    void setstatic(AstToken *lpg_static) { this->lpg_static = lpg_static; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     SingleStaticImportDeclaration(IToken* leftIToken, IToken* rightIToken,
-                                  IAst *lpg_import,
-                                  IAst *lpg_static,
-                                  IAst *lpg_TypeName,
-                                  IAst *lpg_DOT,
-                                  IAst *lpg_identifier,
-                                  IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                  AstToken *lpg_import,
+                                  AstToken *lpg_static,
+                                  Ast *lpg_TypeName,
+                                  AstToken *lpg_DOT,
+                                  identifier *lpg_identifier,
+                                  AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_import = lpg_import;
         ((Ast*) lpg_import)->setParent(this);
         this->lpg_static = lpg_static;
@@ -2814,12 +2815,12 @@ struct SingleStaticImportDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_import);
-        list.push_back(lpg_static);
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_import);
+        list.push_back((IAst*)lpg_static);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -2835,12 +2836,12 @@ struct SingleStaticImportDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_import->accept(v);
-            lpg_static->accept(v);
-            lpg_TypeName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_import)->accept(v);
+            ((IAst*)lpg_static)->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2853,33 +2854,33 @@ struct SingleStaticImportDeclaration :public Ast
  */
 struct StaticImportOnDemandDeclaration :public Ast
 {
-    IAst *lpg_import;
-    IAst *lpg_static;
-    IAst *lpg_TypeName;
-    IAst *lpg_DOT;
-    IAst *lpg_MULTIPLY;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_import;
+    AstToken *lpg_static;
+    Ast *lpg_TypeName;
+    AstToken *lpg_DOT;
+    AstToken *lpg_MULTIPLY;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getimport() { return lpg_import; };
-    void setimport(IAst *lpg_import) { this->lpg_import = lpg_import; }
-    IAst *getstatic() { return lpg_static; };
-    void setstatic(IAst *lpg_static) { this->lpg_static = lpg_static; }
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getMULTIPLY() { return lpg_MULTIPLY; };
-    void setMULTIPLY(IAst *lpg_MULTIPLY) { this->lpg_MULTIPLY = lpg_MULTIPLY; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getimport() { return lpg_import; };
+    void setimport(AstToken *lpg_import) { this->lpg_import = lpg_import; }
+    AstToken *getstatic() { return lpg_static; };
+    void setstatic(AstToken *lpg_static) { this->lpg_static = lpg_static; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getMULTIPLY() { return lpg_MULTIPLY; };
+    void setMULTIPLY(AstToken *lpg_MULTIPLY) { this->lpg_MULTIPLY = lpg_MULTIPLY; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     StaticImportOnDemandDeclaration(IToken* leftIToken, IToken* rightIToken,
-                                    IAst *lpg_import,
-                                    IAst *lpg_static,
-                                    IAst *lpg_TypeName,
-                                    IAst *lpg_DOT,
-                                    IAst *lpg_MULTIPLY,
-                                    IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                    AstToken *lpg_import,
+                                    AstToken *lpg_static,
+                                    Ast *lpg_TypeName,
+                                    AstToken *lpg_DOT,
+                                    AstToken *lpg_MULTIPLY,
+                                    AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_import = lpg_import;
         ((Ast*) lpg_import)->setParent(this);
         this->lpg_static = lpg_static;
@@ -2901,12 +2902,12 @@ struct StaticImportOnDemandDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_import);
-        list.push_back(lpg_static);
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_MULTIPLY);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_import);
+        list.push_back((IAst*)lpg_static);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_MULTIPLY);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -2922,12 +2923,12 @@ struct StaticImportOnDemandDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_import->accept(v);
-            lpg_static->accept(v);
-            lpg_TypeName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_MULTIPLY->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_import)->accept(v);
+            ((IAst*)lpg_static)->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_MULTIPLY)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -2972,49 +2973,49 @@ struct TypeDeclaration :public AstToken
  */
 struct NormalClassDeclaration :public Ast
 {
-    IAst *lpg_ClassModifiersopt;
-    IAst *lpg_class;
-    IAst *lpg_identifier;
-    IAst *lpg_TypeParametersopt;
-    IAst *lpg_Superopt;
-    IAst *lpg_Interfacesopt;
-    IAst *lpg_ClassBody;
+    Ast *lpg_ClassModifiersopt;
+    AstToken *lpg_class;
+    identifier *lpg_identifier;
+    TypeParameters *lpg_TypeParametersopt;
+    Super *lpg_Superopt;
+    Interfaces *lpg_Interfacesopt;
+    ClassBody *lpg_ClassBody;
 
     /**
      * The value returned by <b>getClassModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassModifiersopt() { return lpg_ClassModifiersopt; };
-    void setClassModifiersopt(IAst *lpg_ClassModifiersopt) { this->lpg_ClassModifiersopt = lpg_ClassModifiersopt; }
-    IAst *getclass() { return lpg_class; };
-    void setclass(IAst *lpg_class) { this->lpg_class = lpg_class; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getClassModifiersopt() { return lpg_ClassModifiersopt; };
+    void setClassModifiersopt(Ast *lpg_ClassModifiersopt) { this->lpg_ClassModifiersopt = lpg_ClassModifiersopt; }
+    AstToken *getclass() { return lpg_class; };
+    void setclass(AstToken *lpg_class) { this->lpg_class = lpg_class; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
     /**
      * The value returned by <b>getTypeParametersopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeParametersopt() { return lpg_TypeParametersopt; };
-    void setTypeParametersopt(IAst *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
+    TypeParameters *getTypeParametersopt() { return lpg_TypeParametersopt; };
+    void setTypeParametersopt(TypeParameters *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
     /**
      * The value returned by <b>getSuperopt</b> may be <b>nullptr</b>
      */
-    IAst *getSuperopt() { return lpg_Superopt; };
-    void setSuperopt(IAst *lpg_Superopt) { this->lpg_Superopt = lpg_Superopt; }
+    Super *getSuperopt() { return lpg_Superopt; };
+    void setSuperopt(Super *lpg_Superopt) { this->lpg_Superopt = lpg_Superopt; }
     /**
      * The value returned by <b>getInterfacesopt</b> may be <b>nullptr</b>
      */
-    IAst *getInterfacesopt() { return lpg_Interfacesopt; };
-    void setInterfacesopt(IAst *lpg_Interfacesopt) { this->lpg_Interfacesopt = lpg_Interfacesopt; }
-    IAst *getClassBody() { return lpg_ClassBody; };
-    void setClassBody(IAst *lpg_ClassBody) { this->lpg_ClassBody = lpg_ClassBody; }
+    Interfaces *getInterfacesopt() { return lpg_Interfacesopt; };
+    void setInterfacesopt(Interfaces *lpg_Interfacesopt) { this->lpg_Interfacesopt = lpg_Interfacesopt; }
+    ClassBody *getClassBody() { return lpg_ClassBody; };
+    void setClassBody(ClassBody *lpg_ClassBody) { this->lpg_ClassBody = lpg_ClassBody; }
 
     NormalClassDeclaration(IToken* leftIToken, IToken* rightIToken,
-                           IAst *lpg_ClassModifiersopt,
-                           IAst *lpg_class,
-                           IAst *lpg_identifier,
-                           IAst *lpg_TypeParametersopt,
-                           IAst *lpg_Superopt,
-                           IAst *lpg_Interfacesopt,
-                           IAst *lpg_ClassBody):Ast(leftIToken, rightIToken)    {
+                           Ast *lpg_ClassModifiersopt,
+                           AstToken *lpg_class,
+                           identifier *lpg_identifier,
+                           TypeParameters *lpg_TypeParametersopt,
+                           Super *lpg_Superopt,
+                           Interfaces *lpg_Interfacesopt,
+                           ClassBody *lpg_ClassBody):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassModifiersopt = lpg_ClassModifiersopt;
         if (lpg_ClassModifiersopt != nullptr) ((Ast*) lpg_ClassModifiersopt)->setParent(this);
         this->lpg_class = lpg_class;
@@ -3038,13 +3039,13 @@ struct NormalClassDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassModifiersopt);
-        list.push_back(lpg_class);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_TypeParametersopt);
-        list.push_back(lpg_Superopt);
-        list.push_back(lpg_Interfacesopt);
-        list.push_back(lpg_ClassBody);
+        list.push_back((IAst*)lpg_ClassModifiersopt);
+        list.push_back((IAst*)lpg_class);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_TypeParametersopt);
+        list.push_back((IAst*)lpg_Superopt);
+        list.push_back((IAst*)lpg_Interfacesopt);
+        list.push_back((IAst*)lpg_ClassBody);
         return list;
     }
 
@@ -3060,13 +3061,13 @@ struct NormalClassDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_ClassModifiersopt != nullptr) lpg_ClassModifiersopt->accept(v);
-            lpg_class->accept(v);
-            lpg_identifier->accept(v);
-            if (lpg_TypeParametersopt != nullptr) lpg_TypeParametersopt->accept(v);
-            if (lpg_Superopt != nullptr) lpg_Superopt->accept(v);
-            if (lpg_Interfacesopt != nullptr) lpg_Interfacesopt->accept(v);
-            lpg_ClassBody->accept(v);
+            if (lpg_ClassModifiersopt != nullptr) ((IAst*)lpg_ClassModifiersopt)->accept(v);
+            ((IAst*)lpg_class)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            if (lpg_TypeParametersopt != nullptr) ((IAst*)lpg_TypeParametersopt)->accept(v);
+            if (lpg_Superopt != nullptr) ((IAst*)lpg_Superopt)->accept(v);
+            if (lpg_Interfacesopt != nullptr) ((IAst*)lpg_Interfacesopt)->accept(v);
+            ((IAst*)lpg_ClassBody)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3083,17 +3084,17 @@ struct NormalClassDeclaration :public Ast
  */
 struct ClassModifiers :public Ast
 {
-    IAst *lpg_ClassModifiers;
-    IAst *lpg_ClassModifier;
+    Ast *lpg_ClassModifiers;
+    Ast *lpg_ClassModifier;
 
-    IAst *getClassModifiers() { return lpg_ClassModifiers; };
-    void setClassModifiers(IAst *lpg_ClassModifiers) { this->lpg_ClassModifiers = lpg_ClassModifiers; }
-    IAst *getClassModifier() { return lpg_ClassModifier; };
-    void setClassModifier(IAst *lpg_ClassModifier) { this->lpg_ClassModifier = lpg_ClassModifier; }
+    Ast *getClassModifiers() { return lpg_ClassModifiers; };
+    void setClassModifiers(Ast *lpg_ClassModifiers) { this->lpg_ClassModifiers = lpg_ClassModifiers; }
+    Ast *getClassModifier() { return lpg_ClassModifier; };
+    void setClassModifier(Ast *lpg_ClassModifier) { this->lpg_ClassModifier = lpg_ClassModifier; }
 
     ClassModifiers(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_ClassModifiers,
-                   IAst *lpg_ClassModifier):Ast(leftIToken, rightIToken)    {
+                   Ast *lpg_ClassModifiers,
+                   Ast *lpg_ClassModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassModifiers = lpg_ClassModifiers;
         ((Ast*) lpg_ClassModifiers)->setParent(this);
         this->lpg_ClassModifier = lpg_ClassModifier;
@@ -3107,8 +3108,8 @@ struct ClassModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassModifiers);
-        list.push_back(lpg_ClassModifier);
+        list.push_back((IAst*)lpg_ClassModifiers);
+        list.push_back((IAst*)lpg_ClassModifier);
         return list;
     }
 
@@ -3124,8 +3125,8 @@ struct ClassModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ClassModifiers->accept(v);
-            lpg_ClassModifier->accept(v);
+            ((IAst*)lpg_ClassModifiers)->accept(v);
+            ((IAst*)lpg_ClassModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3138,21 +3139,21 @@ struct ClassModifiers :public Ast
  */
 struct TypeParameters :public Ast
 {
-    IAst *lpg_LESS;
-    IAst *lpg_TypeParameterList;
-    IAst *lpg_GREATER;
+    AstToken *lpg_LESS;
+    Ast *lpg_TypeParameterList;
+    AstToken *lpg_GREATER;
 
-    IAst *getLESS() { return lpg_LESS; };
-    void setLESS(IAst *lpg_LESS) { this->lpg_LESS = lpg_LESS; }
-    IAst *getTypeParameterList() { return lpg_TypeParameterList; };
-    void setTypeParameterList(IAst *lpg_TypeParameterList) { this->lpg_TypeParameterList = lpg_TypeParameterList; }
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getLESS() { return lpg_LESS; };
+    void setLESS(AstToken *lpg_LESS) { this->lpg_LESS = lpg_LESS; }
+    Ast *getTypeParameterList() { return lpg_TypeParameterList; };
+    void setTypeParameterList(Ast *lpg_TypeParameterList) { this->lpg_TypeParameterList = lpg_TypeParameterList; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
 
     TypeParameters(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_LESS,
-                   IAst *lpg_TypeParameterList,
-                   IAst *lpg_GREATER):Ast(leftIToken, rightIToken)    {
+                   AstToken *lpg_LESS,
+                   Ast *lpg_TypeParameterList,
+                   AstToken *lpg_GREATER):Ast(leftIToken, rightIToken)    {
         this->lpg_LESS = lpg_LESS;
         ((Ast*) lpg_LESS)->setParent(this);
         this->lpg_TypeParameterList = lpg_TypeParameterList;
@@ -3168,9 +3169,9 @@ struct TypeParameters :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LESS);
-        list.push_back(lpg_TypeParameterList);
-        list.push_back(lpg_GREATER);
+        list.push_back((IAst*)lpg_LESS);
+        list.push_back((IAst*)lpg_TypeParameterList);
+        list.push_back((IAst*)lpg_GREATER);
         return list;
     }
 
@@ -3186,9 +3187,9 @@ struct TypeParameters :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LESS->accept(v);
-            lpg_TypeParameterList->accept(v);
-            lpg_GREATER->accept(v);
+            ((IAst*)lpg_LESS)->accept(v);
+            ((IAst*)lpg_TypeParameterList)->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3205,21 +3206,21 @@ struct TypeParameters :public Ast
  */
 struct TypeParameterList :public Ast
 {
-    IAst *lpg_TypeParameterList;
-    IAst *lpg_COMMA;
-    IAst *lpg_TypeParameter;
+    Ast *lpg_TypeParameterList;
+    AstToken *lpg_COMMA;
+    TypeParameter *lpg_TypeParameter;
 
-    IAst *getTypeParameterList() { return lpg_TypeParameterList; };
-    void setTypeParameterList(IAst *lpg_TypeParameterList) { this->lpg_TypeParameterList = lpg_TypeParameterList; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getTypeParameter() { return lpg_TypeParameter; };
-    void setTypeParameter(IAst *lpg_TypeParameter) { this->lpg_TypeParameter = lpg_TypeParameter; }
+    Ast *getTypeParameterList() { return lpg_TypeParameterList; };
+    void setTypeParameterList(Ast *lpg_TypeParameterList) { this->lpg_TypeParameterList = lpg_TypeParameterList; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    TypeParameter *getTypeParameter() { return lpg_TypeParameter; };
+    void setTypeParameter(TypeParameter *lpg_TypeParameter) { this->lpg_TypeParameter = lpg_TypeParameter; }
 
     TypeParameterList(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_TypeParameterList,
-                      IAst *lpg_COMMA,
-                      IAst *lpg_TypeParameter):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_TypeParameterList,
+                      AstToken *lpg_COMMA,
+                      TypeParameter *lpg_TypeParameter):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeParameterList = lpg_TypeParameterList;
         ((Ast*) lpg_TypeParameterList)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -3235,9 +3236,9 @@ struct TypeParameterList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeParameterList);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_TypeParameter);
+        list.push_back((IAst*)lpg_TypeParameterList);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_TypeParameter);
         return list;
     }
 
@@ -3253,9 +3254,9 @@ struct TypeParameterList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeParameterList->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_TypeParameter->accept(v);
+            ((IAst*)lpg_TypeParameterList)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_TypeParameter)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3268,17 +3269,17 @@ struct TypeParameterList :public Ast
  */
 struct Super :public Ast
 {
-    IAst *lpg_extends;
-    IAst *lpg_ClassType;
+    AstToken *lpg_extends;
+    ClassType *lpg_ClassType;
 
-    IAst *getextends() { return lpg_extends; };
-    void setextends(IAst *lpg_extends) { this->lpg_extends = lpg_extends; }
-    IAst *getClassType() { return lpg_ClassType; };
-    void setClassType(IAst *lpg_ClassType) { this->lpg_ClassType = lpg_ClassType; }
+    AstToken *getextends() { return lpg_extends; };
+    void setextends(AstToken *lpg_extends) { this->lpg_extends = lpg_extends; }
+    ClassType *getClassType() { return lpg_ClassType; };
+    void setClassType(ClassType *lpg_ClassType) { this->lpg_ClassType = lpg_ClassType; }
 
     Super(IToken* leftIToken, IToken* rightIToken,
-          IAst *lpg_extends,
-          IAst *lpg_ClassType):Ast(leftIToken, rightIToken)    {
+          AstToken *lpg_extends,
+          ClassType *lpg_ClassType):Ast(leftIToken, rightIToken)    {
         this->lpg_extends = lpg_extends;
         ((Ast*) lpg_extends)->setParent(this);
         this->lpg_ClassType = lpg_ClassType;
@@ -3292,8 +3293,8 @@ struct Super :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_extends);
-        list.push_back(lpg_ClassType);
+        list.push_back((IAst*)lpg_extends);
+        list.push_back((IAst*)lpg_ClassType);
         return list;
     }
 
@@ -3309,8 +3310,8 @@ struct Super :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_extends->accept(v);
-            lpg_ClassType->accept(v);
+            ((IAst*)lpg_extends)->accept(v);
+            ((IAst*)lpg_ClassType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3323,17 +3324,17 @@ struct Super :public Ast
  */
 struct Interfaces :public Ast
 {
-    IAst *lpg_implements;
-    IAst *lpg_InterfaceTypeList;
+    AstToken *lpg_implements;
+    Ast *lpg_InterfaceTypeList;
 
-    IAst *getimplements() { return lpg_implements; };
-    void setimplements(IAst *lpg_implements) { this->lpg_implements = lpg_implements; }
-    IAst *getInterfaceTypeList() { return lpg_InterfaceTypeList; };
-    void setInterfaceTypeList(IAst *lpg_InterfaceTypeList) { this->lpg_InterfaceTypeList = lpg_InterfaceTypeList; }
+    AstToken *getimplements() { return lpg_implements; };
+    void setimplements(AstToken *lpg_implements) { this->lpg_implements = lpg_implements; }
+    Ast *getInterfaceTypeList() { return lpg_InterfaceTypeList; };
+    void setInterfaceTypeList(Ast *lpg_InterfaceTypeList) { this->lpg_InterfaceTypeList = lpg_InterfaceTypeList; }
 
     Interfaces(IToken* leftIToken, IToken* rightIToken,
-               IAst *lpg_implements,
-               IAst *lpg_InterfaceTypeList):Ast(leftIToken, rightIToken)    {
+               AstToken *lpg_implements,
+               Ast *lpg_InterfaceTypeList):Ast(leftIToken, rightIToken)    {
         this->lpg_implements = lpg_implements;
         ((Ast*) lpg_implements)->setParent(this);
         this->lpg_InterfaceTypeList = lpg_InterfaceTypeList;
@@ -3347,8 +3348,8 @@ struct Interfaces :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_implements);
-        list.push_back(lpg_InterfaceTypeList);
+        list.push_back((IAst*)lpg_implements);
+        list.push_back((IAst*)lpg_InterfaceTypeList);
         return list;
     }
 
@@ -3364,8 +3365,8 @@ struct Interfaces :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_implements->accept(v);
-            lpg_InterfaceTypeList->accept(v);
+            ((IAst*)lpg_implements)->accept(v);
+            ((IAst*)lpg_InterfaceTypeList)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3382,21 +3383,21 @@ struct Interfaces :public Ast
  */
 struct InterfaceTypeList :public Ast
 {
-    IAst *lpg_InterfaceTypeList;
-    IAst *lpg_COMMA;
-    IAst *lpg_InterfaceType;
+    Ast *lpg_InterfaceTypeList;
+    AstToken *lpg_COMMA;
+    InterfaceType *lpg_InterfaceType;
 
-    IAst *getInterfaceTypeList() { return lpg_InterfaceTypeList; };
-    void setInterfaceTypeList(IAst *lpg_InterfaceTypeList) { this->lpg_InterfaceTypeList = lpg_InterfaceTypeList; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getInterfaceType() { return lpg_InterfaceType; };
-    void setInterfaceType(IAst *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
+    Ast *getInterfaceTypeList() { return lpg_InterfaceTypeList; };
+    void setInterfaceTypeList(Ast *lpg_InterfaceTypeList) { this->lpg_InterfaceTypeList = lpg_InterfaceTypeList; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    InterfaceType *getInterfaceType() { return lpg_InterfaceType; };
+    void setInterfaceType(InterfaceType *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
 
     InterfaceTypeList(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_InterfaceTypeList,
-                      IAst *lpg_COMMA,
-                      IAst *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_InterfaceTypeList,
+                      AstToken *lpg_COMMA,
+                      InterfaceType *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
         this->lpg_InterfaceTypeList = lpg_InterfaceTypeList;
         ((Ast*) lpg_InterfaceTypeList)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -3412,9 +3413,9 @@ struct InterfaceTypeList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_InterfaceTypeList);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_InterfaceType);
+        list.push_back((IAst*)lpg_InterfaceTypeList);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_InterfaceType);
         return list;
     }
 
@@ -3430,9 +3431,9 @@ struct InterfaceTypeList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_InterfaceTypeList->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_InterfaceType->accept(v);
+            ((IAst*)lpg_InterfaceTypeList)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_InterfaceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3445,24 +3446,24 @@ struct InterfaceTypeList :public Ast
  */
 struct ClassBody :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_ClassBodyDeclarationsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_ClassBodyDeclarationsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getClassBodyDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassBodyDeclarationsopt() { return lpg_ClassBodyDeclarationsopt; };
-    void setClassBodyDeclarationsopt(IAst *lpg_ClassBodyDeclarationsopt) { this->lpg_ClassBodyDeclarationsopt = lpg_ClassBodyDeclarationsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Ast *getClassBodyDeclarationsopt() { return lpg_ClassBodyDeclarationsopt; };
+    void setClassBodyDeclarationsopt(Ast *lpg_ClassBodyDeclarationsopt) { this->lpg_ClassBodyDeclarationsopt = lpg_ClassBodyDeclarationsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     ClassBody(IToken* leftIToken, IToken* rightIToken,
-              IAst *lpg_LBRACE,
-              IAst *lpg_ClassBodyDeclarationsopt,
-              IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+              AstToken *lpg_LBRACE,
+              Ast *lpg_ClassBodyDeclarationsopt,
+              AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_ClassBodyDeclarationsopt = lpg_ClassBodyDeclarationsopt;
@@ -3478,9 +3479,9 @@ struct ClassBody :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_ClassBodyDeclarationsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_ClassBodyDeclarationsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -3496,9 +3497,9 @@ struct ClassBody :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_ClassBodyDeclarationsopt != nullptr) lpg_ClassBodyDeclarationsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_ClassBodyDeclarationsopt != nullptr) ((IAst*)lpg_ClassBodyDeclarationsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3515,17 +3516,17 @@ struct ClassBody :public Ast
  */
 struct ClassBodyDeclarations :public Ast
 {
-    IAst *lpg_ClassBodyDeclarations;
-    IAst *lpg_ClassBodyDeclaration;
+    Ast *lpg_ClassBodyDeclarations;
+    Ast *lpg_ClassBodyDeclaration;
 
-    IAst *getClassBodyDeclarations() { return lpg_ClassBodyDeclarations; };
-    void setClassBodyDeclarations(IAst *lpg_ClassBodyDeclarations) { this->lpg_ClassBodyDeclarations = lpg_ClassBodyDeclarations; }
-    IAst *getClassBodyDeclaration() { return lpg_ClassBodyDeclaration; };
-    void setClassBodyDeclaration(IAst *lpg_ClassBodyDeclaration) { this->lpg_ClassBodyDeclaration = lpg_ClassBodyDeclaration; }
+    Ast *getClassBodyDeclarations() { return lpg_ClassBodyDeclarations; };
+    void setClassBodyDeclarations(Ast *lpg_ClassBodyDeclarations) { this->lpg_ClassBodyDeclarations = lpg_ClassBodyDeclarations; }
+    Ast *getClassBodyDeclaration() { return lpg_ClassBodyDeclaration; };
+    void setClassBodyDeclaration(Ast *lpg_ClassBodyDeclaration) { this->lpg_ClassBodyDeclaration = lpg_ClassBodyDeclaration; }
 
     ClassBodyDeclarations(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_ClassBodyDeclarations,
-                          IAst *lpg_ClassBodyDeclaration):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_ClassBodyDeclarations,
+                          Ast *lpg_ClassBodyDeclaration):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassBodyDeclarations = lpg_ClassBodyDeclarations;
         ((Ast*) lpg_ClassBodyDeclarations)->setParent(this);
         this->lpg_ClassBodyDeclaration = lpg_ClassBodyDeclaration;
@@ -3539,8 +3540,8 @@ struct ClassBodyDeclarations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassBodyDeclarations);
-        list.push_back(lpg_ClassBodyDeclaration);
+        list.push_back((IAst*)lpg_ClassBodyDeclarations);
+        list.push_back((IAst*)lpg_ClassBodyDeclaration);
         return list;
     }
 
@@ -3556,8 +3557,8 @@ struct ClassBodyDeclarations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ClassBodyDeclarations->accept(v);
-            lpg_ClassBodyDeclaration->accept(v);
+            ((IAst*)lpg_ClassBodyDeclarations)->accept(v);
+            ((IAst*)lpg_ClassBodyDeclaration)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3604,28 +3605,28 @@ struct ClassMemberDeclaration :public AstToken
  */
 struct FieldDeclaration :public Ast
 {
-    IAst *lpg_FieldModifiersopt;
-    IAst *lpg_Type;
-    IAst *lpg_VariableDeclarators;
-    IAst *lpg_SEMICOLON;
+    Ast *lpg_FieldModifiersopt;
+    Ast *lpg_Type;
+    Ast *lpg_VariableDeclarators;
+    AstToken *lpg_SEMICOLON;
 
     /**
      * The value returned by <b>getFieldModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getFieldModifiersopt() { return lpg_FieldModifiersopt; };
-    void setFieldModifiersopt(IAst *lpg_FieldModifiersopt) { this->lpg_FieldModifiersopt = lpg_FieldModifiersopt; }
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getVariableDeclarators() { return lpg_VariableDeclarators; };
-    void setVariableDeclarators(IAst *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getFieldModifiersopt() { return lpg_FieldModifiersopt; };
+    void setFieldModifiersopt(Ast *lpg_FieldModifiersopt) { this->lpg_FieldModifiersopt = lpg_FieldModifiersopt; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    Ast *getVariableDeclarators() { return lpg_VariableDeclarators; };
+    void setVariableDeclarators(Ast *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     FieldDeclaration(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_FieldModifiersopt,
-                     IAst *lpg_Type,
-                     IAst *lpg_VariableDeclarators,
-                     IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                     Ast *lpg_FieldModifiersopt,
+                     Ast *lpg_Type,
+                     Ast *lpg_VariableDeclarators,
+                     AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_FieldModifiersopt = lpg_FieldModifiersopt;
         if (lpg_FieldModifiersopt != nullptr) ((Ast*) lpg_FieldModifiersopt)->setParent(this);
         this->lpg_Type = lpg_Type;
@@ -3643,10 +3644,10 @@ struct FieldDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_FieldModifiersopt);
-        list.push_back(lpg_Type);
-        list.push_back(lpg_VariableDeclarators);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_FieldModifiersopt);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_VariableDeclarators);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -3662,10 +3663,10 @@ struct FieldDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_FieldModifiersopt != nullptr) lpg_FieldModifiersopt->accept(v);
-            lpg_Type->accept(v);
-            lpg_VariableDeclarators->accept(v);
-            lpg_SEMICOLON->accept(v);
+            if (lpg_FieldModifiersopt != nullptr) ((IAst*)lpg_FieldModifiersopt)->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_VariableDeclarators)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3682,21 +3683,21 @@ struct FieldDeclaration :public Ast
  */
 struct VariableDeclarators :public Ast
 {
-    IAst *lpg_VariableDeclarators;
-    IAst *lpg_COMMA;
-    IAst *lpg_VariableDeclarator;
+    Ast *lpg_VariableDeclarators;
+    AstToken *lpg_COMMA;
+    Ast *lpg_VariableDeclarator;
 
-    IAst *getVariableDeclarators() { return lpg_VariableDeclarators; };
-    void setVariableDeclarators(IAst *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getVariableDeclarator() { return lpg_VariableDeclarator; };
-    void setVariableDeclarator(IAst *lpg_VariableDeclarator) { this->lpg_VariableDeclarator = lpg_VariableDeclarator; }
+    Ast *getVariableDeclarators() { return lpg_VariableDeclarators; };
+    void setVariableDeclarators(Ast *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getVariableDeclarator() { return lpg_VariableDeclarator; };
+    void setVariableDeclarator(Ast *lpg_VariableDeclarator) { this->lpg_VariableDeclarator = lpg_VariableDeclarator; }
 
     VariableDeclarators(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_VariableDeclarators,
-                        IAst *lpg_COMMA,
-                        IAst *lpg_VariableDeclarator):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_VariableDeclarators,
+                        AstToken *lpg_COMMA,
+                        Ast *lpg_VariableDeclarator):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableDeclarators = lpg_VariableDeclarators;
         ((Ast*) lpg_VariableDeclarators)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -3712,9 +3713,9 @@ struct VariableDeclarators :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableDeclarators);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_VariableDeclarator);
+        list.push_back((IAst*)lpg_VariableDeclarators);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_VariableDeclarator);
         return list;
     }
 
@@ -3730,9 +3731,9 @@ struct VariableDeclarators :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_VariableDeclarators->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_VariableDeclarator->accept(v);
+            ((IAst*)lpg_VariableDeclarators)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_VariableDeclarator)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3749,21 +3750,21 @@ struct VariableDeclarators :public Ast
  */
 struct VariableDeclarator :public Ast
 {
-    IAst *lpg_VariableDeclaratorId;
-    IAst *lpg_EQUAL;
-    IAst *lpg_VariableInitializer;
+    Ast *lpg_VariableDeclaratorId;
+    AstToken *lpg_EQUAL;
+    Ast *lpg_VariableInitializer;
 
-    IAst *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
-    void setVariableDeclaratorId(IAst *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
-    IAst *getEQUAL() { return lpg_EQUAL; };
-    void setEQUAL(IAst *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
-    IAst *getVariableInitializer() { return lpg_VariableInitializer; };
-    void setVariableInitializer(IAst *lpg_VariableInitializer) { this->lpg_VariableInitializer = lpg_VariableInitializer; }
+    Ast *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
+    void setVariableDeclaratorId(Ast *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
+    AstToken *getEQUAL() { return lpg_EQUAL; };
+    void setEQUAL(AstToken *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
+    Ast *getVariableInitializer() { return lpg_VariableInitializer; };
+    void setVariableInitializer(Ast *lpg_VariableInitializer) { this->lpg_VariableInitializer = lpg_VariableInitializer; }
 
     VariableDeclarator(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_VariableDeclaratorId,
-                       IAst *lpg_EQUAL,
-                       IAst *lpg_VariableInitializer):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_VariableDeclaratorId,
+                       AstToken *lpg_EQUAL,
+                       Ast *lpg_VariableInitializer):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId;
         ((Ast*) lpg_VariableDeclaratorId)->setParent(this);
         this->lpg_EQUAL = lpg_EQUAL;
@@ -3779,9 +3780,9 @@ struct VariableDeclarator :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableDeclaratorId);
-        list.push_back(lpg_EQUAL);
-        list.push_back(lpg_VariableInitializer);
+        list.push_back((IAst*)lpg_VariableDeclaratorId);
+        list.push_back((IAst*)lpg_EQUAL);
+        list.push_back((IAst*)lpg_VariableInitializer);
         return list;
     }
 
@@ -3797,9 +3798,9 @@ struct VariableDeclarator :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_VariableDeclaratorId->accept(v);
-            lpg_EQUAL->accept(v);
-            lpg_VariableInitializer->accept(v);
+            ((IAst*)lpg_VariableDeclaratorId)->accept(v);
+            ((IAst*)lpg_EQUAL)->accept(v);
+            ((IAst*)lpg_VariableInitializer)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3816,21 +3817,21 @@ struct VariableDeclarator :public Ast
  */
 struct VariableDeclaratorId :public Ast
 {
-    IAst *lpg_VariableDeclaratorId;
-    IAst *lpg_LBRACKET;
-    IAst *lpg_RBRACKET;
+    Ast *lpg_VariableDeclaratorId;
+    AstToken *lpg_LBRACKET;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
-    void setVariableDeclaratorId(IAst *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    Ast *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
+    void setVariableDeclaratorId(Ast *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     VariableDeclaratorId(IToken* leftIToken, IToken* rightIToken,
-                         IAst *lpg_VariableDeclaratorId,
-                         IAst *lpg_LBRACKET,
-                         IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+                         Ast *lpg_VariableDeclaratorId,
+                         AstToken *lpg_LBRACKET,
+                         AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId;
         ((Ast*) lpg_VariableDeclaratorId)->setParent(this);
         this->lpg_LBRACKET = lpg_LBRACKET;
@@ -3846,9 +3847,9 @@ struct VariableDeclaratorId :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableDeclaratorId);
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_VariableDeclaratorId);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -3864,9 +3865,9 @@ struct VariableDeclaratorId :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_VariableDeclaratorId->accept(v);
-            lpg_LBRACKET->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_VariableDeclaratorId)->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3883,17 +3884,17 @@ struct VariableDeclaratorId :public Ast
  */
 struct FieldModifiers :public Ast
 {
-    IAst *lpg_FieldModifiers;
-    IAst *lpg_FieldModifier;
+    Ast *lpg_FieldModifiers;
+    Ast *lpg_FieldModifier;
 
-    IAst *getFieldModifiers() { return lpg_FieldModifiers; };
-    void setFieldModifiers(IAst *lpg_FieldModifiers) { this->lpg_FieldModifiers = lpg_FieldModifiers; }
-    IAst *getFieldModifier() { return lpg_FieldModifier; };
-    void setFieldModifier(IAst *lpg_FieldModifier) { this->lpg_FieldModifier = lpg_FieldModifier; }
+    Ast *getFieldModifiers() { return lpg_FieldModifiers; };
+    void setFieldModifiers(Ast *lpg_FieldModifiers) { this->lpg_FieldModifiers = lpg_FieldModifiers; }
+    Ast *getFieldModifier() { return lpg_FieldModifier; };
+    void setFieldModifier(Ast *lpg_FieldModifier) { this->lpg_FieldModifier = lpg_FieldModifier; }
 
     FieldModifiers(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_FieldModifiers,
-                   IAst *lpg_FieldModifier):Ast(leftIToken, rightIToken)    {
+                   Ast *lpg_FieldModifiers,
+                   Ast *lpg_FieldModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_FieldModifiers = lpg_FieldModifiers;
         ((Ast*) lpg_FieldModifiers)->setParent(this);
         this->lpg_FieldModifier = lpg_FieldModifier;
@@ -3907,8 +3908,8 @@ struct FieldModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_FieldModifiers);
-        list.push_back(lpg_FieldModifier);
+        list.push_back((IAst*)lpg_FieldModifiers);
+        list.push_back((IAst*)lpg_FieldModifier);
         return list;
     }
 
@@ -3924,8 +3925,8 @@ struct FieldModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_FieldModifiers->accept(v);
-            lpg_FieldModifier->accept(v);
+            ((IAst*)lpg_FieldModifiers)->accept(v);
+            ((IAst*)lpg_FieldModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3938,17 +3939,17 @@ struct FieldModifiers :public Ast
  */
 struct MethodDeclaration :public Ast
 {
-    IAst *lpg_MethodHeader;
-    IAst *lpg_MethodBody;
+    MethodHeader *lpg_MethodHeader;
+    Ast *lpg_MethodBody;
 
-    IAst *getMethodHeader() { return lpg_MethodHeader; };
-    void setMethodHeader(IAst *lpg_MethodHeader) { this->lpg_MethodHeader = lpg_MethodHeader; }
-    IAst *getMethodBody() { return lpg_MethodBody; };
-    void setMethodBody(IAst *lpg_MethodBody) { this->lpg_MethodBody = lpg_MethodBody; }
+    MethodHeader *getMethodHeader() { return lpg_MethodHeader; };
+    void setMethodHeader(MethodHeader *lpg_MethodHeader) { this->lpg_MethodHeader = lpg_MethodHeader; }
+    Ast *getMethodBody() { return lpg_MethodBody; };
+    void setMethodBody(Ast *lpg_MethodBody) { this->lpg_MethodBody = lpg_MethodBody; }
 
     MethodDeclaration(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_MethodHeader,
-                      IAst *lpg_MethodBody):Ast(leftIToken, rightIToken)    {
+                      MethodHeader *lpg_MethodHeader,
+                      Ast *lpg_MethodBody):Ast(leftIToken, rightIToken)    {
         this->lpg_MethodHeader = lpg_MethodHeader;
         ((Ast*) lpg_MethodHeader)->setParent(this);
         this->lpg_MethodBody = lpg_MethodBody;
@@ -3962,8 +3963,8 @@ struct MethodDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MethodHeader);
-        list.push_back(lpg_MethodBody);
+        list.push_back((IAst*)lpg_MethodHeader);
+        list.push_back((IAst*)lpg_MethodBody);
         return list;
     }
 
@@ -3979,8 +3980,8 @@ struct MethodDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MethodHeader->accept(v);
-            lpg_MethodBody->accept(v);
+            ((IAst*)lpg_MethodHeader)->accept(v);
+            ((IAst*)lpg_MethodBody)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3993,38 +3994,38 @@ struct MethodDeclaration :public Ast
  */
 struct MethodHeader :public Ast
 {
-    IAst *lpg_MethodModifiersopt;
-    IAst *lpg_TypeParametersopt;
-    IAst *lpg_ResultType;
-    IAst *lpg_MethodDeclarator;
-    IAst *lpg_Throwsopt;
+    Ast *lpg_MethodModifiersopt;
+    TypeParameters *lpg_TypeParametersopt;
+    Ast *lpg_ResultType;
+    Ast *lpg_MethodDeclarator;
+    Throws *lpg_Throwsopt;
 
     /**
      * The value returned by <b>getMethodModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getMethodModifiersopt() { return lpg_MethodModifiersopt; };
-    void setMethodModifiersopt(IAst *lpg_MethodModifiersopt) { this->lpg_MethodModifiersopt = lpg_MethodModifiersopt; }
+    Ast *getMethodModifiersopt() { return lpg_MethodModifiersopt; };
+    void setMethodModifiersopt(Ast *lpg_MethodModifiersopt) { this->lpg_MethodModifiersopt = lpg_MethodModifiersopt; }
     /**
      * The value returned by <b>getTypeParametersopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeParametersopt() { return lpg_TypeParametersopt; };
-    void setTypeParametersopt(IAst *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
-    IAst *getResultType() { return lpg_ResultType; };
-    void setResultType(IAst *lpg_ResultType) { this->lpg_ResultType = lpg_ResultType; }
-    IAst *getMethodDeclarator() { return lpg_MethodDeclarator; };
-    void setMethodDeclarator(IAst *lpg_MethodDeclarator) { this->lpg_MethodDeclarator = lpg_MethodDeclarator; }
+    TypeParameters *getTypeParametersopt() { return lpg_TypeParametersopt; };
+    void setTypeParametersopt(TypeParameters *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
+    Ast *getResultType() { return lpg_ResultType; };
+    void setResultType(Ast *lpg_ResultType) { this->lpg_ResultType = lpg_ResultType; }
+    Ast *getMethodDeclarator() { return lpg_MethodDeclarator; };
+    void setMethodDeclarator(Ast *lpg_MethodDeclarator) { this->lpg_MethodDeclarator = lpg_MethodDeclarator; }
     /**
      * The value returned by <b>getThrowsopt</b> may be <b>nullptr</b>
      */
-    IAst *getThrowsopt() { return lpg_Throwsopt; };
-    void setThrowsopt(IAst *lpg_Throwsopt) { this->lpg_Throwsopt = lpg_Throwsopt; }
+    Throws *getThrowsopt() { return lpg_Throwsopt; };
+    void setThrowsopt(Throws *lpg_Throwsopt) { this->lpg_Throwsopt = lpg_Throwsopt; }
 
     MethodHeader(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_MethodModifiersopt,
-                 IAst *lpg_TypeParametersopt,
-                 IAst *lpg_ResultType,
-                 IAst *lpg_MethodDeclarator,
-                 IAst *lpg_Throwsopt):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_MethodModifiersopt,
+                 TypeParameters *lpg_TypeParametersopt,
+                 Ast *lpg_ResultType,
+                 Ast *lpg_MethodDeclarator,
+                 Throws *lpg_Throwsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_MethodModifiersopt = lpg_MethodModifiersopt;
         if (lpg_MethodModifiersopt != nullptr) ((Ast*) lpg_MethodModifiersopt)->setParent(this);
         this->lpg_TypeParametersopt = lpg_TypeParametersopt;
@@ -4044,11 +4045,11 @@ struct MethodHeader :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MethodModifiersopt);
-        list.push_back(lpg_TypeParametersopt);
-        list.push_back(lpg_ResultType);
-        list.push_back(lpg_MethodDeclarator);
-        list.push_back(lpg_Throwsopt);
+        list.push_back((IAst*)lpg_MethodModifiersopt);
+        list.push_back((IAst*)lpg_TypeParametersopt);
+        list.push_back((IAst*)lpg_ResultType);
+        list.push_back((IAst*)lpg_MethodDeclarator);
+        list.push_back((IAst*)lpg_Throwsopt);
         return list;
     }
 
@@ -4064,11 +4065,11 @@ struct MethodHeader :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_MethodModifiersopt != nullptr) lpg_MethodModifiersopt->accept(v);
-            if (lpg_TypeParametersopt != nullptr) lpg_TypeParametersopt->accept(v);
-            lpg_ResultType->accept(v);
-            lpg_MethodDeclarator->accept(v);
-            if (lpg_Throwsopt != nullptr) lpg_Throwsopt->accept(v);
+            if (lpg_MethodModifiersopt != nullptr) ((IAst*)lpg_MethodModifiersopt)->accept(v);
+            if (lpg_TypeParametersopt != nullptr) ((IAst*)lpg_TypeParametersopt)->accept(v);
+            ((IAst*)lpg_ResultType)->accept(v);
+            ((IAst*)lpg_MethodDeclarator)->accept(v);
+            if (lpg_Throwsopt != nullptr) ((IAst*)lpg_Throwsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4116,21 +4117,21 @@ struct ResultType :public AstToken
  */
 struct FormalParameterList :public Ast
 {
-    IAst *lpg_FormalParameters;
-    IAst *lpg_COMMA;
-    IAst *lpg_LastFormalParameter;
+    Ast *lpg_FormalParameters;
+    AstToken *lpg_COMMA;
+    LastFormalParameter *lpg_LastFormalParameter;
 
-    IAst *getFormalParameters() { return lpg_FormalParameters; };
-    void setFormalParameters(IAst *lpg_FormalParameters) { this->lpg_FormalParameters = lpg_FormalParameters; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getLastFormalParameter() { return lpg_LastFormalParameter; };
-    void setLastFormalParameter(IAst *lpg_LastFormalParameter) { this->lpg_LastFormalParameter = lpg_LastFormalParameter; }
+    Ast *getFormalParameters() { return lpg_FormalParameters; };
+    void setFormalParameters(Ast *lpg_FormalParameters) { this->lpg_FormalParameters = lpg_FormalParameters; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    LastFormalParameter *getLastFormalParameter() { return lpg_LastFormalParameter; };
+    void setLastFormalParameter(LastFormalParameter *lpg_LastFormalParameter) { this->lpg_LastFormalParameter = lpg_LastFormalParameter; }
 
     FormalParameterList(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_FormalParameters,
-                        IAst *lpg_COMMA,
-                        IAst *lpg_LastFormalParameter):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_FormalParameters,
+                        AstToken *lpg_COMMA,
+                        LastFormalParameter *lpg_LastFormalParameter):Ast(leftIToken, rightIToken)    {
         this->lpg_FormalParameters = lpg_FormalParameters;
         ((Ast*) lpg_FormalParameters)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -4146,9 +4147,9 @@ struct FormalParameterList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_FormalParameters);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_LastFormalParameter);
+        list.push_back((IAst*)lpg_FormalParameters);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_LastFormalParameter);
         return list;
     }
 
@@ -4164,9 +4165,9 @@ struct FormalParameterList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_FormalParameters->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_LastFormalParameter->accept(v);
+            ((IAst*)lpg_FormalParameters)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_LastFormalParameter)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4183,21 +4184,21 @@ struct FormalParameterList :public Ast
  */
 struct FormalParameters :public Ast
 {
-    IAst *lpg_FormalParameters;
-    IAst *lpg_COMMA;
-    IAst *lpg_FormalParameter;
+    Ast *lpg_FormalParameters;
+    AstToken *lpg_COMMA;
+    FormalParameter *lpg_FormalParameter;
 
-    IAst *getFormalParameters() { return lpg_FormalParameters; };
-    void setFormalParameters(IAst *lpg_FormalParameters) { this->lpg_FormalParameters = lpg_FormalParameters; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getFormalParameter() { return lpg_FormalParameter; };
-    void setFormalParameter(IAst *lpg_FormalParameter) { this->lpg_FormalParameter = lpg_FormalParameter; }
+    Ast *getFormalParameters() { return lpg_FormalParameters; };
+    void setFormalParameters(Ast *lpg_FormalParameters) { this->lpg_FormalParameters = lpg_FormalParameters; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    FormalParameter *getFormalParameter() { return lpg_FormalParameter; };
+    void setFormalParameter(FormalParameter *lpg_FormalParameter) { this->lpg_FormalParameter = lpg_FormalParameter; }
 
     FormalParameters(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_FormalParameters,
-                     IAst *lpg_COMMA,
-                     IAst *lpg_FormalParameter):Ast(leftIToken, rightIToken)    {
+                     Ast *lpg_FormalParameters,
+                     AstToken *lpg_COMMA,
+                     FormalParameter *lpg_FormalParameter):Ast(leftIToken, rightIToken)    {
         this->lpg_FormalParameters = lpg_FormalParameters;
         ((Ast*) lpg_FormalParameters)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -4213,9 +4214,9 @@ struct FormalParameters :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_FormalParameters);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_FormalParameter);
+        list.push_back((IAst*)lpg_FormalParameters);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_FormalParameter);
         return list;
     }
 
@@ -4231,9 +4232,9 @@ struct FormalParameters :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_FormalParameters->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_FormalParameter->accept(v);
+            ((IAst*)lpg_FormalParameters)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_FormalParameter)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4246,24 +4247,24 @@ struct FormalParameters :public Ast
  */
 struct FormalParameter :public Ast
 {
-    IAst *lpg_VariableModifiersopt;
-    IAst *lpg_Type;
-    IAst *lpg_VariableDeclaratorId;
+    Ast *lpg_VariableModifiersopt;
+    Ast *lpg_Type;
+    Ast *lpg_VariableDeclaratorId;
 
     /**
      * The value returned by <b>getVariableModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getVariableModifiersopt() { return lpg_VariableModifiersopt; };
-    void setVariableModifiersopt(IAst *lpg_VariableModifiersopt) { this->lpg_VariableModifiersopt = lpg_VariableModifiersopt; }
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
-    void setVariableDeclaratorId(IAst *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
+    Ast *getVariableModifiersopt() { return lpg_VariableModifiersopt; };
+    void setVariableModifiersopt(Ast *lpg_VariableModifiersopt) { this->lpg_VariableModifiersopt = lpg_VariableModifiersopt; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    Ast *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
+    void setVariableDeclaratorId(Ast *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
 
     FormalParameter(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_VariableModifiersopt,
-                    IAst *lpg_Type,
-                    IAst *lpg_VariableDeclaratorId):Ast(leftIToken, rightIToken)    {
+                    Ast *lpg_VariableModifiersopt,
+                    Ast *lpg_Type,
+                    Ast *lpg_VariableDeclaratorId):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableModifiersopt = lpg_VariableModifiersopt;
         if (lpg_VariableModifiersopt != nullptr) ((Ast*) lpg_VariableModifiersopt)->setParent(this);
         this->lpg_Type = lpg_Type;
@@ -4279,9 +4280,9 @@ struct FormalParameter :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableModifiersopt);
-        list.push_back(lpg_Type);
-        list.push_back(lpg_VariableDeclaratorId);
+        list.push_back((IAst*)lpg_VariableModifiersopt);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_VariableDeclaratorId);
         return list;
     }
 
@@ -4297,9 +4298,9 @@ struct FormalParameter :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_VariableModifiersopt != nullptr) lpg_VariableModifiersopt->accept(v);
-            lpg_Type->accept(v);
-            lpg_VariableDeclaratorId->accept(v);
+            if (lpg_VariableModifiersopt != nullptr) ((IAst*)lpg_VariableModifiersopt)->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_VariableDeclaratorId)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4316,17 +4317,17 @@ struct FormalParameter :public Ast
  */
 struct VariableModifiers :public Ast
 {
-    IAst *lpg_VariableModifiers;
-    IAst *lpg_VariableModifier;
+    Ast *lpg_VariableModifiers;
+    Ast *lpg_VariableModifier;
 
-    IAst *getVariableModifiers() { return lpg_VariableModifiers; };
-    void setVariableModifiers(IAst *lpg_VariableModifiers) { this->lpg_VariableModifiers = lpg_VariableModifiers; }
-    IAst *getVariableModifier() { return lpg_VariableModifier; };
-    void setVariableModifier(IAst *lpg_VariableModifier) { this->lpg_VariableModifier = lpg_VariableModifier; }
+    Ast *getVariableModifiers() { return lpg_VariableModifiers; };
+    void setVariableModifiers(Ast *lpg_VariableModifiers) { this->lpg_VariableModifiers = lpg_VariableModifiers; }
+    Ast *getVariableModifier() { return lpg_VariableModifier; };
+    void setVariableModifier(Ast *lpg_VariableModifier) { this->lpg_VariableModifier = lpg_VariableModifier; }
 
     VariableModifiers(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_VariableModifiers,
-                      IAst *lpg_VariableModifier):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_VariableModifiers,
+                      Ast *lpg_VariableModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableModifiers = lpg_VariableModifiers;
         ((Ast*) lpg_VariableModifiers)->setParent(this);
         this->lpg_VariableModifier = lpg_VariableModifier;
@@ -4340,8 +4341,8 @@ struct VariableModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableModifiers);
-        list.push_back(lpg_VariableModifier);
+        list.push_back((IAst*)lpg_VariableModifiers);
+        list.push_back((IAst*)lpg_VariableModifier);
         return list;
     }
 
@@ -4357,8 +4358,8 @@ struct VariableModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_VariableModifiers->accept(v);
-            lpg_VariableModifier->accept(v);
+            ((IAst*)lpg_VariableModifiers)->accept(v);
+            ((IAst*)lpg_VariableModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4402,31 +4403,31 @@ struct VariableModifier :public AstToken
  */
 struct LastFormalParameter :public Ast
 {
-    IAst *lpg_VariableModifiersopt;
-    IAst *lpg_Type;
-    IAst *lpg_Ellipsisopt;
-    IAst *lpg_VariableDeclaratorId;
+    Ast *lpg_VariableModifiersopt;
+    Ast *lpg_Type;
+    Ellipsisopt *lpg_Ellipsisopt;
+    Ast *lpg_VariableDeclaratorId;
 
     /**
      * The value returned by <b>getVariableModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getVariableModifiersopt() { return lpg_VariableModifiersopt; };
-    void setVariableModifiersopt(IAst *lpg_VariableModifiersopt) { this->lpg_VariableModifiersopt = lpg_VariableModifiersopt; }
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
+    Ast *getVariableModifiersopt() { return lpg_VariableModifiersopt; };
+    void setVariableModifiersopt(Ast *lpg_VariableModifiersopt) { this->lpg_VariableModifiersopt = lpg_VariableModifiersopt; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
     /**
      * The value returned by <b>getEllipsisopt</b> may be <b>nullptr</b>
      */
-    IAst *getEllipsisopt() { return lpg_Ellipsisopt; };
-    void setEllipsisopt(IAst *lpg_Ellipsisopt) { this->lpg_Ellipsisopt = lpg_Ellipsisopt; }
-    IAst *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
-    void setVariableDeclaratorId(IAst *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
+    Ellipsisopt *getEllipsisopt() { return lpg_Ellipsisopt; };
+    void setEllipsisopt(Ellipsisopt *lpg_Ellipsisopt) { this->lpg_Ellipsisopt = lpg_Ellipsisopt; }
+    Ast *getVariableDeclaratorId() { return lpg_VariableDeclaratorId; };
+    void setVariableDeclaratorId(Ast *lpg_VariableDeclaratorId) { this->lpg_VariableDeclaratorId = lpg_VariableDeclaratorId; }
 
     LastFormalParameter(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_VariableModifiersopt,
-                        IAst *lpg_Type,
-                        IAst *lpg_Ellipsisopt,
-                        IAst *lpg_VariableDeclaratorId):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_VariableModifiersopt,
+                        Ast *lpg_Type,
+                        Ellipsisopt *lpg_Ellipsisopt,
+                        Ast *lpg_VariableDeclaratorId):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableModifiersopt = lpg_VariableModifiersopt;
         if (lpg_VariableModifiersopt != nullptr) ((Ast*) lpg_VariableModifiersopt)->setParent(this);
         this->lpg_Type = lpg_Type;
@@ -4444,10 +4445,10 @@ struct LastFormalParameter :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableModifiersopt);
-        list.push_back(lpg_Type);
-        list.push_back(lpg_Ellipsisopt);
-        list.push_back(lpg_VariableDeclaratorId);
+        list.push_back((IAst*)lpg_VariableModifiersopt);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_Ellipsisopt);
+        list.push_back((IAst*)lpg_VariableDeclaratorId);
         return list;
     }
 
@@ -4463,10 +4464,10 @@ struct LastFormalParameter :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_VariableModifiersopt != nullptr) lpg_VariableModifiersopt->accept(v);
-            lpg_Type->accept(v);
-            if (lpg_Ellipsisopt != nullptr) lpg_Ellipsisopt->accept(v);
-            lpg_VariableDeclaratorId->accept(v);
+            if (lpg_VariableModifiersopt != nullptr) ((IAst*)lpg_VariableModifiersopt)->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            if (lpg_Ellipsisopt != nullptr) ((IAst*)lpg_Ellipsisopt)->accept(v);
+            ((IAst*)lpg_VariableDeclaratorId)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4483,17 +4484,17 @@ struct LastFormalParameter :public Ast
  */
 struct MethodModifiers :public Ast
 {
-    IAst *lpg_MethodModifiers;
-    IAst *lpg_MethodModifier;
+    Ast *lpg_MethodModifiers;
+    Ast *lpg_MethodModifier;
 
-    IAst *getMethodModifiers() { return lpg_MethodModifiers; };
-    void setMethodModifiers(IAst *lpg_MethodModifiers) { this->lpg_MethodModifiers = lpg_MethodModifiers; }
-    IAst *getMethodModifier() { return lpg_MethodModifier; };
-    void setMethodModifier(IAst *lpg_MethodModifier) { this->lpg_MethodModifier = lpg_MethodModifier; }
+    Ast *getMethodModifiers() { return lpg_MethodModifiers; };
+    void setMethodModifiers(Ast *lpg_MethodModifiers) { this->lpg_MethodModifiers = lpg_MethodModifiers; }
+    Ast *getMethodModifier() { return lpg_MethodModifier; };
+    void setMethodModifier(Ast *lpg_MethodModifier) { this->lpg_MethodModifier = lpg_MethodModifier; }
 
     MethodModifiers(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_MethodModifiers,
-                    IAst *lpg_MethodModifier):Ast(leftIToken, rightIToken)    {
+                    Ast *lpg_MethodModifiers,
+                    Ast *lpg_MethodModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_MethodModifiers = lpg_MethodModifiers;
         ((Ast*) lpg_MethodModifiers)->setParent(this);
         this->lpg_MethodModifier = lpg_MethodModifier;
@@ -4507,8 +4508,8 @@ struct MethodModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MethodModifiers);
-        list.push_back(lpg_MethodModifier);
+        list.push_back((IAst*)lpg_MethodModifiers);
+        list.push_back((IAst*)lpg_MethodModifier);
         return list;
     }
 
@@ -4524,8 +4525,8 @@ struct MethodModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MethodModifiers->accept(v);
-            lpg_MethodModifier->accept(v);
+            ((IAst*)lpg_MethodModifiers)->accept(v);
+            ((IAst*)lpg_MethodModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4538,17 +4539,17 @@ struct MethodModifiers :public Ast
  */
 struct Throws :public Ast
 {
-    IAst *lpg_throws;
-    IAst *lpg_ExceptionTypeList;
+    AstToken *lpg_throws;
+    Ast *lpg_ExceptionTypeList;
 
-    IAst *getthrows() { return lpg_throws; };
-    void setthrows(IAst *lpg_throws) { this->lpg_throws = lpg_throws; }
-    IAst *getExceptionTypeList() { return lpg_ExceptionTypeList; };
-    void setExceptionTypeList(IAst *lpg_ExceptionTypeList) { this->lpg_ExceptionTypeList = lpg_ExceptionTypeList; }
+    AstToken *getthrows() { return lpg_throws; };
+    void setthrows(AstToken *lpg_throws) { this->lpg_throws = lpg_throws; }
+    Ast *getExceptionTypeList() { return lpg_ExceptionTypeList; };
+    void setExceptionTypeList(Ast *lpg_ExceptionTypeList) { this->lpg_ExceptionTypeList = lpg_ExceptionTypeList; }
 
     Throws(IToken* leftIToken, IToken* rightIToken,
-           IAst *lpg_throws,
-           IAst *lpg_ExceptionTypeList):Ast(leftIToken, rightIToken)    {
+           AstToken *lpg_throws,
+           Ast *lpg_ExceptionTypeList):Ast(leftIToken, rightIToken)    {
         this->lpg_throws = lpg_throws;
         ((Ast*) lpg_throws)->setParent(this);
         this->lpg_ExceptionTypeList = lpg_ExceptionTypeList;
@@ -4562,8 +4563,8 @@ struct Throws :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_throws);
-        list.push_back(lpg_ExceptionTypeList);
+        list.push_back((IAst*)lpg_throws);
+        list.push_back((IAst*)lpg_ExceptionTypeList);
         return list;
     }
 
@@ -4579,8 +4580,8 @@ struct Throws :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_throws->accept(v);
-            lpg_ExceptionTypeList->accept(v);
+            ((IAst*)lpg_throws)->accept(v);
+            ((IAst*)lpg_ExceptionTypeList)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4597,21 +4598,21 @@ struct Throws :public Ast
  */
 struct ExceptionTypeList :public Ast
 {
-    IAst *lpg_ExceptionTypeList;
-    IAst *lpg_COMMA;
-    IAst *lpg_ExceptionType;
+    Ast *lpg_ExceptionTypeList;
+    AstToken *lpg_COMMA;
+    Ast *lpg_ExceptionType;
 
-    IAst *getExceptionTypeList() { return lpg_ExceptionTypeList; };
-    void setExceptionTypeList(IAst *lpg_ExceptionTypeList) { this->lpg_ExceptionTypeList = lpg_ExceptionTypeList; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getExceptionType() { return lpg_ExceptionType; };
-    void setExceptionType(IAst *lpg_ExceptionType) { this->lpg_ExceptionType = lpg_ExceptionType; }
+    Ast *getExceptionTypeList() { return lpg_ExceptionTypeList; };
+    void setExceptionTypeList(Ast *lpg_ExceptionTypeList) { this->lpg_ExceptionTypeList = lpg_ExceptionTypeList; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getExceptionType() { return lpg_ExceptionType; };
+    void setExceptionType(Ast *lpg_ExceptionType) { this->lpg_ExceptionType = lpg_ExceptionType; }
 
     ExceptionTypeList(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_ExceptionTypeList,
-                      IAst *lpg_COMMA,
-                      IAst *lpg_ExceptionType):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_ExceptionTypeList,
+                      AstToken *lpg_COMMA,
+                      Ast *lpg_ExceptionType):Ast(leftIToken, rightIToken)    {
         this->lpg_ExceptionTypeList = lpg_ExceptionTypeList;
         ((Ast*) lpg_ExceptionTypeList)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -4627,9 +4628,9 @@ struct ExceptionTypeList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ExceptionTypeList);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_ExceptionType);
+        list.push_back((IAst*)lpg_ExceptionTypeList);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_ExceptionType);
         return list;
     }
 
@@ -4645,9 +4646,9 @@ struct ExceptionTypeList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ExceptionTypeList->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_ExceptionType->accept(v);
+            ((IAst*)lpg_ExceptionTypeList)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_ExceptionType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4691,17 +4692,17 @@ struct MethodBody :public AstToken
  */
 struct StaticInitializer :public Ast
 {
-    IAst *lpg_static;
-    IAst *lpg_Block;
+    AstToken *lpg_static;
+    Block *lpg_Block;
 
-    IAst *getstatic() { return lpg_static; };
-    void setstatic(IAst *lpg_static) { this->lpg_static = lpg_static; }
-    IAst *getBlock() { return lpg_Block; };
-    void setBlock(IAst *lpg_Block) { this->lpg_Block = lpg_Block; }
+    AstToken *getstatic() { return lpg_static; };
+    void setstatic(AstToken *lpg_static) { this->lpg_static = lpg_static; }
+    Block *getBlock() { return lpg_Block; };
+    void setBlock(Block *lpg_Block) { this->lpg_Block = lpg_Block; }
 
     StaticInitializer(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_static,
-                      IAst *lpg_Block):Ast(leftIToken, rightIToken)    {
+                      AstToken *lpg_static,
+                      Block *lpg_Block):Ast(leftIToken, rightIToken)    {
         this->lpg_static = lpg_static;
         ((Ast*) lpg_static)->setParent(this);
         this->lpg_Block = lpg_Block;
@@ -4715,8 +4716,8 @@ struct StaticInitializer :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_static);
-        list.push_back(lpg_Block);
+        list.push_back((IAst*)lpg_static);
+        list.push_back((IAst*)lpg_Block);
         return list;
     }
 
@@ -4732,8 +4733,8 @@ struct StaticInitializer :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_static->accept(v);
-            lpg_Block->accept(v);
+            ((IAst*)lpg_static)->accept(v);
+            ((IAst*)lpg_Block)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4746,31 +4747,31 @@ struct StaticInitializer :public Ast
  */
 struct ConstructorDeclaration :public Ast
 {
-    IAst *lpg_ConstructorModifiersopt;
-    IAst *lpg_ConstructorDeclarator;
-    IAst *lpg_Throwsopt;
-    IAst *lpg_ConstructorBody;
+    Ast *lpg_ConstructorModifiersopt;
+    ConstructorDeclarator *lpg_ConstructorDeclarator;
+    Throws *lpg_Throwsopt;
+    ConstructorBody *lpg_ConstructorBody;
 
     /**
      * The value returned by <b>getConstructorModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getConstructorModifiersopt() { return lpg_ConstructorModifiersopt; };
-    void setConstructorModifiersopt(IAst *lpg_ConstructorModifiersopt) { this->lpg_ConstructorModifiersopt = lpg_ConstructorModifiersopt; }
-    IAst *getConstructorDeclarator() { return lpg_ConstructorDeclarator; };
-    void setConstructorDeclarator(IAst *lpg_ConstructorDeclarator) { this->lpg_ConstructorDeclarator = lpg_ConstructorDeclarator; }
+    Ast *getConstructorModifiersopt() { return lpg_ConstructorModifiersopt; };
+    void setConstructorModifiersopt(Ast *lpg_ConstructorModifiersopt) { this->lpg_ConstructorModifiersopt = lpg_ConstructorModifiersopt; }
+    ConstructorDeclarator *getConstructorDeclarator() { return lpg_ConstructorDeclarator; };
+    void setConstructorDeclarator(ConstructorDeclarator *lpg_ConstructorDeclarator) { this->lpg_ConstructorDeclarator = lpg_ConstructorDeclarator; }
     /**
      * The value returned by <b>getThrowsopt</b> may be <b>nullptr</b>
      */
-    IAst *getThrowsopt() { return lpg_Throwsopt; };
-    void setThrowsopt(IAst *lpg_Throwsopt) { this->lpg_Throwsopt = lpg_Throwsopt; }
-    IAst *getConstructorBody() { return lpg_ConstructorBody; };
-    void setConstructorBody(IAst *lpg_ConstructorBody) { this->lpg_ConstructorBody = lpg_ConstructorBody; }
+    Throws *getThrowsopt() { return lpg_Throwsopt; };
+    void setThrowsopt(Throws *lpg_Throwsopt) { this->lpg_Throwsopt = lpg_Throwsopt; }
+    ConstructorBody *getConstructorBody() { return lpg_ConstructorBody; };
+    void setConstructorBody(ConstructorBody *lpg_ConstructorBody) { this->lpg_ConstructorBody = lpg_ConstructorBody; }
 
     ConstructorDeclaration(IToken* leftIToken, IToken* rightIToken,
-                           IAst *lpg_ConstructorModifiersopt,
-                           IAst *lpg_ConstructorDeclarator,
-                           IAst *lpg_Throwsopt,
-                           IAst *lpg_ConstructorBody):Ast(leftIToken, rightIToken)    {
+                           Ast *lpg_ConstructorModifiersopt,
+                           ConstructorDeclarator *lpg_ConstructorDeclarator,
+                           Throws *lpg_Throwsopt,
+                           ConstructorBody *lpg_ConstructorBody):Ast(leftIToken, rightIToken)    {
         this->lpg_ConstructorModifiersopt = lpg_ConstructorModifiersopt;
         if (lpg_ConstructorModifiersopt != nullptr) ((Ast*) lpg_ConstructorModifiersopt)->setParent(this);
         this->lpg_ConstructorDeclarator = lpg_ConstructorDeclarator;
@@ -4788,10 +4789,10 @@ struct ConstructorDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConstructorModifiersopt);
-        list.push_back(lpg_ConstructorDeclarator);
-        list.push_back(lpg_Throwsopt);
-        list.push_back(lpg_ConstructorBody);
+        list.push_back((IAst*)lpg_ConstructorModifiersopt);
+        list.push_back((IAst*)lpg_ConstructorDeclarator);
+        list.push_back((IAst*)lpg_Throwsopt);
+        list.push_back((IAst*)lpg_ConstructorBody);
         return list;
     }
 
@@ -4807,10 +4808,10 @@ struct ConstructorDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_ConstructorModifiersopt != nullptr) lpg_ConstructorModifiersopt->accept(v);
-            lpg_ConstructorDeclarator->accept(v);
-            if (lpg_Throwsopt != nullptr) lpg_Throwsopt->accept(v);
-            lpg_ConstructorBody->accept(v);
+            if (lpg_ConstructorModifiersopt != nullptr) ((IAst*)lpg_ConstructorModifiersopt)->accept(v);
+            ((IAst*)lpg_ConstructorDeclarator)->accept(v);
+            if (lpg_Throwsopt != nullptr) ((IAst*)lpg_Throwsopt)->accept(v);
+            ((IAst*)lpg_ConstructorBody)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4823,35 +4824,35 @@ struct ConstructorDeclaration :public Ast
  */
 struct ConstructorDeclarator :public Ast
 {
-    IAst *lpg_TypeParametersopt;
-    IAst *lpg_SimpleTypeName;
-    IAst *lpg_LPAREN;
-    IAst *lpg_FormalParameterListopt;
-    IAst *lpg_RPAREN;
+    TypeParameters *lpg_TypeParametersopt;
+    identifier *lpg_SimpleTypeName;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_FormalParameterListopt;
+    AstToken *lpg_RPAREN;
 
     /**
      * The value returned by <b>getTypeParametersopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeParametersopt() { return lpg_TypeParametersopt; };
-    void setTypeParametersopt(IAst *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
-    IAst *getSimpleTypeName() { return lpg_SimpleTypeName; };
-    void setSimpleTypeName(IAst *lpg_SimpleTypeName) { this->lpg_SimpleTypeName = lpg_SimpleTypeName; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeParameters *getTypeParametersopt() { return lpg_TypeParametersopt; };
+    void setTypeParametersopt(TypeParameters *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
+    identifier *getSimpleTypeName() { return lpg_SimpleTypeName; };
+    void setSimpleTypeName(identifier *lpg_SimpleTypeName) { this->lpg_SimpleTypeName = lpg_SimpleTypeName; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getFormalParameterListopt</b> may be <b>nullptr</b>
      */
-    IAst *getFormalParameterListopt() { return lpg_FormalParameterListopt; };
-    void setFormalParameterListopt(IAst *lpg_FormalParameterListopt) { this->lpg_FormalParameterListopt = lpg_FormalParameterListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getFormalParameterListopt() { return lpg_FormalParameterListopt; };
+    void setFormalParameterListopt(Ast *lpg_FormalParameterListopt) { this->lpg_FormalParameterListopt = lpg_FormalParameterListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     ConstructorDeclarator(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_TypeParametersopt,
-                          IAst *lpg_SimpleTypeName,
-                          IAst *lpg_LPAREN,
-                          IAst *lpg_FormalParameterListopt,
-                          IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                          TypeParameters *lpg_TypeParametersopt,
+                          identifier *lpg_SimpleTypeName,
+                          AstToken *lpg_LPAREN,
+                          Ast *lpg_FormalParameterListopt,
+                          AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeParametersopt = lpg_TypeParametersopt;
         if (lpg_TypeParametersopt != nullptr) ((Ast*) lpg_TypeParametersopt)->setParent(this);
         this->lpg_SimpleTypeName = lpg_SimpleTypeName;
@@ -4871,11 +4872,11 @@ struct ConstructorDeclarator :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeParametersopt);
-        list.push_back(lpg_SimpleTypeName);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_FormalParameterListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_TypeParametersopt);
+        list.push_back((IAst*)lpg_SimpleTypeName);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_FormalParameterListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -4891,11 +4892,11 @@ struct ConstructorDeclarator :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_TypeParametersopt != nullptr) lpg_TypeParametersopt->accept(v);
-            lpg_SimpleTypeName->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_FormalParameterListopt != nullptr) lpg_FormalParameterListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            if (lpg_TypeParametersopt != nullptr) ((IAst*)lpg_TypeParametersopt)->accept(v);
+            ((IAst*)lpg_SimpleTypeName)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_FormalParameterListopt != nullptr) ((IAst*)lpg_FormalParameterListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4912,17 +4913,17 @@ struct ConstructorDeclarator :public Ast
  */
 struct ConstructorModifiers :public Ast
 {
-    IAst *lpg_ConstructorModifiers;
-    IAst *lpg_ConstructorModifier;
+    Ast *lpg_ConstructorModifiers;
+    Ast *lpg_ConstructorModifier;
 
-    IAst *getConstructorModifiers() { return lpg_ConstructorModifiers; };
-    void setConstructorModifiers(IAst *lpg_ConstructorModifiers) { this->lpg_ConstructorModifiers = lpg_ConstructorModifiers; }
-    IAst *getConstructorModifier() { return lpg_ConstructorModifier; };
-    void setConstructorModifier(IAst *lpg_ConstructorModifier) { this->lpg_ConstructorModifier = lpg_ConstructorModifier; }
+    Ast *getConstructorModifiers() { return lpg_ConstructorModifiers; };
+    void setConstructorModifiers(Ast *lpg_ConstructorModifiers) { this->lpg_ConstructorModifiers = lpg_ConstructorModifiers; }
+    Ast *getConstructorModifier() { return lpg_ConstructorModifier; };
+    void setConstructorModifier(Ast *lpg_ConstructorModifier) { this->lpg_ConstructorModifier = lpg_ConstructorModifier; }
 
     ConstructorModifiers(IToken* leftIToken, IToken* rightIToken,
-                         IAst *lpg_ConstructorModifiers,
-                         IAst *lpg_ConstructorModifier):Ast(leftIToken, rightIToken)    {
+                         Ast *lpg_ConstructorModifiers,
+                         Ast *lpg_ConstructorModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_ConstructorModifiers = lpg_ConstructorModifiers;
         ((Ast*) lpg_ConstructorModifiers)->setParent(this);
         this->lpg_ConstructorModifier = lpg_ConstructorModifier;
@@ -4936,8 +4937,8 @@ struct ConstructorModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConstructorModifiers);
-        list.push_back(lpg_ConstructorModifier);
+        list.push_back((IAst*)lpg_ConstructorModifiers);
+        list.push_back((IAst*)lpg_ConstructorModifier);
         return list;
     }
 
@@ -4953,8 +4954,8 @@ struct ConstructorModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ConstructorModifiers->accept(v);
-            lpg_ConstructorModifier->accept(v);
+            ((IAst*)lpg_ConstructorModifiers)->accept(v);
+            ((IAst*)lpg_ConstructorModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -4967,31 +4968,31 @@ struct ConstructorModifiers :public Ast
  */
 struct ConstructorBody :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_ExplicitConstructorInvocationopt;
-    IAst *lpg_BlockStatementsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_ExplicitConstructorInvocationopt;
+    Ast *lpg_BlockStatementsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getExplicitConstructorInvocationopt</b> may be <b>nullptr</b>
      */
-    IAst *getExplicitConstructorInvocationopt() { return lpg_ExplicitConstructorInvocationopt; };
-    void setExplicitConstructorInvocationopt(IAst *lpg_ExplicitConstructorInvocationopt) { this->lpg_ExplicitConstructorInvocationopt = lpg_ExplicitConstructorInvocationopt; }
+    Ast *getExplicitConstructorInvocationopt() { return lpg_ExplicitConstructorInvocationopt; };
+    void setExplicitConstructorInvocationopt(Ast *lpg_ExplicitConstructorInvocationopt) { this->lpg_ExplicitConstructorInvocationopt = lpg_ExplicitConstructorInvocationopt; }
     /**
      * The value returned by <b>getBlockStatementsopt</b> may be <b>nullptr</b>
      */
-    IAst *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
-    void setBlockStatementsopt(IAst *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Ast *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
+    void setBlockStatementsopt(Ast *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     ConstructorBody(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_LBRACE,
-                    IAst *lpg_ExplicitConstructorInvocationopt,
-                    IAst *lpg_BlockStatementsopt,
-                    IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_LBRACE,
+                    Ast *lpg_ExplicitConstructorInvocationopt,
+                    Ast *lpg_BlockStatementsopt,
+                    AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_ExplicitConstructorInvocationopt = lpg_ExplicitConstructorInvocationopt;
@@ -5009,10 +5010,10 @@ struct ConstructorBody :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_ExplicitConstructorInvocationopt);
-        list.push_back(lpg_BlockStatementsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_ExplicitConstructorInvocationopt);
+        list.push_back((IAst*)lpg_BlockStatementsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -5028,10 +5029,10 @@ struct ConstructorBody :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_ExplicitConstructorInvocationopt != nullptr) lpg_ExplicitConstructorInvocationopt->accept(v);
-            if (lpg_BlockStatementsopt != nullptr) lpg_BlockStatementsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_ExplicitConstructorInvocationopt != nullptr) ((IAst*)lpg_ExplicitConstructorInvocationopt)->accept(v);
+            if (lpg_BlockStatementsopt != nullptr) ((IAst*)lpg_BlockStatementsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5044,35 +5045,35 @@ struct ConstructorBody :public Ast
  */
 struct EnumDeclaration :public Ast
 {
-    IAst *lpg_ClassModifiersopt;
-    IAst *lpg_enum;
-    IAst *lpg_identifier;
-    IAst *lpg_Interfacesopt;
-    IAst *lpg_EnumBody;
+    Ast *lpg_ClassModifiersopt;
+    AstToken *lpg_enum;
+    identifier *lpg_identifier;
+    Interfaces *lpg_Interfacesopt;
+    EnumBody *lpg_EnumBody;
 
     /**
      * The value returned by <b>getClassModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassModifiersopt() { return lpg_ClassModifiersopt; };
-    void setClassModifiersopt(IAst *lpg_ClassModifiersopt) { this->lpg_ClassModifiersopt = lpg_ClassModifiersopt; }
-    IAst *getenum() { return lpg_enum; };
-    void setenum(IAst *lpg_enum) { this->lpg_enum = lpg_enum; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getClassModifiersopt() { return lpg_ClassModifiersopt; };
+    void setClassModifiersopt(Ast *lpg_ClassModifiersopt) { this->lpg_ClassModifiersopt = lpg_ClassModifiersopt; }
+    AstToken *getenum() { return lpg_enum; };
+    void setenum(AstToken *lpg_enum) { this->lpg_enum = lpg_enum; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
     /**
      * The value returned by <b>getInterfacesopt</b> may be <b>nullptr</b>
      */
-    IAst *getInterfacesopt() { return lpg_Interfacesopt; };
-    void setInterfacesopt(IAst *lpg_Interfacesopt) { this->lpg_Interfacesopt = lpg_Interfacesopt; }
-    IAst *getEnumBody() { return lpg_EnumBody; };
-    void setEnumBody(IAst *lpg_EnumBody) { this->lpg_EnumBody = lpg_EnumBody; }
+    Interfaces *getInterfacesopt() { return lpg_Interfacesopt; };
+    void setInterfacesopt(Interfaces *lpg_Interfacesopt) { this->lpg_Interfacesopt = lpg_Interfacesopt; }
+    EnumBody *getEnumBody() { return lpg_EnumBody; };
+    void setEnumBody(EnumBody *lpg_EnumBody) { this->lpg_EnumBody = lpg_EnumBody; }
 
     EnumDeclaration(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_ClassModifiersopt,
-                    IAst *lpg_enum,
-                    IAst *lpg_identifier,
-                    IAst *lpg_Interfacesopt,
-                    IAst *lpg_EnumBody):Ast(leftIToken, rightIToken)    {
+                    Ast *lpg_ClassModifiersopt,
+                    AstToken *lpg_enum,
+                    identifier *lpg_identifier,
+                    Interfaces *lpg_Interfacesopt,
+                    EnumBody *lpg_EnumBody):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassModifiersopt = lpg_ClassModifiersopt;
         if (lpg_ClassModifiersopt != nullptr) ((Ast*) lpg_ClassModifiersopt)->setParent(this);
         this->lpg_enum = lpg_enum;
@@ -5092,11 +5093,11 @@ struct EnumDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassModifiersopt);
-        list.push_back(lpg_enum);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_Interfacesopt);
-        list.push_back(lpg_EnumBody);
+        list.push_back((IAst*)lpg_ClassModifiersopt);
+        list.push_back((IAst*)lpg_enum);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_Interfacesopt);
+        list.push_back((IAst*)lpg_EnumBody);
         return list;
     }
 
@@ -5112,11 +5113,11 @@ struct EnumDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_ClassModifiersopt != nullptr) lpg_ClassModifiersopt->accept(v);
-            lpg_enum->accept(v);
-            lpg_identifier->accept(v);
-            if (lpg_Interfacesopt != nullptr) lpg_Interfacesopt->accept(v);
-            lpg_EnumBody->accept(v);
+            if (lpg_ClassModifiersopt != nullptr) ((IAst*)lpg_ClassModifiersopt)->accept(v);
+            ((IAst*)lpg_enum)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            if (lpg_Interfacesopt != nullptr) ((IAst*)lpg_Interfacesopt)->accept(v);
+            ((IAst*)lpg_EnumBody)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5129,38 +5130,38 @@ struct EnumDeclaration :public Ast
  */
 struct EnumBody :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_EnumConstantsopt;
-    IAst *lpg_Commaopt;
-    IAst *lpg_EnumBodyDeclarationsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_EnumConstantsopt;
+    Commaopt *lpg_Commaopt;
+    EnumBodyDeclarations *lpg_EnumBodyDeclarationsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getEnumConstantsopt</b> may be <b>nullptr</b>
      */
-    IAst *getEnumConstantsopt() { return lpg_EnumConstantsopt; };
-    void setEnumConstantsopt(IAst *lpg_EnumConstantsopt) { this->lpg_EnumConstantsopt = lpg_EnumConstantsopt; }
+    Ast *getEnumConstantsopt() { return lpg_EnumConstantsopt; };
+    void setEnumConstantsopt(Ast *lpg_EnumConstantsopt) { this->lpg_EnumConstantsopt = lpg_EnumConstantsopt; }
     /**
      * The value returned by <b>getCommaopt</b> may be <b>nullptr</b>
      */
-    IAst *getCommaopt() { return lpg_Commaopt; };
-    void setCommaopt(IAst *lpg_Commaopt) { this->lpg_Commaopt = lpg_Commaopt; }
+    Commaopt *getCommaopt() { return lpg_Commaopt; };
+    void setCommaopt(Commaopt *lpg_Commaopt) { this->lpg_Commaopt = lpg_Commaopt; }
     /**
      * The value returned by <b>getEnumBodyDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getEnumBodyDeclarationsopt() { return lpg_EnumBodyDeclarationsopt; };
-    void setEnumBodyDeclarationsopt(IAst *lpg_EnumBodyDeclarationsopt) { this->lpg_EnumBodyDeclarationsopt = lpg_EnumBodyDeclarationsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    EnumBodyDeclarations *getEnumBodyDeclarationsopt() { return lpg_EnumBodyDeclarationsopt; };
+    void setEnumBodyDeclarationsopt(EnumBodyDeclarations *lpg_EnumBodyDeclarationsopt) { this->lpg_EnumBodyDeclarationsopt = lpg_EnumBodyDeclarationsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     EnumBody(IToken* leftIToken, IToken* rightIToken,
-             IAst *lpg_LBRACE,
-             IAst *lpg_EnumConstantsopt,
-             IAst *lpg_Commaopt,
-             IAst *lpg_EnumBodyDeclarationsopt,
-             IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+             AstToken *lpg_LBRACE,
+             Ast *lpg_EnumConstantsopt,
+             Commaopt *lpg_Commaopt,
+             EnumBodyDeclarations *lpg_EnumBodyDeclarationsopt,
+             AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_EnumConstantsopt = lpg_EnumConstantsopt;
@@ -5180,11 +5181,11 @@ struct EnumBody :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_EnumConstantsopt);
-        list.push_back(lpg_Commaopt);
-        list.push_back(lpg_EnumBodyDeclarationsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_EnumConstantsopt);
+        list.push_back((IAst*)lpg_Commaopt);
+        list.push_back((IAst*)lpg_EnumBodyDeclarationsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -5200,11 +5201,11 @@ struct EnumBody :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_EnumConstantsopt != nullptr) lpg_EnumConstantsopt->accept(v);
-            if (lpg_Commaopt != nullptr) lpg_Commaopt->accept(v);
-            if (lpg_EnumBodyDeclarationsopt != nullptr) lpg_EnumBodyDeclarationsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_EnumConstantsopt != nullptr) ((IAst*)lpg_EnumConstantsopt)->accept(v);
+            if (lpg_Commaopt != nullptr) ((IAst*)lpg_Commaopt)->accept(v);
+            if (lpg_EnumBodyDeclarationsopt != nullptr) ((IAst*)lpg_EnumBodyDeclarationsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5221,21 +5222,21 @@ struct EnumBody :public Ast
  */
 struct EnumConstants :public Ast
 {
-    IAst *lpg_EnumConstants;
-    IAst *lpg_COMMA;
-    IAst *lpg_EnumConstant;
+    Ast *lpg_EnumConstants;
+    AstToken *lpg_COMMA;
+    Ast *lpg_EnumConstant;
 
-    IAst *getEnumConstants() { return lpg_EnumConstants; };
-    void setEnumConstants(IAst *lpg_EnumConstants) { this->lpg_EnumConstants = lpg_EnumConstants; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getEnumConstant() { return lpg_EnumConstant; };
-    void setEnumConstant(IAst *lpg_EnumConstant) { this->lpg_EnumConstant = lpg_EnumConstant; }
+    Ast *getEnumConstants() { return lpg_EnumConstants; };
+    void setEnumConstants(Ast *lpg_EnumConstants) { this->lpg_EnumConstants = lpg_EnumConstants; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getEnumConstant() { return lpg_EnumConstant; };
+    void setEnumConstant(Ast *lpg_EnumConstant) { this->lpg_EnumConstant = lpg_EnumConstant; }
 
     EnumConstants(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_EnumConstants,
-                  IAst *lpg_COMMA,
-                  IAst *lpg_EnumConstant):Ast(leftIToken, rightIToken)    {
+                  Ast *lpg_EnumConstants,
+                  AstToken *lpg_COMMA,
+                  Ast *lpg_EnumConstant):Ast(leftIToken, rightIToken)    {
         this->lpg_EnumConstants = lpg_EnumConstants;
         ((Ast*) lpg_EnumConstants)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -5251,9 +5252,9 @@ struct EnumConstants :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_EnumConstants);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_EnumConstant);
+        list.push_back((IAst*)lpg_EnumConstants);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_EnumConstant);
         return list;
     }
 
@@ -5269,9 +5270,9 @@ struct EnumConstants :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_EnumConstants->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_EnumConstant->accept(v);
+            ((IAst*)lpg_EnumConstants)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_EnumConstant)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5288,34 +5289,34 @@ struct EnumConstants :public Ast
  */
 struct EnumConstant :public Ast
 {
-    IAst *lpg_Annotationsopt;
-    IAst *lpg_identifier;
-    IAst *lpg_Argumentsopt;
-    IAst *lpg_ClassBodyopt;
+    Ast *lpg_Annotationsopt;
+    identifier *lpg_identifier;
+    Arguments *lpg_Argumentsopt;
+    ClassBody *lpg_ClassBodyopt;
 
     /**
      * The value returned by <b>getAnnotationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getAnnotationsopt() { return lpg_Annotationsopt; };
-    void setAnnotationsopt(IAst *lpg_Annotationsopt) { this->lpg_Annotationsopt = lpg_Annotationsopt; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getAnnotationsopt() { return lpg_Annotationsopt; };
+    void setAnnotationsopt(Ast *lpg_Annotationsopt) { this->lpg_Annotationsopt = lpg_Annotationsopt; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
     /**
      * The value returned by <b>getArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentsopt() { return lpg_Argumentsopt; };
-    void setArgumentsopt(IAst *lpg_Argumentsopt) { this->lpg_Argumentsopt = lpg_Argumentsopt; }
+    Arguments *getArgumentsopt() { return lpg_Argumentsopt; };
+    void setArgumentsopt(Arguments *lpg_Argumentsopt) { this->lpg_Argumentsopt = lpg_Argumentsopt; }
     /**
      * The value returned by <b>getClassBodyopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassBodyopt() { return lpg_ClassBodyopt; };
-    void setClassBodyopt(IAst *lpg_ClassBodyopt) { this->lpg_ClassBodyopt = lpg_ClassBodyopt; }
+    ClassBody *getClassBodyopt() { return lpg_ClassBodyopt; };
+    void setClassBodyopt(ClassBody *lpg_ClassBodyopt) { this->lpg_ClassBodyopt = lpg_ClassBodyopt; }
 
     EnumConstant(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_Annotationsopt,
-                 IAst *lpg_identifier,
-                 IAst *lpg_Argumentsopt,
-                 IAst *lpg_ClassBodyopt):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_Annotationsopt,
+                 identifier *lpg_identifier,
+                 Arguments *lpg_Argumentsopt,
+                 ClassBody *lpg_ClassBodyopt):Ast(leftIToken, rightIToken)    {
         this->lpg_Annotationsopt = lpg_Annotationsopt;
         if (lpg_Annotationsopt != nullptr) ((Ast*) lpg_Annotationsopt)->setParent(this);
         this->lpg_identifier = lpg_identifier;
@@ -5333,10 +5334,10 @@ struct EnumConstant :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Annotationsopt);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_Argumentsopt);
-        list.push_back(lpg_ClassBodyopt);
+        list.push_back((IAst*)lpg_Annotationsopt);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_Argumentsopt);
+        list.push_back((IAst*)lpg_ClassBodyopt);
         return list;
     }
 
@@ -5352,10 +5353,10 @@ struct EnumConstant :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_Annotationsopt != nullptr) lpg_Annotationsopt->accept(v);
-            lpg_identifier->accept(v);
-            if (lpg_Argumentsopt != nullptr) lpg_Argumentsopt->accept(v);
-            if (lpg_ClassBodyopt != nullptr) lpg_ClassBodyopt->accept(v);
+            if (lpg_Annotationsopt != nullptr) ((IAst*)lpg_Annotationsopt)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            if (lpg_Argumentsopt != nullptr) ((IAst*)lpg_Argumentsopt)->accept(v);
+            if (lpg_ClassBodyopt != nullptr) ((IAst*)lpg_ClassBodyopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5368,24 +5369,24 @@ struct EnumConstant :public Ast
  */
 struct Arguments :public Ast
 {
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     Arguments(IToken* leftIToken, IToken* rightIToken,
-              IAst *lpg_LPAREN,
-              IAst *lpg_ArgumentListopt,
-              IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+              AstToken *lpg_LPAREN,
+              Ast *lpg_ArgumentListopt,
+              AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_LPAREN = lpg_LPAREN;
         ((Ast*) lpg_LPAREN)->setParent(this);
         this->lpg_ArgumentListopt = lpg_ArgumentListopt;
@@ -5401,9 +5402,9 @@ struct Arguments :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -5419,9 +5420,9 @@ struct Arguments :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5434,20 +5435,20 @@ struct Arguments :public Ast
  */
 struct EnumBodyDeclarations :public Ast
 {
-    IAst *lpg_SEMICOLON;
-    IAst *lpg_ClassBodyDeclarationsopt;
+    AstToken *lpg_SEMICOLON;
+    Ast *lpg_ClassBodyDeclarationsopt;
 
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
     /**
      * The value returned by <b>getClassBodyDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassBodyDeclarationsopt() { return lpg_ClassBodyDeclarationsopt; };
-    void setClassBodyDeclarationsopt(IAst *lpg_ClassBodyDeclarationsopt) { this->lpg_ClassBodyDeclarationsopt = lpg_ClassBodyDeclarationsopt; }
+    Ast *getClassBodyDeclarationsopt() { return lpg_ClassBodyDeclarationsopt; };
+    void setClassBodyDeclarationsopt(Ast *lpg_ClassBodyDeclarationsopt) { this->lpg_ClassBodyDeclarationsopt = lpg_ClassBodyDeclarationsopt; }
 
     EnumBodyDeclarations(IToken* leftIToken, IToken* rightIToken,
-                         IAst *lpg_SEMICOLON,
-                         IAst *lpg_ClassBodyDeclarationsopt):Ast(leftIToken, rightIToken)    {
+                         AstToken *lpg_SEMICOLON,
+                         Ast *lpg_ClassBodyDeclarationsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_SEMICOLON = lpg_SEMICOLON;
         ((Ast*) lpg_SEMICOLON)->setParent(this);
         this->lpg_ClassBodyDeclarationsopt = lpg_ClassBodyDeclarationsopt;
@@ -5461,8 +5462,8 @@ struct EnumBodyDeclarations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_SEMICOLON);
-        list.push_back(lpg_ClassBodyDeclarationsopt);
+        list.push_back((IAst*)lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_ClassBodyDeclarationsopt);
         return list;
     }
 
@@ -5478,8 +5479,8 @@ struct EnumBodyDeclarations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_SEMICOLON->accept(v);
-            if (lpg_ClassBodyDeclarationsopt != nullptr) lpg_ClassBodyDeclarationsopt->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
+            if (lpg_ClassBodyDeclarationsopt != nullptr) ((IAst*)lpg_ClassBodyDeclarationsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5492,42 +5493,42 @@ struct EnumBodyDeclarations :public Ast
  */
 struct NormalInterfaceDeclaration :public Ast
 {
-    IAst *lpg_InterfaceModifiersopt;
-    IAst *lpg_interface;
-    IAst *lpg_identifier;
-    IAst *lpg_TypeParametersopt;
-    IAst *lpg_ExtendsInterfacesopt;
-    IAst *lpg_InterfaceBody;
+    Ast *lpg_InterfaceModifiersopt;
+    AstToken *lpg_interface;
+    identifier *lpg_identifier;
+    TypeParameters *lpg_TypeParametersopt;
+    Ast *lpg_ExtendsInterfacesopt;
+    InterfaceBody *lpg_InterfaceBody;
 
     /**
      * The value returned by <b>getInterfaceModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getInterfaceModifiersopt() { return lpg_InterfaceModifiersopt; };
-    void setInterfaceModifiersopt(IAst *lpg_InterfaceModifiersopt) { this->lpg_InterfaceModifiersopt = lpg_InterfaceModifiersopt; }
-    IAst *getinterface() { return lpg_interface; };
-    void setinterface(IAst *lpg_interface) { this->lpg_interface = lpg_interface; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getInterfaceModifiersopt() { return lpg_InterfaceModifiersopt; };
+    void setInterfaceModifiersopt(Ast *lpg_InterfaceModifiersopt) { this->lpg_InterfaceModifiersopt = lpg_InterfaceModifiersopt; }
+    AstToken *getinterface() { return lpg_interface; };
+    void setinterface(AstToken *lpg_interface) { this->lpg_interface = lpg_interface; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
     /**
      * The value returned by <b>getTypeParametersopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeParametersopt() { return lpg_TypeParametersopt; };
-    void setTypeParametersopt(IAst *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
+    TypeParameters *getTypeParametersopt() { return lpg_TypeParametersopt; };
+    void setTypeParametersopt(TypeParameters *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
     /**
      * The value returned by <b>getExtendsInterfacesopt</b> may be <b>nullptr</b>
      */
-    IAst *getExtendsInterfacesopt() { return lpg_ExtendsInterfacesopt; };
-    void setExtendsInterfacesopt(IAst *lpg_ExtendsInterfacesopt) { this->lpg_ExtendsInterfacesopt = lpg_ExtendsInterfacesopt; }
-    IAst *getInterfaceBody() { return lpg_InterfaceBody; };
-    void setInterfaceBody(IAst *lpg_InterfaceBody) { this->lpg_InterfaceBody = lpg_InterfaceBody; }
+    Ast *getExtendsInterfacesopt() { return lpg_ExtendsInterfacesopt; };
+    void setExtendsInterfacesopt(Ast *lpg_ExtendsInterfacesopt) { this->lpg_ExtendsInterfacesopt = lpg_ExtendsInterfacesopt; }
+    InterfaceBody *getInterfaceBody() { return lpg_InterfaceBody; };
+    void setInterfaceBody(InterfaceBody *lpg_InterfaceBody) { this->lpg_InterfaceBody = lpg_InterfaceBody; }
 
     NormalInterfaceDeclaration(IToken* leftIToken, IToken* rightIToken,
-                               IAst *lpg_InterfaceModifiersopt,
-                               IAst *lpg_interface,
-                               IAst *lpg_identifier,
-                               IAst *lpg_TypeParametersopt,
-                               IAst *lpg_ExtendsInterfacesopt,
-                               IAst *lpg_InterfaceBody):Ast(leftIToken, rightIToken)    {
+                               Ast *lpg_InterfaceModifiersopt,
+                               AstToken *lpg_interface,
+                               identifier *lpg_identifier,
+                               TypeParameters *lpg_TypeParametersopt,
+                               Ast *lpg_ExtendsInterfacesopt,
+                               InterfaceBody *lpg_InterfaceBody):Ast(leftIToken, rightIToken)    {
         this->lpg_InterfaceModifiersopt = lpg_InterfaceModifiersopt;
         if (lpg_InterfaceModifiersopt != nullptr) ((Ast*) lpg_InterfaceModifiersopt)->setParent(this);
         this->lpg_interface = lpg_interface;
@@ -5549,12 +5550,12 @@ struct NormalInterfaceDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_InterfaceModifiersopt);
-        list.push_back(lpg_interface);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_TypeParametersopt);
-        list.push_back(lpg_ExtendsInterfacesopt);
-        list.push_back(lpg_InterfaceBody);
+        list.push_back((IAst*)lpg_InterfaceModifiersopt);
+        list.push_back((IAst*)lpg_interface);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_TypeParametersopt);
+        list.push_back((IAst*)lpg_ExtendsInterfacesopt);
+        list.push_back((IAst*)lpg_InterfaceBody);
         return list;
     }
 
@@ -5570,12 +5571,12 @@ struct NormalInterfaceDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_InterfaceModifiersopt != nullptr) lpg_InterfaceModifiersopt->accept(v);
-            lpg_interface->accept(v);
-            lpg_identifier->accept(v);
-            if (lpg_TypeParametersopt != nullptr) lpg_TypeParametersopt->accept(v);
-            if (lpg_ExtendsInterfacesopt != nullptr) lpg_ExtendsInterfacesopt->accept(v);
-            lpg_InterfaceBody->accept(v);
+            if (lpg_InterfaceModifiersopt != nullptr) ((IAst*)lpg_InterfaceModifiersopt)->accept(v);
+            ((IAst*)lpg_interface)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            if (lpg_TypeParametersopt != nullptr) ((IAst*)lpg_TypeParametersopt)->accept(v);
+            if (lpg_ExtendsInterfacesopt != nullptr) ((IAst*)lpg_ExtendsInterfacesopt)->accept(v);
+            ((IAst*)lpg_InterfaceBody)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5592,17 +5593,17 @@ struct NormalInterfaceDeclaration :public Ast
  */
 struct InterfaceModifiers :public Ast
 {
-    IAst *lpg_InterfaceModifiers;
-    IAst *lpg_InterfaceModifier;
+    Ast *lpg_InterfaceModifiers;
+    Ast *lpg_InterfaceModifier;
 
-    IAst *getInterfaceModifiers() { return lpg_InterfaceModifiers; };
-    void setInterfaceModifiers(IAst *lpg_InterfaceModifiers) { this->lpg_InterfaceModifiers = lpg_InterfaceModifiers; }
-    IAst *getInterfaceModifier() { return lpg_InterfaceModifier; };
-    void setInterfaceModifier(IAst *lpg_InterfaceModifier) { this->lpg_InterfaceModifier = lpg_InterfaceModifier; }
+    Ast *getInterfaceModifiers() { return lpg_InterfaceModifiers; };
+    void setInterfaceModifiers(Ast *lpg_InterfaceModifiers) { this->lpg_InterfaceModifiers = lpg_InterfaceModifiers; }
+    Ast *getInterfaceModifier() { return lpg_InterfaceModifier; };
+    void setInterfaceModifier(Ast *lpg_InterfaceModifier) { this->lpg_InterfaceModifier = lpg_InterfaceModifier; }
 
     InterfaceModifiers(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_InterfaceModifiers,
-                       IAst *lpg_InterfaceModifier):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_InterfaceModifiers,
+                       Ast *lpg_InterfaceModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_InterfaceModifiers = lpg_InterfaceModifiers;
         ((Ast*) lpg_InterfaceModifiers)->setParent(this);
         this->lpg_InterfaceModifier = lpg_InterfaceModifier;
@@ -5616,8 +5617,8 @@ struct InterfaceModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_InterfaceModifiers);
-        list.push_back(lpg_InterfaceModifier);
+        list.push_back((IAst*)lpg_InterfaceModifiers);
+        list.push_back((IAst*)lpg_InterfaceModifier);
         return list;
     }
 
@@ -5633,8 +5634,8 @@ struct InterfaceModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_InterfaceModifiers->accept(v);
-            lpg_InterfaceModifier->accept(v);
+            ((IAst*)lpg_InterfaceModifiers)->accept(v);
+            ((IAst*)lpg_InterfaceModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5647,24 +5648,24 @@ struct InterfaceModifiers :public Ast
  */
 struct InterfaceBody :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_InterfaceMemberDeclarationsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_InterfaceMemberDeclarationsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getInterfaceMemberDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getInterfaceMemberDeclarationsopt() { return lpg_InterfaceMemberDeclarationsopt; };
-    void setInterfaceMemberDeclarationsopt(IAst *lpg_InterfaceMemberDeclarationsopt) { this->lpg_InterfaceMemberDeclarationsopt = lpg_InterfaceMemberDeclarationsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Ast *getInterfaceMemberDeclarationsopt() { return lpg_InterfaceMemberDeclarationsopt; };
+    void setInterfaceMemberDeclarationsopt(Ast *lpg_InterfaceMemberDeclarationsopt) { this->lpg_InterfaceMemberDeclarationsopt = lpg_InterfaceMemberDeclarationsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     InterfaceBody(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_LBRACE,
-                  IAst *lpg_InterfaceMemberDeclarationsopt,
-                  IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+                  AstToken *lpg_LBRACE,
+                  Ast *lpg_InterfaceMemberDeclarationsopt,
+                  AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_InterfaceMemberDeclarationsopt = lpg_InterfaceMemberDeclarationsopt;
@@ -5680,9 +5681,9 @@ struct InterfaceBody :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_InterfaceMemberDeclarationsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_InterfaceMemberDeclarationsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -5698,9 +5699,9 @@ struct InterfaceBody :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_InterfaceMemberDeclarationsopt != nullptr) lpg_InterfaceMemberDeclarationsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_InterfaceMemberDeclarationsopt != nullptr) ((IAst*)lpg_InterfaceMemberDeclarationsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5717,17 +5718,17 @@ struct InterfaceBody :public Ast
  */
 struct InterfaceMemberDeclarations :public Ast
 {
-    IAst *lpg_InterfaceMemberDeclarations;
-    IAst *lpg_InterfaceMemberDeclaration;
+    Ast *lpg_InterfaceMemberDeclarations;
+    Ast *lpg_InterfaceMemberDeclaration;
 
-    IAst *getInterfaceMemberDeclarations() { return lpg_InterfaceMemberDeclarations; };
-    void setInterfaceMemberDeclarations(IAst *lpg_InterfaceMemberDeclarations) { this->lpg_InterfaceMemberDeclarations = lpg_InterfaceMemberDeclarations; }
-    IAst *getInterfaceMemberDeclaration() { return lpg_InterfaceMemberDeclaration; };
-    void setInterfaceMemberDeclaration(IAst *lpg_InterfaceMemberDeclaration) { this->lpg_InterfaceMemberDeclaration = lpg_InterfaceMemberDeclaration; }
+    Ast *getInterfaceMemberDeclarations() { return lpg_InterfaceMemberDeclarations; };
+    void setInterfaceMemberDeclarations(Ast *lpg_InterfaceMemberDeclarations) { this->lpg_InterfaceMemberDeclarations = lpg_InterfaceMemberDeclarations; }
+    Ast *getInterfaceMemberDeclaration() { return lpg_InterfaceMemberDeclaration; };
+    void setInterfaceMemberDeclaration(Ast *lpg_InterfaceMemberDeclaration) { this->lpg_InterfaceMemberDeclaration = lpg_InterfaceMemberDeclaration; }
 
     InterfaceMemberDeclarations(IToken* leftIToken, IToken* rightIToken,
-                                IAst *lpg_InterfaceMemberDeclarations,
-                                IAst *lpg_InterfaceMemberDeclaration):Ast(leftIToken, rightIToken)    {
+                                Ast *lpg_InterfaceMemberDeclarations,
+                                Ast *lpg_InterfaceMemberDeclaration):Ast(leftIToken, rightIToken)    {
         this->lpg_InterfaceMemberDeclarations = lpg_InterfaceMemberDeclarations;
         ((Ast*) lpg_InterfaceMemberDeclarations)->setParent(this);
         this->lpg_InterfaceMemberDeclaration = lpg_InterfaceMemberDeclaration;
@@ -5741,8 +5742,8 @@ struct InterfaceMemberDeclarations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_InterfaceMemberDeclarations);
-        list.push_back(lpg_InterfaceMemberDeclaration);
+        list.push_back((IAst*)lpg_InterfaceMemberDeclarations);
+        list.push_back((IAst*)lpg_InterfaceMemberDeclaration);
         return list;
     }
 
@@ -5758,8 +5759,8 @@ struct InterfaceMemberDeclarations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_InterfaceMemberDeclarations->accept(v);
-            lpg_InterfaceMemberDeclaration->accept(v);
+            ((IAst*)lpg_InterfaceMemberDeclarations)->accept(v);
+            ((IAst*)lpg_InterfaceMemberDeclaration)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5806,24 +5807,24 @@ struct InterfaceMemberDeclaration :public AstToken
  */
 struct ConstantDeclaration :public Ast
 {
-    IAst *lpg_ConstantModifiersopt;
-    IAst *lpg_Type;
-    IAst *lpg_VariableDeclarators;
+    Ast *lpg_ConstantModifiersopt;
+    Ast *lpg_Type;
+    Ast *lpg_VariableDeclarators;
 
     /**
      * The value returned by <b>getConstantModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getConstantModifiersopt() { return lpg_ConstantModifiersopt; };
-    void setConstantModifiersopt(IAst *lpg_ConstantModifiersopt) { this->lpg_ConstantModifiersopt = lpg_ConstantModifiersopt; }
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getVariableDeclarators() { return lpg_VariableDeclarators; };
-    void setVariableDeclarators(IAst *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
+    Ast *getConstantModifiersopt() { return lpg_ConstantModifiersopt; };
+    void setConstantModifiersopt(Ast *lpg_ConstantModifiersopt) { this->lpg_ConstantModifiersopt = lpg_ConstantModifiersopt; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    Ast *getVariableDeclarators() { return lpg_VariableDeclarators; };
+    void setVariableDeclarators(Ast *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
 
     ConstantDeclaration(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_ConstantModifiersopt,
-                        IAst *lpg_Type,
-                        IAst *lpg_VariableDeclarators):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_ConstantModifiersopt,
+                        Ast *lpg_Type,
+                        Ast *lpg_VariableDeclarators):Ast(leftIToken, rightIToken)    {
         this->lpg_ConstantModifiersopt = lpg_ConstantModifiersopt;
         if (lpg_ConstantModifiersopt != nullptr) ((Ast*) lpg_ConstantModifiersopt)->setParent(this);
         this->lpg_Type = lpg_Type;
@@ -5839,9 +5840,9 @@ struct ConstantDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConstantModifiersopt);
-        list.push_back(lpg_Type);
-        list.push_back(lpg_VariableDeclarators);
+        list.push_back((IAst*)lpg_ConstantModifiersopt);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_VariableDeclarators);
         return list;
     }
 
@@ -5857,9 +5858,9 @@ struct ConstantDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_ConstantModifiersopt != nullptr) lpg_ConstantModifiersopt->accept(v);
-            lpg_Type->accept(v);
-            lpg_VariableDeclarators->accept(v);
+            if (lpg_ConstantModifiersopt != nullptr) ((IAst*)lpg_ConstantModifiersopt)->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_VariableDeclarators)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5876,17 +5877,17 @@ struct ConstantDeclaration :public Ast
  */
 struct ConstantModifiers :public Ast
 {
-    IAst *lpg_ConstantModifiers;
-    IAst *lpg_ConstantModifier;
+    Ast *lpg_ConstantModifiers;
+    Ast *lpg_ConstantModifier;
 
-    IAst *getConstantModifiers() { return lpg_ConstantModifiers; };
-    void setConstantModifiers(IAst *lpg_ConstantModifiers) { this->lpg_ConstantModifiers = lpg_ConstantModifiers; }
-    IAst *getConstantModifier() { return lpg_ConstantModifier; };
-    void setConstantModifier(IAst *lpg_ConstantModifier) { this->lpg_ConstantModifier = lpg_ConstantModifier; }
+    Ast *getConstantModifiers() { return lpg_ConstantModifiers; };
+    void setConstantModifiers(Ast *lpg_ConstantModifiers) { this->lpg_ConstantModifiers = lpg_ConstantModifiers; }
+    Ast *getConstantModifier() { return lpg_ConstantModifier; };
+    void setConstantModifier(Ast *lpg_ConstantModifier) { this->lpg_ConstantModifier = lpg_ConstantModifier; }
 
     ConstantModifiers(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_ConstantModifiers,
-                      IAst *lpg_ConstantModifier):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_ConstantModifiers,
+                      Ast *lpg_ConstantModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_ConstantModifiers = lpg_ConstantModifiers;
         ((Ast*) lpg_ConstantModifiers)->setParent(this);
         this->lpg_ConstantModifier = lpg_ConstantModifier;
@@ -5900,8 +5901,8 @@ struct ConstantModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConstantModifiers);
-        list.push_back(lpg_ConstantModifier);
+        list.push_back((IAst*)lpg_ConstantModifiers);
+        list.push_back((IAst*)lpg_ConstantModifier);
         return list;
     }
 
@@ -5917,8 +5918,8 @@ struct ConstantModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ConstantModifiers->accept(v);
-            lpg_ConstantModifier->accept(v);
+            ((IAst*)lpg_ConstantModifiers)->accept(v);
+            ((IAst*)lpg_ConstantModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -5931,42 +5932,42 @@ struct ConstantModifiers :public Ast
  */
 struct AbstractMethodDeclaration :public Ast
 {
-    IAst *lpg_AbstractMethodModifiersopt;
-    IAst *lpg_TypeParametersopt;
-    IAst *lpg_ResultType;
-    IAst *lpg_MethodDeclarator;
-    IAst *lpg_Throwsopt;
-    IAst *lpg_SEMICOLON;
+    Ast *lpg_AbstractMethodModifiersopt;
+    TypeParameters *lpg_TypeParametersopt;
+    Ast *lpg_ResultType;
+    Ast *lpg_MethodDeclarator;
+    Throws *lpg_Throwsopt;
+    AstToken *lpg_SEMICOLON;
 
     /**
      * The value returned by <b>getAbstractMethodModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getAbstractMethodModifiersopt() { return lpg_AbstractMethodModifiersopt; };
-    void setAbstractMethodModifiersopt(IAst *lpg_AbstractMethodModifiersopt) { this->lpg_AbstractMethodModifiersopt = lpg_AbstractMethodModifiersopt; }
+    Ast *getAbstractMethodModifiersopt() { return lpg_AbstractMethodModifiersopt; };
+    void setAbstractMethodModifiersopt(Ast *lpg_AbstractMethodModifiersopt) { this->lpg_AbstractMethodModifiersopt = lpg_AbstractMethodModifiersopt; }
     /**
      * The value returned by <b>getTypeParametersopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeParametersopt() { return lpg_TypeParametersopt; };
-    void setTypeParametersopt(IAst *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
-    IAst *getResultType() { return lpg_ResultType; };
-    void setResultType(IAst *lpg_ResultType) { this->lpg_ResultType = lpg_ResultType; }
-    IAst *getMethodDeclarator() { return lpg_MethodDeclarator; };
-    void setMethodDeclarator(IAst *lpg_MethodDeclarator) { this->lpg_MethodDeclarator = lpg_MethodDeclarator; }
+    TypeParameters *getTypeParametersopt() { return lpg_TypeParametersopt; };
+    void setTypeParametersopt(TypeParameters *lpg_TypeParametersopt) { this->lpg_TypeParametersopt = lpg_TypeParametersopt; }
+    Ast *getResultType() { return lpg_ResultType; };
+    void setResultType(Ast *lpg_ResultType) { this->lpg_ResultType = lpg_ResultType; }
+    Ast *getMethodDeclarator() { return lpg_MethodDeclarator; };
+    void setMethodDeclarator(Ast *lpg_MethodDeclarator) { this->lpg_MethodDeclarator = lpg_MethodDeclarator; }
     /**
      * The value returned by <b>getThrowsopt</b> may be <b>nullptr</b>
      */
-    IAst *getThrowsopt() { return lpg_Throwsopt; };
-    void setThrowsopt(IAst *lpg_Throwsopt) { this->lpg_Throwsopt = lpg_Throwsopt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Throws *getThrowsopt() { return lpg_Throwsopt; };
+    void setThrowsopt(Throws *lpg_Throwsopt) { this->lpg_Throwsopt = lpg_Throwsopt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     AbstractMethodDeclaration(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_AbstractMethodModifiersopt,
-                              IAst *lpg_TypeParametersopt,
-                              IAst *lpg_ResultType,
-                              IAst *lpg_MethodDeclarator,
-                              IAst *lpg_Throwsopt,
-                              IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                              Ast *lpg_AbstractMethodModifiersopt,
+                              TypeParameters *lpg_TypeParametersopt,
+                              Ast *lpg_ResultType,
+                              Ast *lpg_MethodDeclarator,
+                              Throws *lpg_Throwsopt,
+                              AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_AbstractMethodModifiersopt = lpg_AbstractMethodModifiersopt;
         if (lpg_AbstractMethodModifiersopt != nullptr) ((Ast*) lpg_AbstractMethodModifiersopt)->setParent(this);
         this->lpg_TypeParametersopt = lpg_TypeParametersopt;
@@ -5988,12 +5989,12 @@ struct AbstractMethodDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AbstractMethodModifiersopt);
-        list.push_back(lpg_TypeParametersopt);
-        list.push_back(lpg_ResultType);
-        list.push_back(lpg_MethodDeclarator);
-        list.push_back(lpg_Throwsopt);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_AbstractMethodModifiersopt);
+        list.push_back((IAst*)lpg_TypeParametersopt);
+        list.push_back((IAst*)lpg_ResultType);
+        list.push_back((IAst*)lpg_MethodDeclarator);
+        list.push_back((IAst*)lpg_Throwsopt);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -6009,12 +6010,12 @@ struct AbstractMethodDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_AbstractMethodModifiersopt != nullptr) lpg_AbstractMethodModifiersopt->accept(v);
-            if (lpg_TypeParametersopt != nullptr) lpg_TypeParametersopt->accept(v);
-            lpg_ResultType->accept(v);
-            lpg_MethodDeclarator->accept(v);
-            if (lpg_Throwsopt != nullptr) lpg_Throwsopt->accept(v);
-            lpg_SEMICOLON->accept(v);
+            if (lpg_AbstractMethodModifiersopt != nullptr) ((IAst*)lpg_AbstractMethodModifiersopt)->accept(v);
+            if (lpg_TypeParametersopt != nullptr) ((IAst*)lpg_TypeParametersopt)->accept(v);
+            ((IAst*)lpg_ResultType)->accept(v);
+            ((IAst*)lpg_MethodDeclarator)->accept(v);
+            if (lpg_Throwsopt != nullptr) ((IAst*)lpg_Throwsopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6031,17 +6032,17 @@ struct AbstractMethodDeclaration :public Ast
  */
 struct AbstractMethodModifiers :public Ast
 {
-    IAst *lpg_AbstractMethodModifiers;
-    IAst *lpg_AbstractMethodModifier;
+    Ast *lpg_AbstractMethodModifiers;
+    Ast *lpg_AbstractMethodModifier;
 
-    IAst *getAbstractMethodModifiers() { return lpg_AbstractMethodModifiers; };
-    void setAbstractMethodModifiers(IAst *lpg_AbstractMethodModifiers) { this->lpg_AbstractMethodModifiers = lpg_AbstractMethodModifiers; }
-    IAst *getAbstractMethodModifier() { return lpg_AbstractMethodModifier; };
-    void setAbstractMethodModifier(IAst *lpg_AbstractMethodModifier) { this->lpg_AbstractMethodModifier = lpg_AbstractMethodModifier; }
+    Ast *getAbstractMethodModifiers() { return lpg_AbstractMethodModifiers; };
+    void setAbstractMethodModifiers(Ast *lpg_AbstractMethodModifiers) { this->lpg_AbstractMethodModifiers = lpg_AbstractMethodModifiers; }
+    Ast *getAbstractMethodModifier() { return lpg_AbstractMethodModifier; };
+    void setAbstractMethodModifier(Ast *lpg_AbstractMethodModifier) { this->lpg_AbstractMethodModifier = lpg_AbstractMethodModifier; }
 
     AbstractMethodModifiers(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_AbstractMethodModifiers,
-                            IAst *lpg_AbstractMethodModifier):Ast(leftIToken, rightIToken)    {
+                            Ast *lpg_AbstractMethodModifiers,
+                            Ast *lpg_AbstractMethodModifier):Ast(leftIToken, rightIToken)    {
         this->lpg_AbstractMethodModifiers = lpg_AbstractMethodModifiers;
         ((Ast*) lpg_AbstractMethodModifiers)->setParent(this);
         this->lpg_AbstractMethodModifier = lpg_AbstractMethodModifier;
@@ -6055,8 +6056,8 @@ struct AbstractMethodModifiers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AbstractMethodModifiers);
-        list.push_back(lpg_AbstractMethodModifier);
+        list.push_back((IAst*)lpg_AbstractMethodModifiers);
+        list.push_back((IAst*)lpg_AbstractMethodModifier);
         return list;
     }
 
@@ -6072,8 +6073,8 @@ struct AbstractMethodModifiers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AbstractMethodModifiers->accept(v);
-            lpg_AbstractMethodModifier->accept(v);
+            ((IAst*)lpg_AbstractMethodModifiers)->accept(v);
+            ((IAst*)lpg_AbstractMethodModifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6086,32 +6087,32 @@ struct AbstractMethodModifiers :public Ast
  */
 struct AnnotationTypeDeclaration :public Ast
 {
-    IAst *lpg_InterfaceModifiersopt;
-    IAst *lpg_AT;
-    IAst *lpg_interface;
-    IAst *lpg_identifier;
-    IAst *lpg_AnnotationTypeBody;
+    Ast *lpg_InterfaceModifiersopt;
+    AstToken *lpg_AT;
+    AstToken *lpg_interface;
+    identifier *lpg_identifier;
+    AnnotationTypeBody *lpg_AnnotationTypeBody;
 
     /**
      * The value returned by <b>getInterfaceModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getInterfaceModifiersopt() { return lpg_InterfaceModifiersopt; };
-    void setInterfaceModifiersopt(IAst *lpg_InterfaceModifiersopt) { this->lpg_InterfaceModifiersopt = lpg_InterfaceModifiersopt; }
-    IAst *getAT() { return lpg_AT; };
-    void setAT(IAst *lpg_AT) { this->lpg_AT = lpg_AT; }
-    IAst *getinterface() { return lpg_interface; };
-    void setinterface(IAst *lpg_interface) { this->lpg_interface = lpg_interface; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getAnnotationTypeBody() { return lpg_AnnotationTypeBody; };
-    void setAnnotationTypeBody(IAst *lpg_AnnotationTypeBody) { this->lpg_AnnotationTypeBody = lpg_AnnotationTypeBody; }
+    Ast *getInterfaceModifiersopt() { return lpg_InterfaceModifiersopt; };
+    void setInterfaceModifiersopt(Ast *lpg_InterfaceModifiersopt) { this->lpg_InterfaceModifiersopt = lpg_InterfaceModifiersopt; }
+    AstToken *getAT() { return lpg_AT; };
+    void setAT(AstToken *lpg_AT) { this->lpg_AT = lpg_AT; }
+    AstToken *getinterface() { return lpg_interface; };
+    void setinterface(AstToken *lpg_interface) { this->lpg_interface = lpg_interface; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AnnotationTypeBody *getAnnotationTypeBody() { return lpg_AnnotationTypeBody; };
+    void setAnnotationTypeBody(AnnotationTypeBody *lpg_AnnotationTypeBody) { this->lpg_AnnotationTypeBody = lpg_AnnotationTypeBody; }
 
     AnnotationTypeDeclaration(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_InterfaceModifiersopt,
-                              IAst *lpg_AT,
-                              IAst *lpg_interface,
-                              IAst *lpg_identifier,
-                              IAst *lpg_AnnotationTypeBody):Ast(leftIToken, rightIToken)    {
+                              Ast *lpg_InterfaceModifiersopt,
+                              AstToken *lpg_AT,
+                              AstToken *lpg_interface,
+                              identifier *lpg_identifier,
+                              AnnotationTypeBody *lpg_AnnotationTypeBody):Ast(leftIToken, rightIToken)    {
         this->lpg_InterfaceModifiersopt = lpg_InterfaceModifiersopt;
         if (lpg_InterfaceModifiersopt != nullptr) ((Ast*) lpg_InterfaceModifiersopt)->setParent(this);
         this->lpg_AT = lpg_AT;
@@ -6131,11 +6132,11 @@ struct AnnotationTypeDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_InterfaceModifiersopt);
-        list.push_back(lpg_AT);
-        list.push_back(lpg_interface);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_AnnotationTypeBody);
+        list.push_back((IAst*)lpg_InterfaceModifiersopt);
+        list.push_back((IAst*)lpg_AT);
+        list.push_back((IAst*)lpg_interface);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_AnnotationTypeBody);
         return list;
     }
 
@@ -6151,11 +6152,11 @@ struct AnnotationTypeDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_InterfaceModifiersopt != nullptr) lpg_InterfaceModifiersopt->accept(v);
-            lpg_AT->accept(v);
-            lpg_interface->accept(v);
-            lpg_identifier->accept(v);
-            lpg_AnnotationTypeBody->accept(v);
+            if (lpg_InterfaceModifiersopt != nullptr) ((IAst*)lpg_InterfaceModifiersopt)->accept(v);
+            ((IAst*)lpg_AT)->accept(v);
+            ((IAst*)lpg_interface)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_AnnotationTypeBody)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6168,24 +6169,24 @@ struct AnnotationTypeDeclaration :public Ast
  */
 struct AnnotationTypeBody :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_AnnotationTypeElementDeclarationsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_AnnotationTypeElementDeclarationsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getAnnotationTypeElementDeclarationsopt</b> may be <b>nullptr</b>
      */
-    IAst *getAnnotationTypeElementDeclarationsopt() { return lpg_AnnotationTypeElementDeclarationsopt; };
-    void setAnnotationTypeElementDeclarationsopt(IAst *lpg_AnnotationTypeElementDeclarationsopt) { this->lpg_AnnotationTypeElementDeclarationsopt = lpg_AnnotationTypeElementDeclarationsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Ast *getAnnotationTypeElementDeclarationsopt() { return lpg_AnnotationTypeElementDeclarationsopt; };
+    void setAnnotationTypeElementDeclarationsopt(Ast *lpg_AnnotationTypeElementDeclarationsopt) { this->lpg_AnnotationTypeElementDeclarationsopt = lpg_AnnotationTypeElementDeclarationsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     AnnotationTypeBody(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_LBRACE,
-                       IAst *lpg_AnnotationTypeElementDeclarationsopt,
-                       IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+                       AstToken *lpg_LBRACE,
+                       Ast *lpg_AnnotationTypeElementDeclarationsopt,
+                       AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_AnnotationTypeElementDeclarationsopt = lpg_AnnotationTypeElementDeclarationsopt;
@@ -6201,9 +6202,9 @@ struct AnnotationTypeBody :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_AnnotationTypeElementDeclarationsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_AnnotationTypeElementDeclarationsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -6219,9 +6220,9 @@ struct AnnotationTypeBody :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_AnnotationTypeElementDeclarationsopt != nullptr) lpg_AnnotationTypeElementDeclarationsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_AnnotationTypeElementDeclarationsopt != nullptr) ((IAst*)lpg_AnnotationTypeElementDeclarationsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6238,17 +6239,17 @@ struct AnnotationTypeBody :public Ast
  */
 struct AnnotationTypeElementDeclarations :public Ast
 {
-    IAst *lpg_AnnotationTypeElementDeclarations;
-    IAst *lpg_AnnotationTypeElementDeclaration;
+    Ast *lpg_AnnotationTypeElementDeclarations;
+    Ast *lpg_AnnotationTypeElementDeclaration;
 
-    IAst *getAnnotationTypeElementDeclarations() { return lpg_AnnotationTypeElementDeclarations; };
-    void setAnnotationTypeElementDeclarations(IAst *lpg_AnnotationTypeElementDeclarations) { this->lpg_AnnotationTypeElementDeclarations = lpg_AnnotationTypeElementDeclarations; }
-    IAst *getAnnotationTypeElementDeclaration() { return lpg_AnnotationTypeElementDeclaration; };
-    void setAnnotationTypeElementDeclaration(IAst *lpg_AnnotationTypeElementDeclaration) { this->lpg_AnnotationTypeElementDeclaration = lpg_AnnotationTypeElementDeclaration; }
+    Ast *getAnnotationTypeElementDeclarations() { return lpg_AnnotationTypeElementDeclarations; };
+    void setAnnotationTypeElementDeclarations(Ast *lpg_AnnotationTypeElementDeclarations) { this->lpg_AnnotationTypeElementDeclarations = lpg_AnnotationTypeElementDeclarations; }
+    Ast *getAnnotationTypeElementDeclaration() { return lpg_AnnotationTypeElementDeclaration; };
+    void setAnnotationTypeElementDeclaration(Ast *lpg_AnnotationTypeElementDeclaration) { this->lpg_AnnotationTypeElementDeclaration = lpg_AnnotationTypeElementDeclaration; }
 
     AnnotationTypeElementDeclarations(IToken* leftIToken, IToken* rightIToken,
-                                      IAst *lpg_AnnotationTypeElementDeclarations,
-                                      IAst *lpg_AnnotationTypeElementDeclaration):Ast(leftIToken, rightIToken)    {
+                                      Ast *lpg_AnnotationTypeElementDeclarations,
+                                      Ast *lpg_AnnotationTypeElementDeclaration):Ast(leftIToken, rightIToken)    {
         this->lpg_AnnotationTypeElementDeclarations = lpg_AnnotationTypeElementDeclarations;
         ((Ast*) lpg_AnnotationTypeElementDeclarations)->setParent(this);
         this->lpg_AnnotationTypeElementDeclaration = lpg_AnnotationTypeElementDeclaration;
@@ -6262,8 +6263,8 @@ struct AnnotationTypeElementDeclarations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AnnotationTypeElementDeclarations);
-        list.push_back(lpg_AnnotationTypeElementDeclaration);
+        list.push_back((IAst*)lpg_AnnotationTypeElementDeclarations);
+        list.push_back((IAst*)lpg_AnnotationTypeElementDeclaration);
         return list;
     }
 
@@ -6279,8 +6280,8 @@ struct AnnotationTypeElementDeclarations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AnnotationTypeElementDeclarations->accept(v);
-            lpg_AnnotationTypeElementDeclaration->accept(v);
+            ((IAst*)lpg_AnnotationTypeElementDeclarations)->accept(v);
+            ((IAst*)lpg_AnnotationTypeElementDeclaration)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6293,17 +6294,17 @@ struct AnnotationTypeElementDeclarations :public Ast
  */
 struct DefaultValue :public Ast
 {
-    IAst *lpg_default;
-    IAst *lpg_ElementValue;
+    AstToken *lpg_default;
+    Ast *lpg_ElementValue;
 
-    IAst *getdefault() { return lpg_default; };
-    void setdefault(IAst *lpg_default) { this->lpg_default = lpg_default; }
-    IAst *getElementValue() { return lpg_ElementValue; };
-    void setElementValue(IAst *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
+    AstToken *getdefault() { return lpg_default; };
+    void setdefault(AstToken *lpg_default) { this->lpg_default = lpg_default; }
+    Ast *getElementValue() { return lpg_ElementValue; };
+    void setElementValue(Ast *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
 
     DefaultValue(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_default,
-                 IAst *lpg_ElementValue):Ast(leftIToken, rightIToken)    {
+                 AstToken *lpg_default,
+                 Ast *lpg_ElementValue):Ast(leftIToken, rightIToken)    {
         this->lpg_default = lpg_default;
         ((Ast*) lpg_default)->setParent(this);
         this->lpg_ElementValue = lpg_ElementValue;
@@ -6317,8 +6318,8 @@ struct DefaultValue :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_default);
-        list.push_back(lpg_ElementValue);
+        list.push_back((IAst*)lpg_default);
+        list.push_back((IAst*)lpg_ElementValue);
         return list;
     }
 
@@ -6334,8 +6335,8 @@ struct DefaultValue :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_default->accept(v);
-            lpg_ElementValue->accept(v);
+            ((IAst*)lpg_default)->accept(v);
+            ((IAst*)lpg_ElementValue)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6352,17 +6353,17 @@ struct DefaultValue :public Ast
  */
 struct Annotations :public Ast
 {
-    IAst *lpg_Annotations;
-    IAst *lpg_Annotation;
+    Ast *lpg_Annotations;
+    Ast *lpg_Annotation;
 
-    IAst *getAnnotations() { return lpg_Annotations; };
-    void setAnnotations(IAst *lpg_Annotations) { this->lpg_Annotations = lpg_Annotations; }
-    IAst *getAnnotation() { return lpg_Annotation; };
-    void setAnnotation(IAst *lpg_Annotation) { this->lpg_Annotation = lpg_Annotation; }
+    Ast *getAnnotations() { return lpg_Annotations; };
+    void setAnnotations(Ast *lpg_Annotations) { this->lpg_Annotations = lpg_Annotations; }
+    Ast *getAnnotation() { return lpg_Annotation; };
+    void setAnnotation(Ast *lpg_Annotation) { this->lpg_Annotation = lpg_Annotation; }
 
     Annotations(IToken* leftIToken, IToken* rightIToken,
-                IAst *lpg_Annotations,
-                IAst *lpg_Annotation):Ast(leftIToken, rightIToken)    {
+                Ast *lpg_Annotations,
+                Ast *lpg_Annotation):Ast(leftIToken, rightIToken)    {
         this->lpg_Annotations = lpg_Annotations;
         ((Ast*) lpg_Annotations)->setParent(this);
         this->lpg_Annotation = lpg_Annotation;
@@ -6376,8 +6377,8 @@ struct Annotations :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Annotations);
-        list.push_back(lpg_Annotation);
+        list.push_back((IAst*)lpg_Annotations);
+        list.push_back((IAst*)lpg_Annotation);
         return list;
     }
 
@@ -6393,8 +6394,8 @@ struct Annotations :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Annotations->accept(v);
-            lpg_Annotation->accept(v);
+            ((IAst*)lpg_Annotations)->accept(v);
+            ((IAst*)lpg_Annotation)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6407,32 +6408,32 @@ struct Annotations :public Ast
  */
 struct NormalAnnotation :public Ast
 {
-    IAst *lpg_AT;
-    IAst *lpg_TypeName;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ElementValuePairsopt;
-    IAst *lpg_RPAREN;
+    AstToken *lpg_AT;
+    Ast *lpg_TypeName;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ElementValuePairsopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getAT() { return lpg_AT; };
-    void setAT(IAst *lpg_AT) { this->lpg_AT = lpg_AT; }
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    AstToken *getAT() { return lpg_AT; };
+    void setAT(AstToken *lpg_AT) { this->lpg_AT = lpg_AT; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getElementValuePairsopt</b> may be <b>nullptr</b>
      */
-    IAst *getElementValuePairsopt() { return lpg_ElementValuePairsopt; };
-    void setElementValuePairsopt(IAst *lpg_ElementValuePairsopt) { this->lpg_ElementValuePairsopt = lpg_ElementValuePairsopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getElementValuePairsopt() { return lpg_ElementValuePairsopt; };
+    void setElementValuePairsopt(Ast *lpg_ElementValuePairsopt) { this->lpg_ElementValuePairsopt = lpg_ElementValuePairsopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     NormalAnnotation(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_AT,
-                     IAst *lpg_TypeName,
-                     IAst *lpg_LPAREN,
-                     IAst *lpg_ElementValuePairsopt,
-                     IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_AT,
+                     Ast *lpg_TypeName,
+                     AstToken *lpg_LPAREN,
+                     Ast *lpg_ElementValuePairsopt,
+                     AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_AT = lpg_AT;
         ((Ast*) lpg_AT)->setParent(this);
         this->lpg_TypeName = lpg_TypeName;
@@ -6452,11 +6453,11 @@ struct NormalAnnotation :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AT);
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ElementValuePairsopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_AT);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ElementValuePairsopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -6472,11 +6473,11 @@ struct NormalAnnotation :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AT->accept(v);
-            lpg_TypeName->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ElementValuePairsopt != nullptr) lpg_ElementValuePairsopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_AT)->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ElementValuePairsopt != nullptr) ((IAst*)lpg_ElementValuePairsopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6493,21 +6494,21 @@ struct NormalAnnotation :public Ast
  */
 struct ElementValuePairs :public Ast
 {
-    IAst *lpg_ElementValuePairs;
-    IAst *lpg_COMMA;
-    IAst *lpg_ElementValuePair;
+    Ast *lpg_ElementValuePairs;
+    AstToken *lpg_COMMA;
+    ElementValuePair *lpg_ElementValuePair;
 
-    IAst *getElementValuePairs() { return lpg_ElementValuePairs; };
-    void setElementValuePairs(IAst *lpg_ElementValuePairs) { this->lpg_ElementValuePairs = lpg_ElementValuePairs; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getElementValuePair() { return lpg_ElementValuePair; };
-    void setElementValuePair(IAst *lpg_ElementValuePair) { this->lpg_ElementValuePair = lpg_ElementValuePair; }
+    Ast *getElementValuePairs() { return lpg_ElementValuePairs; };
+    void setElementValuePairs(Ast *lpg_ElementValuePairs) { this->lpg_ElementValuePairs = lpg_ElementValuePairs; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    ElementValuePair *getElementValuePair() { return lpg_ElementValuePair; };
+    void setElementValuePair(ElementValuePair *lpg_ElementValuePair) { this->lpg_ElementValuePair = lpg_ElementValuePair; }
 
     ElementValuePairs(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_ElementValuePairs,
-                      IAst *lpg_COMMA,
-                      IAst *lpg_ElementValuePair):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_ElementValuePairs,
+                      AstToken *lpg_COMMA,
+                      ElementValuePair *lpg_ElementValuePair):Ast(leftIToken, rightIToken)    {
         this->lpg_ElementValuePairs = lpg_ElementValuePairs;
         ((Ast*) lpg_ElementValuePairs)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -6523,9 +6524,9 @@ struct ElementValuePairs :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ElementValuePairs);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_ElementValuePair);
+        list.push_back((IAst*)lpg_ElementValuePairs);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_ElementValuePair);
         return list;
     }
 
@@ -6541,9 +6542,9 @@ struct ElementValuePairs :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ElementValuePairs->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_ElementValuePair->accept(v);
+            ((IAst*)lpg_ElementValuePairs)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_ElementValuePair)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6556,21 +6557,21 @@ struct ElementValuePairs :public Ast
  */
 struct ElementValuePair :public Ast
 {
-    IAst *lpg_SimpleName;
-    IAst *lpg_EQUAL;
-    IAst *lpg_ElementValue;
+    identifier *lpg_SimpleName;
+    AstToken *lpg_EQUAL;
+    Ast *lpg_ElementValue;
 
-    IAst *getSimpleName() { return lpg_SimpleName; };
-    void setSimpleName(IAst *lpg_SimpleName) { this->lpg_SimpleName = lpg_SimpleName; }
-    IAst *getEQUAL() { return lpg_EQUAL; };
-    void setEQUAL(IAst *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
-    IAst *getElementValue() { return lpg_ElementValue; };
-    void setElementValue(IAst *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
+    identifier *getSimpleName() { return lpg_SimpleName; };
+    void setSimpleName(identifier *lpg_SimpleName) { this->lpg_SimpleName = lpg_SimpleName; }
+    AstToken *getEQUAL() { return lpg_EQUAL; };
+    void setEQUAL(AstToken *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
+    Ast *getElementValue() { return lpg_ElementValue; };
+    void setElementValue(Ast *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
 
     ElementValuePair(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_SimpleName,
-                     IAst *lpg_EQUAL,
-                     IAst *lpg_ElementValue):Ast(leftIToken, rightIToken)    {
+                     identifier *lpg_SimpleName,
+                     AstToken *lpg_EQUAL,
+                     Ast *lpg_ElementValue):Ast(leftIToken, rightIToken)    {
         this->lpg_SimpleName = lpg_SimpleName;
         ((Ast*) lpg_SimpleName)->setParent(this);
         this->lpg_EQUAL = lpg_EQUAL;
@@ -6586,9 +6587,9 @@ struct ElementValuePair :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_SimpleName);
-        list.push_back(lpg_EQUAL);
-        list.push_back(lpg_ElementValue);
+        list.push_back((IAst*)lpg_SimpleName);
+        list.push_back((IAst*)lpg_EQUAL);
+        list.push_back((IAst*)lpg_ElementValue);
         return list;
     }
 
@@ -6604,9 +6605,9 @@ struct ElementValuePair :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_SimpleName->accept(v);
-            lpg_EQUAL->accept(v);
-            lpg_ElementValue->accept(v);
+            ((IAst*)lpg_SimpleName)->accept(v);
+            ((IAst*)lpg_EQUAL)->accept(v);
+            ((IAst*)lpg_ElementValue)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6619,31 +6620,31 @@ struct ElementValuePair :public Ast
  */
 struct ElementValueArrayInitializer :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_ElementValuesopt;
-    IAst *lpg_Commaopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_ElementValuesopt;
+    Commaopt *lpg_Commaopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getElementValuesopt</b> may be <b>nullptr</b>
      */
-    IAst *getElementValuesopt() { return lpg_ElementValuesopt; };
-    void setElementValuesopt(IAst *lpg_ElementValuesopt) { this->lpg_ElementValuesopt = lpg_ElementValuesopt; }
+    Ast *getElementValuesopt() { return lpg_ElementValuesopt; };
+    void setElementValuesopt(Ast *lpg_ElementValuesopt) { this->lpg_ElementValuesopt = lpg_ElementValuesopt; }
     /**
      * The value returned by <b>getCommaopt</b> may be <b>nullptr</b>
      */
-    IAst *getCommaopt() { return lpg_Commaopt; };
-    void setCommaopt(IAst *lpg_Commaopt) { this->lpg_Commaopt = lpg_Commaopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Commaopt *getCommaopt() { return lpg_Commaopt; };
+    void setCommaopt(Commaopt *lpg_Commaopt) { this->lpg_Commaopt = lpg_Commaopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     ElementValueArrayInitializer(IToken* leftIToken, IToken* rightIToken,
-                                 IAst *lpg_LBRACE,
-                                 IAst *lpg_ElementValuesopt,
-                                 IAst *lpg_Commaopt,
-                                 IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+                                 AstToken *lpg_LBRACE,
+                                 Ast *lpg_ElementValuesopt,
+                                 Commaopt *lpg_Commaopt,
+                                 AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_ElementValuesopt = lpg_ElementValuesopt;
@@ -6661,10 +6662,10 @@ struct ElementValueArrayInitializer :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_ElementValuesopt);
-        list.push_back(lpg_Commaopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_ElementValuesopt);
+        list.push_back((IAst*)lpg_Commaopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -6680,10 +6681,10 @@ struct ElementValueArrayInitializer :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_ElementValuesopt != nullptr) lpg_ElementValuesopt->accept(v);
-            if (lpg_Commaopt != nullptr) lpg_Commaopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_ElementValuesopt != nullptr) ((IAst*)lpg_ElementValuesopt)->accept(v);
+            if (lpg_Commaopt != nullptr) ((IAst*)lpg_Commaopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6700,21 +6701,21 @@ struct ElementValueArrayInitializer :public Ast
  */
 struct ElementValues :public Ast
 {
-    IAst *lpg_ElementValues;
-    IAst *lpg_COMMA;
-    IAst *lpg_ElementValue;
+    Ast *lpg_ElementValues;
+    AstToken *lpg_COMMA;
+    Ast *lpg_ElementValue;
 
-    IAst *getElementValues() { return lpg_ElementValues; };
-    void setElementValues(IAst *lpg_ElementValues) { this->lpg_ElementValues = lpg_ElementValues; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getElementValue() { return lpg_ElementValue; };
-    void setElementValue(IAst *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
+    Ast *getElementValues() { return lpg_ElementValues; };
+    void setElementValues(Ast *lpg_ElementValues) { this->lpg_ElementValues = lpg_ElementValues; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getElementValue() { return lpg_ElementValue; };
+    void setElementValue(Ast *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
 
     ElementValues(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_ElementValues,
-                  IAst *lpg_COMMA,
-                  IAst *lpg_ElementValue):Ast(leftIToken, rightIToken)    {
+                  Ast *lpg_ElementValues,
+                  AstToken *lpg_COMMA,
+                  Ast *lpg_ElementValue):Ast(leftIToken, rightIToken)    {
         this->lpg_ElementValues = lpg_ElementValues;
         ((Ast*) lpg_ElementValues)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -6730,9 +6731,9 @@ struct ElementValues :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ElementValues);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_ElementValue);
+        list.push_back((IAst*)lpg_ElementValues);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_ElementValue);
         return list;
     }
 
@@ -6748,9 +6749,9 @@ struct ElementValues :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ElementValues->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_ElementValue->accept(v);
+            ((IAst*)lpg_ElementValues)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_ElementValue)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6763,17 +6764,17 @@ struct ElementValues :public Ast
  */
 struct MarkerAnnotation :public Ast
 {
-    IAst *lpg_AT;
-    IAst *lpg_TypeName;
+    AstToken *lpg_AT;
+    Ast *lpg_TypeName;
 
-    IAst *getAT() { return lpg_AT; };
-    void setAT(IAst *lpg_AT) { this->lpg_AT = lpg_AT; }
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getAT() { return lpg_AT; };
+    void setAT(AstToken *lpg_AT) { this->lpg_AT = lpg_AT; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
 
     MarkerAnnotation(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_AT,
-                     IAst *lpg_TypeName):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_AT,
+                     Ast *lpg_TypeName):Ast(leftIToken, rightIToken)    {
         this->lpg_AT = lpg_AT;
         ((Ast*) lpg_AT)->setParent(this);
         this->lpg_TypeName = lpg_TypeName;
@@ -6787,8 +6788,8 @@ struct MarkerAnnotation :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AT);
-        list.push_back(lpg_TypeName);
+        list.push_back((IAst*)lpg_AT);
+        list.push_back((IAst*)lpg_TypeName);
         return list;
     }
 
@@ -6804,8 +6805,8 @@ struct MarkerAnnotation :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AT->accept(v);
-            lpg_TypeName->accept(v);
+            ((IAst*)lpg_AT)->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6818,29 +6819,29 @@ struct MarkerAnnotation :public Ast
  */
 struct SingleElementAnnotation :public Ast
 {
-    IAst *lpg_AT;
-    IAst *lpg_TypeName;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ElementValue;
-    IAst *lpg_RPAREN;
+    AstToken *lpg_AT;
+    Ast *lpg_TypeName;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ElementValue;
+    AstToken *lpg_RPAREN;
 
-    IAst *getAT() { return lpg_AT; };
-    void setAT(IAst *lpg_AT) { this->lpg_AT = lpg_AT; }
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getElementValue() { return lpg_ElementValue; };
-    void setElementValue(IAst *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    AstToken *getAT() { return lpg_AT; };
+    void setAT(AstToken *lpg_AT) { this->lpg_AT = lpg_AT; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getElementValue() { return lpg_ElementValue; };
+    void setElementValue(Ast *lpg_ElementValue) { this->lpg_ElementValue = lpg_ElementValue; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     SingleElementAnnotation(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_AT,
-                            IAst *lpg_TypeName,
-                            IAst *lpg_LPAREN,
-                            IAst *lpg_ElementValue,
-                            IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                            AstToken *lpg_AT,
+                            Ast *lpg_TypeName,
+                            AstToken *lpg_LPAREN,
+                            Ast *lpg_ElementValue,
+                            AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_AT = lpg_AT;
         ((Ast*) lpg_AT)->setParent(this);
         this->lpg_TypeName = lpg_TypeName;
@@ -6860,11 +6861,11 @@ struct SingleElementAnnotation :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AT);
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ElementValue);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_AT);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ElementValue);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -6880,11 +6881,11 @@ struct SingleElementAnnotation :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AT->accept(v);
-            lpg_TypeName->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_ElementValue->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_AT)->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_ElementValue)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6897,31 +6898,31 @@ struct SingleElementAnnotation :public Ast
  */
 struct ArrayInitializer :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_VariableInitializersopt;
-    IAst *lpg_Commaopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_VariableInitializersopt;
+    Commaopt *lpg_Commaopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getVariableInitializersopt</b> may be <b>nullptr</b>
      */
-    IAst *getVariableInitializersopt() { return lpg_VariableInitializersopt; };
-    void setVariableInitializersopt(IAst *lpg_VariableInitializersopt) { this->lpg_VariableInitializersopt = lpg_VariableInitializersopt; }
+    Ast *getVariableInitializersopt() { return lpg_VariableInitializersopt; };
+    void setVariableInitializersopt(Ast *lpg_VariableInitializersopt) { this->lpg_VariableInitializersopt = lpg_VariableInitializersopt; }
     /**
      * The value returned by <b>getCommaopt</b> may be <b>nullptr</b>
      */
-    IAst *getCommaopt() { return lpg_Commaopt; };
-    void setCommaopt(IAst *lpg_Commaopt) { this->lpg_Commaopt = lpg_Commaopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Commaopt *getCommaopt() { return lpg_Commaopt; };
+    void setCommaopt(Commaopt *lpg_Commaopt) { this->lpg_Commaopt = lpg_Commaopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     ArrayInitializer(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_LBRACE,
-                     IAst *lpg_VariableInitializersopt,
-                     IAst *lpg_Commaopt,
-                     IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_LBRACE,
+                     Ast *lpg_VariableInitializersopt,
+                     Commaopt *lpg_Commaopt,
+                     AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_VariableInitializersopt = lpg_VariableInitializersopt;
@@ -6939,10 +6940,10 @@ struct ArrayInitializer :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_VariableInitializersopt);
-        list.push_back(lpg_Commaopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_VariableInitializersopt);
+        list.push_back((IAst*)lpg_Commaopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -6958,10 +6959,10 @@ struct ArrayInitializer :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_VariableInitializersopt != nullptr) lpg_VariableInitializersopt->accept(v);
-            if (lpg_Commaopt != nullptr) lpg_Commaopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_VariableInitializersopt != nullptr) ((IAst*)lpg_VariableInitializersopt)->accept(v);
+            if (lpg_Commaopt != nullptr) ((IAst*)lpg_Commaopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -6978,21 +6979,21 @@ struct ArrayInitializer :public Ast
  */
 struct VariableInitializers :public Ast
 {
-    IAst *lpg_VariableInitializers;
-    IAst *lpg_COMMA;
-    IAst *lpg_VariableInitializer;
+    Ast *lpg_VariableInitializers;
+    AstToken *lpg_COMMA;
+    Ast *lpg_VariableInitializer;
 
-    IAst *getVariableInitializers() { return lpg_VariableInitializers; };
-    void setVariableInitializers(IAst *lpg_VariableInitializers) { this->lpg_VariableInitializers = lpg_VariableInitializers; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getVariableInitializer() { return lpg_VariableInitializer; };
-    void setVariableInitializer(IAst *lpg_VariableInitializer) { this->lpg_VariableInitializer = lpg_VariableInitializer; }
+    Ast *getVariableInitializers() { return lpg_VariableInitializers; };
+    void setVariableInitializers(Ast *lpg_VariableInitializers) { this->lpg_VariableInitializers = lpg_VariableInitializers; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getVariableInitializer() { return lpg_VariableInitializer; };
+    void setVariableInitializer(Ast *lpg_VariableInitializer) { this->lpg_VariableInitializer = lpg_VariableInitializer; }
 
     VariableInitializers(IToken* leftIToken, IToken* rightIToken,
-                         IAst *lpg_VariableInitializers,
-                         IAst *lpg_COMMA,
-                         IAst *lpg_VariableInitializer):Ast(leftIToken, rightIToken)    {
+                         Ast *lpg_VariableInitializers,
+                         AstToken *lpg_COMMA,
+                         Ast *lpg_VariableInitializer):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableInitializers = lpg_VariableInitializers;
         ((Ast*) lpg_VariableInitializers)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -7008,9 +7009,9 @@ struct VariableInitializers :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableInitializers);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_VariableInitializer);
+        list.push_back((IAst*)lpg_VariableInitializers);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_VariableInitializer);
         return list;
     }
 
@@ -7026,9 +7027,9 @@ struct VariableInitializers :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_VariableInitializers->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_VariableInitializer->accept(v);
+            ((IAst*)lpg_VariableInitializers)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_VariableInitializer)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7041,24 +7042,24 @@ struct VariableInitializers :public Ast
  */
 struct Block :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_BlockStatementsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_BlockStatementsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getBlockStatementsopt</b> may be <b>nullptr</b>
      */
-    IAst *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
-    void setBlockStatementsopt(IAst *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Ast *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
+    void setBlockStatementsopt(Ast *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     Block(IToken* leftIToken, IToken* rightIToken,
-          IAst *lpg_LBRACE,
-          IAst *lpg_BlockStatementsopt,
-          IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+          AstToken *lpg_LBRACE,
+          Ast *lpg_BlockStatementsopt,
+          AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_BlockStatementsopt = lpg_BlockStatementsopt;
@@ -7074,9 +7075,9 @@ struct Block :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_BlockStatementsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_BlockStatementsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -7092,9 +7093,9 @@ struct Block :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_BlockStatementsopt != nullptr) lpg_BlockStatementsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_BlockStatementsopt != nullptr) ((IAst*)lpg_BlockStatementsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7111,17 +7112,17 @@ struct Block :public Ast
  */
 struct BlockStatements :public Ast
 {
-    IAst *lpg_BlockStatements;
-    IAst *lpg_BlockStatement;
+    Ast *lpg_BlockStatements;
+    Ast *lpg_BlockStatement;
 
-    IAst *getBlockStatements() { return lpg_BlockStatements; };
-    void setBlockStatements(IAst *lpg_BlockStatements) { this->lpg_BlockStatements = lpg_BlockStatements; }
-    IAst *getBlockStatement() { return lpg_BlockStatement; };
-    void setBlockStatement(IAst *lpg_BlockStatement) { this->lpg_BlockStatement = lpg_BlockStatement; }
+    Ast *getBlockStatements() { return lpg_BlockStatements; };
+    void setBlockStatements(Ast *lpg_BlockStatements) { this->lpg_BlockStatements = lpg_BlockStatements; }
+    Ast *getBlockStatement() { return lpg_BlockStatement; };
+    void setBlockStatement(Ast *lpg_BlockStatement) { this->lpg_BlockStatement = lpg_BlockStatement; }
 
     BlockStatements(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_BlockStatements,
-                    IAst *lpg_BlockStatement):Ast(leftIToken, rightIToken)    {
+                    Ast *lpg_BlockStatements,
+                    Ast *lpg_BlockStatement):Ast(leftIToken, rightIToken)    {
         this->lpg_BlockStatements = lpg_BlockStatements;
         ((Ast*) lpg_BlockStatements)->setParent(this);
         this->lpg_BlockStatement = lpg_BlockStatement;
@@ -7135,8 +7136,8 @@ struct BlockStatements :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_BlockStatements);
-        list.push_back(lpg_BlockStatement);
+        list.push_back((IAst*)lpg_BlockStatements);
+        list.push_back((IAst*)lpg_BlockStatement);
         return list;
     }
 
@@ -7152,8 +7153,8 @@ struct BlockStatements :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_BlockStatements->accept(v);
-            lpg_BlockStatement->accept(v);
+            ((IAst*)lpg_BlockStatements)->accept(v);
+            ((IAst*)lpg_BlockStatement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7166,17 +7167,17 @@ struct BlockStatements :public Ast
  */
 struct LocalVariableDeclarationStatement :public Ast
 {
-    IAst *lpg_LocalVariableDeclaration;
-    IAst *lpg_SEMICOLON;
+    LocalVariableDeclaration *lpg_LocalVariableDeclaration;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getLocalVariableDeclaration() { return lpg_LocalVariableDeclaration; };
-    void setLocalVariableDeclaration(IAst *lpg_LocalVariableDeclaration) { this->lpg_LocalVariableDeclaration = lpg_LocalVariableDeclaration; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    LocalVariableDeclaration *getLocalVariableDeclaration() { return lpg_LocalVariableDeclaration; };
+    void setLocalVariableDeclaration(LocalVariableDeclaration *lpg_LocalVariableDeclaration) { this->lpg_LocalVariableDeclaration = lpg_LocalVariableDeclaration; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     LocalVariableDeclarationStatement(IToken* leftIToken, IToken* rightIToken,
-                                      IAst *lpg_LocalVariableDeclaration,
-                                      IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                      LocalVariableDeclaration *lpg_LocalVariableDeclaration,
+                                      AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_LocalVariableDeclaration = lpg_LocalVariableDeclaration;
         ((Ast*) lpg_LocalVariableDeclaration)->setParent(this);
         this->lpg_SEMICOLON = lpg_SEMICOLON;
@@ -7190,8 +7191,8 @@ struct LocalVariableDeclarationStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LocalVariableDeclaration);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_LocalVariableDeclaration);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -7207,8 +7208,8 @@ struct LocalVariableDeclarationStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LocalVariableDeclaration->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_LocalVariableDeclaration)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7221,24 +7222,24 @@ struct LocalVariableDeclarationStatement :public Ast
  */
 struct LocalVariableDeclaration :public Ast
 {
-    IAst *lpg_VariableModifiersopt;
-    IAst *lpg_Type;
-    IAst *lpg_VariableDeclarators;
+    Ast *lpg_VariableModifiersopt;
+    Ast *lpg_Type;
+    Ast *lpg_VariableDeclarators;
 
     /**
      * The value returned by <b>getVariableModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getVariableModifiersopt() { return lpg_VariableModifiersopt; };
-    void setVariableModifiersopt(IAst *lpg_VariableModifiersopt) { this->lpg_VariableModifiersopt = lpg_VariableModifiersopt; }
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getVariableDeclarators() { return lpg_VariableDeclarators; };
-    void setVariableDeclarators(IAst *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
+    Ast *getVariableModifiersopt() { return lpg_VariableModifiersopt; };
+    void setVariableModifiersopt(Ast *lpg_VariableModifiersopt) { this->lpg_VariableModifiersopt = lpg_VariableModifiersopt; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    Ast *getVariableDeclarators() { return lpg_VariableDeclarators; };
+    void setVariableDeclarators(Ast *lpg_VariableDeclarators) { this->lpg_VariableDeclarators = lpg_VariableDeclarators; }
 
     LocalVariableDeclaration(IToken* leftIToken, IToken* rightIToken,
-                             IAst *lpg_VariableModifiersopt,
-                             IAst *lpg_Type,
-                             IAst *lpg_VariableDeclarators):Ast(leftIToken, rightIToken)    {
+                             Ast *lpg_VariableModifiersopt,
+                             Ast *lpg_Type,
+                             Ast *lpg_VariableDeclarators):Ast(leftIToken, rightIToken)    {
         this->lpg_VariableModifiersopt = lpg_VariableModifiersopt;
         if (lpg_VariableModifiersopt != nullptr) ((Ast*) lpg_VariableModifiersopt)->setParent(this);
         this->lpg_Type = lpg_Type;
@@ -7254,9 +7255,9 @@ struct LocalVariableDeclaration :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_VariableModifiersopt);
-        list.push_back(lpg_Type);
-        list.push_back(lpg_VariableDeclarators);
+        list.push_back((IAst*)lpg_VariableModifiersopt);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_VariableDeclarators);
         return list;
     }
 
@@ -7272,9 +7273,9 @@ struct LocalVariableDeclaration :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_VariableModifiersopt != nullptr) lpg_VariableModifiersopt->accept(v);
-            lpg_Type->accept(v);
-            lpg_VariableDeclarators->accept(v);
+            if (lpg_VariableModifiersopt != nullptr) ((IAst*)lpg_VariableModifiersopt)->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_VariableDeclarators)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7287,29 +7288,29 @@ struct LocalVariableDeclaration :public Ast
  */
 struct IfThenStatement :public Ast
 {
-    IAst *lpg_if;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_Statement;
+    AstToken *lpg_if;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_Statement;
 
-    IAst *getif() { return lpg_if; };
-    void setif(IAst *lpg_if) { this->lpg_if = lpg_if; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    AstToken *getif() { return lpg_if; };
+    void setif(AstToken *lpg_if) { this->lpg_if = lpg_if; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
 
     IfThenStatement(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_if,
-                    IAst *lpg_LPAREN,
-                    IAst *lpg_Expression,
-                    IAst *lpg_RPAREN,
-                    IAst *lpg_Statement):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_if,
+                    AstToken *lpg_LPAREN,
+                    Ast *lpg_Expression,
+                    AstToken *lpg_RPAREN,
+                    Ast *lpg_Statement):Ast(leftIToken, rightIToken)    {
         this->lpg_if = lpg_if;
         ((Ast*) lpg_if)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -7329,11 +7330,11 @@ struct IfThenStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_if);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_Statement);
+        list.push_back((IAst*)lpg_if);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_Statement);
         return list;
     }
 
@@ -7349,11 +7350,11 @@ struct IfThenStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_if->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_Statement->accept(v);
+            ((IAst*)lpg_if)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7366,37 +7367,37 @@ struct IfThenStatement :public Ast
  */
 struct IfThenElseStatement :public Ast
 {
-    IAst *lpg_if;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_StatementNoShortIf;
-    IAst *lpg_else;
-    IAst *lpg_Statement;
+    AstToken *lpg_if;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_StatementNoShortIf;
+    AstToken *lpg_else;
+    Ast *lpg_Statement;
 
-    IAst *getif() { return lpg_if; };
-    void setif(IAst *lpg_if) { this->lpg_if = lpg_if; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
-    void setStatementNoShortIf(IAst *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
-    IAst *getelse() { return lpg_else; };
-    void setelse(IAst *lpg_else) { this->lpg_else = lpg_else; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    AstToken *getif() { return lpg_if; };
+    void setif(AstToken *lpg_if) { this->lpg_if = lpg_if; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
+    void setStatementNoShortIf(Ast *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
+    AstToken *getelse() { return lpg_else; };
+    void setelse(AstToken *lpg_else) { this->lpg_else = lpg_else; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
 
     IfThenElseStatement(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_if,
-                        IAst *lpg_LPAREN,
-                        IAst *lpg_Expression,
-                        IAst *lpg_RPAREN,
-                        IAst *lpg_StatementNoShortIf,
-                        IAst *lpg_else,
-                        IAst *lpg_Statement):Ast(leftIToken, rightIToken)    {
+                        AstToken *lpg_if,
+                        AstToken *lpg_LPAREN,
+                        Ast *lpg_Expression,
+                        AstToken *lpg_RPAREN,
+                        Ast *lpg_StatementNoShortIf,
+                        AstToken *lpg_else,
+                        Ast *lpg_Statement):Ast(leftIToken, rightIToken)    {
         this->lpg_if = lpg_if;
         ((Ast*) lpg_if)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -7420,13 +7421,13 @@ struct IfThenElseStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_if);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_StatementNoShortIf);
-        list.push_back(lpg_else);
-        list.push_back(lpg_Statement);
+        list.push_back((IAst*)lpg_if);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_StatementNoShortIf);
+        list.push_back((IAst*)lpg_else);
+        list.push_back((IAst*)lpg_Statement);
         return list;
     }
 
@@ -7442,13 +7443,13 @@ struct IfThenElseStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_if->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_StatementNoShortIf->accept(v);
-            lpg_else->accept(v);
-            lpg_Statement->accept(v);
+            ((IAst*)lpg_if)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_StatementNoShortIf)->accept(v);
+            ((IAst*)lpg_else)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7461,37 +7462,37 @@ struct IfThenElseStatement :public Ast
  */
 struct IfThenElseStatementNoShortIf :public Ast
 {
-    IAst *lpg_if;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_StatementNoShortIf;
-    IAst *lpg_else;
-    IAst *lpg_StatementNoShortIf7;
+    AstToken *lpg_if;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_StatementNoShortIf;
+    AstToken *lpg_else;
+    Ast *lpg_StatementNoShortIf7;
 
-    IAst *getif() { return lpg_if; };
-    void setif(IAst *lpg_if) { this->lpg_if = lpg_if; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
-    void setStatementNoShortIf(IAst *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
-    IAst *getelse() { return lpg_else; };
-    void setelse(IAst *lpg_else) { this->lpg_else = lpg_else; }
-    IAst *getStatementNoShortIf7() { return lpg_StatementNoShortIf7; };
-    void setStatementNoShortIf7(IAst *lpg_StatementNoShortIf7) { this->lpg_StatementNoShortIf7 = lpg_StatementNoShortIf7; }
+    AstToken *getif() { return lpg_if; };
+    void setif(AstToken *lpg_if) { this->lpg_if = lpg_if; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
+    void setStatementNoShortIf(Ast *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
+    AstToken *getelse() { return lpg_else; };
+    void setelse(AstToken *lpg_else) { this->lpg_else = lpg_else; }
+    Ast *getStatementNoShortIf7() { return lpg_StatementNoShortIf7; };
+    void setStatementNoShortIf7(Ast *lpg_StatementNoShortIf7) { this->lpg_StatementNoShortIf7 = lpg_StatementNoShortIf7; }
 
     IfThenElseStatementNoShortIf(IToken* leftIToken, IToken* rightIToken,
-                                 IAst *lpg_if,
-                                 IAst *lpg_LPAREN,
-                                 IAst *lpg_Expression,
-                                 IAst *lpg_RPAREN,
-                                 IAst *lpg_StatementNoShortIf,
-                                 IAst *lpg_else,
-                                 IAst *lpg_StatementNoShortIf7):Ast(leftIToken, rightIToken)    {
+                                 AstToken *lpg_if,
+                                 AstToken *lpg_LPAREN,
+                                 Ast *lpg_Expression,
+                                 AstToken *lpg_RPAREN,
+                                 Ast *lpg_StatementNoShortIf,
+                                 AstToken *lpg_else,
+                                 Ast *lpg_StatementNoShortIf7):Ast(leftIToken, rightIToken)    {
         this->lpg_if = lpg_if;
         ((Ast*) lpg_if)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -7515,13 +7516,13 @@ struct IfThenElseStatementNoShortIf :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_if);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_StatementNoShortIf);
-        list.push_back(lpg_else);
-        list.push_back(lpg_StatementNoShortIf7);
+        list.push_back((IAst*)lpg_if);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_StatementNoShortIf);
+        list.push_back((IAst*)lpg_else);
+        list.push_back((IAst*)lpg_StatementNoShortIf7);
         return list;
     }
 
@@ -7537,13 +7538,13 @@ struct IfThenElseStatementNoShortIf :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_if->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_StatementNoShortIf->accept(v);
-            lpg_else->accept(v);
-            lpg_StatementNoShortIf7->accept(v);
+            ((IAst*)lpg_if)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_StatementNoShortIf)->accept(v);
+            ((IAst*)lpg_else)->accept(v);
+            ((IAst*)lpg_StatementNoShortIf7)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7583,21 +7584,21 @@ struct EmptyStatement :public AstToken
  */
 struct LabeledStatement :public Ast
 {
-    IAst *lpg_identifier;
-    IAst *lpg_COLON;
-    IAst *lpg_Statement;
+    identifier *lpg_identifier;
+    AstToken *lpg_COLON;
+    Ast *lpg_Statement;
 
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
 
     LabeledStatement(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_identifier,
-                     IAst *lpg_COLON,
-                     IAst *lpg_Statement):Ast(leftIToken, rightIToken)    {
+                     identifier *lpg_identifier,
+                     AstToken *lpg_COLON,
+                     Ast *lpg_Statement):Ast(leftIToken, rightIToken)    {
         this->lpg_identifier = lpg_identifier;
         ((Ast*) lpg_identifier)->setParent(this);
         this->lpg_COLON = lpg_COLON;
@@ -7613,9 +7614,9 @@ struct LabeledStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_COLON);
-        list.push_back(lpg_Statement);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_COLON);
+        list.push_back((IAst*)lpg_Statement);
         return list;
     }
 
@@ -7631,9 +7632,9 @@ struct LabeledStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_identifier->accept(v);
-            lpg_COLON->accept(v);
-            lpg_Statement->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7646,21 +7647,21 @@ struct LabeledStatement :public Ast
  */
 struct LabeledStatementNoShortIf :public Ast
 {
-    IAst *lpg_identifier;
-    IAst *lpg_COLON;
-    IAst *lpg_StatementNoShortIf;
+    identifier *lpg_identifier;
+    AstToken *lpg_COLON;
+    Ast *lpg_StatementNoShortIf;
 
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
-    IAst *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
-    void setStatementNoShortIf(IAst *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    Ast *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
+    void setStatementNoShortIf(Ast *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
 
     LabeledStatementNoShortIf(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_identifier,
-                              IAst *lpg_COLON,
-                              IAst *lpg_StatementNoShortIf):Ast(leftIToken, rightIToken)    {
+                              identifier *lpg_identifier,
+                              AstToken *lpg_COLON,
+                              Ast *lpg_StatementNoShortIf):Ast(leftIToken, rightIToken)    {
         this->lpg_identifier = lpg_identifier;
         ((Ast*) lpg_identifier)->setParent(this);
         this->lpg_COLON = lpg_COLON;
@@ -7676,9 +7677,9 @@ struct LabeledStatementNoShortIf :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_COLON);
-        list.push_back(lpg_StatementNoShortIf);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_COLON);
+        list.push_back((IAst*)lpg_StatementNoShortIf);
         return list;
     }
 
@@ -7694,9 +7695,9 @@ struct LabeledStatementNoShortIf :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_identifier->accept(v);
-            lpg_COLON->accept(v);
-            lpg_StatementNoShortIf->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
+            ((IAst*)lpg_StatementNoShortIf)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7709,17 +7710,17 @@ struct LabeledStatementNoShortIf :public Ast
  */
 struct ExpressionStatement :public Ast
 {
-    IAst *lpg_StatementExpression;
-    IAst *lpg_SEMICOLON;
+    Ast *lpg_StatementExpression;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getStatementExpression() { return lpg_StatementExpression; };
-    void setStatementExpression(IAst *lpg_StatementExpression) { this->lpg_StatementExpression = lpg_StatementExpression; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getStatementExpression() { return lpg_StatementExpression; };
+    void setStatementExpression(Ast *lpg_StatementExpression) { this->lpg_StatementExpression = lpg_StatementExpression; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ExpressionStatement(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_StatementExpression,
-                        IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_StatementExpression,
+                        AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_StatementExpression = lpg_StatementExpression;
         ((Ast*) lpg_StatementExpression)->setParent(this);
         this->lpg_SEMICOLON = lpg_SEMICOLON;
@@ -7733,8 +7734,8 @@ struct ExpressionStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_StatementExpression);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_StatementExpression);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -7750,8 +7751,8 @@ struct ExpressionStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_StatementExpression->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_StatementExpression)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7764,29 +7765,29 @@ struct ExpressionStatement :public Ast
  */
 struct SwitchStatement :public Ast
 {
-    IAst *lpg_switch;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_SwitchBlock;
+    AstToken *lpg_switch;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    SwitchBlock *lpg_SwitchBlock;
 
-    IAst *getswitch() { return lpg_switch; };
-    void setswitch(IAst *lpg_switch) { this->lpg_switch = lpg_switch; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getSwitchBlock() { return lpg_SwitchBlock; };
-    void setSwitchBlock(IAst *lpg_SwitchBlock) { this->lpg_SwitchBlock = lpg_SwitchBlock; }
+    AstToken *getswitch() { return lpg_switch; };
+    void setswitch(AstToken *lpg_switch) { this->lpg_switch = lpg_switch; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    SwitchBlock *getSwitchBlock() { return lpg_SwitchBlock; };
+    void setSwitchBlock(SwitchBlock *lpg_SwitchBlock) { this->lpg_SwitchBlock = lpg_SwitchBlock; }
 
     SwitchStatement(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_switch,
-                    IAst *lpg_LPAREN,
-                    IAst *lpg_Expression,
-                    IAst *lpg_RPAREN,
-                    IAst *lpg_SwitchBlock):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_switch,
+                    AstToken *lpg_LPAREN,
+                    Ast *lpg_Expression,
+                    AstToken *lpg_RPAREN,
+                    SwitchBlock *lpg_SwitchBlock):Ast(leftIToken, rightIToken)    {
         this->lpg_switch = lpg_switch;
         ((Ast*) lpg_switch)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -7806,11 +7807,11 @@ struct SwitchStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_switch);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_SwitchBlock);
+        list.push_back((IAst*)lpg_switch);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_SwitchBlock);
         return list;
     }
 
@@ -7826,11 +7827,11 @@ struct SwitchStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_switch->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_SwitchBlock->accept(v);
+            ((IAst*)lpg_switch)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_SwitchBlock)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7843,31 +7844,31 @@ struct SwitchStatement :public Ast
  */
 struct SwitchBlock :public Ast
 {
-    IAst *lpg_LBRACE;
-    IAst *lpg_SwitchBlockStatementGroupsopt;
-    IAst *lpg_SwitchLabelsopt;
-    IAst *lpg_RBRACE;
+    AstToken *lpg_LBRACE;
+    Ast *lpg_SwitchBlockStatementGroupsopt;
+    Ast *lpg_SwitchLabelsopt;
+    AstToken *lpg_RBRACE;
 
-    IAst *getLBRACE() { return lpg_LBRACE; };
-    void setLBRACE(IAst *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
+    AstToken *getLBRACE() { return lpg_LBRACE; };
+    void setLBRACE(AstToken *lpg_LBRACE) { this->lpg_LBRACE = lpg_LBRACE; }
     /**
      * The value returned by <b>getSwitchBlockStatementGroupsopt</b> may be <b>nullptr</b>
      */
-    IAst *getSwitchBlockStatementGroupsopt() { return lpg_SwitchBlockStatementGroupsopt; };
-    void setSwitchBlockStatementGroupsopt(IAst *lpg_SwitchBlockStatementGroupsopt) { this->lpg_SwitchBlockStatementGroupsopt = lpg_SwitchBlockStatementGroupsopt; }
+    Ast *getSwitchBlockStatementGroupsopt() { return lpg_SwitchBlockStatementGroupsopt; };
+    void setSwitchBlockStatementGroupsopt(Ast *lpg_SwitchBlockStatementGroupsopt) { this->lpg_SwitchBlockStatementGroupsopt = lpg_SwitchBlockStatementGroupsopt; }
     /**
      * The value returned by <b>getSwitchLabelsopt</b> may be <b>nullptr</b>
      */
-    IAst *getSwitchLabelsopt() { return lpg_SwitchLabelsopt; };
-    void setSwitchLabelsopt(IAst *lpg_SwitchLabelsopt) { this->lpg_SwitchLabelsopt = lpg_SwitchLabelsopt; }
-    IAst *getRBRACE() { return lpg_RBRACE; };
-    void setRBRACE(IAst *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
+    Ast *getSwitchLabelsopt() { return lpg_SwitchLabelsopt; };
+    void setSwitchLabelsopt(Ast *lpg_SwitchLabelsopt) { this->lpg_SwitchLabelsopt = lpg_SwitchLabelsopt; }
+    AstToken *getRBRACE() { return lpg_RBRACE; };
+    void setRBRACE(AstToken *lpg_RBRACE) { this->lpg_RBRACE = lpg_RBRACE; }
 
     SwitchBlock(IToken* leftIToken, IToken* rightIToken,
-                IAst *lpg_LBRACE,
-                IAst *lpg_SwitchBlockStatementGroupsopt,
-                IAst *lpg_SwitchLabelsopt,
-                IAst *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
+                AstToken *lpg_LBRACE,
+                Ast *lpg_SwitchBlockStatementGroupsopt,
+                Ast *lpg_SwitchLabelsopt,
+                AstToken *lpg_RBRACE):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACE = lpg_LBRACE;
         ((Ast*) lpg_LBRACE)->setParent(this);
         this->lpg_SwitchBlockStatementGroupsopt = lpg_SwitchBlockStatementGroupsopt;
@@ -7885,10 +7886,10 @@ struct SwitchBlock :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACE);
-        list.push_back(lpg_SwitchBlockStatementGroupsopt);
-        list.push_back(lpg_SwitchLabelsopt);
-        list.push_back(lpg_RBRACE);
+        list.push_back((IAst*)lpg_LBRACE);
+        list.push_back((IAst*)lpg_SwitchBlockStatementGroupsopt);
+        list.push_back((IAst*)lpg_SwitchLabelsopt);
+        list.push_back((IAst*)lpg_RBRACE);
         return list;
     }
 
@@ -7904,10 +7905,10 @@ struct SwitchBlock :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACE->accept(v);
-            if (lpg_SwitchBlockStatementGroupsopt != nullptr) lpg_SwitchBlockStatementGroupsopt->accept(v);
-            if (lpg_SwitchLabelsopt != nullptr) lpg_SwitchLabelsopt->accept(v);
-            lpg_RBRACE->accept(v);
+            ((IAst*)lpg_LBRACE)->accept(v);
+            if (lpg_SwitchBlockStatementGroupsopt != nullptr) ((IAst*)lpg_SwitchBlockStatementGroupsopt)->accept(v);
+            if (lpg_SwitchLabelsopt != nullptr) ((IAst*)lpg_SwitchLabelsopt)->accept(v);
+            ((IAst*)lpg_RBRACE)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7924,17 +7925,17 @@ struct SwitchBlock :public Ast
  */
 struct SwitchBlockStatementGroups :public Ast
 {
-    IAst *lpg_SwitchBlockStatementGroups;
-    IAst *lpg_SwitchBlockStatementGroup;
+    Ast *lpg_SwitchBlockStatementGroups;
+    SwitchBlockStatementGroup *lpg_SwitchBlockStatementGroup;
 
-    IAst *getSwitchBlockStatementGroups() { return lpg_SwitchBlockStatementGroups; };
-    void setSwitchBlockStatementGroups(IAst *lpg_SwitchBlockStatementGroups) { this->lpg_SwitchBlockStatementGroups = lpg_SwitchBlockStatementGroups; }
-    IAst *getSwitchBlockStatementGroup() { return lpg_SwitchBlockStatementGroup; };
-    void setSwitchBlockStatementGroup(IAst *lpg_SwitchBlockStatementGroup) { this->lpg_SwitchBlockStatementGroup = lpg_SwitchBlockStatementGroup; }
+    Ast *getSwitchBlockStatementGroups() { return lpg_SwitchBlockStatementGroups; };
+    void setSwitchBlockStatementGroups(Ast *lpg_SwitchBlockStatementGroups) { this->lpg_SwitchBlockStatementGroups = lpg_SwitchBlockStatementGroups; }
+    SwitchBlockStatementGroup *getSwitchBlockStatementGroup() { return lpg_SwitchBlockStatementGroup; };
+    void setSwitchBlockStatementGroup(SwitchBlockStatementGroup *lpg_SwitchBlockStatementGroup) { this->lpg_SwitchBlockStatementGroup = lpg_SwitchBlockStatementGroup; }
 
     SwitchBlockStatementGroups(IToken* leftIToken, IToken* rightIToken,
-                               IAst *lpg_SwitchBlockStatementGroups,
-                               IAst *lpg_SwitchBlockStatementGroup):Ast(leftIToken, rightIToken)    {
+                               Ast *lpg_SwitchBlockStatementGroups,
+                               SwitchBlockStatementGroup *lpg_SwitchBlockStatementGroup):Ast(leftIToken, rightIToken)    {
         this->lpg_SwitchBlockStatementGroups = lpg_SwitchBlockStatementGroups;
         ((Ast*) lpg_SwitchBlockStatementGroups)->setParent(this);
         this->lpg_SwitchBlockStatementGroup = lpg_SwitchBlockStatementGroup;
@@ -7948,8 +7949,8 @@ struct SwitchBlockStatementGroups :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_SwitchBlockStatementGroups);
-        list.push_back(lpg_SwitchBlockStatementGroup);
+        list.push_back((IAst*)lpg_SwitchBlockStatementGroups);
+        list.push_back((IAst*)lpg_SwitchBlockStatementGroup);
         return list;
     }
 
@@ -7965,8 +7966,8 @@ struct SwitchBlockStatementGroups :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_SwitchBlockStatementGroups->accept(v);
-            lpg_SwitchBlockStatementGroup->accept(v);
+            ((IAst*)lpg_SwitchBlockStatementGroups)->accept(v);
+            ((IAst*)lpg_SwitchBlockStatementGroup)->accept(v);
         }
         v->endVisit(this);
     }
@@ -7979,17 +7980,17 @@ struct SwitchBlockStatementGroups :public Ast
  */
 struct SwitchBlockStatementGroup :public Ast
 {
-    IAst *lpg_SwitchLabels;
-    IAst *lpg_BlockStatements;
+    Ast *lpg_SwitchLabels;
+    Ast *lpg_BlockStatements;
 
-    IAst *getSwitchLabels() { return lpg_SwitchLabels; };
-    void setSwitchLabels(IAst *lpg_SwitchLabels) { this->lpg_SwitchLabels = lpg_SwitchLabels; }
-    IAst *getBlockStatements() { return lpg_BlockStatements; };
-    void setBlockStatements(IAst *lpg_BlockStatements) { this->lpg_BlockStatements = lpg_BlockStatements; }
+    Ast *getSwitchLabels() { return lpg_SwitchLabels; };
+    void setSwitchLabels(Ast *lpg_SwitchLabels) { this->lpg_SwitchLabels = lpg_SwitchLabels; }
+    Ast *getBlockStatements() { return lpg_BlockStatements; };
+    void setBlockStatements(Ast *lpg_BlockStatements) { this->lpg_BlockStatements = lpg_BlockStatements; }
 
     SwitchBlockStatementGroup(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_SwitchLabels,
-                              IAst *lpg_BlockStatements):Ast(leftIToken, rightIToken)    {
+                              Ast *lpg_SwitchLabels,
+                              Ast *lpg_BlockStatements):Ast(leftIToken, rightIToken)    {
         this->lpg_SwitchLabels = lpg_SwitchLabels;
         ((Ast*) lpg_SwitchLabels)->setParent(this);
         this->lpg_BlockStatements = lpg_BlockStatements;
@@ -8003,8 +8004,8 @@ struct SwitchBlockStatementGroup :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_SwitchLabels);
-        list.push_back(lpg_BlockStatements);
+        list.push_back((IAst*)lpg_SwitchLabels);
+        list.push_back((IAst*)lpg_BlockStatements);
         return list;
     }
 
@@ -8020,8 +8021,8 @@ struct SwitchBlockStatementGroup :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_SwitchLabels->accept(v);
-            lpg_BlockStatements->accept(v);
+            ((IAst*)lpg_SwitchLabels)->accept(v);
+            ((IAst*)lpg_BlockStatements)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8038,17 +8039,17 @@ struct SwitchBlockStatementGroup :public Ast
  */
 struct SwitchLabels :public Ast
 {
-    IAst *lpg_SwitchLabels;
-    IAst *lpg_SwitchLabel;
+    Ast *lpg_SwitchLabels;
+    Ast *lpg_SwitchLabel;
 
-    IAst *getSwitchLabels() { return lpg_SwitchLabels; };
-    void setSwitchLabels(IAst *lpg_SwitchLabels) { this->lpg_SwitchLabels = lpg_SwitchLabels; }
-    IAst *getSwitchLabel() { return lpg_SwitchLabel; };
-    void setSwitchLabel(IAst *lpg_SwitchLabel) { this->lpg_SwitchLabel = lpg_SwitchLabel; }
+    Ast *getSwitchLabels() { return lpg_SwitchLabels; };
+    void setSwitchLabels(Ast *lpg_SwitchLabels) { this->lpg_SwitchLabels = lpg_SwitchLabels; }
+    Ast *getSwitchLabel() { return lpg_SwitchLabel; };
+    void setSwitchLabel(Ast *lpg_SwitchLabel) { this->lpg_SwitchLabel = lpg_SwitchLabel; }
 
     SwitchLabels(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_SwitchLabels,
-                 IAst *lpg_SwitchLabel):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_SwitchLabels,
+                 Ast *lpg_SwitchLabel):Ast(leftIToken, rightIToken)    {
         this->lpg_SwitchLabels = lpg_SwitchLabels;
         ((Ast*) lpg_SwitchLabels)->setParent(this);
         this->lpg_SwitchLabel = lpg_SwitchLabel;
@@ -8062,8 +8063,8 @@ struct SwitchLabels :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_SwitchLabels);
-        list.push_back(lpg_SwitchLabel);
+        list.push_back((IAst*)lpg_SwitchLabels);
+        list.push_back((IAst*)lpg_SwitchLabel);
         return list;
     }
 
@@ -8079,8 +8080,8 @@ struct SwitchLabels :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_SwitchLabels->accept(v);
-            lpg_SwitchLabel->accept(v);
+            ((IAst*)lpg_SwitchLabels)->accept(v);
+            ((IAst*)lpg_SwitchLabel)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8093,29 +8094,29 @@ struct SwitchLabels :public Ast
  */
 struct WhileStatement :public Ast
 {
-    IAst *lpg_while;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_Statement;
+    AstToken *lpg_while;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_Statement;
 
-    IAst *getwhile() { return lpg_while; };
-    void setwhile(IAst *lpg_while) { this->lpg_while = lpg_while; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    AstToken *getwhile() { return lpg_while; };
+    void setwhile(AstToken *lpg_while) { this->lpg_while = lpg_while; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
 
     WhileStatement(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_while,
-                   IAst *lpg_LPAREN,
-                   IAst *lpg_Expression,
-                   IAst *lpg_RPAREN,
-                   IAst *lpg_Statement):Ast(leftIToken, rightIToken)    {
+                   AstToken *lpg_while,
+                   AstToken *lpg_LPAREN,
+                   Ast *lpg_Expression,
+                   AstToken *lpg_RPAREN,
+                   Ast *lpg_Statement):Ast(leftIToken, rightIToken)    {
         this->lpg_while = lpg_while;
         ((Ast*) lpg_while)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -8135,11 +8136,11 @@ struct WhileStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_while);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_Statement);
+        list.push_back((IAst*)lpg_while);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_Statement);
         return list;
     }
 
@@ -8155,11 +8156,11 @@ struct WhileStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_while->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_Statement->accept(v);
+            ((IAst*)lpg_while)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8172,29 +8173,29 @@ struct WhileStatement :public Ast
  */
 struct WhileStatementNoShortIf :public Ast
 {
-    IAst *lpg_while;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_StatementNoShortIf;
+    AstToken *lpg_while;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_StatementNoShortIf;
 
-    IAst *getwhile() { return lpg_while; };
-    void setwhile(IAst *lpg_while) { this->lpg_while = lpg_while; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
-    void setStatementNoShortIf(IAst *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
+    AstToken *getwhile() { return lpg_while; };
+    void setwhile(AstToken *lpg_while) { this->lpg_while = lpg_while; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
+    void setStatementNoShortIf(Ast *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
 
     WhileStatementNoShortIf(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_while,
-                            IAst *lpg_LPAREN,
-                            IAst *lpg_Expression,
-                            IAst *lpg_RPAREN,
-                            IAst *lpg_StatementNoShortIf):Ast(leftIToken, rightIToken)    {
+                            AstToken *lpg_while,
+                            AstToken *lpg_LPAREN,
+                            Ast *lpg_Expression,
+                            AstToken *lpg_RPAREN,
+                            Ast *lpg_StatementNoShortIf):Ast(leftIToken, rightIToken)    {
         this->lpg_while = lpg_while;
         ((Ast*) lpg_while)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -8214,11 +8215,11 @@ struct WhileStatementNoShortIf :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_while);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_StatementNoShortIf);
+        list.push_back((IAst*)lpg_while);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_StatementNoShortIf);
         return list;
     }
 
@@ -8234,11 +8235,11 @@ struct WhileStatementNoShortIf :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_while->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_StatementNoShortIf->accept(v);
+            ((IAst*)lpg_while)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_StatementNoShortIf)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8251,37 +8252,37 @@ struct WhileStatementNoShortIf :public Ast
  */
 struct DoStatement :public Ast
 {
-    IAst *lpg_do;
-    IAst *lpg_Statement;
-    IAst *lpg_while;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_do;
+    Ast *lpg_Statement;
+    AstToken *lpg_while;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getdo() { return lpg_do; };
-    void setdo(IAst *lpg_do) { this->lpg_do = lpg_do; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
-    IAst *getwhile() { return lpg_while; };
-    void setwhile(IAst *lpg_while) { this->lpg_while = lpg_while; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getdo() { return lpg_do; };
+    void setdo(AstToken *lpg_do) { this->lpg_do = lpg_do; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    AstToken *getwhile() { return lpg_while; };
+    void setwhile(AstToken *lpg_while) { this->lpg_while = lpg_while; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     DoStatement(IToken* leftIToken, IToken* rightIToken,
-                IAst *lpg_do,
-                IAst *lpg_Statement,
-                IAst *lpg_while,
-                IAst *lpg_LPAREN,
-                IAst *lpg_Expression,
-                IAst *lpg_RPAREN,
-                IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                AstToken *lpg_do,
+                Ast *lpg_Statement,
+                AstToken *lpg_while,
+                AstToken *lpg_LPAREN,
+                Ast *lpg_Expression,
+                AstToken *lpg_RPAREN,
+                AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_do = lpg_do;
         ((Ast*) lpg_do)->setParent(this);
         this->lpg_Statement = lpg_Statement;
@@ -8305,13 +8306,13 @@ struct DoStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_do);
-        list.push_back(lpg_Statement);
-        list.push_back(lpg_while);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_do);
+        list.push_back((IAst*)lpg_Statement);
+        list.push_back((IAst*)lpg_while);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -8327,13 +8328,13 @@ struct DoStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_do->accept(v);
-            lpg_Statement->accept(v);
-            lpg_while->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_do)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
+            ((IAst*)lpg_while)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8346,54 +8347,54 @@ struct DoStatement :public Ast
  */
 struct BasicForStatement :public Ast
 {
-    IAst *lpg_for;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ForInitopt;
-    IAst *lpg_SEMICOLON;
-    IAst *lpg_Expressionopt;
-    IAst *lpg_SEMICOLON6;
-    IAst *lpg_ForUpdateopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_Statement;
+    AstToken *lpg_for;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ForInitopt;
+    AstToken *lpg_SEMICOLON;
+    Ast *lpg_Expressionopt;
+    AstToken *lpg_SEMICOLON6;
+    Ast *lpg_ForUpdateopt;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_Statement;
 
-    IAst *getfor() { return lpg_for; };
-    void setfor(IAst *lpg_for) { this->lpg_for = lpg_for; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    AstToken *getfor() { return lpg_for; };
+    void setfor(AstToken *lpg_for) { this->lpg_for = lpg_for; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getForInitopt</b> may be <b>nullptr</b>
      */
-    IAst *getForInitopt() { return lpg_ForInitopt; };
-    void setForInitopt(IAst *lpg_ForInitopt) { this->lpg_ForInitopt = lpg_ForInitopt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getForInitopt() { return lpg_ForInitopt; };
+    void setForInitopt(Ast *lpg_ForInitopt) { this->lpg_ForInitopt = lpg_ForInitopt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
     /**
      * The value returned by <b>getExpressionopt</b> may be <b>nullptr</b>
      */
-    IAst *getExpressionopt() { return lpg_Expressionopt; };
-    void setExpressionopt(IAst *lpg_Expressionopt) { this->lpg_Expressionopt = lpg_Expressionopt; }
-    IAst *getSEMICOLON6() { return lpg_SEMICOLON6; };
-    void setSEMICOLON6(IAst *lpg_SEMICOLON6) { this->lpg_SEMICOLON6 = lpg_SEMICOLON6; }
+    Ast *getExpressionopt() { return lpg_Expressionopt; };
+    void setExpressionopt(Ast *lpg_Expressionopt) { this->lpg_Expressionopt = lpg_Expressionopt; }
+    AstToken *getSEMICOLON6() { return lpg_SEMICOLON6; };
+    void setSEMICOLON6(AstToken *lpg_SEMICOLON6) { this->lpg_SEMICOLON6 = lpg_SEMICOLON6; }
     /**
      * The value returned by <b>getForUpdateopt</b> may be <b>nullptr</b>
      */
-    IAst *getForUpdateopt() { return lpg_ForUpdateopt; };
-    void setForUpdateopt(IAst *lpg_ForUpdateopt) { this->lpg_ForUpdateopt = lpg_ForUpdateopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    Ast *getForUpdateopt() { return lpg_ForUpdateopt; };
+    void setForUpdateopt(Ast *lpg_ForUpdateopt) { this->lpg_ForUpdateopt = lpg_ForUpdateopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
 
     BasicForStatement(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_for,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_ForInitopt,
-                      IAst *lpg_SEMICOLON,
-                      IAst *lpg_Expressionopt,
-                      IAst *lpg_SEMICOLON6,
-                      IAst *lpg_ForUpdateopt,
-                      IAst *lpg_RPAREN,
-                      IAst *lpg_Statement):Ast(leftIToken, rightIToken)    {
+                      AstToken *lpg_for,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_ForInitopt,
+                      AstToken *lpg_SEMICOLON,
+                      Ast *lpg_Expressionopt,
+                      AstToken *lpg_SEMICOLON6,
+                      Ast *lpg_ForUpdateopt,
+                      AstToken *lpg_RPAREN,
+                      Ast *lpg_Statement):Ast(leftIToken, rightIToken)    {
         this->lpg_for = lpg_for;
         ((Ast*) lpg_for)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -8421,15 +8422,15 @@ struct BasicForStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_for);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ForInitopt);
-        list.push_back(lpg_SEMICOLON);
-        list.push_back(lpg_Expressionopt);
-        list.push_back(lpg_SEMICOLON6);
-        list.push_back(lpg_ForUpdateopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_Statement);
+        list.push_back((IAst*)lpg_for);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ForInitopt);
+        list.push_back((IAst*)lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_Expressionopt);
+        list.push_back((IAst*)lpg_SEMICOLON6);
+        list.push_back((IAst*)lpg_ForUpdateopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_Statement);
         return list;
     }
 
@@ -8445,15 +8446,15 @@ struct BasicForStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_for->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ForInitopt != nullptr) lpg_ForInitopt->accept(v);
-            lpg_SEMICOLON->accept(v);
-            if (lpg_Expressionopt != nullptr) lpg_Expressionopt->accept(v);
-            lpg_SEMICOLON6->accept(v);
-            if (lpg_ForUpdateopt != nullptr) lpg_ForUpdateopt->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_Statement->accept(v);
+            ((IAst*)lpg_for)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ForInitopt != nullptr) ((IAst*)lpg_ForInitopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
+            if (lpg_Expressionopt != nullptr) ((IAst*)lpg_Expressionopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON6)->accept(v);
+            if (lpg_ForUpdateopt != nullptr) ((IAst*)lpg_ForUpdateopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8466,54 +8467,54 @@ struct BasicForStatement :public Ast
  */
 struct ForStatementNoShortIf :public Ast
 {
-    IAst *lpg_for;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ForInitopt;
-    IAst *lpg_SEMICOLON;
-    IAst *lpg_Expressionopt;
-    IAst *lpg_SEMICOLON6;
-    IAst *lpg_ForUpdateopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_StatementNoShortIf;
+    AstToken *lpg_for;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ForInitopt;
+    AstToken *lpg_SEMICOLON;
+    Ast *lpg_Expressionopt;
+    AstToken *lpg_SEMICOLON6;
+    Ast *lpg_ForUpdateopt;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_StatementNoShortIf;
 
-    IAst *getfor() { return lpg_for; };
-    void setfor(IAst *lpg_for) { this->lpg_for = lpg_for; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    AstToken *getfor() { return lpg_for; };
+    void setfor(AstToken *lpg_for) { this->lpg_for = lpg_for; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getForInitopt</b> may be <b>nullptr</b>
      */
-    IAst *getForInitopt() { return lpg_ForInitopt; };
-    void setForInitopt(IAst *lpg_ForInitopt) { this->lpg_ForInitopt = lpg_ForInitopt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getForInitopt() { return lpg_ForInitopt; };
+    void setForInitopt(Ast *lpg_ForInitopt) { this->lpg_ForInitopt = lpg_ForInitopt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
     /**
      * The value returned by <b>getExpressionopt</b> may be <b>nullptr</b>
      */
-    IAst *getExpressionopt() { return lpg_Expressionopt; };
-    void setExpressionopt(IAst *lpg_Expressionopt) { this->lpg_Expressionopt = lpg_Expressionopt; }
-    IAst *getSEMICOLON6() { return lpg_SEMICOLON6; };
-    void setSEMICOLON6(IAst *lpg_SEMICOLON6) { this->lpg_SEMICOLON6 = lpg_SEMICOLON6; }
+    Ast *getExpressionopt() { return lpg_Expressionopt; };
+    void setExpressionopt(Ast *lpg_Expressionopt) { this->lpg_Expressionopt = lpg_Expressionopt; }
+    AstToken *getSEMICOLON6() { return lpg_SEMICOLON6; };
+    void setSEMICOLON6(AstToken *lpg_SEMICOLON6) { this->lpg_SEMICOLON6 = lpg_SEMICOLON6; }
     /**
      * The value returned by <b>getForUpdateopt</b> may be <b>nullptr</b>
      */
-    IAst *getForUpdateopt() { return lpg_ForUpdateopt; };
-    void setForUpdateopt(IAst *lpg_ForUpdateopt) { this->lpg_ForUpdateopt = lpg_ForUpdateopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
-    void setStatementNoShortIf(IAst *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
+    Ast *getForUpdateopt() { return lpg_ForUpdateopt; };
+    void setForUpdateopt(Ast *lpg_ForUpdateopt) { this->lpg_ForUpdateopt = lpg_ForUpdateopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatementNoShortIf() { return lpg_StatementNoShortIf; };
+    void setStatementNoShortIf(Ast *lpg_StatementNoShortIf) { this->lpg_StatementNoShortIf = lpg_StatementNoShortIf; }
 
     ForStatementNoShortIf(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_for,
-                          IAst *lpg_LPAREN,
-                          IAst *lpg_ForInitopt,
-                          IAst *lpg_SEMICOLON,
-                          IAst *lpg_Expressionopt,
-                          IAst *lpg_SEMICOLON6,
-                          IAst *lpg_ForUpdateopt,
-                          IAst *lpg_RPAREN,
-                          IAst *lpg_StatementNoShortIf):Ast(leftIToken, rightIToken)    {
+                          AstToken *lpg_for,
+                          AstToken *lpg_LPAREN,
+                          Ast *lpg_ForInitopt,
+                          AstToken *lpg_SEMICOLON,
+                          Ast *lpg_Expressionopt,
+                          AstToken *lpg_SEMICOLON6,
+                          Ast *lpg_ForUpdateopt,
+                          AstToken *lpg_RPAREN,
+                          Ast *lpg_StatementNoShortIf):Ast(leftIToken, rightIToken)    {
         this->lpg_for = lpg_for;
         ((Ast*) lpg_for)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -8541,15 +8542,15 @@ struct ForStatementNoShortIf :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_for);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ForInitopt);
-        list.push_back(lpg_SEMICOLON);
-        list.push_back(lpg_Expressionopt);
-        list.push_back(lpg_SEMICOLON6);
-        list.push_back(lpg_ForUpdateopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_StatementNoShortIf);
+        list.push_back((IAst*)lpg_for);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ForInitopt);
+        list.push_back((IAst*)lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_Expressionopt);
+        list.push_back((IAst*)lpg_SEMICOLON6);
+        list.push_back((IAst*)lpg_ForUpdateopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_StatementNoShortIf);
         return list;
     }
 
@@ -8565,15 +8566,15 @@ struct ForStatementNoShortIf :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_for->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ForInitopt != nullptr) lpg_ForInitopt->accept(v);
-            lpg_SEMICOLON->accept(v);
-            if (lpg_Expressionopt != nullptr) lpg_Expressionopt->accept(v);
-            lpg_SEMICOLON6->accept(v);
-            if (lpg_ForUpdateopt != nullptr) lpg_ForUpdateopt->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_StatementNoShortIf->accept(v);
+            ((IAst*)lpg_for)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ForInitopt != nullptr) ((IAst*)lpg_ForInitopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
+            if (lpg_Expressionopt != nullptr) ((IAst*)lpg_Expressionopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON6)->accept(v);
+            if (lpg_ForUpdateopt != nullptr) ((IAst*)lpg_ForUpdateopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_StatementNoShortIf)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8590,21 +8591,21 @@ struct ForStatementNoShortIf :public Ast
  */
 struct StatementExpressionList :public Ast
 {
-    IAst *lpg_StatementExpressionList;
-    IAst *lpg_COMMA;
-    IAst *lpg_StatementExpression;
+    Ast *lpg_StatementExpressionList;
+    AstToken *lpg_COMMA;
+    Ast *lpg_StatementExpression;
 
-    IAst *getStatementExpressionList() { return lpg_StatementExpressionList; };
-    void setStatementExpressionList(IAst *lpg_StatementExpressionList) { this->lpg_StatementExpressionList = lpg_StatementExpressionList; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getStatementExpression() { return lpg_StatementExpression; };
-    void setStatementExpression(IAst *lpg_StatementExpression) { this->lpg_StatementExpression = lpg_StatementExpression; }
+    Ast *getStatementExpressionList() { return lpg_StatementExpressionList; };
+    void setStatementExpressionList(Ast *lpg_StatementExpressionList) { this->lpg_StatementExpressionList = lpg_StatementExpressionList; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getStatementExpression() { return lpg_StatementExpression; };
+    void setStatementExpression(Ast *lpg_StatementExpression) { this->lpg_StatementExpression = lpg_StatementExpression; }
 
     StatementExpressionList(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_StatementExpressionList,
-                            IAst *lpg_COMMA,
-                            IAst *lpg_StatementExpression):Ast(leftIToken, rightIToken)    {
+                            Ast *lpg_StatementExpressionList,
+                            AstToken *lpg_COMMA,
+                            Ast *lpg_StatementExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_StatementExpressionList = lpg_StatementExpressionList;
         ((Ast*) lpg_StatementExpressionList)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -8620,9 +8621,9 @@ struct StatementExpressionList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_StatementExpressionList);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_StatementExpression);
+        list.push_back((IAst*)lpg_StatementExpressionList);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_StatementExpression);
         return list;
     }
 
@@ -8638,9 +8639,9 @@ struct StatementExpressionList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_StatementExpressionList->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_StatementExpression->accept(v);
+            ((IAst*)lpg_StatementExpressionList)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_StatementExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8653,37 +8654,37 @@ struct StatementExpressionList :public Ast
  */
 struct EnhancedForStatement :public Ast
 {
-    IAst *lpg_for;
-    IAst *lpg_LPAREN;
-    IAst *lpg_FormalParameter;
-    IAst *lpg_COLON;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_Statement;
+    AstToken *lpg_for;
+    AstToken *lpg_LPAREN;
+    FormalParameter *lpg_FormalParameter;
+    AstToken *lpg_COLON;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_Statement;
 
-    IAst *getfor() { return lpg_for; };
-    void setfor(IAst *lpg_for) { this->lpg_for = lpg_for; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getFormalParameter() { return lpg_FormalParameter; };
-    void setFormalParameter(IAst *lpg_FormalParameter) { this->lpg_FormalParameter = lpg_FormalParameter; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getStatement() { return lpg_Statement; };
-    void setStatement(IAst *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
+    AstToken *getfor() { return lpg_for; };
+    void setfor(AstToken *lpg_for) { this->lpg_for = lpg_for; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    FormalParameter *getFormalParameter() { return lpg_FormalParameter; };
+    void setFormalParameter(FormalParameter *lpg_FormalParameter) { this->lpg_FormalParameter = lpg_FormalParameter; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getStatement() { return lpg_Statement; };
+    void setStatement(Ast *lpg_Statement) { this->lpg_Statement = lpg_Statement; }
 
     EnhancedForStatement(IToken* leftIToken, IToken* rightIToken,
-                         IAst *lpg_for,
-                         IAst *lpg_LPAREN,
-                         IAst *lpg_FormalParameter,
-                         IAst *lpg_COLON,
-                         IAst *lpg_Expression,
-                         IAst *lpg_RPAREN,
-                         IAst *lpg_Statement):Ast(leftIToken, rightIToken)    {
+                         AstToken *lpg_for,
+                         AstToken *lpg_LPAREN,
+                         FormalParameter *lpg_FormalParameter,
+                         AstToken *lpg_COLON,
+                         Ast *lpg_Expression,
+                         AstToken *lpg_RPAREN,
+                         Ast *lpg_Statement):Ast(leftIToken, rightIToken)    {
         this->lpg_for = lpg_for;
         ((Ast*) lpg_for)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -8707,13 +8708,13 @@ struct EnhancedForStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_for);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_FormalParameter);
-        list.push_back(lpg_COLON);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_Statement);
+        list.push_back((IAst*)lpg_for);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_FormalParameter);
+        list.push_back((IAst*)lpg_COLON);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_Statement);
         return list;
     }
 
@@ -8729,13 +8730,13 @@ struct EnhancedForStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_for->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_FormalParameter->accept(v);
-            lpg_COLON->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_Statement->accept(v);
+            ((IAst*)lpg_for)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_FormalParameter)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_Statement)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8748,24 +8749,24 @@ struct EnhancedForStatement :public Ast
  */
 struct BreakStatement :public Ast
 {
-    IAst *lpg_break;
-    IAst *lpg_identifieropt;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_break;
+    identifier *lpg_identifieropt;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getbreak() { return lpg_break; };
-    void setbreak(IAst *lpg_break) { this->lpg_break = lpg_break; }
+    AstToken *getbreak() { return lpg_break; };
+    void setbreak(AstToken *lpg_break) { this->lpg_break = lpg_break; }
     /**
      * The value returned by <b>getidentifieropt</b> may be <b>nullptr</b>
      */
-    IAst *getidentifieropt() { return lpg_identifieropt; };
-    void setidentifieropt(IAst *lpg_identifieropt) { this->lpg_identifieropt = lpg_identifieropt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    identifier *getidentifieropt() { return lpg_identifieropt; };
+    void setidentifieropt(identifier *lpg_identifieropt) { this->lpg_identifieropt = lpg_identifieropt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     BreakStatement(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_break,
-                   IAst *lpg_identifieropt,
-                   IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                   AstToken *lpg_break,
+                   identifier *lpg_identifieropt,
+                   AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_break = lpg_break;
         ((Ast*) lpg_break)->setParent(this);
         this->lpg_identifieropt = lpg_identifieropt;
@@ -8781,9 +8782,9 @@ struct BreakStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_break);
-        list.push_back(lpg_identifieropt);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_break);
+        list.push_back((IAst*)lpg_identifieropt);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -8799,9 +8800,9 @@ struct BreakStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_break->accept(v);
-            if (lpg_identifieropt != nullptr) lpg_identifieropt->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_break)->accept(v);
+            if (lpg_identifieropt != nullptr) ((IAst*)lpg_identifieropt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8814,24 +8815,24 @@ struct BreakStatement :public Ast
  */
 struct ContinueStatement :public Ast
 {
-    IAst *lpg_continue;
-    IAst *lpg_identifieropt;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_continue;
+    identifier *lpg_identifieropt;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getcontinue() { return lpg_continue; };
-    void setcontinue(IAst *lpg_continue) { this->lpg_continue = lpg_continue; }
+    AstToken *getcontinue() { return lpg_continue; };
+    void setcontinue(AstToken *lpg_continue) { this->lpg_continue = lpg_continue; }
     /**
      * The value returned by <b>getidentifieropt</b> may be <b>nullptr</b>
      */
-    IAst *getidentifieropt() { return lpg_identifieropt; };
-    void setidentifieropt(IAst *lpg_identifieropt) { this->lpg_identifieropt = lpg_identifieropt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    identifier *getidentifieropt() { return lpg_identifieropt; };
+    void setidentifieropt(identifier *lpg_identifieropt) { this->lpg_identifieropt = lpg_identifieropt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ContinueStatement(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_continue,
-                      IAst *lpg_identifieropt,
-                      IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                      AstToken *lpg_continue,
+                      identifier *lpg_identifieropt,
+                      AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_continue = lpg_continue;
         ((Ast*) lpg_continue)->setParent(this);
         this->lpg_identifieropt = lpg_identifieropt;
@@ -8847,9 +8848,9 @@ struct ContinueStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_continue);
-        list.push_back(lpg_identifieropt);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_continue);
+        list.push_back((IAst*)lpg_identifieropt);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -8865,9 +8866,9 @@ struct ContinueStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_continue->accept(v);
-            if (lpg_identifieropt != nullptr) lpg_identifieropt->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_continue)->accept(v);
+            if (lpg_identifieropt != nullptr) ((IAst*)lpg_identifieropt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8880,24 +8881,24 @@ struct ContinueStatement :public Ast
  */
 struct ReturnStatement :public Ast
 {
-    IAst *lpg_return;
-    IAst *lpg_Expressionopt;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_return;
+    Ast *lpg_Expressionopt;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getreturn() { return lpg_return; };
-    void setreturn(IAst *lpg_return) { this->lpg_return = lpg_return; }
+    AstToken *getreturn() { return lpg_return; };
+    void setreturn(AstToken *lpg_return) { this->lpg_return = lpg_return; }
     /**
      * The value returned by <b>getExpressionopt</b> may be <b>nullptr</b>
      */
-    IAst *getExpressionopt() { return lpg_Expressionopt; };
-    void setExpressionopt(IAst *lpg_Expressionopt) { this->lpg_Expressionopt = lpg_Expressionopt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getExpressionopt() { return lpg_Expressionopt; };
+    void setExpressionopt(Ast *lpg_Expressionopt) { this->lpg_Expressionopt = lpg_Expressionopt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ReturnStatement(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_return,
-                    IAst *lpg_Expressionopt,
-                    IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_return,
+                    Ast *lpg_Expressionopt,
+                    AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_return = lpg_return;
         ((Ast*) lpg_return)->setParent(this);
         this->lpg_Expressionopt = lpg_Expressionopt;
@@ -8913,9 +8914,9 @@ struct ReturnStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_return);
-        list.push_back(lpg_Expressionopt);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_return);
+        list.push_back((IAst*)lpg_Expressionopt);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -8931,9 +8932,9 @@ struct ReturnStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_return->accept(v);
-            if (lpg_Expressionopt != nullptr) lpg_Expressionopt->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_return)->accept(v);
+            if (lpg_Expressionopt != nullptr) ((IAst*)lpg_Expressionopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -8946,21 +8947,21 @@ struct ReturnStatement :public Ast
  */
 struct ThrowStatement :public Ast
 {
-    IAst *lpg_throw;
-    IAst *lpg_Expression;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_throw;
+    Ast *lpg_Expression;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getthrow() { return lpg_throw; };
-    void setthrow(IAst *lpg_throw) { this->lpg_throw = lpg_throw; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getthrow() { return lpg_throw; };
+    void setthrow(AstToken *lpg_throw) { this->lpg_throw = lpg_throw; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ThrowStatement(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_throw,
-                   IAst *lpg_Expression,
-                   IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                   AstToken *lpg_throw,
+                   Ast *lpg_Expression,
+                   AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_throw = lpg_throw;
         ((Ast*) lpg_throw)->setParent(this);
         this->lpg_Expression = lpg_Expression;
@@ -8976,9 +8977,9 @@ struct ThrowStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_throw);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_throw);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -8994,9 +8995,9 @@ struct ThrowStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_throw->accept(v);
-            lpg_Expression->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_throw)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9009,29 +9010,29 @@ struct ThrowStatement :public Ast
  */
 struct SynchronizedStatement :public Ast
 {
-    IAst *lpg_synchronized;
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
-    IAst *lpg_Block;
+    AstToken *lpg_synchronized;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
+    Block *lpg_Block;
 
-    IAst *getsynchronized() { return lpg_synchronized; };
-    void setsynchronized(IAst *lpg_synchronized) { this->lpg_synchronized = lpg_synchronized; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getBlock() { return lpg_Block; };
-    void setBlock(IAst *lpg_Block) { this->lpg_Block = lpg_Block; }
+    AstToken *getsynchronized() { return lpg_synchronized; };
+    void setsynchronized(AstToken *lpg_synchronized) { this->lpg_synchronized = lpg_synchronized; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Block *getBlock() { return lpg_Block; };
+    void setBlock(Block *lpg_Block) { this->lpg_Block = lpg_Block; }
 
     SynchronizedStatement(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_synchronized,
-                          IAst *lpg_LPAREN,
-                          IAst *lpg_Expression,
-                          IAst *lpg_RPAREN,
-                          IAst *lpg_Block):Ast(leftIToken, rightIToken)    {
+                          AstToken *lpg_synchronized,
+                          AstToken *lpg_LPAREN,
+                          Ast *lpg_Expression,
+                          AstToken *lpg_RPAREN,
+                          Block *lpg_Block):Ast(leftIToken, rightIToken)    {
         this->lpg_synchronized = lpg_synchronized;
         ((Ast*) lpg_synchronized)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -9051,11 +9052,11 @@ struct SynchronizedStatement :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_synchronized);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_Block);
+        list.push_back((IAst*)lpg_synchronized);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_Block);
         return list;
     }
 
@@ -9071,11 +9072,11 @@ struct SynchronizedStatement :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_synchronized->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_Block->accept(v);
+            ((IAst*)lpg_synchronized)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_Block)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9092,17 +9093,17 @@ struct SynchronizedStatement :public Ast
  */
 struct Catches :public Ast
 {
-    IAst *lpg_Catches;
-    IAst *lpg_CatchClause;
+    Ast *lpg_Catches;
+    CatchClause *lpg_CatchClause;
 
-    IAst *getCatches() { return lpg_Catches; };
-    void setCatches(IAst *lpg_Catches) { this->lpg_Catches = lpg_Catches; }
-    IAst *getCatchClause() { return lpg_CatchClause; };
-    void setCatchClause(IAst *lpg_CatchClause) { this->lpg_CatchClause = lpg_CatchClause; }
+    Ast *getCatches() { return lpg_Catches; };
+    void setCatches(Ast *lpg_Catches) { this->lpg_Catches = lpg_Catches; }
+    CatchClause *getCatchClause() { return lpg_CatchClause; };
+    void setCatchClause(CatchClause *lpg_CatchClause) { this->lpg_CatchClause = lpg_CatchClause; }
 
     Catches(IToken* leftIToken, IToken* rightIToken,
-            IAst *lpg_Catches,
-            IAst *lpg_CatchClause):Ast(leftIToken, rightIToken)    {
+            Ast *lpg_Catches,
+            CatchClause *lpg_CatchClause):Ast(leftIToken, rightIToken)    {
         this->lpg_Catches = lpg_Catches;
         ((Ast*) lpg_Catches)->setParent(this);
         this->lpg_CatchClause = lpg_CatchClause;
@@ -9116,8 +9117,8 @@ struct Catches :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Catches);
-        list.push_back(lpg_CatchClause);
+        list.push_back((IAst*)lpg_Catches);
+        list.push_back((IAst*)lpg_CatchClause);
         return list;
     }
 
@@ -9133,8 +9134,8 @@ struct Catches :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Catches->accept(v);
-            lpg_CatchClause->accept(v);
+            ((IAst*)lpg_Catches)->accept(v);
+            ((IAst*)lpg_CatchClause)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9147,29 +9148,29 @@ struct Catches :public Ast
  */
 struct CatchClause :public Ast
 {
-    IAst *lpg_catch;
-    IAst *lpg_LPAREN;
-    IAst *lpg_FormalParameter;
-    IAst *lpg_RPAREN;
-    IAst *lpg_Block;
+    AstToken *lpg_catch;
+    AstToken *lpg_LPAREN;
+    FormalParameter *lpg_FormalParameter;
+    AstToken *lpg_RPAREN;
+    Block *lpg_Block;
 
-    IAst *getcatch() { return lpg_catch; };
-    void setcatch(IAst *lpg_catch) { this->lpg_catch = lpg_catch; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getFormalParameter() { return lpg_FormalParameter; };
-    void setFormalParameter(IAst *lpg_FormalParameter) { this->lpg_FormalParameter = lpg_FormalParameter; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getBlock() { return lpg_Block; };
-    void setBlock(IAst *lpg_Block) { this->lpg_Block = lpg_Block; }
+    AstToken *getcatch() { return lpg_catch; };
+    void setcatch(AstToken *lpg_catch) { this->lpg_catch = lpg_catch; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    FormalParameter *getFormalParameter() { return lpg_FormalParameter; };
+    void setFormalParameter(FormalParameter *lpg_FormalParameter) { this->lpg_FormalParameter = lpg_FormalParameter; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Block *getBlock() { return lpg_Block; };
+    void setBlock(Block *lpg_Block) { this->lpg_Block = lpg_Block; }
 
     CatchClause(IToken* leftIToken, IToken* rightIToken,
-                IAst *lpg_catch,
-                IAst *lpg_LPAREN,
-                IAst *lpg_FormalParameter,
-                IAst *lpg_RPAREN,
-                IAst *lpg_Block):Ast(leftIToken, rightIToken)    {
+                AstToken *lpg_catch,
+                AstToken *lpg_LPAREN,
+                FormalParameter *lpg_FormalParameter,
+                AstToken *lpg_RPAREN,
+                Block *lpg_Block):Ast(leftIToken, rightIToken)    {
         this->lpg_catch = lpg_catch;
         ((Ast*) lpg_catch)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -9189,11 +9190,11 @@ struct CatchClause :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_catch);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_FormalParameter);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_Block);
+        list.push_back((IAst*)lpg_catch);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_FormalParameter);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_Block);
         return list;
     }
 
@@ -9209,11 +9210,11 @@ struct CatchClause :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_catch->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_FormalParameter->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_Block->accept(v);
+            ((IAst*)lpg_catch)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_FormalParameter)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_Block)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9226,17 +9227,17 @@ struct CatchClause :public Ast
  */
 struct Finally :public Ast
 {
-    IAst *lpg_finally;
-    IAst *lpg_Block;
+    AstToken *lpg_finally;
+    Block *lpg_Block;
 
-    IAst *getfinally() { return lpg_finally; };
-    void setfinally(IAst *lpg_finally) { this->lpg_finally = lpg_finally; }
-    IAst *getBlock() { return lpg_Block; };
-    void setBlock(IAst *lpg_Block) { this->lpg_Block = lpg_Block; }
+    AstToken *getfinally() { return lpg_finally; };
+    void setfinally(AstToken *lpg_finally) { this->lpg_finally = lpg_finally; }
+    Block *getBlock() { return lpg_Block; };
+    void setBlock(Block *lpg_Block) { this->lpg_Block = lpg_Block; }
 
     Finally(IToken* leftIToken, IToken* rightIToken,
-            IAst *lpg_finally,
-            IAst *lpg_Block):Ast(leftIToken, rightIToken)    {
+            AstToken *lpg_finally,
+            Block *lpg_Block):Ast(leftIToken, rightIToken)    {
         this->lpg_finally = lpg_finally;
         ((Ast*) lpg_finally)->setParent(this);
         this->lpg_Block = lpg_Block;
@@ -9250,8 +9251,8 @@ struct Finally :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_finally);
-        list.push_back(lpg_Block);
+        list.push_back((IAst*)lpg_finally);
+        list.push_back((IAst*)lpg_Block);
         return list;
     }
 
@@ -9267,8 +9268,8 @@ struct Finally :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_finally->accept(v);
-            lpg_Block->accept(v);
+            ((IAst*)lpg_finally)->accept(v);
+            ((IAst*)lpg_Block)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9285,21 +9286,21 @@ struct Finally :public Ast
  */
 struct ArgumentList :public Ast
 {
-    IAst *lpg_ArgumentList;
-    IAst *lpg_COMMA;
-    IAst *lpg_Expression;
+    Ast *lpg_ArgumentList;
+    AstToken *lpg_COMMA;
+    Ast *lpg_Expression;
 
-    IAst *getArgumentList() { return lpg_ArgumentList; };
-    void setArgumentList(IAst *lpg_ArgumentList) { this->lpg_ArgumentList = lpg_ArgumentList; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    Ast *getArgumentList() { return lpg_ArgumentList; };
+    void setArgumentList(Ast *lpg_ArgumentList) { this->lpg_ArgumentList = lpg_ArgumentList; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
 
     ArgumentList(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_ArgumentList,
-                 IAst *lpg_COMMA,
-                 IAst *lpg_Expression):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_ArgumentList,
+                 AstToken *lpg_COMMA,
+                 Ast *lpg_Expression):Ast(leftIToken, rightIToken)    {
         this->lpg_ArgumentList = lpg_ArgumentList;
         ((Ast*) lpg_ArgumentList)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -9315,9 +9316,9 @@ struct ArgumentList :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ArgumentList);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_Expression);
+        list.push_back((IAst*)lpg_ArgumentList);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_Expression);
         return list;
     }
 
@@ -9333,9 +9334,9 @@ struct ArgumentList :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ArgumentList->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_Expression->accept(v);
+            ((IAst*)lpg_ArgumentList)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9352,17 +9353,17 @@ struct ArgumentList :public Ast
  */
 struct DimExprs :public Ast
 {
-    IAst *lpg_DimExprs;
-    IAst *lpg_DimExpr;
+    Ast *lpg_DimExprs;
+    DimExpr *lpg_DimExpr;
 
-    IAst *getDimExprs() { return lpg_DimExprs; };
-    void setDimExprs(IAst *lpg_DimExprs) { this->lpg_DimExprs = lpg_DimExprs; }
-    IAst *getDimExpr() { return lpg_DimExpr; };
-    void setDimExpr(IAst *lpg_DimExpr) { this->lpg_DimExpr = lpg_DimExpr; }
+    Ast *getDimExprs() { return lpg_DimExprs; };
+    void setDimExprs(Ast *lpg_DimExprs) { this->lpg_DimExprs = lpg_DimExprs; }
+    DimExpr *getDimExpr() { return lpg_DimExpr; };
+    void setDimExpr(DimExpr *lpg_DimExpr) { this->lpg_DimExpr = lpg_DimExpr; }
 
     DimExprs(IToken* leftIToken, IToken* rightIToken,
-             IAst *lpg_DimExprs,
-             IAst *lpg_DimExpr):Ast(leftIToken, rightIToken)    {
+             Ast *lpg_DimExprs,
+             DimExpr *lpg_DimExpr):Ast(leftIToken, rightIToken)    {
         this->lpg_DimExprs = lpg_DimExprs;
         ((Ast*) lpg_DimExprs)->setParent(this);
         this->lpg_DimExpr = lpg_DimExpr;
@@ -9376,8 +9377,8 @@ struct DimExprs :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_DimExprs);
-        list.push_back(lpg_DimExpr);
+        list.push_back((IAst*)lpg_DimExprs);
+        list.push_back((IAst*)lpg_DimExpr);
         return list;
     }
 
@@ -9393,8 +9394,8 @@ struct DimExprs :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_DimExprs->accept(v);
-            lpg_DimExpr->accept(v);
+            ((IAst*)lpg_DimExprs)->accept(v);
+            ((IAst*)lpg_DimExpr)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9407,21 +9408,21 @@ struct DimExprs :public Ast
  */
 struct DimExpr :public Ast
 {
-    IAst *lpg_LBRACKET;
-    IAst *lpg_Expression;
-    IAst *lpg_RBRACKET;
+    AstToken *lpg_LBRACKET;
+    Ast *lpg_Expression;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     DimExpr(IToken* leftIToken, IToken* rightIToken,
-            IAst *lpg_LBRACKET,
-            IAst *lpg_Expression,
-            IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+            AstToken *lpg_LBRACKET,
+            Ast *lpg_Expression,
+            AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACKET = lpg_LBRACKET;
         ((Ast*) lpg_LBRACKET)->setParent(this);
         this->lpg_Expression = lpg_Expression;
@@ -9437,9 +9438,9 @@ struct DimExpr :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -9455,9 +9456,9 @@ struct DimExpr :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACKET->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9470,17 +9471,17 @@ struct DimExpr :public Ast
  */
 struct PostIncrementExpression :public Ast
 {
-    IAst *lpg_PostfixExpression;
-    IAst *lpg_PLUS_PLUS;
+    Ast *lpg_PostfixExpression;
+    AstToken *lpg_PLUS_PLUS;
 
-    IAst *getPostfixExpression() { return lpg_PostfixExpression; };
-    void setPostfixExpression(IAst *lpg_PostfixExpression) { this->lpg_PostfixExpression = lpg_PostfixExpression; }
-    IAst *getPLUS_PLUS() { return lpg_PLUS_PLUS; };
-    void setPLUS_PLUS(IAst *lpg_PLUS_PLUS) { this->lpg_PLUS_PLUS = lpg_PLUS_PLUS; }
+    Ast *getPostfixExpression() { return lpg_PostfixExpression; };
+    void setPostfixExpression(Ast *lpg_PostfixExpression) { this->lpg_PostfixExpression = lpg_PostfixExpression; }
+    AstToken *getPLUS_PLUS() { return lpg_PLUS_PLUS; };
+    void setPLUS_PLUS(AstToken *lpg_PLUS_PLUS) { this->lpg_PLUS_PLUS = lpg_PLUS_PLUS; }
 
     PostIncrementExpression(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_PostfixExpression,
-                            IAst *lpg_PLUS_PLUS):Ast(leftIToken, rightIToken)    {
+                            Ast *lpg_PostfixExpression,
+                            AstToken *lpg_PLUS_PLUS):Ast(leftIToken, rightIToken)    {
         this->lpg_PostfixExpression = lpg_PostfixExpression;
         ((Ast*) lpg_PostfixExpression)->setParent(this);
         this->lpg_PLUS_PLUS = lpg_PLUS_PLUS;
@@ -9494,8 +9495,8 @@ struct PostIncrementExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PostfixExpression);
-        list.push_back(lpg_PLUS_PLUS);
+        list.push_back((IAst*)lpg_PostfixExpression);
+        list.push_back((IAst*)lpg_PLUS_PLUS);
         return list;
     }
 
@@ -9511,8 +9512,8 @@ struct PostIncrementExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PostfixExpression->accept(v);
-            lpg_PLUS_PLUS->accept(v);
+            ((IAst*)lpg_PostfixExpression)->accept(v);
+            ((IAst*)lpg_PLUS_PLUS)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9525,17 +9526,17 @@ struct PostIncrementExpression :public Ast
  */
 struct PostDecrementExpression :public Ast
 {
-    IAst *lpg_PostfixExpression;
-    IAst *lpg_MINUS_MINUS;
+    Ast *lpg_PostfixExpression;
+    AstToken *lpg_MINUS_MINUS;
 
-    IAst *getPostfixExpression() { return lpg_PostfixExpression; };
-    void setPostfixExpression(IAst *lpg_PostfixExpression) { this->lpg_PostfixExpression = lpg_PostfixExpression; }
-    IAst *getMINUS_MINUS() { return lpg_MINUS_MINUS; };
-    void setMINUS_MINUS(IAst *lpg_MINUS_MINUS) { this->lpg_MINUS_MINUS = lpg_MINUS_MINUS; }
+    Ast *getPostfixExpression() { return lpg_PostfixExpression; };
+    void setPostfixExpression(Ast *lpg_PostfixExpression) { this->lpg_PostfixExpression = lpg_PostfixExpression; }
+    AstToken *getMINUS_MINUS() { return lpg_MINUS_MINUS; };
+    void setMINUS_MINUS(AstToken *lpg_MINUS_MINUS) { this->lpg_MINUS_MINUS = lpg_MINUS_MINUS; }
 
     PostDecrementExpression(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_PostfixExpression,
-                            IAst *lpg_MINUS_MINUS):Ast(leftIToken, rightIToken)    {
+                            Ast *lpg_PostfixExpression,
+                            AstToken *lpg_MINUS_MINUS):Ast(leftIToken, rightIToken)    {
         this->lpg_PostfixExpression = lpg_PostfixExpression;
         ((Ast*) lpg_PostfixExpression)->setParent(this);
         this->lpg_MINUS_MINUS = lpg_MINUS_MINUS;
@@ -9549,8 +9550,8 @@ struct PostDecrementExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PostfixExpression);
-        list.push_back(lpg_MINUS_MINUS);
+        list.push_back((IAst*)lpg_PostfixExpression);
+        list.push_back((IAst*)lpg_MINUS_MINUS);
         return list;
     }
 
@@ -9566,8 +9567,8 @@ struct PostDecrementExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PostfixExpression->accept(v);
-            lpg_MINUS_MINUS->accept(v);
+            ((IAst*)lpg_PostfixExpression)->accept(v);
+            ((IAst*)lpg_MINUS_MINUS)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9580,17 +9581,17 @@ struct PostDecrementExpression :public Ast
  */
 struct PreIncrementExpression :public Ast
 {
-    IAst *lpg_PLUS_PLUS;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_PLUS_PLUS;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getPLUS_PLUS() { return lpg_PLUS_PLUS; };
-    void setPLUS_PLUS(IAst *lpg_PLUS_PLUS) { this->lpg_PLUS_PLUS = lpg_PLUS_PLUS; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    AstToken *getPLUS_PLUS() { return lpg_PLUS_PLUS; };
+    void setPLUS_PLUS(AstToken *lpg_PLUS_PLUS) { this->lpg_PLUS_PLUS = lpg_PLUS_PLUS; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     PreIncrementExpression(IToken* leftIToken, IToken* rightIToken,
-                           IAst *lpg_PLUS_PLUS,
-                           IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                           AstToken *lpg_PLUS_PLUS,
+                           Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_PLUS_PLUS = lpg_PLUS_PLUS;
         ((Ast*) lpg_PLUS_PLUS)->setParent(this);
         this->lpg_UnaryExpression = lpg_UnaryExpression;
@@ -9604,8 +9605,8 @@ struct PreIncrementExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PLUS_PLUS);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_PLUS_PLUS);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -9621,8 +9622,8 @@ struct PreIncrementExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PLUS_PLUS->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_PLUS_PLUS)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9635,17 +9636,17 @@ struct PreIncrementExpression :public Ast
  */
 struct PreDecrementExpression :public Ast
 {
-    IAst *lpg_MINUS_MINUS;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_MINUS_MINUS;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getMINUS_MINUS() { return lpg_MINUS_MINUS; };
-    void setMINUS_MINUS(IAst *lpg_MINUS_MINUS) { this->lpg_MINUS_MINUS = lpg_MINUS_MINUS; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    AstToken *getMINUS_MINUS() { return lpg_MINUS_MINUS; };
+    void setMINUS_MINUS(AstToken *lpg_MINUS_MINUS) { this->lpg_MINUS_MINUS = lpg_MINUS_MINUS; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     PreDecrementExpression(IToken* leftIToken, IToken* rightIToken,
-                           IAst *lpg_MINUS_MINUS,
-                           IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                           AstToken *lpg_MINUS_MINUS,
+                           Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_MINUS_MINUS = lpg_MINUS_MINUS;
         ((Ast*) lpg_MINUS_MINUS)->setParent(this);
         this->lpg_UnaryExpression = lpg_UnaryExpression;
@@ -9659,8 +9660,8 @@ struct PreDecrementExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MINUS_MINUS);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_MINUS_MINUS);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -9676,8 +9677,8 @@ struct PreDecrementExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MINUS_MINUS->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_MINUS_MINUS)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9694,21 +9695,21 @@ struct PreDecrementExpression :public Ast
  */
 struct AndExpression :public Ast
 {
-    IAst *lpg_AndExpression;
-    IAst *lpg_AND;
-    IAst *lpg_EqualityExpression;
+    Ast *lpg_AndExpression;
+    AstToken *lpg_AND;
+    Ast *lpg_EqualityExpression;
 
-    IAst *getAndExpression() { return lpg_AndExpression; };
-    void setAndExpression(IAst *lpg_AndExpression) { this->lpg_AndExpression = lpg_AndExpression; }
-    IAst *getAND() { return lpg_AND; };
-    void setAND(IAst *lpg_AND) { this->lpg_AND = lpg_AND; }
-    IAst *getEqualityExpression() { return lpg_EqualityExpression; };
-    void setEqualityExpression(IAst *lpg_EqualityExpression) { this->lpg_EqualityExpression = lpg_EqualityExpression; }
+    Ast *getAndExpression() { return lpg_AndExpression; };
+    void setAndExpression(Ast *lpg_AndExpression) { this->lpg_AndExpression = lpg_AndExpression; }
+    AstToken *getAND() { return lpg_AND; };
+    void setAND(AstToken *lpg_AND) { this->lpg_AND = lpg_AND; }
+    Ast *getEqualityExpression() { return lpg_EqualityExpression; };
+    void setEqualityExpression(Ast *lpg_EqualityExpression) { this->lpg_EqualityExpression = lpg_EqualityExpression; }
 
     AndExpression(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_AndExpression,
-                  IAst *lpg_AND,
-                  IAst *lpg_EqualityExpression):Ast(leftIToken, rightIToken)    {
+                  Ast *lpg_AndExpression,
+                  AstToken *lpg_AND,
+                  Ast *lpg_EqualityExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_AndExpression = lpg_AndExpression;
         ((Ast*) lpg_AndExpression)->setParent(this);
         this->lpg_AND = lpg_AND;
@@ -9724,9 +9725,9 @@ struct AndExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AndExpression);
-        list.push_back(lpg_AND);
-        list.push_back(lpg_EqualityExpression);
+        list.push_back((IAst*)lpg_AndExpression);
+        list.push_back((IAst*)lpg_AND);
+        list.push_back((IAst*)lpg_EqualityExpression);
         return list;
     }
 
@@ -9742,9 +9743,9 @@ struct AndExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AndExpression->accept(v);
-            lpg_AND->accept(v);
-            lpg_EqualityExpression->accept(v);
+            ((IAst*)lpg_AndExpression)->accept(v);
+            ((IAst*)lpg_AND)->accept(v);
+            ((IAst*)lpg_EqualityExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9761,21 +9762,21 @@ struct AndExpression :public Ast
  */
 struct ExclusiveOrExpression :public Ast
 {
-    IAst *lpg_ExclusiveOrExpression;
-    IAst *lpg_XOR;
-    IAst *lpg_AndExpression;
+    Ast *lpg_ExclusiveOrExpression;
+    AstToken *lpg_XOR;
+    Ast *lpg_AndExpression;
 
-    IAst *getExclusiveOrExpression() { return lpg_ExclusiveOrExpression; };
-    void setExclusiveOrExpression(IAst *lpg_ExclusiveOrExpression) { this->lpg_ExclusiveOrExpression = lpg_ExclusiveOrExpression; }
-    IAst *getXOR() { return lpg_XOR; };
-    void setXOR(IAst *lpg_XOR) { this->lpg_XOR = lpg_XOR; }
-    IAst *getAndExpression() { return lpg_AndExpression; };
-    void setAndExpression(IAst *lpg_AndExpression) { this->lpg_AndExpression = lpg_AndExpression; }
+    Ast *getExclusiveOrExpression() { return lpg_ExclusiveOrExpression; };
+    void setExclusiveOrExpression(Ast *lpg_ExclusiveOrExpression) { this->lpg_ExclusiveOrExpression = lpg_ExclusiveOrExpression; }
+    AstToken *getXOR() { return lpg_XOR; };
+    void setXOR(AstToken *lpg_XOR) { this->lpg_XOR = lpg_XOR; }
+    Ast *getAndExpression() { return lpg_AndExpression; };
+    void setAndExpression(Ast *lpg_AndExpression) { this->lpg_AndExpression = lpg_AndExpression; }
 
     ExclusiveOrExpression(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_ExclusiveOrExpression,
-                          IAst *lpg_XOR,
-                          IAst *lpg_AndExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_ExclusiveOrExpression,
+                          AstToken *lpg_XOR,
+                          Ast *lpg_AndExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ExclusiveOrExpression = lpg_ExclusiveOrExpression;
         ((Ast*) lpg_ExclusiveOrExpression)->setParent(this);
         this->lpg_XOR = lpg_XOR;
@@ -9791,9 +9792,9 @@ struct ExclusiveOrExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ExclusiveOrExpression);
-        list.push_back(lpg_XOR);
-        list.push_back(lpg_AndExpression);
+        list.push_back((IAst*)lpg_ExclusiveOrExpression);
+        list.push_back((IAst*)lpg_XOR);
+        list.push_back((IAst*)lpg_AndExpression);
         return list;
     }
 
@@ -9809,9 +9810,9 @@ struct ExclusiveOrExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ExclusiveOrExpression->accept(v);
-            lpg_XOR->accept(v);
-            lpg_AndExpression->accept(v);
+            ((IAst*)lpg_ExclusiveOrExpression)->accept(v);
+            ((IAst*)lpg_XOR)->accept(v);
+            ((IAst*)lpg_AndExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9828,21 +9829,21 @@ struct ExclusiveOrExpression :public Ast
  */
 struct InclusiveOrExpression :public Ast
 {
-    IAst *lpg_InclusiveOrExpression;
-    IAst *lpg_OR;
-    IAst *lpg_ExclusiveOrExpression;
+    Ast *lpg_InclusiveOrExpression;
+    AstToken *lpg_OR;
+    Ast *lpg_ExclusiveOrExpression;
 
-    IAst *getInclusiveOrExpression() { return lpg_InclusiveOrExpression; };
-    void setInclusiveOrExpression(IAst *lpg_InclusiveOrExpression) { this->lpg_InclusiveOrExpression = lpg_InclusiveOrExpression; }
-    IAst *getOR() { return lpg_OR; };
-    void setOR(IAst *lpg_OR) { this->lpg_OR = lpg_OR; }
-    IAst *getExclusiveOrExpression() { return lpg_ExclusiveOrExpression; };
-    void setExclusiveOrExpression(IAst *lpg_ExclusiveOrExpression) { this->lpg_ExclusiveOrExpression = lpg_ExclusiveOrExpression; }
+    Ast *getInclusiveOrExpression() { return lpg_InclusiveOrExpression; };
+    void setInclusiveOrExpression(Ast *lpg_InclusiveOrExpression) { this->lpg_InclusiveOrExpression = lpg_InclusiveOrExpression; }
+    AstToken *getOR() { return lpg_OR; };
+    void setOR(AstToken *lpg_OR) { this->lpg_OR = lpg_OR; }
+    Ast *getExclusiveOrExpression() { return lpg_ExclusiveOrExpression; };
+    void setExclusiveOrExpression(Ast *lpg_ExclusiveOrExpression) { this->lpg_ExclusiveOrExpression = lpg_ExclusiveOrExpression; }
 
     InclusiveOrExpression(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_InclusiveOrExpression,
-                          IAst *lpg_OR,
-                          IAst *lpg_ExclusiveOrExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_InclusiveOrExpression,
+                          AstToken *lpg_OR,
+                          Ast *lpg_ExclusiveOrExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_InclusiveOrExpression = lpg_InclusiveOrExpression;
         ((Ast*) lpg_InclusiveOrExpression)->setParent(this);
         this->lpg_OR = lpg_OR;
@@ -9858,9 +9859,9 @@ struct InclusiveOrExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_InclusiveOrExpression);
-        list.push_back(lpg_OR);
-        list.push_back(lpg_ExclusiveOrExpression);
+        list.push_back((IAst*)lpg_InclusiveOrExpression);
+        list.push_back((IAst*)lpg_OR);
+        list.push_back((IAst*)lpg_ExclusiveOrExpression);
         return list;
     }
 
@@ -9876,9 +9877,9 @@ struct InclusiveOrExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_InclusiveOrExpression->accept(v);
-            lpg_OR->accept(v);
-            lpg_ExclusiveOrExpression->accept(v);
+            ((IAst*)lpg_InclusiveOrExpression)->accept(v);
+            ((IAst*)lpg_OR)->accept(v);
+            ((IAst*)lpg_ExclusiveOrExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9895,21 +9896,21 @@ struct InclusiveOrExpression :public Ast
  */
 struct ConditionalAndExpression :public Ast
 {
-    IAst *lpg_ConditionalAndExpression;
-    IAst *lpg_AND_AND;
-    IAst *lpg_InclusiveOrExpression;
+    Ast *lpg_ConditionalAndExpression;
+    AstToken *lpg_AND_AND;
+    Ast *lpg_InclusiveOrExpression;
 
-    IAst *getConditionalAndExpression() { return lpg_ConditionalAndExpression; };
-    void setConditionalAndExpression(IAst *lpg_ConditionalAndExpression) { this->lpg_ConditionalAndExpression = lpg_ConditionalAndExpression; }
-    IAst *getAND_AND() { return lpg_AND_AND; };
-    void setAND_AND(IAst *lpg_AND_AND) { this->lpg_AND_AND = lpg_AND_AND; }
-    IAst *getInclusiveOrExpression() { return lpg_InclusiveOrExpression; };
-    void setInclusiveOrExpression(IAst *lpg_InclusiveOrExpression) { this->lpg_InclusiveOrExpression = lpg_InclusiveOrExpression; }
+    Ast *getConditionalAndExpression() { return lpg_ConditionalAndExpression; };
+    void setConditionalAndExpression(Ast *lpg_ConditionalAndExpression) { this->lpg_ConditionalAndExpression = lpg_ConditionalAndExpression; }
+    AstToken *getAND_AND() { return lpg_AND_AND; };
+    void setAND_AND(AstToken *lpg_AND_AND) { this->lpg_AND_AND = lpg_AND_AND; }
+    Ast *getInclusiveOrExpression() { return lpg_InclusiveOrExpression; };
+    void setInclusiveOrExpression(Ast *lpg_InclusiveOrExpression) { this->lpg_InclusiveOrExpression = lpg_InclusiveOrExpression; }
 
     ConditionalAndExpression(IToken* leftIToken, IToken* rightIToken,
-                             IAst *lpg_ConditionalAndExpression,
-                             IAst *lpg_AND_AND,
-                             IAst *lpg_InclusiveOrExpression):Ast(leftIToken, rightIToken)    {
+                             Ast *lpg_ConditionalAndExpression,
+                             AstToken *lpg_AND_AND,
+                             Ast *lpg_InclusiveOrExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ConditionalAndExpression = lpg_ConditionalAndExpression;
         ((Ast*) lpg_ConditionalAndExpression)->setParent(this);
         this->lpg_AND_AND = lpg_AND_AND;
@@ -9925,9 +9926,9 @@ struct ConditionalAndExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConditionalAndExpression);
-        list.push_back(lpg_AND_AND);
-        list.push_back(lpg_InclusiveOrExpression);
+        list.push_back((IAst*)lpg_ConditionalAndExpression);
+        list.push_back((IAst*)lpg_AND_AND);
+        list.push_back((IAst*)lpg_InclusiveOrExpression);
         return list;
     }
 
@@ -9943,9 +9944,9 @@ struct ConditionalAndExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ConditionalAndExpression->accept(v);
-            lpg_AND_AND->accept(v);
-            lpg_InclusiveOrExpression->accept(v);
+            ((IAst*)lpg_ConditionalAndExpression)->accept(v);
+            ((IAst*)lpg_AND_AND)->accept(v);
+            ((IAst*)lpg_InclusiveOrExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -9962,21 +9963,21 @@ struct ConditionalAndExpression :public Ast
  */
 struct ConditionalOrExpression :public Ast
 {
-    IAst *lpg_ConditionalOrExpression;
-    IAst *lpg_OR_OR;
-    IAst *lpg_ConditionalAndExpression;
+    Ast *lpg_ConditionalOrExpression;
+    AstToken *lpg_OR_OR;
+    Ast *lpg_ConditionalAndExpression;
 
-    IAst *getConditionalOrExpression() { return lpg_ConditionalOrExpression; };
-    void setConditionalOrExpression(IAst *lpg_ConditionalOrExpression) { this->lpg_ConditionalOrExpression = lpg_ConditionalOrExpression; }
-    IAst *getOR_OR() { return lpg_OR_OR; };
-    void setOR_OR(IAst *lpg_OR_OR) { this->lpg_OR_OR = lpg_OR_OR; }
-    IAst *getConditionalAndExpression() { return lpg_ConditionalAndExpression; };
-    void setConditionalAndExpression(IAst *lpg_ConditionalAndExpression) { this->lpg_ConditionalAndExpression = lpg_ConditionalAndExpression; }
+    Ast *getConditionalOrExpression() { return lpg_ConditionalOrExpression; };
+    void setConditionalOrExpression(Ast *lpg_ConditionalOrExpression) { this->lpg_ConditionalOrExpression = lpg_ConditionalOrExpression; }
+    AstToken *getOR_OR() { return lpg_OR_OR; };
+    void setOR_OR(AstToken *lpg_OR_OR) { this->lpg_OR_OR = lpg_OR_OR; }
+    Ast *getConditionalAndExpression() { return lpg_ConditionalAndExpression; };
+    void setConditionalAndExpression(Ast *lpg_ConditionalAndExpression) { this->lpg_ConditionalAndExpression = lpg_ConditionalAndExpression; }
 
     ConditionalOrExpression(IToken* leftIToken, IToken* rightIToken,
-                            IAst *lpg_ConditionalOrExpression,
-                            IAst *lpg_OR_OR,
-                            IAst *lpg_ConditionalAndExpression):Ast(leftIToken, rightIToken)    {
+                            Ast *lpg_ConditionalOrExpression,
+                            AstToken *lpg_OR_OR,
+                            Ast *lpg_ConditionalAndExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ConditionalOrExpression = lpg_ConditionalOrExpression;
         ((Ast*) lpg_ConditionalOrExpression)->setParent(this);
         this->lpg_OR_OR = lpg_OR_OR;
@@ -9992,9 +9993,9 @@ struct ConditionalOrExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConditionalOrExpression);
-        list.push_back(lpg_OR_OR);
-        list.push_back(lpg_ConditionalAndExpression);
+        list.push_back((IAst*)lpg_ConditionalOrExpression);
+        list.push_back((IAst*)lpg_OR_OR);
+        list.push_back((IAst*)lpg_ConditionalAndExpression);
         return list;
     }
 
@@ -10010,9 +10011,9 @@ struct ConditionalOrExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ConditionalOrExpression->accept(v);
-            lpg_OR_OR->accept(v);
-            lpg_ConditionalAndExpression->accept(v);
+            ((IAst*)lpg_ConditionalOrExpression)->accept(v);
+            ((IAst*)lpg_OR_OR)->accept(v);
+            ((IAst*)lpg_ConditionalAndExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -10029,29 +10030,29 @@ struct ConditionalOrExpression :public Ast
  */
 struct ConditionalExpression :public Ast
 {
-    IAst *lpg_ConditionalOrExpression;
-    IAst *lpg_QUESTION;
-    IAst *lpg_Expression;
-    IAst *lpg_COLON;
-    IAst *lpg_ConditionalExpression;
+    Ast *lpg_ConditionalOrExpression;
+    AstToken *lpg_QUESTION;
+    Ast *lpg_Expression;
+    AstToken *lpg_COLON;
+    Ast *lpg_ConditionalExpression;
 
-    IAst *getConditionalOrExpression() { return lpg_ConditionalOrExpression; };
-    void setConditionalOrExpression(IAst *lpg_ConditionalOrExpression) { this->lpg_ConditionalOrExpression = lpg_ConditionalOrExpression; }
-    IAst *getQUESTION() { return lpg_QUESTION; };
-    void setQUESTION(IAst *lpg_QUESTION) { this->lpg_QUESTION = lpg_QUESTION; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
-    IAst *getConditionalExpression() { return lpg_ConditionalExpression; };
-    void setConditionalExpression(IAst *lpg_ConditionalExpression) { this->lpg_ConditionalExpression = lpg_ConditionalExpression; }
+    Ast *getConditionalOrExpression() { return lpg_ConditionalOrExpression; };
+    void setConditionalOrExpression(Ast *lpg_ConditionalOrExpression) { this->lpg_ConditionalOrExpression = lpg_ConditionalOrExpression; }
+    AstToken *getQUESTION() { return lpg_QUESTION; };
+    void setQUESTION(AstToken *lpg_QUESTION) { this->lpg_QUESTION = lpg_QUESTION; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    Ast *getConditionalExpression() { return lpg_ConditionalExpression; };
+    void setConditionalExpression(Ast *lpg_ConditionalExpression) { this->lpg_ConditionalExpression = lpg_ConditionalExpression; }
 
     ConditionalExpression(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_ConditionalOrExpression,
-                          IAst *lpg_QUESTION,
-                          IAst *lpg_Expression,
-                          IAst *lpg_COLON,
-                          IAst *lpg_ConditionalExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_ConditionalOrExpression,
+                          AstToken *lpg_QUESTION,
+                          Ast *lpg_Expression,
+                          AstToken *lpg_COLON,
+                          Ast *lpg_ConditionalExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ConditionalOrExpression = lpg_ConditionalOrExpression;
         ((Ast*) lpg_ConditionalOrExpression)->setParent(this);
         this->lpg_QUESTION = lpg_QUESTION;
@@ -10071,11 +10072,11 @@ struct ConditionalExpression :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ConditionalOrExpression);
-        list.push_back(lpg_QUESTION);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_COLON);
-        list.push_back(lpg_ConditionalExpression);
+        list.push_back((IAst*)lpg_ConditionalOrExpression);
+        list.push_back((IAst*)lpg_QUESTION);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_COLON);
+        list.push_back((IAst*)lpg_ConditionalExpression);
         return list;
     }
 
@@ -10091,11 +10092,11 @@ struct ConditionalExpression :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ConditionalOrExpression->accept(v);
-            lpg_QUESTION->accept(v);
-            lpg_Expression->accept(v);
-            lpg_COLON->accept(v);
-            lpg_ConditionalExpression->accept(v);
+            ((IAst*)lpg_ConditionalOrExpression)->accept(v);
+            ((IAst*)lpg_QUESTION)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
+            ((IAst*)lpg_ConditionalExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -10108,21 +10109,21 @@ struct ConditionalExpression :public Ast
  */
 struct Assignment :public Ast
 {
-    IAst *lpg_LeftHandSide;
-    IAst *lpg_AssignmentOperator;
-    IAst *lpg_AssignmentExpression;
+    Ast *lpg_LeftHandSide;
+    Ast *lpg_AssignmentOperator;
+    Ast *lpg_AssignmentExpression;
 
-    IAst *getLeftHandSide() { return lpg_LeftHandSide; };
-    void setLeftHandSide(IAst *lpg_LeftHandSide) { this->lpg_LeftHandSide = lpg_LeftHandSide; }
-    IAst *getAssignmentOperator() { return lpg_AssignmentOperator; };
-    void setAssignmentOperator(IAst *lpg_AssignmentOperator) { this->lpg_AssignmentOperator = lpg_AssignmentOperator; }
-    IAst *getAssignmentExpression() { return lpg_AssignmentExpression; };
-    void setAssignmentExpression(IAst *lpg_AssignmentExpression) { this->lpg_AssignmentExpression = lpg_AssignmentExpression; }
+    Ast *getLeftHandSide() { return lpg_LeftHandSide; };
+    void setLeftHandSide(Ast *lpg_LeftHandSide) { this->lpg_LeftHandSide = lpg_LeftHandSide; }
+    Ast *getAssignmentOperator() { return lpg_AssignmentOperator; };
+    void setAssignmentOperator(Ast *lpg_AssignmentOperator) { this->lpg_AssignmentOperator = lpg_AssignmentOperator; }
+    Ast *getAssignmentExpression() { return lpg_AssignmentExpression; };
+    void setAssignmentExpression(Ast *lpg_AssignmentExpression) { this->lpg_AssignmentExpression = lpg_AssignmentExpression; }
 
     Assignment(IToken* leftIToken, IToken* rightIToken,
-               IAst *lpg_LeftHandSide,
-               IAst *lpg_AssignmentOperator,
-               IAst *lpg_AssignmentExpression):Ast(leftIToken, rightIToken)    {
+               Ast *lpg_LeftHandSide,
+               Ast *lpg_AssignmentOperator,
+               Ast *lpg_AssignmentExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_LeftHandSide = lpg_LeftHandSide;
         ((Ast*) lpg_LeftHandSide)->setParent(this);
         this->lpg_AssignmentOperator = lpg_AssignmentOperator;
@@ -10138,9 +10139,9 @@ struct Assignment :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LeftHandSide);
-        list.push_back(lpg_AssignmentOperator);
-        list.push_back(lpg_AssignmentExpression);
+        list.push_back((IAst*)lpg_LeftHandSide);
+        list.push_back((IAst*)lpg_AssignmentOperator);
+        list.push_back((IAst*)lpg_AssignmentExpression);
         return list;
     }
 
@@ -10156,9 +10157,9 @@ struct Assignment :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LeftHandSide->accept(v);
-            lpg_AssignmentOperator->accept(v);
-            lpg_AssignmentExpression->accept(v);
+            ((IAst*)lpg_LeftHandSide)->accept(v);
+            ((IAst*)lpg_AssignmentOperator)->accept(v);
+            ((IAst*)lpg_AssignmentExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -10233,24 +10234,24 @@ struct Ellipsisopt :public AstToken
  */
 struct LPGUserAction0 :public Ast
 {
-    IAst *lpg_BeginAction;
-    IAst *lpg_BlockStatementsopt;
-    IAst *lpg_EndAction;
+    AstToken *lpg_BeginAction;
+    Ast *lpg_BlockStatementsopt;
+    AstToken *lpg_EndAction;
 
-    IAst *getBeginAction() { return lpg_BeginAction; };
-    void setBeginAction(IAst *lpg_BeginAction) { this->lpg_BeginAction = lpg_BeginAction; }
+    AstToken *getBeginAction() { return lpg_BeginAction; };
+    void setBeginAction(AstToken *lpg_BeginAction) { this->lpg_BeginAction = lpg_BeginAction; }
     /**
      * The value returned by <b>getBlockStatementsopt</b> may be <b>nullptr</b>
      */
-    IAst *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
-    void setBlockStatementsopt(IAst *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
-    IAst *getEndAction() { return lpg_EndAction; };
-    void setEndAction(IAst *lpg_EndAction) { this->lpg_EndAction = lpg_EndAction; }
+    Ast *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
+    void setBlockStatementsopt(Ast *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
+    AstToken *getEndAction() { return lpg_EndAction; };
+    void setEndAction(AstToken *lpg_EndAction) { this->lpg_EndAction = lpg_EndAction; }
 
     LPGUserAction0(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_BeginAction,
-                   IAst *lpg_BlockStatementsopt,
-                   IAst *lpg_EndAction):Ast(leftIToken, rightIToken)    {
+                   AstToken *lpg_BeginAction,
+                   Ast *lpg_BlockStatementsopt,
+                   AstToken *lpg_EndAction):Ast(leftIToken, rightIToken)    {
         this->lpg_BeginAction = lpg_BeginAction;
         ((Ast*) lpg_BeginAction)->setParent(this);
         this->lpg_BlockStatementsopt = lpg_BlockStatementsopt;
@@ -10266,9 +10267,9 @@ struct LPGUserAction0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_BeginAction);
-        list.push_back(lpg_BlockStatementsopt);
-        list.push_back(lpg_EndAction);
+        list.push_back((IAst*)lpg_BeginAction);
+        list.push_back((IAst*)lpg_BlockStatementsopt);
+        list.push_back((IAst*)lpg_EndAction);
         return list;
     }
 
@@ -10284,9 +10285,9 @@ struct LPGUserAction0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_BeginAction->accept(v);
-            if (lpg_BlockStatementsopt != nullptr) lpg_BlockStatementsopt->accept(v);
-            lpg_EndAction->accept(v);
+            ((IAst*)lpg_BeginAction)->accept(v);
+            if (lpg_BlockStatementsopt != nullptr) ((IAst*)lpg_BlockStatementsopt)->accept(v);
+            ((IAst*)lpg_EndAction)->accept(v);
         }
         v->endVisit(this);
     }
@@ -10299,24 +10300,24 @@ struct LPGUserAction0 :public Ast
  */
 struct LPGUserAction1 :public Ast
 {
-    IAst *lpg_BeginJava;
-    IAst *lpg_BlockStatementsopt;
-    IAst *lpg_EndJava;
+    AstToken *lpg_BeginJava;
+    Ast *lpg_BlockStatementsopt;
+    AstToken *lpg_EndJava;
 
-    IAst *getBeginJava() { return lpg_BeginJava; };
-    void setBeginJava(IAst *lpg_BeginJava) { this->lpg_BeginJava = lpg_BeginJava; }
+    AstToken *getBeginJava() { return lpg_BeginJava; };
+    void setBeginJava(AstToken *lpg_BeginJava) { this->lpg_BeginJava = lpg_BeginJava; }
     /**
      * The value returned by <b>getBlockStatementsopt</b> may be <b>nullptr</b>
      */
-    IAst *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
-    void setBlockStatementsopt(IAst *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
-    IAst *getEndJava() { return lpg_EndJava; };
-    void setEndJava(IAst *lpg_EndJava) { this->lpg_EndJava = lpg_EndJava; }
+    Ast *getBlockStatementsopt() { return lpg_BlockStatementsopt; };
+    void setBlockStatementsopt(Ast *lpg_BlockStatementsopt) { this->lpg_BlockStatementsopt = lpg_BlockStatementsopt; }
+    AstToken *getEndJava() { return lpg_EndJava; };
+    void setEndJava(AstToken *lpg_EndJava) { this->lpg_EndJava = lpg_EndJava; }
 
     LPGUserAction1(IToken* leftIToken, IToken* rightIToken,
-                   IAst *lpg_BeginJava,
-                   IAst *lpg_BlockStatementsopt,
-                   IAst *lpg_EndJava):Ast(leftIToken, rightIToken)    {
+                   AstToken *lpg_BeginJava,
+                   Ast *lpg_BlockStatementsopt,
+                   AstToken *lpg_EndJava):Ast(leftIToken, rightIToken)    {
         this->lpg_BeginJava = lpg_BeginJava;
         ((Ast*) lpg_BeginJava)->setParent(this);
         this->lpg_BlockStatementsopt = lpg_BlockStatementsopt;
@@ -10332,9 +10333,9 @@ struct LPGUserAction1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_BeginJava);
-        list.push_back(lpg_BlockStatementsopt);
-        list.push_back(lpg_EndJava);
+        list.push_back((IAst*)lpg_BeginJava);
+        list.push_back((IAst*)lpg_BlockStatementsopt);
+        list.push_back((IAst*)lpg_EndJava);
         return list;
     }
 
@@ -10350,9 +10351,9 @@ struct LPGUserAction1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_BeginJava->accept(v);
-            if (lpg_BlockStatementsopt != nullptr) lpg_BlockStatementsopt->accept(v);
-            lpg_EndJava->accept(v);
+            ((IAst*)lpg_BeginJava)->accept(v);
+            if (lpg_BlockStatementsopt != nullptr) ((IAst*)lpg_BlockStatementsopt)->accept(v);
+            ((IAst*)lpg_EndJava)->accept(v);
         }
         v->endVisit(this);
     }
@@ -10635,17 +10636,17 @@ struct FloatingPointType1 :public AstToken
  */
 struct WildcardBounds0 :public Ast
 {
-    IAst *lpg_extends;
-    IAst *lpg_ReferenceType;
+    AstToken *lpg_extends;
+    Ast *lpg_ReferenceType;
 
-    IAst *getextends() { return lpg_extends; };
-    void setextends(IAst *lpg_extends) { this->lpg_extends = lpg_extends; }
-    IAst *getReferenceType() { return lpg_ReferenceType; };
-    void setReferenceType(IAst *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
+    AstToken *getextends() { return lpg_extends; };
+    void setextends(AstToken *lpg_extends) { this->lpg_extends = lpg_extends; }
+    Ast *getReferenceType() { return lpg_ReferenceType; };
+    void setReferenceType(Ast *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
 
     WildcardBounds0(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_extends,
-                    IAst *lpg_ReferenceType):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_extends,
+                    Ast *lpg_ReferenceType):Ast(leftIToken, rightIToken)    {
         this->lpg_extends = lpg_extends;
         ((Ast*) lpg_extends)->setParent(this);
         this->lpg_ReferenceType = lpg_ReferenceType;
@@ -10659,8 +10660,8 @@ struct WildcardBounds0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_extends);
-        list.push_back(lpg_ReferenceType);
+        list.push_back((IAst*)lpg_extends);
+        list.push_back((IAst*)lpg_ReferenceType);
         return list;
     }
 
@@ -10676,8 +10677,8 @@ struct WildcardBounds0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_extends->accept(v);
-            lpg_ReferenceType->accept(v);
+            ((IAst*)lpg_extends)->accept(v);
+            ((IAst*)lpg_ReferenceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -10690,17 +10691,17 @@ struct WildcardBounds0 :public Ast
  */
 struct WildcardBounds1 :public Ast
 {
-    IAst *lpg_super;
-    IAst *lpg_ReferenceType;
+    AstToken *lpg_super;
+    Ast *lpg_ReferenceType;
 
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getReferenceType() { return lpg_ReferenceType; };
-    void setReferenceType(IAst *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    Ast *getReferenceType() { return lpg_ReferenceType; };
+    void setReferenceType(Ast *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
 
     WildcardBounds1(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_super,
-                    IAst *lpg_ReferenceType):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_super,
+                    Ast *lpg_ReferenceType):Ast(leftIToken, rightIToken)    {
         this->lpg_super = lpg_super;
         ((Ast*) lpg_super)->setParent(this);
         this->lpg_ReferenceType = lpg_ReferenceType;
@@ -10714,8 +10715,8 @@ struct WildcardBounds1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_super);
-        list.push_back(lpg_ReferenceType);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_ReferenceType);
         return list;
     }
 
@@ -10731,8 +10732,8 @@ struct WildcardBounds1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_super->accept(v);
-            lpg_ReferenceType->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_ReferenceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -11123,28 +11124,28 @@ struct FieldModifier6 :public AstToken
  */
 struct MethodDeclarator0 :public Ast
 {
-    IAst *lpg_identifier;
-    IAst *lpg_LPAREN;
-    IAst *lpg_FormalParameterListopt;
-    IAst *lpg_RPAREN;
+    identifier *lpg_identifier;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_FormalParameterListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getFormalParameterListopt</b> may be <b>nullptr</b>
      */
-    IAst *getFormalParameterListopt() { return lpg_FormalParameterListopt; };
-    void setFormalParameterListopt(IAst *lpg_FormalParameterListopt) { this->lpg_FormalParameterListopt = lpg_FormalParameterListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getFormalParameterListopt() { return lpg_FormalParameterListopt; };
+    void setFormalParameterListopt(Ast *lpg_FormalParameterListopt) { this->lpg_FormalParameterListopt = lpg_FormalParameterListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     MethodDeclarator0(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_identifier,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_FormalParameterListopt,
-                      IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                      identifier *lpg_identifier,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_FormalParameterListopt,
+                      AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_identifier = lpg_identifier;
         ((Ast*) lpg_identifier)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -11162,10 +11163,10 @@ struct MethodDeclarator0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_FormalParameterListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_FormalParameterListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -11181,10 +11182,10 @@ struct MethodDeclarator0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_identifier->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_FormalParameterListopt != nullptr) lpg_FormalParameterListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_FormalParameterListopt != nullptr) ((IAst*)lpg_FormalParameterListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -11197,21 +11198,21 @@ struct MethodDeclarator0 :public Ast
  */
 struct MethodDeclarator1 :public Ast
 {
-    IAst *lpg_MethodDeclarator;
-    IAst *lpg_LBRACKET;
-    IAst *lpg_RBRACKET;
+    Ast *lpg_MethodDeclarator;
+    AstToken *lpg_LBRACKET;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getMethodDeclarator() { return lpg_MethodDeclarator; };
-    void setMethodDeclarator(IAst *lpg_MethodDeclarator) { this->lpg_MethodDeclarator = lpg_MethodDeclarator; }
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    Ast *getMethodDeclarator() { return lpg_MethodDeclarator; };
+    void setMethodDeclarator(Ast *lpg_MethodDeclarator) { this->lpg_MethodDeclarator = lpg_MethodDeclarator; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     MethodDeclarator1(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_MethodDeclarator,
-                      IAst *lpg_LBRACKET,
-                      IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_MethodDeclarator,
+                      AstToken *lpg_LBRACKET,
+                      AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_MethodDeclarator = lpg_MethodDeclarator;
         ((Ast*) lpg_MethodDeclarator)->setParent(this);
         this->lpg_LBRACKET = lpg_LBRACKET;
@@ -11227,9 +11228,9 @@ struct MethodDeclarator1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MethodDeclarator);
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_MethodDeclarator);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -11245,9 +11246,9 @@ struct MethodDeclarator1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MethodDeclarator->accept(v);
-            lpg_LBRACKET->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_MethodDeclarator)->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -11584,39 +11585,39 @@ struct ConstructorModifier2 :public AstToken
  */
 struct ExplicitConstructorInvocation0 :public Ast
 {
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_this;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_SEMICOLON;
+    TypeArguments *lpg_TypeArgumentsopt;
+    AstToken *lpg_this;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
+    AstToken *lpg_SEMICOLON;
 
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getthis() { return lpg_this; };
-    void setthis(IAst *lpg_this) { this->lpg_this = lpg_this; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    AstToken *getthis() { return lpg_this; };
+    void setthis(AstToken *lpg_this) { this->lpg_this = lpg_this; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ExplicitConstructorInvocation0(IToken* leftIToken, IToken* rightIToken,
-                                   IAst *lpg_TypeArgumentsopt,
-                                   IAst *lpg_this,
-                                   IAst *lpg_LPAREN,
-                                   IAst *lpg_ArgumentListopt,
-                                   IAst *lpg_RPAREN,
-                                   IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                   TypeArguments *lpg_TypeArgumentsopt,
+                                   AstToken *lpg_this,
+                                   AstToken *lpg_LPAREN,
+                                   Ast *lpg_ArgumentListopt,
+                                   AstToken *lpg_RPAREN,
+                                   AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt;
         if (lpg_TypeArgumentsopt != nullptr) ((Ast*) lpg_TypeArgumentsopt)->setParent(this);
         this->lpg_this = lpg_this;
@@ -11638,12 +11639,12 @@ struct ExplicitConstructorInvocation0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_this);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_this);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -11659,12 +11660,12 @@ struct ExplicitConstructorInvocation0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_this->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_SEMICOLON->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_this)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -11677,39 +11678,39 @@ struct ExplicitConstructorInvocation0 :public Ast
  */
 struct ExplicitConstructorInvocation1 :public Ast
 {
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_super;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_SEMICOLON;
+    TypeArguments *lpg_TypeArgumentsopt;
+    AstToken *lpg_super;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
+    AstToken *lpg_SEMICOLON;
 
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ExplicitConstructorInvocation1(IToken* leftIToken, IToken* rightIToken,
-                                   IAst *lpg_TypeArgumentsopt,
-                                   IAst *lpg_super,
-                                   IAst *lpg_LPAREN,
-                                   IAst *lpg_ArgumentListopt,
-                                   IAst *lpg_RPAREN,
-                                   IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                   TypeArguments *lpg_TypeArgumentsopt,
+                                   AstToken *lpg_super,
+                                   AstToken *lpg_LPAREN,
+                                   Ast *lpg_ArgumentListopt,
+                                   AstToken *lpg_RPAREN,
+                                   AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt;
         if (lpg_TypeArgumentsopt != nullptr) ((Ast*) lpg_TypeArgumentsopt)->setParent(this);
         this->lpg_super = lpg_super;
@@ -11731,12 +11732,12 @@ struct ExplicitConstructorInvocation1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_super);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -11752,12 +11753,12 @@ struct ExplicitConstructorInvocation1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_super->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_SEMICOLON->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -11770,47 +11771,47 @@ struct ExplicitConstructorInvocation1 :public Ast
  */
 struct ExplicitConstructorInvocation2 :public Ast
 {
-    IAst *lpg_Primary;
-    IAst *lpg_DOT;
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_super;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_SEMICOLON;
+    Ast *lpg_Primary;
+    AstToken *lpg_DOT;
+    TypeArguments *lpg_TypeArgumentsopt;
+    AstToken *lpg_super;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getPrimary() { return lpg_Primary; };
-    void setPrimary(IAst *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    Ast *getPrimary() { return lpg_Primary; };
+    void setPrimary(Ast *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     ExplicitConstructorInvocation2(IToken* leftIToken, IToken* rightIToken,
-                                   IAst *lpg_Primary,
-                                   IAst *lpg_DOT,
-                                   IAst *lpg_TypeArgumentsopt,
-                                   IAst *lpg_super,
-                                   IAst *lpg_LPAREN,
-                                   IAst *lpg_ArgumentListopt,
-                                   IAst *lpg_RPAREN,
-                                   IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                   Ast *lpg_Primary,
+                                   AstToken *lpg_DOT,
+                                   TypeArguments *lpg_TypeArgumentsopt,
+                                   AstToken *lpg_super,
+                                   AstToken *lpg_LPAREN,
+                                   Ast *lpg_ArgumentListopt,
+                                   AstToken *lpg_RPAREN,
+                                   AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_Primary = lpg_Primary;
         ((Ast*) lpg_Primary)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -11836,14 +11837,14 @@ struct ExplicitConstructorInvocation2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Primary);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_super);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_Primary);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -11859,14 +11860,14 @@ struct ExplicitConstructorInvocation2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Primary->accept(v);
-            lpg_DOT->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_super->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_Primary)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12041,17 +12042,17 @@ struct InterfaceModifier5 :public AstToken
  */
 struct ExtendsInterfaces0 :public Ast
 {
-    IAst *lpg_extends;
-    IAst *lpg_InterfaceType;
+    AstToken *lpg_extends;
+    InterfaceType *lpg_InterfaceType;
 
-    IAst *getextends() { return lpg_extends; };
-    void setextends(IAst *lpg_extends) { this->lpg_extends = lpg_extends; }
-    IAst *getInterfaceType() { return lpg_InterfaceType; };
-    void setInterfaceType(IAst *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
+    AstToken *getextends() { return lpg_extends; };
+    void setextends(AstToken *lpg_extends) { this->lpg_extends = lpg_extends; }
+    InterfaceType *getInterfaceType() { return lpg_InterfaceType; };
+    void setInterfaceType(InterfaceType *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
 
     ExtendsInterfaces0(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_extends,
-                       IAst *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
+                       AstToken *lpg_extends,
+                       InterfaceType *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
         this->lpg_extends = lpg_extends;
         ((Ast*) lpg_extends)->setParent(this);
         this->lpg_InterfaceType = lpg_InterfaceType;
@@ -12065,8 +12066,8 @@ struct ExtendsInterfaces0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_extends);
-        list.push_back(lpg_InterfaceType);
+        list.push_back((IAst*)lpg_extends);
+        list.push_back((IAst*)lpg_InterfaceType);
         return list;
     }
 
@@ -12082,8 +12083,8 @@ struct ExtendsInterfaces0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_extends->accept(v);
-            lpg_InterfaceType->accept(v);
+            ((IAst*)lpg_extends)->accept(v);
+            ((IAst*)lpg_InterfaceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12096,21 +12097,21 @@ struct ExtendsInterfaces0 :public Ast
  */
 struct ExtendsInterfaces1 :public Ast
 {
-    IAst *lpg_ExtendsInterfaces;
-    IAst *lpg_COMMA;
-    IAst *lpg_InterfaceType;
+    Ast *lpg_ExtendsInterfaces;
+    AstToken *lpg_COMMA;
+    InterfaceType *lpg_InterfaceType;
 
-    IAst *getExtendsInterfaces() { return lpg_ExtendsInterfaces; };
-    void setExtendsInterfaces(IAst *lpg_ExtendsInterfaces) { this->lpg_ExtendsInterfaces = lpg_ExtendsInterfaces; }
-    IAst *getCOMMA() { return lpg_COMMA; };
-    void setCOMMA(IAst *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
-    IAst *getInterfaceType() { return lpg_InterfaceType; };
-    void setInterfaceType(IAst *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
+    Ast *getExtendsInterfaces() { return lpg_ExtendsInterfaces; };
+    void setExtendsInterfaces(Ast *lpg_ExtendsInterfaces) { this->lpg_ExtendsInterfaces = lpg_ExtendsInterfaces; }
+    AstToken *getCOMMA() { return lpg_COMMA; };
+    void setCOMMA(AstToken *lpg_COMMA) { this->lpg_COMMA = lpg_COMMA; }
+    InterfaceType *getInterfaceType() { return lpg_InterfaceType; };
+    void setInterfaceType(InterfaceType *lpg_InterfaceType) { this->lpg_InterfaceType = lpg_InterfaceType; }
 
     ExtendsInterfaces1(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_ExtendsInterfaces,
-                       IAst *lpg_COMMA,
-                       IAst *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_ExtendsInterfaces,
+                       AstToken *lpg_COMMA,
+                       InterfaceType *lpg_InterfaceType):Ast(leftIToken, rightIToken)    {
         this->lpg_ExtendsInterfaces = lpg_ExtendsInterfaces;
         ((Ast*) lpg_ExtendsInterfaces)->setParent(this);
         this->lpg_COMMA = lpg_COMMA;
@@ -12126,9 +12127,9 @@ struct ExtendsInterfaces1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ExtendsInterfaces);
-        list.push_back(lpg_COMMA);
-        list.push_back(lpg_InterfaceType);
+        list.push_back((IAst*)lpg_ExtendsInterfaces);
+        list.push_back((IAst*)lpg_COMMA);
+        list.push_back((IAst*)lpg_InterfaceType);
         return list;
     }
 
@@ -12144,9 +12145,9 @@ struct ExtendsInterfaces1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ExtendsInterfaces->accept(v);
-            lpg_COMMA->accept(v);
-            lpg_InterfaceType->accept(v);
+            ((IAst*)lpg_ExtendsInterfaces)->accept(v);
+            ((IAst*)lpg_COMMA)->accept(v);
+            ((IAst*)lpg_InterfaceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12294,43 +12295,43 @@ struct AbstractMethodModifier1 :public AstToken
  */
 struct AnnotationTypeElementDeclaration0 :public Ast
 {
-    IAst *lpg_AbstractMethodModifiersopt;
-    IAst *lpg_Type;
-    IAst *lpg_identifier;
-    IAst *lpg_LPAREN;
-    IAst *lpg_RPAREN;
-    IAst *lpg_DefaultValueopt;
-    IAst *lpg_SEMICOLON;
+    Ast *lpg_AbstractMethodModifiersopt;
+    Ast *lpg_Type;
+    identifier *lpg_identifier;
+    AstToken *lpg_LPAREN;
+    AstToken *lpg_RPAREN;
+    DefaultValue *lpg_DefaultValueopt;
+    AstToken *lpg_SEMICOLON;
 
     /**
      * The value returned by <b>getAbstractMethodModifiersopt</b> may be <b>nullptr</b>
      */
-    IAst *getAbstractMethodModifiersopt() { return lpg_AbstractMethodModifiersopt; };
-    void setAbstractMethodModifiersopt(IAst *lpg_AbstractMethodModifiersopt) { this->lpg_AbstractMethodModifiersopt = lpg_AbstractMethodModifiersopt; }
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getAbstractMethodModifiersopt() { return lpg_AbstractMethodModifiersopt; };
+    void setAbstractMethodModifiersopt(Ast *lpg_AbstractMethodModifiersopt) { this->lpg_AbstractMethodModifiersopt = lpg_AbstractMethodModifiersopt; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
     /**
      * The value returned by <b>getDefaultValueopt</b> may be <b>nullptr</b>
      */
-    IAst *getDefaultValueopt() { return lpg_DefaultValueopt; };
-    void setDefaultValueopt(IAst *lpg_DefaultValueopt) { this->lpg_DefaultValueopt = lpg_DefaultValueopt; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    DefaultValue *getDefaultValueopt() { return lpg_DefaultValueopt; };
+    void setDefaultValueopt(DefaultValue *lpg_DefaultValueopt) { this->lpg_DefaultValueopt = lpg_DefaultValueopt; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     AnnotationTypeElementDeclaration0(IToken* leftIToken, IToken* rightIToken,
-                                      IAst *lpg_AbstractMethodModifiersopt,
-                                      IAst *lpg_Type,
-                                      IAst *lpg_identifier,
-                                      IAst *lpg_LPAREN,
-                                      IAst *lpg_RPAREN,
-                                      IAst *lpg_DefaultValueopt,
-                                      IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                                      Ast *lpg_AbstractMethodModifiersopt,
+                                      Ast *lpg_Type,
+                                      identifier *lpg_identifier,
+                                      AstToken *lpg_LPAREN,
+                                      AstToken *lpg_RPAREN,
+                                      DefaultValue *lpg_DefaultValueopt,
+                                      AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_AbstractMethodModifiersopt = lpg_AbstractMethodModifiersopt;
         if (lpg_AbstractMethodModifiersopt != nullptr) ((Ast*) lpg_AbstractMethodModifiersopt)->setParent(this);
         this->lpg_Type = lpg_Type;
@@ -12354,13 +12355,13 @@ struct AnnotationTypeElementDeclaration0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AbstractMethodModifiersopt);
-        list.push_back(lpg_Type);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_DefaultValueopt);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_AbstractMethodModifiersopt);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_DefaultValueopt);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -12376,13 +12377,13 @@ struct AnnotationTypeElementDeclaration0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            if (lpg_AbstractMethodModifiersopt != nullptr) lpg_AbstractMethodModifiersopt->accept(v);
-            lpg_Type->accept(v);
-            lpg_identifier->accept(v);
-            lpg_LPAREN->accept(v);
-            lpg_RPAREN->accept(v);
-            if (lpg_DefaultValueopt != nullptr) lpg_DefaultValueopt->accept(v);
-            lpg_SEMICOLON->accept(v);
+            if (lpg_AbstractMethodModifiersopt != nullptr) ((IAst*)lpg_AbstractMethodModifiersopt)->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            if (lpg_DefaultValueopt != nullptr) ((IAst*)lpg_DefaultValueopt)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12422,21 +12423,21 @@ struct AnnotationTypeElementDeclaration1 :public AstToken
  */
 struct AssertStatement0 :public Ast
 {
-    IAst *lpg_assert;
-    IAst *lpg_Expression;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_assert;
+    Ast *lpg_Expression;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getassert() { return lpg_assert; };
-    void setassert(IAst *lpg_assert) { this->lpg_assert = lpg_assert; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getassert() { return lpg_assert; };
+    void setassert(AstToken *lpg_assert) { this->lpg_assert = lpg_assert; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     AssertStatement0(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_assert,
-                     IAst *lpg_Expression,
-                     IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_assert,
+                     Ast *lpg_Expression,
+                     AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_assert = lpg_assert;
         ((Ast*) lpg_assert)->setParent(this);
         this->lpg_Expression = lpg_Expression;
@@ -12452,9 +12453,9 @@ struct AssertStatement0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_assert);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_assert);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -12470,9 +12471,9 @@ struct AssertStatement0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_assert->accept(v);
-            lpg_Expression->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_assert)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12485,29 +12486,29 @@ struct AssertStatement0 :public Ast
  */
 struct AssertStatement1 :public Ast
 {
-    IAst *lpg_assert;
-    IAst *lpg_Expression;
-    IAst *lpg_COLON;
-    IAst *lpg_Expression4;
-    IAst *lpg_SEMICOLON;
+    AstToken *lpg_assert;
+    Ast *lpg_Expression;
+    AstToken *lpg_COLON;
+    Ast *lpg_Expression4;
+    AstToken *lpg_SEMICOLON;
 
-    IAst *getassert() { return lpg_assert; };
-    void setassert(IAst *lpg_assert) { this->lpg_assert = lpg_assert; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
-    IAst *getExpression4() { return lpg_Expression4; };
-    void setExpression4(IAst *lpg_Expression4) { this->lpg_Expression4 = lpg_Expression4; }
-    IAst *getSEMICOLON() { return lpg_SEMICOLON; };
-    void setSEMICOLON(IAst *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
+    AstToken *getassert() { return lpg_assert; };
+    void setassert(AstToken *lpg_assert) { this->lpg_assert = lpg_assert; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    Ast *getExpression4() { return lpg_Expression4; };
+    void setExpression4(Ast *lpg_Expression4) { this->lpg_Expression4 = lpg_Expression4; }
+    AstToken *getSEMICOLON() { return lpg_SEMICOLON; };
+    void setSEMICOLON(AstToken *lpg_SEMICOLON) { this->lpg_SEMICOLON = lpg_SEMICOLON; }
 
     AssertStatement1(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_assert,
-                     IAst *lpg_Expression,
-                     IAst *lpg_COLON,
-                     IAst *lpg_Expression4,
-                     IAst *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_assert,
+                     Ast *lpg_Expression,
+                     AstToken *lpg_COLON,
+                     Ast *lpg_Expression4,
+                     AstToken *lpg_SEMICOLON):Ast(leftIToken, rightIToken)    {
         this->lpg_assert = lpg_assert;
         ((Ast*) lpg_assert)->setParent(this);
         this->lpg_Expression = lpg_Expression;
@@ -12527,11 +12528,11 @@ struct AssertStatement1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_assert);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_COLON);
-        list.push_back(lpg_Expression4);
-        list.push_back(lpg_SEMICOLON);
+        list.push_back((IAst*)lpg_assert);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_COLON);
+        list.push_back((IAst*)lpg_Expression4);
+        list.push_back((IAst*)lpg_SEMICOLON);
         return list;
     }
 
@@ -12547,11 +12548,11 @@ struct AssertStatement1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_assert->accept(v);
-            lpg_Expression->accept(v);
-            lpg_COLON->accept(v);
-            lpg_Expression4->accept(v);
-            lpg_SEMICOLON->accept(v);
+            ((IAst*)lpg_assert)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
+            ((IAst*)lpg_Expression4)->accept(v);
+            ((IAst*)lpg_SEMICOLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12564,21 +12565,21 @@ struct AssertStatement1 :public Ast
  */
 struct SwitchLabel0 :public Ast
 {
-    IAst *lpg_case;
-    IAst *lpg_ConstantExpression;
-    IAst *lpg_COLON;
+    AstToken *lpg_case;
+    Ast *lpg_ConstantExpression;
+    AstToken *lpg_COLON;
 
-    IAst *getcase() { return lpg_case; };
-    void setcase(IAst *lpg_case) { this->lpg_case = lpg_case; }
-    IAst *getConstantExpression() { return lpg_ConstantExpression; };
-    void setConstantExpression(IAst *lpg_ConstantExpression) { this->lpg_ConstantExpression = lpg_ConstantExpression; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    AstToken *getcase() { return lpg_case; };
+    void setcase(AstToken *lpg_case) { this->lpg_case = lpg_case; }
+    Ast *getConstantExpression() { return lpg_ConstantExpression; };
+    void setConstantExpression(Ast *lpg_ConstantExpression) { this->lpg_ConstantExpression = lpg_ConstantExpression; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
 
     SwitchLabel0(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_case,
-                 IAst *lpg_ConstantExpression,
-                 IAst *lpg_COLON):Ast(leftIToken, rightIToken)    {
+                 AstToken *lpg_case,
+                 Ast *lpg_ConstantExpression,
+                 AstToken *lpg_COLON):Ast(leftIToken, rightIToken)    {
         this->lpg_case = lpg_case;
         ((Ast*) lpg_case)->setParent(this);
         this->lpg_ConstantExpression = lpg_ConstantExpression;
@@ -12594,9 +12595,9 @@ struct SwitchLabel0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_case);
-        list.push_back(lpg_ConstantExpression);
-        list.push_back(lpg_COLON);
+        list.push_back((IAst*)lpg_case);
+        list.push_back((IAst*)lpg_ConstantExpression);
+        list.push_back((IAst*)lpg_COLON);
         return list;
     }
 
@@ -12612,9 +12613,9 @@ struct SwitchLabel0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_case->accept(v);
-            lpg_ConstantExpression->accept(v);
-            lpg_COLON->accept(v);
+            ((IAst*)lpg_case)->accept(v);
+            ((IAst*)lpg_ConstantExpression)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12627,21 +12628,21 @@ struct SwitchLabel0 :public Ast
  */
 struct SwitchLabel1 :public Ast
 {
-    IAst *lpg_case;
-    IAst *lpg_EnumConstant;
-    IAst *lpg_COLON;
+    AstToken *lpg_case;
+    Ast *lpg_EnumConstant;
+    AstToken *lpg_COLON;
 
-    IAst *getcase() { return lpg_case; };
-    void setcase(IAst *lpg_case) { this->lpg_case = lpg_case; }
-    IAst *getEnumConstant() { return lpg_EnumConstant; };
-    void setEnumConstant(IAst *lpg_EnumConstant) { this->lpg_EnumConstant = lpg_EnumConstant; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    AstToken *getcase() { return lpg_case; };
+    void setcase(AstToken *lpg_case) { this->lpg_case = lpg_case; }
+    Ast *getEnumConstant() { return lpg_EnumConstant; };
+    void setEnumConstant(Ast *lpg_EnumConstant) { this->lpg_EnumConstant = lpg_EnumConstant; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
 
     SwitchLabel1(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_case,
-                 IAst *lpg_EnumConstant,
-                 IAst *lpg_COLON):Ast(leftIToken, rightIToken)    {
+                 AstToken *lpg_case,
+                 Ast *lpg_EnumConstant,
+                 AstToken *lpg_COLON):Ast(leftIToken, rightIToken)    {
         this->lpg_case = lpg_case;
         ((Ast*) lpg_case)->setParent(this);
         this->lpg_EnumConstant = lpg_EnumConstant;
@@ -12657,9 +12658,9 @@ struct SwitchLabel1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_case);
-        list.push_back(lpg_EnumConstant);
-        list.push_back(lpg_COLON);
+        list.push_back((IAst*)lpg_case);
+        list.push_back((IAst*)lpg_EnumConstant);
+        list.push_back((IAst*)lpg_COLON);
         return list;
     }
 
@@ -12675,9 +12676,9 @@ struct SwitchLabel1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_case->accept(v);
-            lpg_EnumConstant->accept(v);
-            lpg_COLON->accept(v);
+            ((IAst*)lpg_case)->accept(v);
+            ((IAst*)lpg_EnumConstant)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12690,17 +12691,17 @@ struct SwitchLabel1 :public Ast
  */
 struct SwitchLabel2 :public Ast
 {
-    IAst *lpg_default;
-    IAst *lpg_COLON;
+    AstToken *lpg_default;
+    AstToken *lpg_COLON;
 
-    IAst *getdefault() { return lpg_default; };
-    void setdefault(IAst *lpg_default) { this->lpg_default = lpg_default; }
-    IAst *getCOLON() { return lpg_COLON; };
-    void setCOLON(IAst *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
+    AstToken *getdefault() { return lpg_default; };
+    void setdefault(AstToken *lpg_default) { this->lpg_default = lpg_default; }
+    AstToken *getCOLON() { return lpg_COLON; };
+    void setCOLON(AstToken *lpg_COLON) { this->lpg_COLON = lpg_COLON; }
 
     SwitchLabel2(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_default,
-                 IAst *lpg_COLON):Ast(leftIToken, rightIToken)    {
+                 AstToken *lpg_default,
+                 AstToken *lpg_COLON):Ast(leftIToken, rightIToken)    {
         this->lpg_default = lpg_default;
         ((Ast*) lpg_default)->setParent(this);
         this->lpg_COLON = lpg_COLON;
@@ -12714,8 +12715,8 @@ struct SwitchLabel2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_default);
-        list.push_back(lpg_COLON);
+        list.push_back((IAst*)lpg_default);
+        list.push_back((IAst*)lpg_COLON);
         return list;
     }
 
@@ -12731,8 +12732,8 @@ struct SwitchLabel2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_default->accept(v);
-            lpg_COLON->accept(v);
+            ((IAst*)lpg_default)->accept(v);
+            ((IAst*)lpg_COLON)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12745,21 +12746,21 @@ struct SwitchLabel2 :public Ast
  */
 struct TryStatement0 :public Ast
 {
-    IAst *lpg_try;
-    IAst *lpg_Block;
-    IAst *lpg_Catches;
+    AstToken *lpg_try;
+    Block *lpg_Block;
+    Ast *lpg_Catches;
 
-    IAst *gettry() { return lpg_try; };
-    void settry(IAst *lpg_try) { this->lpg_try = lpg_try; }
-    IAst *getBlock() { return lpg_Block; };
-    void setBlock(IAst *lpg_Block) { this->lpg_Block = lpg_Block; }
-    IAst *getCatches() { return lpg_Catches; };
-    void setCatches(IAst *lpg_Catches) { this->lpg_Catches = lpg_Catches; }
+    AstToken *gettry() { return lpg_try; };
+    void settry(AstToken *lpg_try) { this->lpg_try = lpg_try; }
+    Block *getBlock() { return lpg_Block; };
+    void setBlock(Block *lpg_Block) { this->lpg_Block = lpg_Block; }
+    Ast *getCatches() { return lpg_Catches; };
+    void setCatches(Ast *lpg_Catches) { this->lpg_Catches = lpg_Catches; }
 
     TryStatement0(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_try,
-                  IAst *lpg_Block,
-                  IAst *lpg_Catches):Ast(leftIToken, rightIToken)    {
+                  AstToken *lpg_try,
+                  Block *lpg_Block,
+                  Ast *lpg_Catches):Ast(leftIToken, rightIToken)    {
         this->lpg_try = lpg_try;
         ((Ast*) lpg_try)->setParent(this);
         this->lpg_Block = lpg_Block;
@@ -12775,9 +12776,9 @@ struct TryStatement0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_try);
-        list.push_back(lpg_Block);
-        list.push_back(lpg_Catches);
+        list.push_back((IAst*)lpg_try);
+        list.push_back((IAst*)lpg_Block);
+        list.push_back((IAst*)lpg_Catches);
         return list;
     }
 
@@ -12793,9 +12794,9 @@ struct TryStatement0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_try->accept(v);
-            lpg_Block->accept(v);
-            lpg_Catches->accept(v);
+            ((IAst*)lpg_try)->accept(v);
+            ((IAst*)lpg_Block)->accept(v);
+            ((IAst*)lpg_Catches)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12808,28 +12809,28 @@ struct TryStatement0 :public Ast
  */
 struct TryStatement1 :public Ast
 {
-    IAst *lpg_try;
-    IAst *lpg_Block;
-    IAst *lpg_Catchesopt;
-    IAst *lpg_Finally;
+    AstToken *lpg_try;
+    Block *lpg_Block;
+    Ast *lpg_Catchesopt;
+    Finally *lpg_Finally;
 
-    IAst *gettry() { return lpg_try; };
-    void settry(IAst *lpg_try) { this->lpg_try = lpg_try; }
-    IAst *getBlock() { return lpg_Block; };
-    void setBlock(IAst *lpg_Block) { this->lpg_Block = lpg_Block; }
+    AstToken *gettry() { return lpg_try; };
+    void settry(AstToken *lpg_try) { this->lpg_try = lpg_try; }
+    Block *getBlock() { return lpg_Block; };
+    void setBlock(Block *lpg_Block) { this->lpg_Block = lpg_Block; }
     /**
      * The value returned by <b>getCatchesopt</b> may be <b>nullptr</b>
      */
-    IAst *getCatchesopt() { return lpg_Catchesopt; };
-    void setCatchesopt(IAst *lpg_Catchesopt) { this->lpg_Catchesopt = lpg_Catchesopt; }
-    IAst *getFinally() { return lpg_Finally; };
-    void setFinally(IAst *lpg_Finally) { this->lpg_Finally = lpg_Finally; }
+    Ast *getCatchesopt() { return lpg_Catchesopt; };
+    void setCatchesopt(Ast *lpg_Catchesopt) { this->lpg_Catchesopt = lpg_Catchesopt; }
+    Finally *getFinally() { return lpg_Finally; };
+    void setFinally(Finally *lpg_Finally) { this->lpg_Finally = lpg_Finally; }
 
     TryStatement1(IToken* leftIToken, IToken* rightIToken,
-                  IAst *lpg_try,
-                  IAst *lpg_Block,
-                  IAst *lpg_Catchesopt,
-                  IAst *lpg_Finally):Ast(leftIToken, rightIToken)    {
+                  AstToken *lpg_try,
+                  Block *lpg_Block,
+                  Ast *lpg_Catchesopt,
+                  Finally *lpg_Finally):Ast(leftIToken, rightIToken)    {
         this->lpg_try = lpg_try;
         ((Ast*) lpg_try)->setParent(this);
         this->lpg_Block = lpg_Block;
@@ -12847,10 +12848,10 @@ struct TryStatement1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_try);
-        list.push_back(lpg_Block);
-        list.push_back(lpg_Catchesopt);
-        list.push_back(lpg_Finally);
+        list.push_back((IAst*)lpg_try);
+        list.push_back((IAst*)lpg_Block);
+        list.push_back((IAst*)lpg_Catchesopt);
+        list.push_back((IAst*)lpg_Finally);
         return list;
     }
 
@@ -12866,10 +12867,10 @@ struct TryStatement1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_try->accept(v);
-            lpg_Block->accept(v);
-            if (lpg_Catchesopt != nullptr) lpg_Catchesopt->accept(v);
-            lpg_Finally->accept(v);
+            ((IAst*)lpg_try)->accept(v);
+            ((IAst*)lpg_Block)->accept(v);
+            if (lpg_Catchesopt != nullptr) ((IAst*)lpg_Catchesopt)->accept(v);
+            ((IAst*)lpg_Finally)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12882,21 +12883,21 @@ struct TryStatement1 :public Ast
  */
 struct PrimaryNoNewArray0 :public Ast
 {
-    IAst *lpg_Type;
-    IAst *lpg_DOT;
-    IAst *lpg_class;
+    Ast *lpg_Type;
+    AstToken *lpg_DOT;
+    AstToken *lpg_class;
 
-    IAst *getType() { return lpg_Type; };
-    void setType(IAst *lpg_Type) { this->lpg_Type = lpg_Type; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getclass() { return lpg_class; };
-    void setclass(IAst *lpg_class) { this->lpg_class = lpg_class; }
+    Ast *getType() { return lpg_Type; };
+    void setType(Ast *lpg_Type) { this->lpg_Type = lpg_Type; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getclass() { return lpg_class; };
+    void setclass(AstToken *lpg_class) { this->lpg_class = lpg_class; }
 
     PrimaryNoNewArray0(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_Type,
-                       IAst *lpg_DOT,
-                       IAst *lpg_class):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_Type,
+                       AstToken *lpg_DOT,
+                       AstToken *lpg_class):Ast(leftIToken, rightIToken)    {
         this->lpg_Type = lpg_Type;
         ((Ast*) lpg_Type)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -12912,9 +12913,9 @@ struct PrimaryNoNewArray0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Type);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_class);
+        list.push_back((IAst*)lpg_Type);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_class);
         return list;
     }
 
@@ -12930,9 +12931,9 @@ struct PrimaryNoNewArray0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Type->accept(v);
-            lpg_DOT->accept(v);
-            lpg_class->accept(v);
+            ((IAst*)lpg_Type)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_class)->accept(v);
         }
         v->endVisit(this);
     }
@@ -12945,21 +12946,21 @@ struct PrimaryNoNewArray0 :public Ast
  */
 struct PrimaryNoNewArray1 :public Ast
 {
-    IAst *lpg_void;
-    IAst *lpg_DOT;
-    IAst *lpg_class;
+    AstToken *lpg_void;
+    AstToken *lpg_DOT;
+    AstToken *lpg_class;
 
-    IAst *getvoid() { return lpg_void; };
-    void setvoid(IAst *lpg_void) { this->lpg_void = lpg_void; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getclass() { return lpg_class; };
-    void setclass(IAst *lpg_class) { this->lpg_class = lpg_class; }
+    AstToken *getvoid() { return lpg_void; };
+    void setvoid(AstToken *lpg_void) { this->lpg_void = lpg_void; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getclass() { return lpg_class; };
+    void setclass(AstToken *lpg_class) { this->lpg_class = lpg_class; }
 
     PrimaryNoNewArray1(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_void,
-                       IAst *lpg_DOT,
-                       IAst *lpg_class):Ast(leftIToken, rightIToken)    {
+                       AstToken *lpg_void,
+                       AstToken *lpg_DOT,
+                       AstToken *lpg_class):Ast(leftIToken, rightIToken)    {
         this->lpg_void = lpg_void;
         ((Ast*) lpg_void)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -12975,9 +12976,9 @@ struct PrimaryNoNewArray1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_void);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_class);
+        list.push_back((IAst*)lpg_void);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_class);
         return list;
     }
 
@@ -12993,9 +12994,9 @@ struct PrimaryNoNewArray1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_void->accept(v);
-            lpg_DOT->accept(v);
-            lpg_class->accept(v);
+            ((IAst*)lpg_void)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_class)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13035,21 +13036,21 @@ struct PrimaryNoNewArray2 :public AstToken
  */
 struct PrimaryNoNewArray3 :public Ast
 {
-    IAst *lpg_ClassName;
-    IAst *lpg_DOT;
-    IAst *lpg_this;
+    Ast *lpg_ClassName;
+    AstToken *lpg_DOT;
+    AstToken *lpg_this;
 
-    IAst *getClassName() { return lpg_ClassName; };
-    void setClassName(IAst *lpg_ClassName) { this->lpg_ClassName = lpg_ClassName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getthis() { return lpg_this; };
-    void setthis(IAst *lpg_this) { this->lpg_this = lpg_this; }
+    Ast *getClassName() { return lpg_ClassName; };
+    void setClassName(Ast *lpg_ClassName) { this->lpg_ClassName = lpg_ClassName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getthis() { return lpg_this; };
+    void setthis(AstToken *lpg_this) { this->lpg_this = lpg_this; }
 
     PrimaryNoNewArray3(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_ClassName,
-                       IAst *lpg_DOT,
-                       IAst *lpg_this):Ast(leftIToken, rightIToken)    {
+                       Ast *lpg_ClassName,
+                       AstToken *lpg_DOT,
+                       AstToken *lpg_this):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassName = lpg_ClassName;
         ((Ast*) lpg_ClassName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -13065,9 +13066,9 @@ struct PrimaryNoNewArray3 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_this);
+        list.push_back((IAst*)lpg_ClassName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_this);
         return list;
     }
 
@@ -13083,9 +13084,9 @@ struct PrimaryNoNewArray3 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ClassName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_this->accept(v);
+            ((IAst*)lpg_ClassName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_this)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13098,21 +13099,21 @@ struct PrimaryNoNewArray3 :public Ast
  */
 struct PrimaryNoNewArray4 :public Ast
 {
-    IAst *lpg_LPAREN;
-    IAst *lpg_Expression;
-    IAst *lpg_RPAREN;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_Expression;
+    AstToken *lpg_RPAREN;
 
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     PrimaryNoNewArray4(IToken* leftIToken, IToken* rightIToken,
-                       IAst *lpg_LPAREN,
-                       IAst *lpg_Expression,
-                       IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                       AstToken *lpg_LPAREN,
+                       Ast *lpg_Expression,
+                       AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_LPAREN = lpg_LPAREN;
         ((Ast*) lpg_LPAREN)->setParent(this);
         this->lpg_Expression = lpg_Expression;
@@ -13128,9 +13129,9 @@ struct PrimaryNoNewArray4 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -13146,9 +13147,9 @@ struct PrimaryNoNewArray4 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LPAREN->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13404,53 +13405,53 @@ struct BooleanLiteral1 :public AstToken
  */
 struct ClassInstanceCreationExpression0 :public Ast
 {
-    IAst *lpg_new;
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_ClassOrInterfaceType;
-    IAst *lpg_TypeArgumentsopt4;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_ClassBodyopt;
+    AstToken *lpg_new;
+    TypeArguments *lpg_TypeArgumentsopt;
+    ClassType *lpg_ClassOrInterfaceType;
+    TypeArguments *lpg_TypeArgumentsopt4;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
+    ClassBody *lpg_ClassBodyopt;
 
-    IAst *getnew() { return lpg_new; };
-    void setnew(IAst *lpg_new) { this->lpg_new = lpg_new; }
+    AstToken *getnew() { return lpg_new; };
+    void setnew(AstToken *lpg_new) { this->lpg_new = lpg_new; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
-    void setClassOrInterfaceType(IAst *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    ClassType *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
+    void setClassOrInterfaceType(ClassType *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
     /**
      * The value returned by <b>getTypeArgumentsopt4</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt4() { return lpg_TypeArgumentsopt4; };
-    void setTypeArgumentsopt4(IAst *lpg_TypeArgumentsopt4) { this->lpg_TypeArgumentsopt4 = lpg_TypeArgumentsopt4; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt4() { return lpg_TypeArgumentsopt4; };
+    void setTypeArgumentsopt4(TypeArguments *lpg_TypeArgumentsopt4) { this->lpg_TypeArgumentsopt4 = lpg_TypeArgumentsopt4; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
     /**
      * The value returned by <b>getClassBodyopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassBodyopt() { return lpg_ClassBodyopt; };
-    void setClassBodyopt(IAst *lpg_ClassBodyopt) { this->lpg_ClassBodyopt = lpg_ClassBodyopt; }
+    ClassBody *getClassBodyopt() { return lpg_ClassBodyopt; };
+    void setClassBodyopt(ClassBody *lpg_ClassBodyopt) { this->lpg_ClassBodyopt = lpg_ClassBodyopt; }
 
     ClassInstanceCreationExpression0(IToken* leftIToken, IToken* rightIToken,
-                                     IAst *lpg_new,
-                                     IAst *lpg_TypeArgumentsopt,
-                                     IAst *lpg_ClassOrInterfaceType,
-                                     IAst *lpg_TypeArgumentsopt4,
-                                     IAst *lpg_LPAREN,
-                                     IAst *lpg_ArgumentListopt,
-                                     IAst *lpg_RPAREN,
-                                     IAst *lpg_ClassBodyopt):Ast(leftIToken, rightIToken)    {
+                                     AstToken *lpg_new,
+                                     TypeArguments *lpg_TypeArgumentsopt,
+                                     ClassType *lpg_ClassOrInterfaceType,
+                                     TypeArguments *lpg_TypeArgumentsopt4,
+                                     AstToken *lpg_LPAREN,
+                                     Ast *lpg_ArgumentListopt,
+                                     AstToken *lpg_RPAREN,
+                                     ClassBody *lpg_ClassBodyopt):Ast(leftIToken, rightIToken)    {
         this->lpg_new = lpg_new;
         ((Ast*) lpg_new)->setParent(this);
         this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt;
@@ -13476,14 +13477,14 @@ struct ClassInstanceCreationExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_new);
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_ClassOrInterfaceType);
-        list.push_back(lpg_TypeArgumentsopt4);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_ClassBodyopt);
+        list.push_back((IAst*)lpg_new);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_ClassOrInterfaceType);
+        list.push_back((IAst*)lpg_TypeArgumentsopt4);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_ClassBodyopt);
         return list;
     }
 
@@ -13499,14 +13500,14 @@ struct ClassInstanceCreationExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_new->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_ClassOrInterfaceType->accept(v);
-            if (lpg_TypeArgumentsopt4 != nullptr) lpg_TypeArgumentsopt4->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
-            if (lpg_ClassBodyopt != nullptr) lpg_ClassBodyopt->accept(v);
+            ((IAst*)lpg_new)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_ClassOrInterfaceType)->accept(v);
+            if (lpg_TypeArgumentsopt4 != nullptr) ((IAst*)lpg_TypeArgumentsopt4)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            if (lpg_ClassBodyopt != nullptr) ((IAst*)lpg_ClassBodyopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13519,61 +13520,61 @@ struct ClassInstanceCreationExpression0 :public Ast
  */
 struct ClassInstanceCreationExpression1 :public Ast
 {
-    IAst *lpg_Primary;
-    IAst *lpg_DOT;
-    IAst *lpg_new;
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_identifier;
-    IAst *lpg_TypeArgumentsopt6;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_ClassBodyopt;
+    Ast *lpg_Primary;
+    AstToken *lpg_DOT;
+    AstToken *lpg_new;
+    TypeArguments *lpg_TypeArgumentsopt;
+    identifier *lpg_identifier;
+    TypeArguments *lpg_TypeArgumentsopt6;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
+    ClassBody *lpg_ClassBodyopt;
 
-    IAst *getPrimary() { return lpg_Primary; };
-    void setPrimary(IAst *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getnew() { return lpg_new; };
-    void setnew(IAst *lpg_new) { this->lpg_new = lpg_new; }
+    Ast *getPrimary() { return lpg_Primary; };
+    void setPrimary(Ast *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getnew() { return lpg_new; };
+    void setnew(AstToken *lpg_new) { this->lpg_new = lpg_new; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
     /**
      * The value returned by <b>getTypeArgumentsopt6</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt6() { return lpg_TypeArgumentsopt6; };
-    void setTypeArgumentsopt6(IAst *lpg_TypeArgumentsopt6) { this->lpg_TypeArgumentsopt6 = lpg_TypeArgumentsopt6; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt6() { return lpg_TypeArgumentsopt6; };
+    void setTypeArgumentsopt6(TypeArguments *lpg_TypeArgumentsopt6) { this->lpg_TypeArgumentsopt6 = lpg_TypeArgumentsopt6; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
     /**
      * The value returned by <b>getClassBodyopt</b> may be <b>nullptr</b>
      */
-    IAst *getClassBodyopt() { return lpg_ClassBodyopt; };
-    void setClassBodyopt(IAst *lpg_ClassBodyopt) { this->lpg_ClassBodyopt = lpg_ClassBodyopt; }
+    ClassBody *getClassBodyopt() { return lpg_ClassBodyopt; };
+    void setClassBodyopt(ClassBody *lpg_ClassBodyopt) { this->lpg_ClassBodyopt = lpg_ClassBodyopt; }
 
     ClassInstanceCreationExpression1(IToken* leftIToken, IToken* rightIToken,
-                                     IAst *lpg_Primary,
-                                     IAst *lpg_DOT,
-                                     IAst *lpg_new,
-                                     IAst *lpg_TypeArgumentsopt,
-                                     IAst *lpg_identifier,
-                                     IAst *lpg_TypeArgumentsopt6,
-                                     IAst *lpg_LPAREN,
-                                     IAst *lpg_ArgumentListopt,
-                                     IAst *lpg_RPAREN,
-                                     IAst *lpg_ClassBodyopt):Ast(leftIToken, rightIToken)    {
+                                     Ast *lpg_Primary,
+                                     AstToken *lpg_DOT,
+                                     AstToken *lpg_new,
+                                     TypeArguments *lpg_TypeArgumentsopt,
+                                     identifier *lpg_identifier,
+                                     TypeArguments *lpg_TypeArgumentsopt6,
+                                     AstToken *lpg_LPAREN,
+                                     Ast *lpg_ArgumentListopt,
+                                     AstToken *lpg_RPAREN,
+                                     ClassBody *lpg_ClassBodyopt):Ast(leftIToken, rightIToken)    {
         this->lpg_Primary = lpg_Primary;
         ((Ast*) lpg_Primary)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -13603,16 +13604,16 @@ struct ClassInstanceCreationExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Primary);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_new);
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_TypeArgumentsopt6);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_ClassBodyopt);
+        list.push_back((IAst*)lpg_Primary);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_new);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_TypeArgumentsopt6);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_ClassBodyopt);
         return list;
     }
 
@@ -13628,16 +13629,16 @@ struct ClassInstanceCreationExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Primary->accept(v);
-            lpg_DOT->accept(v);
-            lpg_new->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_identifier->accept(v);
-            if (lpg_TypeArgumentsopt6 != nullptr) lpg_TypeArgumentsopt6->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
-            if (lpg_ClassBodyopt != nullptr) lpg_ClassBodyopt->accept(v);
+            ((IAst*)lpg_Primary)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_new)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            if (lpg_TypeArgumentsopt6 != nullptr) ((IAst*)lpg_TypeArgumentsopt6)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            if (lpg_ClassBodyopt != nullptr) ((IAst*)lpg_ClassBodyopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13650,28 +13651,28 @@ struct ClassInstanceCreationExpression1 :public Ast
  */
 struct ArrayCreationExpression0 :public Ast
 {
-    IAst *lpg_new;
-    IAst *lpg_PrimitiveType;
-    IAst *lpg_DimExprs;
-    IAst *lpg_Dimsopt;
+    AstToken *lpg_new;
+    Ast *lpg_PrimitiveType;
+    Ast *lpg_DimExprs;
+    Ast *lpg_Dimsopt;
 
-    IAst *getnew() { return lpg_new; };
-    void setnew(IAst *lpg_new) { this->lpg_new = lpg_new; }
-    IAst *getPrimitiveType() { return lpg_PrimitiveType; };
-    void setPrimitiveType(IAst *lpg_PrimitiveType) { this->lpg_PrimitiveType = lpg_PrimitiveType; }
-    IAst *getDimExprs() { return lpg_DimExprs; };
-    void setDimExprs(IAst *lpg_DimExprs) { this->lpg_DimExprs = lpg_DimExprs; }
+    AstToken *getnew() { return lpg_new; };
+    void setnew(AstToken *lpg_new) { this->lpg_new = lpg_new; }
+    Ast *getPrimitiveType() { return lpg_PrimitiveType; };
+    void setPrimitiveType(Ast *lpg_PrimitiveType) { this->lpg_PrimitiveType = lpg_PrimitiveType; }
+    Ast *getDimExprs() { return lpg_DimExprs; };
+    void setDimExprs(Ast *lpg_DimExprs) { this->lpg_DimExprs = lpg_DimExprs; }
     /**
      * The value returned by <b>getDimsopt</b> may be <b>nullptr</b>
      */
-    IAst *getDimsopt() { return lpg_Dimsopt; };
-    void setDimsopt(IAst *lpg_Dimsopt) { this->lpg_Dimsopt = lpg_Dimsopt; }
+    Ast *getDimsopt() { return lpg_Dimsopt; };
+    void setDimsopt(Ast *lpg_Dimsopt) { this->lpg_Dimsopt = lpg_Dimsopt; }
 
     ArrayCreationExpression0(IToken* leftIToken, IToken* rightIToken,
-                             IAst *lpg_new,
-                             IAst *lpg_PrimitiveType,
-                             IAst *lpg_DimExprs,
-                             IAst *lpg_Dimsopt):Ast(leftIToken, rightIToken)    {
+                             AstToken *lpg_new,
+                             Ast *lpg_PrimitiveType,
+                             Ast *lpg_DimExprs,
+                             Ast *lpg_Dimsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_new = lpg_new;
         ((Ast*) lpg_new)->setParent(this);
         this->lpg_PrimitiveType = lpg_PrimitiveType;
@@ -13689,10 +13690,10 @@ struct ArrayCreationExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_new);
-        list.push_back(lpg_PrimitiveType);
-        list.push_back(lpg_DimExprs);
-        list.push_back(lpg_Dimsopt);
+        list.push_back((IAst*)lpg_new);
+        list.push_back((IAst*)lpg_PrimitiveType);
+        list.push_back((IAst*)lpg_DimExprs);
+        list.push_back((IAst*)lpg_Dimsopt);
         return list;
     }
 
@@ -13708,10 +13709,10 @@ struct ArrayCreationExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_new->accept(v);
-            lpg_PrimitiveType->accept(v);
-            lpg_DimExprs->accept(v);
-            if (lpg_Dimsopt != nullptr) lpg_Dimsopt->accept(v);
+            ((IAst*)lpg_new)->accept(v);
+            ((IAst*)lpg_PrimitiveType)->accept(v);
+            ((IAst*)lpg_DimExprs)->accept(v);
+            if (lpg_Dimsopt != nullptr) ((IAst*)lpg_Dimsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13724,28 +13725,28 @@ struct ArrayCreationExpression0 :public Ast
  */
 struct ArrayCreationExpression1 :public Ast
 {
-    IAst *lpg_new;
-    IAst *lpg_ClassOrInterfaceType;
-    IAst *lpg_DimExprs;
-    IAst *lpg_Dimsopt;
+    AstToken *lpg_new;
+    ClassType *lpg_ClassOrInterfaceType;
+    Ast *lpg_DimExprs;
+    Ast *lpg_Dimsopt;
 
-    IAst *getnew() { return lpg_new; };
-    void setnew(IAst *lpg_new) { this->lpg_new = lpg_new; }
-    IAst *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
-    void setClassOrInterfaceType(IAst *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
-    IAst *getDimExprs() { return lpg_DimExprs; };
-    void setDimExprs(IAst *lpg_DimExprs) { this->lpg_DimExprs = lpg_DimExprs; }
+    AstToken *getnew() { return lpg_new; };
+    void setnew(AstToken *lpg_new) { this->lpg_new = lpg_new; }
+    ClassType *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
+    void setClassOrInterfaceType(ClassType *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
+    Ast *getDimExprs() { return lpg_DimExprs; };
+    void setDimExprs(Ast *lpg_DimExprs) { this->lpg_DimExprs = lpg_DimExprs; }
     /**
      * The value returned by <b>getDimsopt</b> may be <b>nullptr</b>
      */
-    IAst *getDimsopt() { return lpg_Dimsopt; };
-    void setDimsopt(IAst *lpg_Dimsopt) { this->lpg_Dimsopt = lpg_Dimsopt; }
+    Ast *getDimsopt() { return lpg_Dimsopt; };
+    void setDimsopt(Ast *lpg_Dimsopt) { this->lpg_Dimsopt = lpg_Dimsopt; }
 
     ArrayCreationExpression1(IToken* leftIToken, IToken* rightIToken,
-                             IAst *lpg_new,
-                             IAst *lpg_ClassOrInterfaceType,
-                             IAst *lpg_DimExprs,
-                             IAst *lpg_Dimsopt):Ast(leftIToken, rightIToken)    {
+                             AstToken *lpg_new,
+                             ClassType *lpg_ClassOrInterfaceType,
+                             Ast *lpg_DimExprs,
+                             Ast *lpg_Dimsopt):Ast(leftIToken, rightIToken)    {
         this->lpg_new = lpg_new;
         ((Ast*) lpg_new)->setParent(this);
         this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType;
@@ -13763,10 +13764,10 @@ struct ArrayCreationExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_new);
-        list.push_back(lpg_ClassOrInterfaceType);
-        list.push_back(lpg_DimExprs);
-        list.push_back(lpg_Dimsopt);
+        list.push_back((IAst*)lpg_new);
+        list.push_back((IAst*)lpg_ClassOrInterfaceType);
+        list.push_back((IAst*)lpg_DimExprs);
+        list.push_back((IAst*)lpg_Dimsopt);
         return list;
     }
 
@@ -13782,10 +13783,10 @@ struct ArrayCreationExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_new->accept(v);
-            lpg_ClassOrInterfaceType->accept(v);
-            lpg_DimExprs->accept(v);
-            if (lpg_Dimsopt != nullptr) lpg_Dimsopt->accept(v);
+            ((IAst*)lpg_new)->accept(v);
+            ((IAst*)lpg_ClassOrInterfaceType)->accept(v);
+            ((IAst*)lpg_DimExprs)->accept(v);
+            if (lpg_Dimsopt != nullptr) ((IAst*)lpg_Dimsopt)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13798,25 +13799,25 @@ struct ArrayCreationExpression1 :public Ast
  */
 struct ArrayCreationExpression2 :public Ast
 {
-    IAst *lpg_new;
-    IAst *lpg_PrimitiveType;
-    IAst *lpg_Dims;
-    IAst *lpg_ArrayInitializer;
+    AstToken *lpg_new;
+    Ast *lpg_PrimitiveType;
+    Ast *lpg_Dims;
+    ArrayInitializer *lpg_ArrayInitializer;
 
-    IAst *getnew() { return lpg_new; };
-    void setnew(IAst *lpg_new) { this->lpg_new = lpg_new; }
-    IAst *getPrimitiveType() { return lpg_PrimitiveType; };
-    void setPrimitiveType(IAst *lpg_PrimitiveType) { this->lpg_PrimitiveType = lpg_PrimitiveType; }
-    IAst *getDims() { return lpg_Dims; };
-    void setDims(IAst *lpg_Dims) { this->lpg_Dims = lpg_Dims; }
-    IAst *getArrayInitializer() { return lpg_ArrayInitializer; };
-    void setArrayInitializer(IAst *lpg_ArrayInitializer) { this->lpg_ArrayInitializer = lpg_ArrayInitializer; }
+    AstToken *getnew() { return lpg_new; };
+    void setnew(AstToken *lpg_new) { this->lpg_new = lpg_new; }
+    Ast *getPrimitiveType() { return lpg_PrimitiveType; };
+    void setPrimitiveType(Ast *lpg_PrimitiveType) { this->lpg_PrimitiveType = lpg_PrimitiveType; }
+    Ast *getDims() { return lpg_Dims; };
+    void setDims(Ast *lpg_Dims) { this->lpg_Dims = lpg_Dims; }
+    ArrayInitializer *getArrayInitializer() { return lpg_ArrayInitializer; };
+    void setArrayInitializer(ArrayInitializer *lpg_ArrayInitializer) { this->lpg_ArrayInitializer = lpg_ArrayInitializer; }
 
     ArrayCreationExpression2(IToken* leftIToken, IToken* rightIToken,
-                             IAst *lpg_new,
-                             IAst *lpg_PrimitiveType,
-                             IAst *lpg_Dims,
-                             IAst *lpg_ArrayInitializer):Ast(leftIToken, rightIToken)    {
+                             AstToken *lpg_new,
+                             Ast *lpg_PrimitiveType,
+                             Ast *lpg_Dims,
+                             ArrayInitializer *lpg_ArrayInitializer):Ast(leftIToken, rightIToken)    {
         this->lpg_new = lpg_new;
         ((Ast*) lpg_new)->setParent(this);
         this->lpg_PrimitiveType = lpg_PrimitiveType;
@@ -13834,10 +13835,10 @@ struct ArrayCreationExpression2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_new);
-        list.push_back(lpg_PrimitiveType);
-        list.push_back(lpg_Dims);
-        list.push_back(lpg_ArrayInitializer);
+        list.push_back((IAst*)lpg_new);
+        list.push_back((IAst*)lpg_PrimitiveType);
+        list.push_back((IAst*)lpg_Dims);
+        list.push_back((IAst*)lpg_ArrayInitializer);
         return list;
     }
 
@@ -13853,10 +13854,10 @@ struct ArrayCreationExpression2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_new->accept(v);
-            lpg_PrimitiveType->accept(v);
-            lpg_Dims->accept(v);
-            lpg_ArrayInitializer->accept(v);
+            ((IAst*)lpg_new)->accept(v);
+            ((IAst*)lpg_PrimitiveType)->accept(v);
+            ((IAst*)lpg_Dims)->accept(v);
+            ((IAst*)lpg_ArrayInitializer)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13869,25 +13870,25 @@ struct ArrayCreationExpression2 :public Ast
  */
 struct ArrayCreationExpression3 :public Ast
 {
-    IAst *lpg_new;
-    IAst *lpg_ClassOrInterfaceType;
-    IAst *lpg_Dims;
-    IAst *lpg_ArrayInitializer;
+    AstToken *lpg_new;
+    ClassType *lpg_ClassOrInterfaceType;
+    Ast *lpg_Dims;
+    ArrayInitializer *lpg_ArrayInitializer;
 
-    IAst *getnew() { return lpg_new; };
-    void setnew(IAst *lpg_new) { this->lpg_new = lpg_new; }
-    IAst *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
-    void setClassOrInterfaceType(IAst *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
-    IAst *getDims() { return lpg_Dims; };
-    void setDims(IAst *lpg_Dims) { this->lpg_Dims = lpg_Dims; }
-    IAst *getArrayInitializer() { return lpg_ArrayInitializer; };
-    void setArrayInitializer(IAst *lpg_ArrayInitializer) { this->lpg_ArrayInitializer = lpg_ArrayInitializer; }
+    AstToken *getnew() { return lpg_new; };
+    void setnew(AstToken *lpg_new) { this->lpg_new = lpg_new; }
+    ClassType *getClassOrInterfaceType() { return lpg_ClassOrInterfaceType; };
+    void setClassOrInterfaceType(ClassType *lpg_ClassOrInterfaceType) { this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType; }
+    Ast *getDims() { return lpg_Dims; };
+    void setDims(Ast *lpg_Dims) { this->lpg_Dims = lpg_Dims; }
+    ArrayInitializer *getArrayInitializer() { return lpg_ArrayInitializer; };
+    void setArrayInitializer(ArrayInitializer *lpg_ArrayInitializer) { this->lpg_ArrayInitializer = lpg_ArrayInitializer; }
 
     ArrayCreationExpression3(IToken* leftIToken, IToken* rightIToken,
-                             IAst *lpg_new,
-                             IAst *lpg_ClassOrInterfaceType,
-                             IAst *lpg_Dims,
-                             IAst *lpg_ArrayInitializer):Ast(leftIToken, rightIToken)    {
+                             AstToken *lpg_new,
+                             ClassType *lpg_ClassOrInterfaceType,
+                             Ast *lpg_Dims,
+                             ArrayInitializer *lpg_ArrayInitializer):Ast(leftIToken, rightIToken)    {
         this->lpg_new = lpg_new;
         ((Ast*) lpg_new)->setParent(this);
         this->lpg_ClassOrInterfaceType = lpg_ClassOrInterfaceType;
@@ -13905,10 +13906,10 @@ struct ArrayCreationExpression3 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_new);
-        list.push_back(lpg_ClassOrInterfaceType);
-        list.push_back(lpg_Dims);
-        list.push_back(lpg_ArrayInitializer);
+        list.push_back((IAst*)lpg_new);
+        list.push_back((IAst*)lpg_ClassOrInterfaceType);
+        list.push_back((IAst*)lpg_Dims);
+        list.push_back((IAst*)lpg_ArrayInitializer);
         return list;
     }
 
@@ -13924,10 +13925,10 @@ struct ArrayCreationExpression3 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_new->accept(v);
-            lpg_ClassOrInterfaceType->accept(v);
-            lpg_Dims->accept(v);
-            lpg_ArrayInitializer->accept(v);
+            ((IAst*)lpg_new)->accept(v);
+            ((IAst*)lpg_ClassOrInterfaceType)->accept(v);
+            ((IAst*)lpg_Dims)->accept(v);
+            ((IAst*)lpg_ArrayInitializer)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13940,17 +13941,17 @@ struct ArrayCreationExpression3 :public Ast
  */
 struct Dims0 :public Ast
 {
-    IAst *lpg_LBRACKET;
-    IAst *lpg_RBRACKET;
+    AstToken *lpg_LBRACKET;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     Dims0(IToken* leftIToken, IToken* rightIToken,
-          IAst *lpg_LBRACKET,
-          IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+          AstToken *lpg_LBRACKET,
+          AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_LBRACKET = lpg_LBRACKET;
         ((Ast*) lpg_LBRACKET)->setParent(this);
         this->lpg_RBRACKET = lpg_RBRACKET;
@@ -13964,8 +13965,8 @@ struct Dims0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -13981,8 +13982,8 @@ struct Dims0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LBRACKET->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -13995,21 +13996,21 @@ struct Dims0 :public Ast
  */
 struct Dims1 :public Ast
 {
-    IAst *lpg_Dims;
-    IAst *lpg_LBRACKET;
-    IAst *lpg_RBRACKET;
+    Ast *lpg_Dims;
+    AstToken *lpg_LBRACKET;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getDims() { return lpg_Dims; };
-    void setDims(IAst *lpg_Dims) { this->lpg_Dims = lpg_Dims; }
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    Ast *getDims() { return lpg_Dims; };
+    void setDims(Ast *lpg_Dims) { this->lpg_Dims = lpg_Dims; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     Dims1(IToken* leftIToken, IToken* rightIToken,
-          IAst *lpg_Dims,
-          IAst *lpg_LBRACKET,
-          IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+          Ast *lpg_Dims,
+          AstToken *lpg_LBRACKET,
+          AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_Dims = lpg_Dims;
         ((Ast*) lpg_Dims)->setParent(this);
         this->lpg_LBRACKET = lpg_LBRACKET;
@@ -14025,9 +14026,9 @@ struct Dims1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Dims);
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_Dims);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -14043,9 +14044,9 @@ struct Dims1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Dims->accept(v);
-            lpg_LBRACKET->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_Dims)->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14058,21 +14059,21 @@ struct Dims1 :public Ast
  */
 struct FieldAccess0 :public Ast
 {
-    IAst *lpg_Primary;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    Ast *lpg_Primary;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getPrimary() { return lpg_Primary; };
-    void setPrimary(IAst *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getPrimary() { return lpg_Primary; };
+    void setPrimary(Ast *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     FieldAccess0(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_Primary,
-                 IAst *lpg_DOT,
-                 IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_Primary,
+                 AstToken *lpg_DOT,
+                 identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_Primary = lpg_Primary;
         ((Ast*) lpg_Primary)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14088,9 +14089,9 @@ struct FieldAccess0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Primary);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_Primary);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -14106,9 +14107,9 @@ struct FieldAccess0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Primary->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_Primary)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14121,21 +14122,21 @@ struct FieldAccess0 :public Ast
  */
 struct FieldAccess1 :public Ast
 {
-    IAst *lpg_super;
-    IAst *lpg_DOT;
-    IAst *lpg_identifier;
+    AstToken *lpg_super;
+    AstToken *lpg_DOT;
+    identifier *lpg_identifier;
 
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     FieldAccess1(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_super,
-                 IAst *lpg_DOT,
-                 IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                 AstToken *lpg_super,
+                 AstToken *lpg_DOT,
+                 identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_super = lpg_super;
         ((Ast*) lpg_super)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14151,9 +14152,9 @@ struct FieldAccess1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_super);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -14169,9 +14170,9 @@ struct FieldAccess1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_super->accept(v);
-            lpg_DOT->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14184,29 +14185,29 @@ struct FieldAccess1 :public Ast
  */
 struct FieldAccess2 :public Ast
 {
-    IAst *lpg_ClassName;
-    IAst *lpg_DOT;
-    IAst *lpg_super;
-    IAst *lpg_DOT4;
-    IAst *lpg_identifier;
+    Ast *lpg_ClassName;
+    AstToken *lpg_DOT;
+    AstToken *lpg_super;
+    AstToken *lpg_DOT4;
+    identifier *lpg_identifier;
 
-    IAst *getClassName() { return lpg_ClassName; };
-    void setClassName(IAst *lpg_ClassName) { this->lpg_ClassName = lpg_ClassName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getDOT4() { return lpg_DOT4; };
-    void setDOT4(IAst *lpg_DOT4) { this->lpg_DOT4 = lpg_DOT4; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    Ast *getClassName() { return lpg_ClassName; };
+    void setClassName(Ast *lpg_ClassName) { this->lpg_ClassName = lpg_ClassName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    AstToken *getDOT4() { return lpg_DOT4; };
+    void setDOT4(AstToken *lpg_DOT4) { this->lpg_DOT4 = lpg_DOT4; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
 
     FieldAccess2(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_ClassName,
-                 IAst *lpg_DOT,
-                 IAst *lpg_super,
-                 IAst *lpg_DOT4,
-                 IAst *lpg_identifier):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_ClassName,
+                 AstToken *lpg_DOT,
+                 AstToken *lpg_super,
+                 AstToken *lpg_DOT4,
+                 identifier *lpg_identifier):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassName = lpg_ClassName;
         ((Ast*) lpg_ClassName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14226,11 +14227,11 @@ struct FieldAccess2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_super);
-        list.push_back(lpg_DOT4);
-        list.push_back(lpg_identifier);
+        list.push_back((IAst*)lpg_ClassName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_DOT4);
+        list.push_back((IAst*)lpg_identifier);
         return list;
     }
 
@@ -14246,11 +14247,11 @@ struct FieldAccess2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ClassName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_super->accept(v);
-            lpg_DOT4->accept(v);
-            lpg_identifier->accept(v);
+            ((IAst*)lpg_ClassName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_DOT4)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14263,28 +14264,28 @@ struct FieldAccess2 :public Ast
  */
 struct MethodInvocation0 :public Ast
 {
-    IAst *lpg_MethodName;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
+    Ast *lpg_MethodName;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getMethodName() { return lpg_MethodName; };
-    void setMethodName(IAst *lpg_MethodName) { this->lpg_MethodName = lpg_MethodName; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getMethodName() { return lpg_MethodName; };
+    void setMethodName(Ast *lpg_MethodName) { this->lpg_MethodName = lpg_MethodName; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     MethodInvocation0(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_MethodName,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_ArgumentListopt,
-                      IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_MethodName,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_ArgumentListopt,
+                      AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_MethodName = lpg_MethodName;
         ((Ast*) lpg_MethodName)->setParent(this);
         this->lpg_LPAREN = lpg_LPAREN;
@@ -14302,10 +14303,10 @@ struct MethodInvocation0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MethodName);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_MethodName);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -14321,10 +14322,10 @@ struct MethodInvocation0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MethodName->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_MethodName)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14337,43 +14338,43 @@ struct MethodInvocation0 :public Ast
  */
 struct MethodInvocation1 :public Ast
 {
-    IAst *lpg_Primary;
-    IAst *lpg_DOT;
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_identifier;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
+    Ast *lpg_Primary;
+    AstToken *lpg_DOT;
+    TypeArguments *lpg_TypeArgumentsopt;
+    identifier *lpg_identifier;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getPrimary() { return lpg_Primary; };
-    void setPrimary(IAst *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    Ast *getPrimary() { return lpg_Primary; };
+    void setPrimary(Ast *lpg_Primary) { this->lpg_Primary = lpg_Primary; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     MethodInvocation1(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_Primary,
-                      IAst *lpg_DOT,
-                      IAst *lpg_TypeArgumentsopt,
-                      IAst *lpg_identifier,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_ArgumentListopt,
-                      IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_Primary,
+                      AstToken *lpg_DOT,
+                      TypeArguments *lpg_TypeArgumentsopt,
+                      identifier *lpg_identifier,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_ArgumentListopt,
+                      AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_Primary = lpg_Primary;
         ((Ast*) lpg_Primary)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14397,13 +14398,13 @@ struct MethodInvocation1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_Primary);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_Primary);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -14419,13 +14420,13 @@ struct MethodInvocation1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_Primary->accept(v);
-            lpg_DOT->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_identifier->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_Primary)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14438,43 +14439,43 @@ struct MethodInvocation1 :public Ast
  */
 struct MethodInvocation2 :public Ast
 {
-    IAst *lpg_super;
-    IAst *lpg_DOT;
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_identifier;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
+    AstToken *lpg_super;
+    AstToken *lpg_DOT;
+    TypeArguments *lpg_TypeArgumentsopt;
+    identifier *lpg_identifier;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     MethodInvocation2(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_super,
-                      IAst *lpg_DOT,
-                      IAst *lpg_TypeArgumentsopt,
-                      IAst *lpg_identifier,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_ArgumentListopt,
-                      IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                      AstToken *lpg_super,
+                      AstToken *lpg_DOT,
+                      TypeArguments *lpg_TypeArgumentsopt,
+                      identifier *lpg_identifier,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_ArgumentListopt,
+                      AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_super = lpg_super;
         ((Ast*) lpg_super)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14498,13 +14499,13 @@ struct MethodInvocation2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_super);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -14520,13 +14521,13 @@ struct MethodInvocation2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_super->accept(v);
-            lpg_DOT->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_identifier->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14539,51 +14540,51 @@ struct MethodInvocation2 :public Ast
  */
 struct MethodInvocation3 :public Ast
 {
-    IAst *lpg_ClassName;
-    IAst *lpg_DOT;
-    IAst *lpg_super;
-    IAst *lpg_DOT4;
-    IAst *lpg_TypeArgumentsopt;
-    IAst *lpg_identifier;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
+    Ast *lpg_ClassName;
+    AstToken *lpg_DOT;
+    AstToken *lpg_super;
+    AstToken *lpg_DOT4;
+    TypeArguments *lpg_TypeArgumentsopt;
+    identifier *lpg_identifier;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getClassName() { return lpg_ClassName; };
-    void setClassName(IAst *lpg_ClassName) { this->lpg_ClassName = lpg_ClassName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getsuper() { return lpg_super; };
-    void setsuper(IAst *lpg_super) { this->lpg_super = lpg_super; }
-    IAst *getDOT4() { return lpg_DOT4; };
-    void setDOT4(IAst *lpg_DOT4) { this->lpg_DOT4 = lpg_DOT4; }
+    Ast *getClassName() { return lpg_ClassName; };
+    void setClassName(Ast *lpg_ClassName) { this->lpg_ClassName = lpg_ClassName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    AstToken *getsuper() { return lpg_super; };
+    void setsuper(AstToken *lpg_super) { this->lpg_super = lpg_super; }
+    AstToken *getDOT4() { return lpg_DOT4; };
+    void setDOT4(AstToken *lpg_DOT4) { this->lpg_DOT4 = lpg_DOT4; }
     /**
      * The value returned by <b>getTypeArgumentsopt</b> may be <b>nullptr</b>
      */
-    IAst *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
-    void setTypeArgumentsopt(IAst *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    TypeArguments *getTypeArgumentsopt() { return lpg_TypeArgumentsopt; };
+    void setTypeArgumentsopt(TypeArguments *lpg_TypeArgumentsopt) { this->lpg_TypeArgumentsopt = lpg_TypeArgumentsopt; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     MethodInvocation3(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_ClassName,
-                      IAst *lpg_DOT,
-                      IAst *lpg_super,
-                      IAst *lpg_DOT4,
-                      IAst *lpg_TypeArgumentsopt,
-                      IAst *lpg_identifier,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_ArgumentListopt,
-                      IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_ClassName,
+                      AstToken *lpg_DOT,
+                      AstToken *lpg_super,
+                      AstToken *lpg_DOT4,
+                      TypeArguments *lpg_TypeArgumentsopt,
+                      identifier *lpg_identifier,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_ArgumentListopt,
+                      AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_ClassName = lpg_ClassName;
         ((Ast*) lpg_ClassName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14611,15 +14612,15 @@ struct MethodInvocation3 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ClassName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_super);
-        list.push_back(lpg_DOT4);
-        list.push_back(lpg_TypeArgumentsopt);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_ClassName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_super);
+        list.push_back((IAst*)lpg_DOT4);
+        list.push_back((IAst*)lpg_TypeArgumentsopt);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -14635,15 +14636,15 @@ struct MethodInvocation3 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ClassName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_super->accept(v);
-            lpg_DOT4->accept(v);
-            if (lpg_TypeArgumentsopt != nullptr) lpg_TypeArgumentsopt->accept(v);
-            lpg_identifier->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_ClassName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_super)->accept(v);
+            ((IAst*)lpg_DOT4)->accept(v);
+            if (lpg_TypeArgumentsopt != nullptr) ((IAst*)lpg_TypeArgumentsopt)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14656,40 +14657,40 @@ struct MethodInvocation3 :public Ast
  */
 struct MethodInvocation4 :public Ast
 {
-    IAst *lpg_TypeName;
-    IAst *lpg_DOT;
-    IAst *lpg_TypeArguments;
-    IAst *lpg_identifier;
-    IAst *lpg_LPAREN;
-    IAst *lpg_ArgumentListopt;
-    IAst *lpg_RPAREN;
+    Ast *lpg_TypeName;
+    AstToken *lpg_DOT;
+    TypeArguments *lpg_TypeArguments;
+    identifier *lpg_identifier;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ArgumentListopt;
+    AstToken *lpg_RPAREN;
 
-    IAst *getTypeName() { return lpg_TypeName; };
-    void setTypeName(IAst *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
-    IAst *getDOT() { return lpg_DOT; };
-    void setDOT(IAst *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
-    IAst *getTypeArguments() { return lpg_TypeArguments; };
-    void setTypeArguments(IAst *lpg_TypeArguments) { this->lpg_TypeArguments = lpg_TypeArguments; }
-    IAst *getidentifier() { return lpg_identifier; };
-    void setidentifier(IAst *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getTypeName() { return lpg_TypeName; };
+    void setTypeName(Ast *lpg_TypeName) { this->lpg_TypeName = lpg_TypeName; }
+    AstToken *getDOT() { return lpg_DOT; };
+    void setDOT(AstToken *lpg_DOT) { this->lpg_DOT = lpg_DOT; }
+    TypeArguments *getTypeArguments() { return lpg_TypeArguments; };
+    void setTypeArguments(TypeArguments *lpg_TypeArguments) { this->lpg_TypeArguments = lpg_TypeArguments; }
+    identifier *getidentifier() { return lpg_identifier; };
+    void setidentifier(identifier *lpg_identifier) { this->lpg_identifier = lpg_identifier; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
     /**
      * The value returned by <b>getArgumentListopt</b> may be <b>nullptr</b>
      */
-    IAst *getArgumentListopt() { return lpg_ArgumentListopt; };
-    void setArgumentListopt(IAst *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getArgumentListopt() { return lpg_ArgumentListopt; };
+    void setArgumentListopt(Ast *lpg_ArgumentListopt) { this->lpg_ArgumentListopt = lpg_ArgumentListopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
 
     MethodInvocation4(IToken* leftIToken, IToken* rightIToken,
-                      IAst *lpg_TypeName,
-                      IAst *lpg_DOT,
-                      IAst *lpg_TypeArguments,
-                      IAst *lpg_identifier,
-                      IAst *lpg_LPAREN,
-                      IAst *lpg_ArgumentListopt,
-                      IAst *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
+                      Ast *lpg_TypeName,
+                      AstToken *lpg_DOT,
+                      TypeArguments *lpg_TypeArguments,
+                      identifier *lpg_identifier,
+                      AstToken *lpg_LPAREN,
+                      Ast *lpg_ArgumentListopt,
+                      AstToken *lpg_RPAREN):Ast(leftIToken, rightIToken)    {
         this->lpg_TypeName = lpg_TypeName;
         ((Ast*) lpg_TypeName)->setParent(this);
         this->lpg_DOT = lpg_DOT;
@@ -14713,13 +14714,13 @@ struct MethodInvocation4 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TypeName);
-        list.push_back(lpg_DOT);
-        list.push_back(lpg_TypeArguments);
-        list.push_back(lpg_identifier);
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ArgumentListopt);
-        list.push_back(lpg_RPAREN);
+        list.push_back((IAst*)lpg_TypeName);
+        list.push_back((IAst*)lpg_DOT);
+        list.push_back((IAst*)lpg_TypeArguments);
+        list.push_back((IAst*)lpg_identifier);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ArgumentListopt);
+        list.push_back((IAst*)lpg_RPAREN);
         return list;
     }
 
@@ -14735,13 +14736,13 @@ struct MethodInvocation4 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TypeName->accept(v);
-            lpg_DOT->accept(v);
-            lpg_TypeArguments->accept(v);
-            lpg_identifier->accept(v);
-            lpg_LPAREN->accept(v);
-            if (lpg_ArgumentListopt != nullptr) lpg_ArgumentListopt->accept(v);
-            lpg_RPAREN->accept(v);
+            ((IAst*)lpg_TypeName)->accept(v);
+            ((IAst*)lpg_DOT)->accept(v);
+            ((IAst*)lpg_TypeArguments)->accept(v);
+            ((IAst*)lpg_identifier)->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            if (lpg_ArgumentListopt != nullptr) ((IAst*)lpg_ArgumentListopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14754,25 +14755,25 @@ struct MethodInvocation4 :public Ast
  */
 struct ArrayAccess0 :public Ast
 {
-    IAst *lpg_ExpressionName;
-    IAst *lpg_LBRACKET;
-    IAst *lpg_Expression;
-    IAst *lpg_RBRACKET;
+    Ast *lpg_ExpressionName;
+    AstToken *lpg_LBRACKET;
+    Ast *lpg_Expression;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getExpressionName() { return lpg_ExpressionName; };
-    void setExpressionName(IAst *lpg_ExpressionName) { this->lpg_ExpressionName = lpg_ExpressionName; }
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    Ast *getExpressionName() { return lpg_ExpressionName; };
+    void setExpressionName(Ast *lpg_ExpressionName) { this->lpg_ExpressionName = lpg_ExpressionName; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     ArrayAccess0(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_ExpressionName,
-                 IAst *lpg_LBRACKET,
-                 IAst *lpg_Expression,
-                 IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_ExpressionName,
+                 AstToken *lpg_LBRACKET,
+                 Ast *lpg_Expression,
+                 AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_ExpressionName = lpg_ExpressionName;
         ((Ast*) lpg_ExpressionName)->setParent(this);
         this->lpg_LBRACKET = lpg_LBRACKET;
@@ -14790,10 +14791,10 @@ struct ArrayAccess0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ExpressionName);
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_ExpressionName);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -14809,10 +14810,10 @@ struct ArrayAccess0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ExpressionName->accept(v);
-            lpg_LBRACKET->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_ExpressionName)->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14825,25 +14826,25 @@ struct ArrayAccess0 :public Ast
  */
 struct ArrayAccess1 :public Ast
 {
-    IAst *lpg_PrimaryNoNewArray;
-    IAst *lpg_LBRACKET;
-    IAst *lpg_Expression;
-    IAst *lpg_RBRACKET;
+    Ast *lpg_PrimaryNoNewArray;
+    AstToken *lpg_LBRACKET;
+    Ast *lpg_Expression;
+    AstToken *lpg_RBRACKET;
 
-    IAst *getPrimaryNoNewArray() { return lpg_PrimaryNoNewArray; };
-    void setPrimaryNoNewArray(IAst *lpg_PrimaryNoNewArray) { this->lpg_PrimaryNoNewArray = lpg_PrimaryNoNewArray; }
-    IAst *getLBRACKET() { return lpg_LBRACKET; };
-    void setLBRACKET(IAst *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
-    IAst *getExpression() { return lpg_Expression; };
-    void setExpression(IAst *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
-    IAst *getRBRACKET() { return lpg_RBRACKET; };
-    void setRBRACKET(IAst *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
+    Ast *getPrimaryNoNewArray() { return lpg_PrimaryNoNewArray; };
+    void setPrimaryNoNewArray(Ast *lpg_PrimaryNoNewArray) { this->lpg_PrimaryNoNewArray = lpg_PrimaryNoNewArray; }
+    AstToken *getLBRACKET() { return lpg_LBRACKET; };
+    void setLBRACKET(AstToken *lpg_LBRACKET) { this->lpg_LBRACKET = lpg_LBRACKET; }
+    Ast *getExpression() { return lpg_Expression; };
+    void setExpression(Ast *lpg_Expression) { this->lpg_Expression = lpg_Expression; }
+    AstToken *getRBRACKET() { return lpg_RBRACKET; };
+    void setRBRACKET(AstToken *lpg_RBRACKET) { this->lpg_RBRACKET = lpg_RBRACKET; }
 
     ArrayAccess1(IToken* leftIToken, IToken* rightIToken,
-                 IAst *lpg_PrimaryNoNewArray,
-                 IAst *lpg_LBRACKET,
-                 IAst *lpg_Expression,
-                 IAst *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
+                 Ast *lpg_PrimaryNoNewArray,
+                 AstToken *lpg_LBRACKET,
+                 Ast *lpg_Expression,
+                 AstToken *lpg_RBRACKET):Ast(leftIToken, rightIToken)    {
         this->lpg_PrimaryNoNewArray = lpg_PrimaryNoNewArray;
         ((Ast*) lpg_PrimaryNoNewArray)->setParent(this);
         this->lpg_LBRACKET = lpg_LBRACKET;
@@ -14861,10 +14862,10 @@ struct ArrayAccess1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PrimaryNoNewArray);
-        list.push_back(lpg_LBRACKET);
-        list.push_back(lpg_Expression);
-        list.push_back(lpg_RBRACKET);
+        list.push_back((IAst*)lpg_PrimaryNoNewArray);
+        list.push_back((IAst*)lpg_LBRACKET);
+        list.push_back((IAst*)lpg_Expression);
+        list.push_back((IAst*)lpg_RBRACKET);
         return list;
     }
 
@@ -14880,10 +14881,10 @@ struct ArrayAccess1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PrimaryNoNewArray->accept(v);
-            lpg_LBRACKET->accept(v);
-            lpg_Expression->accept(v);
-            lpg_RBRACKET->accept(v);
+            ((IAst*)lpg_PrimaryNoNewArray)->accept(v);
+            ((IAst*)lpg_LBRACKET)->accept(v);
+            ((IAst*)lpg_Expression)->accept(v);
+            ((IAst*)lpg_RBRACKET)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14896,17 +14897,17 @@ struct ArrayAccess1 :public Ast
  */
 struct UnaryExpression0 :public Ast
 {
-    IAst *lpg_PLUS;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_PLUS;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getPLUS() { return lpg_PLUS; };
-    void setPLUS(IAst *lpg_PLUS) { this->lpg_PLUS = lpg_PLUS; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    AstToken *getPLUS() { return lpg_PLUS; };
+    void setPLUS(AstToken *lpg_PLUS) { this->lpg_PLUS = lpg_PLUS; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     UnaryExpression0(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_PLUS,
-                     IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_PLUS,
+                     Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_PLUS = lpg_PLUS;
         ((Ast*) lpg_PLUS)->setParent(this);
         this->lpg_UnaryExpression = lpg_UnaryExpression;
@@ -14920,8 +14921,8 @@ struct UnaryExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_PLUS);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_PLUS);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -14937,8 +14938,8 @@ struct UnaryExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_PLUS->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_PLUS)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -14951,17 +14952,17 @@ struct UnaryExpression0 :public Ast
  */
 struct UnaryExpression1 :public Ast
 {
-    IAst *lpg_MINUS;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_MINUS;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getMINUS() { return lpg_MINUS; };
-    void setMINUS(IAst *lpg_MINUS) { this->lpg_MINUS = lpg_MINUS; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    AstToken *getMINUS() { return lpg_MINUS; };
+    void setMINUS(AstToken *lpg_MINUS) { this->lpg_MINUS = lpg_MINUS; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     UnaryExpression1(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_MINUS,
-                     IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                     AstToken *lpg_MINUS,
+                     Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_MINUS = lpg_MINUS;
         ((Ast*) lpg_MINUS)->setParent(this);
         this->lpg_UnaryExpression = lpg_UnaryExpression;
@@ -14975,8 +14976,8 @@ struct UnaryExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MINUS);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_MINUS);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -14992,8 +14993,8 @@ struct UnaryExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MINUS->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_MINUS)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15006,17 +15007,17 @@ struct UnaryExpression1 :public Ast
  */
 struct UnaryExpressionNotPlusMinus0 :public Ast
 {
-    IAst *lpg_TWIDDLE;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_TWIDDLE;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getTWIDDLE() { return lpg_TWIDDLE; };
-    void setTWIDDLE(IAst *lpg_TWIDDLE) { this->lpg_TWIDDLE = lpg_TWIDDLE; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    AstToken *getTWIDDLE() { return lpg_TWIDDLE; };
+    void setTWIDDLE(AstToken *lpg_TWIDDLE) { this->lpg_TWIDDLE = lpg_TWIDDLE; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     UnaryExpressionNotPlusMinus0(IToken* leftIToken, IToken* rightIToken,
-                                 IAst *lpg_TWIDDLE,
-                                 IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                                 AstToken *lpg_TWIDDLE,
+                                 Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_TWIDDLE = lpg_TWIDDLE;
         ((Ast*) lpg_TWIDDLE)->setParent(this);
         this->lpg_UnaryExpression = lpg_UnaryExpression;
@@ -15030,8 +15031,8 @@ struct UnaryExpressionNotPlusMinus0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_TWIDDLE);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_TWIDDLE);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -15047,8 +15048,8 @@ struct UnaryExpressionNotPlusMinus0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_TWIDDLE->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_TWIDDLE)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15061,17 +15062,17 @@ struct UnaryExpressionNotPlusMinus0 :public Ast
  */
 struct UnaryExpressionNotPlusMinus1 :public Ast
 {
-    IAst *lpg_NOT;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_NOT;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getNOT() { return lpg_NOT; };
-    void setNOT(IAst *lpg_NOT) { this->lpg_NOT = lpg_NOT; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    AstToken *getNOT() { return lpg_NOT; };
+    void setNOT(AstToken *lpg_NOT) { this->lpg_NOT = lpg_NOT; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     UnaryExpressionNotPlusMinus1(IToken* leftIToken, IToken* rightIToken,
-                                 IAst *lpg_NOT,
-                                 IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                                 AstToken *lpg_NOT,
+                                 Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_NOT = lpg_NOT;
         ((Ast*) lpg_NOT)->setParent(this);
         this->lpg_UnaryExpression = lpg_UnaryExpression;
@@ -15085,8 +15086,8 @@ struct UnaryExpressionNotPlusMinus1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_NOT);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_NOT);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -15102,8 +15103,8 @@ struct UnaryExpressionNotPlusMinus1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_NOT->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_NOT)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15116,32 +15117,32 @@ struct UnaryExpressionNotPlusMinus1 :public Ast
  */
 struct CastExpression0 :public Ast
 {
-    IAst *lpg_LPAREN;
-    IAst *lpg_PrimitiveType;
-    IAst *lpg_Dimsopt;
-    IAst *lpg_RPAREN;
-    IAst *lpg_UnaryExpression;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_PrimitiveType;
+    Ast *lpg_Dimsopt;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getPrimitiveType() { return lpg_PrimitiveType; };
-    void setPrimitiveType(IAst *lpg_PrimitiveType) { this->lpg_PrimitiveType = lpg_PrimitiveType; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getPrimitiveType() { return lpg_PrimitiveType; };
+    void setPrimitiveType(Ast *lpg_PrimitiveType) { this->lpg_PrimitiveType = lpg_PrimitiveType; }
     /**
      * The value returned by <b>getDimsopt</b> may be <b>nullptr</b>
      */
-    IAst *getDimsopt() { return lpg_Dimsopt; };
-    void setDimsopt(IAst *lpg_Dimsopt) { this->lpg_Dimsopt = lpg_Dimsopt; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    Ast *getDimsopt() { return lpg_Dimsopt; };
+    void setDimsopt(Ast *lpg_Dimsopt) { this->lpg_Dimsopt = lpg_Dimsopt; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     CastExpression0(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_LPAREN,
-                    IAst *lpg_PrimitiveType,
-                    IAst *lpg_Dimsopt,
-                    IAst *lpg_RPAREN,
-                    IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_LPAREN,
+                    Ast *lpg_PrimitiveType,
+                    Ast *lpg_Dimsopt,
+                    AstToken *lpg_RPAREN,
+                    Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_LPAREN = lpg_LPAREN;
         ((Ast*) lpg_LPAREN)->setParent(this);
         this->lpg_PrimitiveType = lpg_PrimitiveType;
@@ -15161,11 +15162,11 @@ struct CastExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_PrimitiveType);
-        list.push_back(lpg_Dimsopt);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_PrimitiveType);
+        list.push_back((IAst*)lpg_Dimsopt);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -15181,11 +15182,11 @@ struct CastExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LPAREN->accept(v);
-            lpg_PrimitiveType->accept(v);
-            if (lpg_Dimsopt != nullptr) lpg_Dimsopt->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_PrimitiveType)->accept(v);
+            if (lpg_Dimsopt != nullptr) ((IAst*)lpg_Dimsopt)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15198,25 +15199,25 @@ struct CastExpression0 :public Ast
  */
 struct CastExpression1 :public Ast
 {
-    IAst *lpg_LPAREN;
-    IAst *lpg_ReferenceType;
-    IAst *lpg_RPAREN;
-    IAst *lpg_UnaryExpressionNotPlusMinus;
+    AstToken *lpg_LPAREN;
+    Ast *lpg_ReferenceType;
+    AstToken *lpg_RPAREN;
+    Ast *lpg_UnaryExpressionNotPlusMinus;
 
-    IAst *getLPAREN() { return lpg_LPAREN; };
-    void setLPAREN(IAst *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
-    IAst *getReferenceType() { return lpg_ReferenceType; };
-    void setReferenceType(IAst *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
-    IAst *getRPAREN() { return lpg_RPAREN; };
-    void setRPAREN(IAst *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
-    IAst *getUnaryExpressionNotPlusMinus() { return lpg_UnaryExpressionNotPlusMinus; };
-    void setUnaryExpressionNotPlusMinus(IAst *lpg_UnaryExpressionNotPlusMinus) { this->lpg_UnaryExpressionNotPlusMinus = lpg_UnaryExpressionNotPlusMinus; }
+    AstToken *getLPAREN() { return lpg_LPAREN; };
+    void setLPAREN(AstToken *lpg_LPAREN) { this->lpg_LPAREN = lpg_LPAREN; }
+    Ast *getReferenceType() { return lpg_ReferenceType; };
+    void setReferenceType(Ast *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
+    AstToken *getRPAREN() { return lpg_RPAREN; };
+    void setRPAREN(AstToken *lpg_RPAREN) { this->lpg_RPAREN = lpg_RPAREN; }
+    Ast *getUnaryExpressionNotPlusMinus() { return lpg_UnaryExpressionNotPlusMinus; };
+    void setUnaryExpressionNotPlusMinus(Ast *lpg_UnaryExpressionNotPlusMinus) { this->lpg_UnaryExpressionNotPlusMinus = lpg_UnaryExpressionNotPlusMinus; }
 
     CastExpression1(IToken* leftIToken, IToken* rightIToken,
-                    IAst *lpg_LPAREN,
-                    IAst *lpg_ReferenceType,
-                    IAst *lpg_RPAREN,
-                    IAst *lpg_UnaryExpressionNotPlusMinus):Ast(leftIToken, rightIToken)    {
+                    AstToken *lpg_LPAREN,
+                    Ast *lpg_ReferenceType,
+                    AstToken *lpg_RPAREN,
+                    Ast *lpg_UnaryExpressionNotPlusMinus):Ast(leftIToken, rightIToken)    {
         this->lpg_LPAREN = lpg_LPAREN;
         ((Ast*) lpg_LPAREN)->setParent(this);
         this->lpg_ReferenceType = lpg_ReferenceType;
@@ -15234,10 +15235,10 @@ struct CastExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_LPAREN);
-        list.push_back(lpg_ReferenceType);
-        list.push_back(lpg_RPAREN);
-        list.push_back(lpg_UnaryExpressionNotPlusMinus);
+        list.push_back((IAst*)lpg_LPAREN);
+        list.push_back((IAst*)lpg_ReferenceType);
+        list.push_back((IAst*)lpg_RPAREN);
+        list.push_back((IAst*)lpg_UnaryExpressionNotPlusMinus);
         return list;
     }
 
@@ -15253,10 +15254,10 @@ struct CastExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_LPAREN->accept(v);
-            lpg_ReferenceType->accept(v);
-            lpg_RPAREN->accept(v);
-            lpg_UnaryExpressionNotPlusMinus->accept(v);
+            ((IAst*)lpg_LPAREN)->accept(v);
+            ((IAst*)lpg_ReferenceType)->accept(v);
+            ((IAst*)lpg_RPAREN)->accept(v);
+            ((IAst*)lpg_UnaryExpressionNotPlusMinus)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15269,21 +15270,21 @@ struct CastExpression1 :public Ast
  */
 struct MultiplicativeExpression0 :public Ast
 {
-    IAst *lpg_MultiplicativeExpression;
-    IAst *lpg_MULTIPLY;
-    IAst *lpg_UnaryExpression;
+    Ast *lpg_MultiplicativeExpression;
+    AstToken *lpg_MULTIPLY;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
-    void setMultiplicativeExpression(IAst *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
-    IAst *getMULTIPLY() { return lpg_MULTIPLY; };
-    void setMULTIPLY(IAst *lpg_MULTIPLY) { this->lpg_MULTIPLY = lpg_MULTIPLY; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    Ast *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
+    void setMultiplicativeExpression(Ast *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
+    AstToken *getMULTIPLY() { return lpg_MULTIPLY; };
+    void setMULTIPLY(AstToken *lpg_MULTIPLY) { this->lpg_MULTIPLY = lpg_MULTIPLY; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     MultiplicativeExpression0(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_MultiplicativeExpression,
-                              IAst *lpg_MULTIPLY,
-                              IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                              Ast *lpg_MultiplicativeExpression,
+                              AstToken *lpg_MULTIPLY,
+                              Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression;
         ((Ast*) lpg_MultiplicativeExpression)->setParent(this);
         this->lpg_MULTIPLY = lpg_MULTIPLY;
@@ -15299,9 +15300,9 @@ struct MultiplicativeExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MultiplicativeExpression);
-        list.push_back(lpg_MULTIPLY);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_MultiplicativeExpression);
+        list.push_back((IAst*)lpg_MULTIPLY);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -15317,9 +15318,9 @@ struct MultiplicativeExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MultiplicativeExpression->accept(v);
-            lpg_MULTIPLY->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_MultiplicativeExpression)->accept(v);
+            ((IAst*)lpg_MULTIPLY)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15332,21 +15333,21 @@ struct MultiplicativeExpression0 :public Ast
  */
 struct MultiplicativeExpression1 :public Ast
 {
-    IAst *lpg_MultiplicativeExpression;
-    IAst *lpg_DIVIDE;
-    IAst *lpg_UnaryExpression;
+    Ast *lpg_MultiplicativeExpression;
+    AstToken *lpg_DIVIDE;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
-    void setMultiplicativeExpression(IAst *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
-    IAst *getDIVIDE() { return lpg_DIVIDE; };
-    void setDIVIDE(IAst *lpg_DIVIDE) { this->lpg_DIVIDE = lpg_DIVIDE; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    Ast *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
+    void setMultiplicativeExpression(Ast *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
+    AstToken *getDIVIDE() { return lpg_DIVIDE; };
+    void setDIVIDE(AstToken *lpg_DIVIDE) { this->lpg_DIVIDE = lpg_DIVIDE; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     MultiplicativeExpression1(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_MultiplicativeExpression,
-                              IAst *lpg_DIVIDE,
-                              IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                              Ast *lpg_MultiplicativeExpression,
+                              AstToken *lpg_DIVIDE,
+                              Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression;
         ((Ast*) lpg_MultiplicativeExpression)->setParent(this);
         this->lpg_DIVIDE = lpg_DIVIDE;
@@ -15362,9 +15363,9 @@ struct MultiplicativeExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MultiplicativeExpression);
-        list.push_back(lpg_DIVIDE);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_MultiplicativeExpression);
+        list.push_back((IAst*)lpg_DIVIDE);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -15380,9 +15381,9 @@ struct MultiplicativeExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MultiplicativeExpression->accept(v);
-            lpg_DIVIDE->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_MultiplicativeExpression)->accept(v);
+            ((IAst*)lpg_DIVIDE)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15395,21 +15396,21 @@ struct MultiplicativeExpression1 :public Ast
  */
 struct MultiplicativeExpression2 :public Ast
 {
-    IAst *lpg_MultiplicativeExpression;
-    IAst *lpg_REMAINDER;
-    IAst *lpg_UnaryExpression;
+    Ast *lpg_MultiplicativeExpression;
+    AstToken *lpg_REMAINDER;
+    Ast *lpg_UnaryExpression;
 
-    IAst *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
-    void setMultiplicativeExpression(IAst *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
-    IAst *getREMAINDER() { return lpg_REMAINDER; };
-    void setREMAINDER(IAst *lpg_REMAINDER) { this->lpg_REMAINDER = lpg_REMAINDER; }
-    IAst *getUnaryExpression() { return lpg_UnaryExpression; };
-    void setUnaryExpression(IAst *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
+    Ast *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
+    void setMultiplicativeExpression(Ast *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
+    AstToken *getREMAINDER() { return lpg_REMAINDER; };
+    void setREMAINDER(AstToken *lpg_REMAINDER) { this->lpg_REMAINDER = lpg_REMAINDER; }
+    Ast *getUnaryExpression() { return lpg_UnaryExpression; };
+    void setUnaryExpression(Ast *lpg_UnaryExpression) { this->lpg_UnaryExpression = lpg_UnaryExpression; }
 
     MultiplicativeExpression2(IToken* leftIToken, IToken* rightIToken,
-                              IAst *lpg_MultiplicativeExpression,
-                              IAst *lpg_REMAINDER,
-                              IAst *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
+                              Ast *lpg_MultiplicativeExpression,
+                              AstToken *lpg_REMAINDER,
+                              Ast *lpg_UnaryExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression;
         ((Ast*) lpg_MultiplicativeExpression)->setParent(this);
         this->lpg_REMAINDER = lpg_REMAINDER;
@@ -15425,9 +15426,9 @@ struct MultiplicativeExpression2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_MultiplicativeExpression);
-        list.push_back(lpg_REMAINDER);
-        list.push_back(lpg_UnaryExpression);
+        list.push_back((IAst*)lpg_MultiplicativeExpression);
+        list.push_back((IAst*)lpg_REMAINDER);
+        list.push_back((IAst*)lpg_UnaryExpression);
         return list;
     }
 
@@ -15443,9 +15444,9 @@ struct MultiplicativeExpression2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_MultiplicativeExpression->accept(v);
-            lpg_REMAINDER->accept(v);
-            lpg_UnaryExpression->accept(v);
+            ((IAst*)lpg_MultiplicativeExpression)->accept(v);
+            ((IAst*)lpg_REMAINDER)->accept(v);
+            ((IAst*)lpg_UnaryExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15458,21 +15459,21 @@ struct MultiplicativeExpression2 :public Ast
  */
 struct AdditiveExpression0 :public Ast
 {
-    IAst *lpg_AdditiveExpression;
-    IAst *lpg_PLUS;
-    IAst *lpg_MultiplicativeExpression;
+    Ast *lpg_AdditiveExpression;
+    AstToken *lpg_PLUS;
+    Ast *lpg_MultiplicativeExpression;
 
-    IAst *getAdditiveExpression() { return lpg_AdditiveExpression; };
-    void setAdditiveExpression(IAst *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
-    IAst *getPLUS() { return lpg_PLUS; };
-    void setPLUS(IAst *lpg_PLUS) { this->lpg_PLUS = lpg_PLUS; }
-    IAst *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
-    void setMultiplicativeExpression(IAst *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
+    Ast *getAdditiveExpression() { return lpg_AdditiveExpression; };
+    void setAdditiveExpression(Ast *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
+    AstToken *getPLUS() { return lpg_PLUS; };
+    void setPLUS(AstToken *lpg_PLUS) { this->lpg_PLUS = lpg_PLUS; }
+    Ast *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
+    void setMultiplicativeExpression(Ast *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
 
     AdditiveExpression0(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_AdditiveExpression,
-                        IAst *lpg_PLUS,
-                        IAst *lpg_MultiplicativeExpression):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_AdditiveExpression,
+                        AstToken *lpg_PLUS,
+                        Ast *lpg_MultiplicativeExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_AdditiveExpression = lpg_AdditiveExpression;
         ((Ast*) lpg_AdditiveExpression)->setParent(this);
         this->lpg_PLUS = lpg_PLUS;
@@ -15488,9 +15489,9 @@ struct AdditiveExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AdditiveExpression);
-        list.push_back(lpg_PLUS);
-        list.push_back(lpg_MultiplicativeExpression);
+        list.push_back((IAst*)lpg_AdditiveExpression);
+        list.push_back((IAst*)lpg_PLUS);
+        list.push_back((IAst*)lpg_MultiplicativeExpression);
         return list;
     }
 
@@ -15506,9 +15507,9 @@ struct AdditiveExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AdditiveExpression->accept(v);
-            lpg_PLUS->accept(v);
-            lpg_MultiplicativeExpression->accept(v);
+            ((IAst*)lpg_AdditiveExpression)->accept(v);
+            ((IAst*)lpg_PLUS)->accept(v);
+            ((IAst*)lpg_MultiplicativeExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15521,21 +15522,21 @@ struct AdditiveExpression0 :public Ast
  */
 struct AdditiveExpression1 :public Ast
 {
-    IAst *lpg_AdditiveExpression;
-    IAst *lpg_MINUS;
-    IAst *lpg_MultiplicativeExpression;
+    Ast *lpg_AdditiveExpression;
+    AstToken *lpg_MINUS;
+    Ast *lpg_MultiplicativeExpression;
 
-    IAst *getAdditiveExpression() { return lpg_AdditiveExpression; };
-    void setAdditiveExpression(IAst *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
-    IAst *getMINUS() { return lpg_MINUS; };
-    void setMINUS(IAst *lpg_MINUS) { this->lpg_MINUS = lpg_MINUS; }
-    IAst *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
-    void setMultiplicativeExpression(IAst *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
+    Ast *getAdditiveExpression() { return lpg_AdditiveExpression; };
+    void setAdditiveExpression(Ast *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
+    AstToken *getMINUS() { return lpg_MINUS; };
+    void setMINUS(AstToken *lpg_MINUS) { this->lpg_MINUS = lpg_MINUS; }
+    Ast *getMultiplicativeExpression() { return lpg_MultiplicativeExpression; };
+    void setMultiplicativeExpression(Ast *lpg_MultiplicativeExpression) { this->lpg_MultiplicativeExpression = lpg_MultiplicativeExpression; }
 
     AdditiveExpression1(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_AdditiveExpression,
-                        IAst *lpg_MINUS,
-                        IAst *lpg_MultiplicativeExpression):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_AdditiveExpression,
+                        AstToken *lpg_MINUS,
+                        Ast *lpg_MultiplicativeExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_AdditiveExpression = lpg_AdditiveExpression;
         ((Ast*) lpg_AdditiveExpression)->setParent(this);
         this->lpg_MINUS = lpg_MINUS;
@@ -15551,9 +15552,9 @@ struct AdditiveExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_AdditiveExpression);
-        list.push_back(lpg_MINUS);
-        list.push_back(lpg_MultiplicativeExpression);
+        list.push_back((IAst*)lpg_AdditiveExpression);
+        list.push_back((IAst*)lpg_MINUS);
+        list.push_back((IAst*)lpg_MultiplicativeExpression);
         return list;
     }
 
@@ -15569,9 +15570,9 @@ struct AdditiveExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_AdditiveExpression->accept(v);
-            lpg_MINUS->accept(v);
-            lpg_MultiplicativeExpression->accept(v);
+            ((IAst*)lpg_AdditiveExpression)->accept(v);
+            ((IAst*)lpg_MINUS)->accept(v);
+            ((IAst*)lpg_MultiplicativeExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15584,21 +15585,21 @@ struct AdditiveExpression1 :public Ast
  */
 struct ShiftExpression0 :public Ast
 {
-    IAst *lpg_ShiftExpression;
-    IAst *lpg_LEFT_SHIFT;
-    IAst *lpg_AdditiveExpression;
+    Ast *lpg_ShiftExpression;
+    AstToken *lpg_LEFT_SHIFT;
+    Ast *lpg_AdditiveExpression;
 
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
-    IAst *getLEFT_SHIFT() { return lpg_LEFT_SHIFT; };
-    void setLEFT_SHIFT(IAst *lpg_LEFT_SHIFT) { this->lpg_LEFT_SHIFT = lpg_LEFT_SHIFT; }
-    IAst *getAdditiveExpression() { return lpg_AdditiveExpression; };
-    void setAdditiveExpression(IAst *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    AstToken *getLEFT_SHIFT() { return lpg_LEFT_SHIFT; };
+    void setLEFT_SHIFT(AstToken *lpg_LEFT_SHIFT) { this->lpg_LEFT_SHIFT = lpg_LEFT_SHIFT; }
+    Ast *getAdditiveExpression() { return lpg_AdditiveExpression; };
+    void setAdditiveExpression(Ast *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
 
     ShiftExpression0(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_ShiftExpression,
-                     IAst *lpg_LEFT_SHIFT,
-                     IAst *lpg_AdditiveExpression):Ast(leftIToken, rightIToken)    {
+                     Ast *lpg_ShiftExpression,
+                     AstToken *lpg_LEFT_SHIFT,
+                     Ast *lpg_AdditiveExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ShiftExpression = lpg_ShiftExpression;
         ((Ast*) lpg_ShiftExpression)->setParent(this);
         this->lpg_LEFT_SHIFT = lpg_LEFT_SHIFT;
@@ -15614,9 +15615,9 @@ struct ShiftExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ShiftExpression);
-        list.push_back(lpg_LEFT_SHIFT);
-        list.push_back(lpg_AdditiveExpression);
+        list.push_back((IAst*)lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_LEFT_SHIFT);
+        list.push_back((IAst*)lpg_AdditiveExpression);
         return list;
     }
 
@@ -15632,9 +15633,9 @@ struct ShiftExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ShiftExpression->accept(v);
-            lpg_LEFT_SHIFT->accept(v);
-            lpg_AdditiveExpression->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
+            ((IAst*)lpg_LEFT_SHIFT)->accept(v);
+            ((IAst*)lpg_AdditiveExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15647,25 +15648,25 @@ struct ShiftExpression0 :public Ast
  */
 struct ShiftExpression1 :public Ast
 {
-    IAst *lpg_ShiftExpression;
-    IAst *lpg_GREATER;
-    IAst *lpg_GREATER3;
-    IAst *lpg_AdditiveExpression;
+    Ast *lpg_ShiftExpression;
+    AstToken *lpg_GREATER;
+    AstToken *lpg_GREATER3;
+    Ast *lpg_AdditiveExpression;
 
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
-    IAst *getGREATER3() { return lpg_GREATER3; };
-    void setGREATER3(IAst *lpg_GREATER3) { this->lpg_GREATER3 = lpg_GREATER3; }
-    IAst *getAdditiveExpression() { return lpg_AdditiveExpression; };
-    void setAdditiveExpression(IAst *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getGREATER3() { return lpg_GREATER3; };
+    void setGREATER3(AstToken *lpg_GREATER3) { this->lpg_GREATER3 = lpg_GREATER3; }
+    Ast *getAdditiveExpression() { return lpg_AdditiveExpression; };
+    void setAdditiveExpression(Ast *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
 
     ShiftExpression1(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_ShiftExpression,
-                     IAst *lpg_GREATER,
-                     IAst *lpg_GREATER3,
-                     IAst *lpg_AdditiveExpression):Ast(leftIToken, rightIToken)    {
+                     Ast *lpg_ShiftExpression,
+                     AstToken *lpg_GREATER,
+                     AstToken *lpg_GREATER3,
+                     Ast *lpg_AdditiveExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ShiftExpression = lpg_ShiftExpression;
         ((Ast*) lpg_ShiftExpression)->setParent(this);
         this->lpg_GREATER = lpg_GREATER;
@@ -15683,10 +15684,10 @@ struct ShiftExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ShiftExpression);
-        list.push_back(lpg_GREATER);
-        list.push_back(lpg_GREATER3);
-        list.push_back(lpg_AdditiveExpression);
+        list.push_back((IAst*)lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_GREATER);
+        list.push_back((IAst*)lpg_GREATER3);
+        list.push_back((IAst*)lpg_AdditiveExpression);
         return list;
     }
 
@@ -15702,10 +15703,10 @@ struct ShiftExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ShiftExpression->accept(v);
-            lpg_GREATER->accept(v);
-            lpg_GREATER3->accept(v);
-            lpg_AdditiveExpression->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
+            ((IAst*)lpg_GREATER3)->accept(v);
+            ((IAst*)lpg_AdditiveExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15718,29 +15719,29 @@ struct ShiftExpression1 :public Ast
  */
 struct ShiftExpression2 :public Ast
 {
-    IAst *lpg_ShiftExpression;
-    IAst *lpg_GREATER;
-    IAst *lpg_GREATER3;
-    IAst *lpg_GREATER4;
-    IAst *lpg_AdditiveExpression;
+    Ast *lpg_ShiftExpression;
+    AstToken *lpg_GREATER;
+    AstToken *lpg_GREATER3;
+    AstToken *lpg_GREATER4;
+    Ast *lpg_AdditiveExpression;
 
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
-    IAst *getGREATER3() { return lpg_GREATER3; };
-    void setGREATER3(IAst *lpg_GREATER3) { this->lpg_GREATER3 = lpg_GREATER3; }
-    IAst *getGREATER4() { return lpg_GREATER4; };
-    void setGREATER4(IAst *lpg_GREATER4) { this->lpg_GREATER4 = lpg_GREATER4; }
-    IAst *getAdditiveExpression() { return lpg_AdditiveExpression; };
-    void setAdditiveExpression(IAst *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getGREATER3() { return lpg_GREATER3; };
+    void setGREATER3(AstToken *lpg_GREATER3) { this->lpg_GREATER3 = lpg_GREATER3; }
+    AstToken *getGREATER4() { return lpg_GREATER4; };
+    void setGREATER4(AstToken *lpg_GREATER4) { this->lpg_GREATER4 = lpg_GREATER4; }
+    Ast *getAdditiveExpression() { return lpg_AdditiveExpression; };
+    void setAdditiveExpression(Ast *lpg_AdditiveExpression) { this->lpg_AdditiveExpression = lpg_AdditiveExpression; }
 
     ShiftExpression2(IToken* leftIToken, IToken* rightIToken,
-                     IAst *lpg_ShiftExpression,
-                     IAst *lpg_GREATER,
-                     IAst *lpg_GREATER3,
-                     IAst *lpg_GREATER4,
-                     IAst *lpg_AdditiveExpression):Ast(leftIToken, rightIToken)    {
+                     Ast *lpg_ShiftExpression,
+                     AstToken *lpg_GREATER,
+                     AstToken *lpg_GREATER3,
+                     AstToken *lpg_GREATER4,
+                     Ast *lpg_AdditiveExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_ShiftExpression = lpg_ShiftExpression;
         ((Ast*) lpg_ShiftExpression)->setParent(this);
         this->lpg_GREATER = lpg_GREATER;
@@ -15760,11 +15761,11 @@ struct ShiftExpression2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_ShiftExpression);
-        list.push_back(lpg_GREATER);
-        list.push_back(lpg_GREATER3);
-        list.push_back(lpg_GREATER4);
-        list.push_back(lpg_AdditiveExpression);
+        list.push_back((IAst*)lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_GREATER);
+        list.push_back((IAst*)lpg_GREATER3);
+        list.push_back((IAst*)lpg_GREATER4);
+        list.push_back((IAst*)lpg_AdditiveExpression);
         return list;
     }
 
@@ -15780,11 +15781,11 @@ struct ShiftExpression2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_ShiftExpression->accept(v);
-            lpg_GREATER->accept(v);
-            lpg_GREATER3->accept(v);
-            lpg_GREATER4->accept(v);
-            lpg_AdditiveExpression->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
+            ((IAst*)lpg_GREATER3)->accept(v);
+            ((IAst*)lpg_GREATER4)->accept(v);
+            ((IAst*)lpg_AdditiveExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15797,21 +15798,21 @@ struct ShiftExpression2 :public Ast
  */
 struct RelationalExpression0 :public Ast
 {
-    IAst *lpg_RelationalExpression;
-    IAst *lpg_LESS;
-    IAst *lpg_ShiftExpression;
+    Ast *lpg_RelationalExpression;
+    AstToken *lpg_LESS;
+    Ast *lpg_ShiftExpression;
 
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
-    IAst *getLESS() { return lpg_LESS; };
-    void setLESS(IAst *lpg_LESS) { this->lpg_LESS = lpg_LESS; }
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    AstToken *getLESS() { return lpg_LESS; };
+    void setLESS(AstToken *lpg_LESS) { this->lpg_LESS = lpg_LESS; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
 
     RelationalExpression0(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_RelationalExpression,
-                          IAst *lpg_LESS,
-                          IAst *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_RelationalExpression,
+                          AstToken *lpg_LESS,
+                          Ast *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_RelationalExpression = lpg_RelationalExpression;
         ((Ast*) lpg_RelationalExpression)->setParent(this);
         this->lpg_LESS = lpg_LESS;
@@ -15827,9 +15828,9 @@ struct RelationalExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_RelationalExpression);
-        list.push_back(lpg_LESS);
-        list.push_back(lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_LESS);
+        list.push_back((IAst*)lpg_ShiftExpression);
         return list;
     }
 
@@ -15845,9 +15846,9 @@ struct RelationalExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_RelationalExpression->accept(v);
-            lpg_LESS->accept(v);
-            lpg_ShiftExpression->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
+            ((IAst*)lpg_LESS)->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15860,21 +15861,21 @@ struct RelationalExpression0 :public Ast
  */
 struct RelationalExpression1 :public Ast
 {
-    IAst *lpg_RelationalExpression;
-    IAst *lpg_GREATER;
-    IAst *lpg_ShiftExpression;
+    Ast *lpg_RelationalExpression;
+    AstToken *lpg_GREATER;
+    Ast *lpg_ShiftExpression;
 
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
 
     RelationalExpression1(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_RelationalExpression,
-                          IAst *lpg_GREATER,
-                          IAst *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_RelationalExpression,
+                          AstToken *lpg_GREATER,
+                          Ast *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_RelationalExpression = lpg_RelationalExpression;
         ((Ast*) lpg_RelationalExpression)->setParent(this);
         this->lpg_GREATER = lpg_GREATER;
@@ -15890,9 +15891,9 @@ struct RelationalExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_RelationalExpression);
-        list.push_back(lpg_GREATER);
-        list.push_back(lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_GREATER);
+        list.push_back((IAst*)lpg_ShiftExpression);
         return list;
     }
 
@@ -15908,9 +15909,9 @@ struct RelationalExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_RelationalExpression->accept(v);
-            lpg_GREATER->accept(v);
-            lpg_ShiftExpression->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15923,21 +15924,21 @@ struct RelationalExpression1 :public Ast
  */
 struct RelationalExpression2 :public Ast
 {
-    IAst *lpg_RelationalExpression;
-    IAst *lpg_LESS_EQUAL;
-    IAst *lpg_ShiftExpression;
+    Ast *lpg_RelationalExpression;
+    AstToken *lpg_LESS_EQUAL;
+    Ast *lpg_ShiftExpression;
 
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
-    IAst *getLESS_EQUAL() { return lpg_LESS_EQUAL; };
-    void setLESS_EQUAL(IAst *lpg_LESS_EQUAL) { this->lpg_LESS_EQUAL = lpg_LESS_EQUAL; }
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    AstToken *getLESS_EQUAL() { return lpg_LESS_EQUAL; };
+    void setLESS_EQUAL(AstToken *lpg_LESS_EQUAL) { this->lpg_LESS_EQUAL = lpg_LESS_EQUAL; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
 
     RelationalExpression2(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_RelationalExpression,
-                          IAst *lpg_LESS_EQUAL,
-                          IAst *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_RelationalExpression,
+                          AstToken *lpg_LESS_EQUAL,
+                          Ast *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_RelationalExpression = lpg_RelationalExpression;
         ((Ast*) lpg_RelationalExpression)->setParent(this);
         this->lpg_LESS_EQUAL = lpg_LESS_EQUAL;
@@ -15953,9 +15954,9 @@ struct RelationalExpression2 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_RelationalExpression);
-        list.push_back(lpg_LESS_EQUAL);
-        list.push_back(lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_LESS_EQUAL);
+        list.push_back((IAst*)lpg_ShiftExpression);
         return list;
     }
 
@@ -15971,9 +15972,9 @@ struct RelationalExpression2 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_RelationalExpression->accept(v);
-            lpg_LESS_EQUAL->accept(v);
-            lpg_ShiftExpression->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
+            ((IAst*)lpg_LESS_EQUAL)->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -15986,25 +15987,25 @@ struct RelationalExpression2 :public Ast
  */
 struct RelationalExpression3 :public Ast
 {
-    IAst *lpg_RelationalExpression;
-    IAst *lpg_GREATER;
-    IAst *lpg_EQUAL;
-    IAst *lpg_ShiftExpression;
+    Ast *lpg_RelationalExpression;
+    AstToken *lpg_GREATER;
+    AstToken *lpg_EQUAL;
+    Ast *lpg_ShiftExpression;
 
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
-    IAst *getEQUAL() { return lpg_EQUAL; };
-    void setEQUAL(IAst *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
-    IAst *getShiftExpression() { return lpg_ShiftExpression; };
-    void setShiftExpression(IAst *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getEQUAL() { return lpg_EQUAL; };
+    void setEQUAL(AstToken *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
+    Ast *getShiftExpression() { return lpg_ShiftExpression; };
+    void setShiftExpression(Ast *lpg_ShiftExpression) { this->lpg_ShiftExpression = lpg_ShiftExpression; }
 
     RelationalExpression3(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_RelationalExpression,
-                          IAst *lpg_GREATER,
-                          IAst *lpg_EQUAL,
-                          IAst *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_RelationalExpression,
+                          AstToken *lpg_GREATER,
+                          AstToken *lpg_EQUAL,
+                          Ast *lpg_ShiftExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_RelationalExpression = lpg_RelationalExpression;
         ((Ast*) lpg_RelationalExpression)->setParent(this);
         this->lpg_GREATER = lpg_GREATER;
@@ -16022,10 +16023,10 @@ struct RelationalExpression3 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_RelationalExpression);
-        list.push_back(lpg_GREATER);
-        list.push_back(lpg_EQUAL);
-        list.push_back(lpg_ShiftExpression);
+        list.push_back((IAst*)lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_GREATER);
+        list.push_back((IAst*)lpg_EQUAL);
+        list.push_back((IAst*)lpg_ShiftExpression);
         return list;
     }
 
@@ -16041,10 +16042,10 @@ struct RelationalExpression3 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_RelationalExpression->accept(v);
-            lpg_GREATER->accept(v);
-            lpg_EQUAL->accept(v);
-            lpg_ShiftExpression->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
+            ((IAst*)lpg_EQUAL)->accept(v);
+            ((IAst*)lpg_ShiftExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -16057,21 +16058,21 @@ struct RelationalExpression3 :public Ast
  */
 struct RelationalExpression4 :public Ast
 {
-    IAst *lpg_RelationalExpression;
-    IAst *lpg_instanceof;
-    IAst *lpg_ReferenceType;
+    Ast *lpg_RelationalExpression;
+    AstToken *lpg_instanceof;
+    Ast *lpg_ReferenceType;
 
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
-    IAst *getinstanceof() { return lpg_instanceof; };
-    void setinstanceof(IAst *lpg_instanceof) { this->lpg_instanceof = lpg_instanceof; }
-    IAst *getReferenceType() { return lpg_ReferenceType; };
-    void setReferenceType(IAst *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    AstToken *getinstanceof() { return lpg_instanceof; };
+    void setinstanceof(AstToken *lpg_instanceof) { this->lpg_instanceof = lpg_instanceof; }
+    Ast *getReferenceType() { return lpg_ReferenceType; };
+    void setReferenceType(Ast *lpg_ReferenceType) { this->lpg_ReferenceType = lpg_ReferenceType; }
 
     RelationalExpression4(IToken* leftIToken, IToken* rightIToken,
-                          IAst *lpg_RelationalExpression,
-                          IAst *lpg_instanceof,
-                          IAst *lpg_ReferenceType):Ast(leftIToken, rightIToken)    {
+                          Ast *lpg_RelationalExpression,
+                          AstToken *lpg_instanceof,
+                          Ast *lpg_ReferenceType):Ast(leftIToken, rightIToken)    {
         this->lpg_RelationalExpression = lpg_RelationalExpression;
         ((Ast*) lpg_RelationalExpression)->setParent(this);
         this->lpg_instanceof = lpg_instanceof;
@@ -16087,9 +16088,9 @@ struct RelationalExpression4 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_RelationalExpression);
-        list.push_back(lpg_instanceof);
-        list.push_back(lpg_ReferenceType);
+        list.push_back((IAst*)lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_instanceof);
+        list.push_back((IAst*)lpg_ReferenceType);
         return list;
     }
 
@@ -16105,9 +16106,9 @@ struct RelationalExpression4 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_RelationalExpression->accept(v);
-            lpg_instanceof->accept(v);
-            lpg_ReferenceType->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
+            ((IAst*)lpg_instanceof)->accept(v);
+            ((IAst*)lpg_ReferenceType)->accept(v);
         }
         v->endVisit(this);
     }
@@ -16120,21 +16121,21 @@ struct RelationalExpression4 :public Ast
  */
 struct EqualityExpression0 :public Ast
 {
-    IAst *lpg_EqualityExpression;
-    IAst *lpg_EQUAL_EQUAL;
-    IAst *lpg_RelationalExpression;
+    Ast *lpg_EqualityExpression;
+    AstToken *lpg_EQUAL_EQUAL;
+    Ast *lpg_RelationalExpression;
 
-    IAst *getEqualityExpression() { return lpg_EqualityExpression; };
-    void setEqualityExpression(IAst *lpg_EqualityExpression) { this->lpg_EqualityExpression = lpg_EqualityExpression; }
-    IAst *getEQUAL_EQUAL() { return lpg_EQUAL_EQUAL; };
-    void setEQUAL_EQUAL(IAst *lpg_EQUAL_EQUAL) { this->lpg_EQUAL_EQUAL = lpg_EQUAL_EQUAL; }
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    Ast *getEqualityExpression() { return lpg_EqualityExpression; };
+    void setEqualityExpression(Ast *lpg_EqualityExpression) { this->lpg_EqualityExpression = lpg_EqualityExpression; }
+    AstToken *getEQUAL_EQUAL() { return lpg_EQUAL_EQUAL; };
+    void setEQUAL_EQUAL(AstToken *lpg_EQUAL_EQUAL) { this->lpg_EQUAL_EQUAL = lpg_EQUAL_EQUAL; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
 
     EqualityExpression0(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_EqualityExpression,
-                        IAst *lpg_EQUAL_EQUAL,
-                        IAst *lpg_RelationalExpression):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_EqualityExpression,
+                        AstToken *lpg_EQUAL_EQUAL,
+                        Ast *lpg_RelationalExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_EqualityExpression = lpg_EqualityExpression;
         ((Ast*) lpg_EqualityExpression)->setParent(this);
         this->lpg_EQUAL_EQUAL = lpg_EQUAL_EQUAL;
@@ -16150,9 +16151,9 @@ struct EqualityExpression0 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_EqualityExpression);
-        list.push_back(lpg_EQUAL_EQUAL);
-        list.push_back(lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_EqualityExpression);
+        list.push_back((IAst*)lpg_EQUAL_EQUAL);
+        list.push_back((IAst*)lpg_RelationalExpression);
         return list;
     }
 
@@ -16168,9 +16169,9 @@ struct EqualityExpression0 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_EqualityExpression->accept(v);
-            lpg_EQUAL_EQUAL->accept(v);
-            lpg_RelationalExpression->accept(v);
+            ((IAst*)lpg_EqualityExpression)->accept(v);
+            ((IAst*)lpg_EQUAL_EQUAL)->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -16183,21 +16184,21 @@ struct EqualityExpression0 :public Ast
  */
 struct EqualityExpression1 :public Ast
 {
-    IAst *lpg_EqualityExpression;
-    IAst *lpg_NOT_EQUAL;
-    IAst *lpg_RelationalExpression;
+    Ast *lpg_EqualityExpression;
+    AstToken *lpg_NOT_EQUAL;
+    Ast *lpg_RelationalExpression;
 
-    IAst *getEqualityExpression() { return lpg_EqualityExpression; };
-    void setEqualityExpression(IAst *lpg_EqualityExpression) { this->lpg_EqualityExpression = lpg_EqualityExpression; }
-    IAst *getNOT_EQUAL() { return lpg_NOT_EQUAL; };
-    void setNOT_EQUAL(IAst *lpg_NOT_EQUAL) { this->lpg_NOT_EQUAL = lpg_NOT_EQUAL; }
-    IAst *getRelationalExpression() { return lpg_RelationalExpression; };
-    void setRelationalExpression(IAst *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
+    Ast *getEqualityExpression() { return lpg_EqualityExpression; };
+    void setEqualityExpression(Ast *lpg_EqualityExpression) { this->lpg_EqualityExpression = lpg_EqualityExpression; }
+    AstToken *getNOT_EQUAL() { return lpg_NOT_EQUAL; };
+    void setNOT_EQUAL(AstToken *lpg_NOT_EQUAL) { this->lpg_NOT_EQUAL = lpg_NOT_EQUAL; }
+    Ast *getRelationalExpression() { return lpg_RelationalExpression; };
+    void setRelationalExpression(Ast *lpg_RelationalExpression) { this->lpg_RelationalExpression = lpg_RelationalExpression; }
 
     EqualityExpression1(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_EqualityExpression,
-                        IAst *lpg_NOT_EQUAL,
-                        IAst *lpg_RelationalExpression):Ast(leftIToken, rightIToken)    {
+                        Ast *lpg_EqualityExpression,
+                        AstToken *lpg_NOT_EQUAL,
+                        Ast *lpg_RelationalExpression):Ast(leftIToken, rightIToken)    {
         this->lpg_EqualityExpression = lpg_EqualityExpression;
         ((Ast*) lpg_EqualityExpression)->setParent(this);
         this->lpg_NOT_EQUAL = lpg_NOT_EQUAL;
@@ -16213,9 +16214,9 @@ struct EqualityExpression1 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_EqualityExpression);
-        list.push_back(lpg_NOT_EQUAL);
-        list.push_back(lpg_RelationalExpression);
+        list.push_back((IAst*)lpg_EqualityExpression);
+        list.push_back((IAst*)lpg_NOT_EQUAL);
+        list.push_back((IAst*)lpg_RelationalExpression);
         return list;
     }
 
@@ -16231,9 +16232,9 @@ struct EqualityExpression1 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_EqualityExpression->accept(v);
-            lpg_NOT_EQUAL->accept(v);
-            lpg_RelationalExpression->accept(v);
+            ((IAst*)lpg_EqualityExpression)->accept(v);
+            ((IAst*)lpg_NOT_EQUAL)->accept(v);
+            ((IAst*)lpg_RelationalExpression)->accept(v);
         }
         v->endVisit(this);
     }
@@ -16435,21 +16436,21 @@ struct AssignmentOperator6 :public AstToken
  */
 struct AssignmentOperator7 :public Ast
 {
-    IAst *lpg_GREATER;
-    IAst *lpg_GREATER2;
-    IAst *lpg_EQUAL;
+    AstToken *lpg_GREATER;
+    AstToken *lpg_GREATER2;
+    AstToken *lpg_EQUAL;
 
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
-    IAst *getGREATER2() { return lpg_GREATER2; };
-    void setGREATER2(IAst *lpg_GREATER2) { this->lpg_GREATER2 = lpg_GREATER2; }
-    IAst *getEQUAL() { return lpg_EQUAL; };
-    void setEQUAL(IAst *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getGREATER2() { return lpg_GREATER2; };
+    void setGREATER2(AstToken *lpg_GREATER2) { this->lpg_GREATER2 = lpg_GREATER2; }
+    AstToken *getEQUAL() { return lpg_EQUAL; };
+    void setEQUAL(AstToken *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
 
     AssignmentOperator7(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_GREATER,
-                        IAst *lpg_GREATER2,
-                        IAst *lpg_EQUAL):Ast(leftIToken, rightIToken)    {
+                        AstToken *lpg_GREATER,
+                        AstToken *lpg_GREATER2,
+                        AstToken *lpg_EQUAL):Ast(leftIToken, rightIToken)    {
         this->lpg_GREATER = lpg_GREATER;
         ((Ast*) lpg_GREATER)->setParent(this);
         this->lpg_GREATER2 = lpg_GREATER2;
@@ -16465,9 +16466,9 @@ struct AssignmentOperator7 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_GREATER);
-        list.push_back(lpg_GREATER2);
-        list.push_back(lpg_EQUAL);
+        list.push_back((IAst*)lpg_GREATER);
+        list.push_back((IAst*)lpg_GREATER2);
+        list.push_back((IAst*)lpg_EQUAL);
         return list;
     }
 
@@ -16483,9 +16484,9 @@ struct AssignmentOperator7 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_GREATER->accept(v);
-            lpg_GREATER2->accept(v);
-            lpg_EQUAL->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
+            ((IAst*)lpg_GREATER2)->accept(v);
+            ((IAst*)lpg_EQUAL)->accept(v);
         }
         v->endVisit(this);
     }
@@ -16498,25 +16499,25 @@ struct AssignmentOperator7 :public Ast
  */
 struct AssignmentOperator8 :public Ast
 {
-    IAst *lpg_GREATER;
-    IAst *lpg_GREATER2;
-    IAst *lpg_GREATER3;
-    IAst *lpg_EQUAL;
+    AstToken *lpg_GREATER;
+    AstToken *lpg_GREATER2;
+    AstToken *lpg_GREATER3;
+    AstToken *lpg_EQUAL;
 
-    IAst *getGREATER() { return lpg_GREATER; };
-    void setGREATER(IAst *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
-    IAst *getGREATER2() { return lpg_GREATER2; };
-    void setGREATER2(IAst *lpg_GREATER2) { this->lpg_GREATER2 = lpg_GREATER2; }
-    IAst *getGREATER3() { return lpg_GREATER3; };
-    void setGREATER3(IAst *lpg_GREATER3) { this->lpg_GREATER3 = lpg_GREATER3; }
-    IAst *getEQUAL() { return lpg_EQUAL; };
-    void setEQUAL(IAst *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
+    AstToken *getGREATER() { return lpg_GREATER; };
+    void setGREATER(AstToken *lpg_GREATER) { this->lpg_GREATER = lpg_GREATER; }
+    AstToken *getGREATER2() { return lpg_GREATER2; };
+    void setGREATER2(AstToken *lpg_GREATER2) { this->lpg_GREATER2 = lpg_GREATER2; }
+    AstToken *getGREATER3() { return lpg_GREATER3; };
+    void setGREATER3(AstToken *lpg_GREATER3) { this->lpg_GREATER3 = lpg_GREATER3; }
+    AstToken *getEQUAL() { return lpg_EQUAL; };
+    void setEQUAL(AstToken *lpg_EQUAL) { this->lpg_EQUAL = lpg_EQUAL; }
 
     AssignmentOperator8(IToken* leftIToken, IToken* rightIToken,
-                        IAst *lpg_GREATER,
-                        IAst *lpg_GREATER2,
-                        IAst *lpg_GREATER3,
-                        IAst *lpg_EQUAL):Ast(leftIToken, rightIToken)    {
+                        AstToken *lpg_GREATER,
+                        AstToken *lpg_GREATER2,
+                        AstToken *lpg_GREATER3,
+                        AstToken *lpg_EQUAL):Ast(leftIToken, rightIToken)    {
         this->lpg_GREATER = lpg_GREATER;
         ((Ast*) lpg_GREATER)->setParent(this);
         this->lpg_GREATER2 = lpg_GREATER2;
@@ -16534,10 +16535,10 @@ struct AssignmentOperator8 :public Ast
     std::vector<IAst*> getAllChildren()
     {
         std::vector<IAst*> list;
-        list.push_back(lpg_GREATER);
-        list.push_back(lpg_GREATER2);
-        list.push_back(lpg_GREATER3);
-        list.push_back(lpg_EQUAL);
+        list.push_back((IAst*)lpg_GREATER);
+        list.push_back((IAst*)lpg_GREATER2);
+        list.push_back((IAst*)lpg_GREATER3);
+        list.push_back((IAst*)lpg_EQUAL);
         return list;
     }
 
@@ -16553,10 +16554,10 @@ struct AssignmentOperator8 :public Ast
         bool checkChildren = v->visit(this);
         if (checkChildren)
         {
-            lpg_GREATER->accept(v);
-            lpg_GREATER2->accept(v);
-            lpg_GREATER3->accept(v);
-            lpg_EQUAL->accept(v);
+            ((IAst*)lpg_GREATER)->accept(v);
+            ((IAst*)lpg_GREATER2)->accept(v);
+            ((IAst*)lpg_GREATER3)->accept(v);
+            ((IAst*)lpg_EQUAL)->accept(v);
         }
         v->endVisit(this);
     }

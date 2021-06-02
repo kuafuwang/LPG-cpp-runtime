@@ -1,5 +1,5 @@
 
-#line 128 "jikespg.g"
+//#line 128 "jikespg.g"
 #ifndef jikespg_act_INCLUDED
 #define jikespg_act_INCLUDED
 
@@ -274,7 +274,7 @@ protected:
 
     void Act130(void);
 
-#line 1340 "jikespg.g"
+//#line 1340 "jikespg.g"
 
 };
 #endif

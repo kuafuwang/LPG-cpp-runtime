@@ -234,6 +234,9 @@ void Scanner::Scan()
             //
             if (template_file == NULL)
                 template_file = lex_stream -> FindOrInsertFile(option -> include_search_directory, option -> template_name);
+        	
+            if (template_file == NULL)
+                template_file = lex_stream->FindOrInsertFile( option->template_name);
 
             //
             // If we could not open the template file, issue an error.
@@ -253,11 +256,14 @@ void Scanner::Scan()
                     msg.Next() = "\" could not be read";
                     option -> EmitError(0, msg);
 
-                    return;
                 }
-                PushEnvironment();
-                input_file = template_file;
-                template_cursor = ScanOptions(); // scan the template options
+                else
+                {
+                    PushEnvironment();
+                    input_file = template_file;
+                    template_cursor = ScanOptions(); // scan the template options
+                }
+ 
             }
         }
 

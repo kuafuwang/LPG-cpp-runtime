@@ -20,6 +20,7 @@ const char *Option::default_block_begin = "/.",
 Option::Option(int argc_, const char **argv_)
 : argc(argc_), argv(argv_)
 {
+    for_parser = true;
     syslis = NULL;
     ast_block = NULL;
     dat_directory_location = NULL;
@@ -3247,6 +3248,7 @@ void Option::CompleteOptionProcessing()
                                                           : "xml")))));
     }
     sym_type = GetType(sym_file);
+	
 	if(NULL ==top_level_ast_file)
 	{
         top_level_ast_file = GetFile(out_directory,

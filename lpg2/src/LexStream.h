@@ -234,13 +234,26 @@ public:
     const char *NameString(TokenIndex i)
     {
         VariableSymbol *variable = GetVariableSymbol(i);
+    	if(variable)
+    	{
+            return  variable->Name();
+    	}
         MacroSymbol *macro = GetMacroSymbol(i);
-        BlockSymbol *block = GetBlockSymbol(i);
+        if (macro)
+        {
+            return  macro->Name();
+        }
+        BlockSymbol* block = GetBlockSymbol(i);
+    	if(Kind(i) == TK_BLOCK)
+    	{
+           return  block->BlockBegin();
+    	}
+        return   KeywordName(token_stream[i].Kind());
 
-        return (variable ? variable -> Name()
+    /*    return (variable ? variable -> Name()
                          : macro ? macro -> Name()
                                  : Kind(i) == TK_BLOCK ? block -> BlockBegin()
-                                                       : KeywordName(token_stream[i].Kind()));
+                                                       : KeywordName(token_stream[i].Kind()));*/
     }
 
     //

@@ -36,6 +36,7 @@ InputFileSymbol *LexStream::FindOrInsertFile(Tuple<const char *> &search_directo
         struct stat status;
         if (stat(full_filename, &status) == 0)
             break;
+    	
         delete [] full_filename;
         full_filename = NULL;
     }

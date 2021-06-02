@@ -22,8 +22,10 @@ struct MessageHandle : public IMessageHandler
        
 	}
 };
+
 int main(void)
 {
+    
     int idd = 2;
     MessageHandle  handle;
   

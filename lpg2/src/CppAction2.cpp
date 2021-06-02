@@ -412,6 +412,11 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
             header_buffer.Put("#pragma once\n");
             header_buffer.Put(R"(#include "IAbstractArrayList.h")");
             header_buffer.Put("\n");
+	    	if(option->visitor  == Option::DEFAULT)
+	    	{
+                header_buffer.Put(R"(#include "Any.h")");
+                header_buffer.Put("\n");
+	    	}
             header_buffer.Put(R"(#include "IAst.h")");
             header_buffer.Put("\n");
             header_buffer.Put("namespace ");
@@ -969,9 +974,7 @@ void CppAction2::ProcessAstActions(Tuple<ActionBlockElement>& actions,
         }
     }
           
-        
-
-        
+      
     return;
 }
 
@@ -1020,12 +1023,12 @@ void CppAction2::GenerateVisitorHeaders(TextBuffer &ast_buffer, const char *inde
             ast_buffer.Put(" *v, Object* o)=0;\n");
 
             ast_buffer.Put(header);
-            ast_buffer.Put("virtual Object* accept(Result");
+            ast_buffer.Put("virtual lpg::Any accept(Result");
             ast_buffer.Put(option -> visitor_type);
             ast_buffer.Put(" *v)=0;\n");
 
             ast_buffer.Put(header);
-            ast_buffer.Put("virtual Object* accept(ResultArgument");
+            ast_buffer.Put("virtual lpg::Any accept(ResultArgument");
             ast_buffer.Put(option -> visitor_type);
             ast_buffer.Put(" *v, Object* o)=0;");
         }
@@ -1058,11 +1061,11 @@ void CppAction2::GenerateVisitorMethods(NTC &ntc,
                                      ast_buffer.Put(option -> visitor_type);
                                      ast_buffer.Put(" *v, Object* o) { v->visit(this, o); }\n");
 
-        ast_buffer.Put(indentation); ast_buffer.Put("    Object* accept(Result");
+        ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any accept(Result");
                                      ast_buffer.Put(option -> visitor_type);
                                      ast_buffer.Put(" *v) { return v->visit(this); }\n");
 
-        ast_buffer.Put(indentation); ast_buffer.Put("    Object* accept(ResultArgument");
+        ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any accept(ResultArgument");
                                      ast_buffer.Put(option -> visitor_type);
                                      ast_buffer.Put(" *v, Object* o) { return v->visit(this, o); }\n");
     }
@@ -1107,9 +1110,10 @@ void CppAction2::GenerateVisitorMethods(NTC &ntc,
                     ast_buffer.Put(symbol_set[i] -> Name());
                     ast_buffer.Put(" != nullptr) ");
                 }
+                ast_buffer.Put("((IAst*)");
                 ast_buffer.Put(ast_member_prefix.c_str());
                 ast_buffer.Put(symbol_set[i] -> Name());
-                ast_buffer.Put("->accept(v);\n");
+                ast_buffer.Put(")->accept(v);\n");
             }
 
             if (symbol_set.Size() > 1)
@@ -1145,7 +1149,7 @@ void CppAction2::GenerateGetAllChildrenMethod(TextBuffer &ast_buffer,
         ast_buffer.Put(indentation); ast_buffer.Put("        std::vector<IAst*> list;\n");
         for (int i = 0; i < symbol_set.Size(); i++)
         {
-            ast_buffer.Put(indentation); ast_buffer.Put("        list.push_back(");
+            ast_buffer.Put(indentation); ast_buffer.Put("        list.push_back((IAst*)");
 										 ast_buffer.Put(ast_member_prefix.c_str());
                                          ast_buffer.Put(symbol_set[i] -> Name());
                                          ast_buffer.Put(");\n");
@@ -1243,14 +1247,14 @@ void CppAction2::GenerateResultVisitorInterface(ActionFileSymbol* ast_filename_s
     for (int i = 0; i < type_set.Size(); i++)
     {
         Symbol *symbol = type_set[i];
-        ast_buffer.Put(indentation); ast_buffer.Put("  virtual  Object* visit");
+        ast_buffer.Put(indentation); ast_buffer.Put("  virtual  lpg::Any visit");
                                      ast_buffer.Put("(");
                                      ast_buffer.Put(symbol -> Name());
                                      ast_buffer.Put(" *n)=0;\n");
     }
 
                                  ast_buffer.Put("\n");
-    ast_buffer.Put(indentation); ast_buffer.Put("  virtual  Object* visit");
+    ast_buffer.Put(indentation); ast_buffer.Put("  virtual  lpg::Any visit");
                                  ast_buffer.Put("(");
                                  ast_buffer.Put(option -> ast_type);
                                  ast_buffer.Put(" *n)=0;\n");
@@ -1276,14 +1280,14 @@ void CppAction2::GenerateResultArgumentVisitorInterface(ActionFileSymbol* ast_fi
     for (int i = 0; i < type_set.Size(); i++)
     {
         Symbol *symbol = type_set[i];
-        ast_buffer.Put(indentation); ast_buffer.Put("  virtual  Object* visit");
+        ast_buffer.Put(indentation); ast_buffer.Put("  virtual  lpg::Any visit");
                                      ast_buffer.Put("(");
                                      ast_buffer.Put(symbol -> Name());
                                      ast_buffer.Put(" *n, Object* o)=0;\n");
     }
 
                                  ast_buffer.Put("\n");
-    ast_buffer.Put(indentation); ast_buffer.Put("  virtual  Object* visit");
+    ast_buffer.Put(indentation); ast_buffer.Put("  virtual  lpg::Any visit");
                                  ast_buffer.Put("(");
                                  ast_buffer.Put(option -> ast_type);
                                  ast_buffer.Put(" *n, Object* o)=0;\n");
@@ -1454,17 +1458,17 @@ void CppAction2::GenerateResultVisitorAbstractClass(ActionFileSymbol* ast_filena
                                  ast_buffer.Put(option -> visitor_type);
                                  ast_buffer.Put("\n");
     ast_buffer.Put(indentation); ast_buffer.Put("{\n");
-    ast_buffer.Put(indentation); ast_buffer.Put("    virtual Object* unimplementedVisitor(const std::string& s);\n\n");
+    ast_buffer.Put(indentation); ast_buffer.Put("    virtual lpg::Any unimplementedVisitor(const std::string& s);\n\n");
     {
         for (int i = 0; i < type_set.Size(); i++)
         {
             Symbol *symbol = type_set[i];
-            ast_buffer.Put(indentation); ast_buffer.Put("    Object* visit(");
+            ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any visit(");
                                          ast_buffer.Put(symbol -> Name());
                                          ast_buffer.Put(" *n) { return unimplementedVisitor(\"visit(");
                                          ast_buffer.Put(symbol -> Name());
                                          ast_buffer.Put(")\"); }\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("    Object* visit(");
+            ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any visit(");
                                          ast_buffer.Put(symbol -> Name());
                                          ast_buffer.Put(" *n, Object* o) { return  unimplementedVisitor(\"visit(");
                                          ast_buffer.Put(symbol -> Name());
@@ -1474,7 +1478,7 @@ void CppAction2::GenerateResultVisitorAbstractClass(ActionFileSymbol* ast_filena
     }
 
                                  ast_buffer.Put("\n");
-    ast_buffer.Put(indentation); ast_buffer.Put("    Object* visit");
+    ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any visit");
                                  ast_buffer.Put("(");
                                  ast_buffer.Put(option -> ast_type);
                                  ast_buffer.Put(" *n)\n");
@@ -1497,7 +1501,7 @@ void CppAction2::GenerateResultVisitorAbstractClass(ActionFileSymbol* ast_filena
     ast_buffer.Put(indentation); ast_buffer.Put("    }\n");
 
 
-    ast_buffer.Put(indentation); ast_buffer.Put("    Object* visit");
+    ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any visit");
                                  ast_buffer.Put("(");
                                  ast_buffer.Put(option -> ast_type);
                                  ast_buffer.Put(" *n, Object *o)\n");
@@ -1760,7 +1764,7 @@ static std::string replaceAll(const std::string& s, const std::string& var, cons
 
     do {
         int idx = s.find(var, pos);
-        if (idx == string::npos) {
+        if (idx == std::string::npos) {
             result += s.substr(pos);
             break;
         } else {
@@ -1790,7 +1794,7 @@ static void PutWithIndentation(TextBuffer& buffer, const std::string& s, const c
 {
     for (int pos=0; pos < s.length(); ) {
         int idx = s.find('\n', pos);
-        int end = (idx == string::npos) ? s.length() : idx + 1;
+        int end = (idx == std::string::npos) ? s.length() : idx + 1;
 
         buffer.Put(indentation);
         buffer.Put(s.c_str() + pos, end - pos);
@@ -1983,7 +1987,7 @@ void CppAction2::GenerateCommentHeader(TextBuffer &ast_buffer,
                                        Tuple<int> &generated_rule)
 {
     const char *rule_info = " *<li>Rule $rule_number:  $rule_text";
-
+    BlockSymbol* scope_block = nullptr;
     ast_buffer.Put(indentation); ast_buffer.Put("/**");
     if (ungenerated_rule.Length() > 0)
     {
@@ -2003,7 +2007,7 @@ void CppAction2::GenerateCommentHeader(TextBuffer &ast_buffer,
 
             ast_buffer.Put("\n");
             ast_buffer.Put(indentation);
-            ProcessActionLine(ActionBlockElement::BODY,
+            ProcessActionLine(scope_block, ActionBlockElement::BODY,
                               &ast_buffer,
                               lex_stream -> FileName(separator_token),
                               rule_info,
@@ -2036,7 +2040,7 @@ void CppAction2::GenerateCommentHeader(TextBuffer &ast_buffer,
 
         ast_buffer.Put("\n");
         ast_buffer.Put(indentation);
-        ProcessActionLine(ActionBlockElement::BODY,
+        ProcessActionLine(scope_block, ActionBlockElement::BODY,
                           &ast_buffer,
                           lex_stream -> FileName(separator_token), // option -> DefaultBlock() -> ActionfileSymbol() -> Name(),
                           rule_info,
@@ -2065,15 +2069,14 @@ void CppAction2::GenerateListMethods(CTC &ctc,
                                      Array<const char *> &typestring)
 {
     const char *element_name = element.array_element_type_symbol -> Name(),
-               *element_type = ctc.FindBestTypeFor(element.array_element_type_symbol -> SymbolIndex());
-
+             //  *element_type = ctc.FindBestTypeFor(element.array_element_type_symbol -> SymbolIndex());
+        * element_type = ctc.FindUniqueTypeFor(element.array_element_type_symbol->SymbolIndex(), option->ast_type);
     //
     // Generate ADD method
     //
     ast_buffer.Put(indentation); ast_buffer.Put("    ");
                                  ast_buffer.Put("void addElement(");
-                               //  ast_buffer.Put(element_type);
-                                 ast_buffer.Put("IAst");
+                                 ast_buffer.Put(element_type);                        
                                  ast_buffer.Put(" *");
                                  ast_buffer.Put(ast_member_prefix.c_str());
                                  ast_buffer.Put(element_name);
@@ -2160,15 +2163,15 @@ void CppAction2::GenerateListMethods(CTC &ctc,
         // Code cannot be generated to automatically visit a node that
         // can return a value. These cases are left up to the user.
         //
-        ast_buffer.Put(indentation); ast_buffer.Put("    Object* accept(Result");
+        ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any accept(Result");
                                      ast_buffer.Put(option -> visitor_type);
         if (ctc.FindUniqueTypeFor(element.array_element_type_symbol -> SymbolIndex()) != NULL)
         {
                                          ast_buffer.Put(" *v)\n");
             ast_buffer.Put(indentation); ast_buffer.Put("    {\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("        java.util.ArrayList result = new java.util.ArrayList();\n");
+            ast_buffer.Put(indentation); ast_buffer.Put("        std::vector<lpg::Any> result;\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        for (int i = 0; i < size(); i++)\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("            result.add(v->visit(get");
+            ast_buffer.Put(indentation); ast_buffer.Put("            result.push_back(v->visit(get");
                                          ast_buffer.Put(element_name);
                                          ast_buffer.Put("At(i)));\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        return result;\n");
@@ -2176,26 +2179,26 @@ void CppAction2::GenerateListMethods(CTC &ctc,
         }
         else
         {
-                                         ast_buffer.Put(" v)\n");
+                                         ast_buffer.Put(" *v)\n");
             ast_buffer.Put(indentation); ast_buffer.Put("    {\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("        java.util.ArrayList result = new java.util.ArrayList();\n");
+            ast_buffer.Put(indentation); ast_buffer.Put("        std::vector<lpg::Any> result;\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        for (int i = 0; i < size(); i++)\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("            result.add(get");
+            ast_buffer.Put(indentation); ast_buffer.Put("            result.push_back(get");
                                          ast_buffer.Put(element_name);
-                                         ast_buffer.Put("At(i).accept(v));\n");
+                                         ast_buffer.Put("At(i)->accept(v));\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        return result;\n");
             ast_buffer.Put(indentation); ast_buffer.Put("    }\n");
         }
 
-        ast_buffer.Put(indentation); ast_buffer.Put("    Object* accept(ResultArgument");
+        ast_buffer.Put(indentation); ast_buffer.Put("    lpg::Any accept(ResultArgument");
                                      ast_buffer.Put(option -> visitor_type);
         if (ctc.FindUniqueTypeFor(element.array_element_type_symbol -> SymbolIndex()) != NULL)
         {
-                                         ast_buffer.Put(" v, Object* o)\n");
+                                         ast_buffer.Put(" *v, Object* o)\n");
             ast_buffer.Put(indentation); ast_buffer.Put("    {\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("        java.util.ArrayList result = new java.util.ArrayList();\n");
+            ast_buffer.Put(indentation); ast_buffer.Put("        std::vector<lpg::Any> result;\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        for (int i = 0; i < size(); i++)\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("            result.add(v->visit(get");
+            ast_buffer.Put(indentation); ast_buffer.Put("            result.push_back(v->visit(get");
                                          ast_buffer.Put(element_name);
                                          ast_buffer.Put("At(i), o));\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        return result;\n");
@@ -2203,13 +2206,13 @@ void CppAction2::GenerateListMethods(CTC &ctc,
         }
         else
         {
-                                         ast_buffer.Put(" v, Object *o)\n");
+                                         ast_buffer.Put(" *v, Object *o)\n");
             ast_buffer.Put(indentation); ast_buffer.Put("    {\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("        java.util.ArrayList result = new java.util.ArrayList();\n");
+            ast_buffer.Put(indentation); ast_buffer.Put("        std::vector<lpg::Any> result;\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        for (int i = 0; i < size(); i++)\n");
-            ast_buffer.Put(indentation); ast_buffer.Put("            result.add(get");
+            ast_buffer.Put(indentation); ast_buffer.Put("            result.push_back(get");
                                          ast_buffer.Put(element_name);
-                                         ast_buffer.Put("At(i).accept(v, o));\n");
+                                         ast_buffer.Put("At(i)->accept(v, o));\n");
             ast_buffer.Put(indentation); ast_buffer.Put("        return result;\n");
             ast_buffer.Put(indentation); ast_buffer.Put("    }\n");
         }
@@ -2308,8 +2311,10 @@ void CppAction2::GenerateListClass(CTC &ctc,
     assert(element.array_element_type_symbol != NULL);
     const char *classname = element.real_name,
                *element_name = element.array_element_type_symbol -> Name(),
-               *element_type = ctc.FindBestTypeFor(element.array_element_type_symbol -> SymbolIndex());
-
+             //  *element_type = ctc.FindBestTypeFor(element.array_element_type_symbol -> SymbolIndex());
+        * element_type = ctc.FindUniqueTypeFor(element.array_element_type_symbol->SymbolIndex(), option->ast_type);
+  
+	
     add_forward_class_def(ast_filename_symbol, classname);
     GenerateCommentHeader(ast_buffer, indentation, element.ungenerated_rule, element.rule);
 
@@ -2337,14 +2342,12 @@ void CppAction2::GenerateListClass(CTC &ctc,
         ast_buffer.Put(indentation); ast_buffer.Put("     */\n");
     }
     ast_buffer.Put(indentation); ast_buffer.Put("    ");
-                                // ast_buffer.Put(element_type);
-								 ast_buffer.Put("IAst");
+                                 ast_buffer.Put(element_type);
+								
                                  ast_buffer.Put("* get");
                                  ast_buffer.Put(element_name);
                                  ast_buffer.Put("At(int i) { return (");
-	
-                                // ast_buffer.Put(element_type);
-								 ast_buffer.Put("IAst");
+                                 ast_buffer.Put(element_type);
                                  ast_buffer.Put("*) getElementAt(i); }\n\n");
 
     //
@@ -2361,8 +2364,8 @@ void CppAction2::GenerateListClass(CTC &ctc,
     ast_buffer.Put(indentation); ast_buffer.Put("    ");
                                  ast_buffer.Put(classname);
                                  ast_buffer.Put("(");
-                                // ast_buffer.Put(element_type);
-                                 ast_buffer.Put("IAst");
+                                ast_buffer.Put(element_type);
+                               
                                  ast_buffer.Put("* ");
                                  ast_buffer.Put(ast_member_prefix.c_str());
                                  ast_buffer.Put(element_name);
@@ -2420,8 +2423,9 @@ void CppAction2::GenerateListExtensionClass(CTC &ctc,
     TextBuffer& ast_buffer = *(ast_filename_symbol->BodyBuffer());
     const char *classname = element.real_name,
                *element_name = element.array_element_type_symbol -> Name(),
-               *element_type = ctc.FindBestTypeFor(element.array_element_type_symbol -> SymbolIndex());
-
+            //   *element_type = ctc.FindBestTypeFor(element.array_element_type_symbol -> SymbolIndex());
+    * element_type = ctc.FindUniqueTypeFor(element.array_element_type_symbol->SymbolIndex(), option->ast_type);
+	
     GenerateCommentHeader(ast_buffer, indentation, element.ungenerated_rule, special_array.rules);
 
     add_forward_class_def(ast_filename_symbol, classname);
@@ -2577,9 +2581,12 @@ void CppAction2::GenerateRuleClass(CTC &ctc,
             {
                 for (int i = 0; i < symbol_set.Size(); i++)
                 {
+                   // auto temp_type = ctc.FindBestTypeFor(rhs_type_index[i]);
+                    auto temp_type = ctc.FindUniqueTypeFor(rhs_type_index[i], option->ast_type);
+                	
                     ast_buffer.Put(indentation); ast_buffer.Put("    ");
-                                                 //ast_buffer.Put(ctc.FindBestTypeFor(rhs_type_index[i]));
-												 ast_buffer.Put("IAst");
+                                                
+												 ast_buffer.Put(temp_type);
                                                  ast_buffer.Put(" *");
                                                  ast_buffer.Put(ast_member_prefix.c_str());
                                                  ast_buffer.Put(symbol_set[i] -> Name());
@@ -2593,7 +2600,9 @@ void CppAction2::GenerateRuleClass(CTC &ctc,
                 {
                     const char *symbolName = symbol_set[i] -> Name();
                    // const char *bestType = ctc.FindBestTypeFor(rhs_type_index[i]);
-                    const char* bestType = "IAst";
+                    const char* bestType = ctc.FindUniqueTypeFor(rhs_type_index[i], option->ast_type);
+                	
+                	
                     if (ntc.CanProduceNullAst(rhs_type_index[i]))
                     {
                         ast_buffer.Put(indentation); ast_buffer.Put("    /**\n");
@@ -2619,7 +2628,7 @@ void CppAction2::GenerateRuleClass(CTC &ctc,
                     ast_buffer.Put(symbolName);
                     ast_buffer.Put("(");
                     ast_buffer.Put(bestType);
-                   // ast_buffer.Put("IAst");
+                
                     ast_buffer.Put(" *"); // add "_" prefix to arg name in case symbol happens to be a Java keyword
                     ast_buffer.Put(ast_member_prefix.c_str());
                     ast_buffer.Put(symbolName);
@@ -2658,8 +2667,10 @@ void CppAction2::GenerateRuleClass(CTC &ctc,
             {
                 for (int k = 0; k <= length; k++)
                     ast_buffer.PutChar(' ');
-                ast_buffer.Put("IAst");
-                //ast_buffer.Put(ctc.FindBestTypeFor(rhs_type_index[i]));
+              //  auto temp_type = ctc.FindBestTypeFor(rhs_type_index[i]);
+                auto temp_type = ctc.FindUniqueTypeFor(rhs_type_index[i], option->ast_type);
+
+                ast_buffer.Put(temp_type);
                 ast_buffer.Put(" *");
                 ast_buffer.Put(ast_member_prefix.c_str());
                 ast_buffer.Put(symbol_set[i] -> Name());
@@ -2827,12 +2838,14 @@ void CppAction2::GenerateMergedClass(CTC &ctc,
         for (int i = 0; i < symbol_set.Size(); i++)
         {
             ast_buffer.Put(indentation); ast_buffer.Put("    ");
-                                       //  ast_buffer.Put(ctc.FindBestTypeFor(rhs_type_index[i]));
-										 ast_buffer.Put("IAst");
-                                         ast_buffer.Put(" *");
-                                         ast_buffer.Put(ast_member_prefix.c_str());
-                                         ast_buffer.Put(symbol_set[i] -> Name());
-                                         ast_buffer.Put(";\n");
+           // auto temp_type = ctc.FindBestTypeFor(rhs_type_index[i]);
+            auto temp_type = ctc.FindUniqueTypeFor(rhs_type_index[i], option->ast_type);
+                         
+			 ast_buffer.Put(temp_type);
+	         ast_buffer.Put(" *");
+	         ast_buffer.Put(ast_member_prefix.c_str());
+	         ast_buffer.Put(symbol_set[i] -> Name());
+	         ast_buffer.Put(";\n");
         }
     }
     ast_buffer.Put("\n");
@@ -2869,16 +2882,20 @@ void CppAction2::GenerateMergedClass(CTC &ctc,
                 ast_buffer.Put(indentation); ast_buffer.Put("     */\n");
             }
 
-            ast_buffer.Put(indentation); ast_buffer.Put("    ");
-                                         //ast_buffer.Put(ctc.FindBestTypeFor(rhs_type_index[i]));
-										 ast_buffer.Put("IAst");
-                                         ast_buffer.Put(" *get");
-                                         ast_buffer.Put(symbol_set[i] -> Name());
-                                         ast_buffer.Put("() { return ");
-                                         ast_buffer.Put(ast_member_prefix.c_str());
-                                         ast_buffer.Put(symbol_set[i] -> Name());
-                                         ast_buffer.Put("; }\n");
-        }
+            ast_buffer.Put(indentation);
+        	ast_buffer.Put("    ");
+                                        
+          //  auto temp_type = ctc.FindBestTypeFor(rhs_type_index[i]);
+            auto temp_type = ctc.FindUniqueTypeFor(rhs_type_index[i], option->ast_type);
+
+			 ast_buffer.Put(temp_type);
+	         ast_buffer.Put(" *get");
+	         ast_buffer.Put(symbol_set[i] -> Name());
+	         ast_buffer.Put("() { return ");
+	         ast_buffer.Put(ast_member_prefix.c_str());
+	         ast_buffer.Put(symbol_set[i] -> Name());
+	         ast_buffer.Put("; }\n");
+	}
     }
     ast_buffer.Put("\n");
 
@@ -2905,7 +2922,9 @@ void CppAction2::GenerateMergedClass(CTC &ctc,
         {
             for (int k = 0; k <= length; k++)
                 ast_buffer.PutChar(' ');
-            ast_buffer.Put("IAst");
+            auto temp_type = ctc.FindUniqueTypeFor(rhs_type_index[i], option->ast_type);
+
+            ast_buffer.Put(temp_type);
             ast_buffer.Put(" *");
             ast_buffer.Put(ast_member_prefix.c_str());
             ast_buffer.Put(symbol_set[i] -> Name());
@@ -3217,8 +3236,9 @@ void CppAction2::GenerateAstAllocation(CTC &ctc,
                     }
                     else
                     {
-                      // auto type_desc =  ctc.FindBestTypeFor(type_index[i]);
-                       const  char* type_desc = "IAst";
+                     // auto type_desc =  ctc.FindBestTypeFor(type_index[i]);
+                      auto type_desc = ctc.FindUniqueTypeFor(type_index[i], option->ast_type);
+   
                         GenerateCode(&ast_buffer, lparen, rule_no);
                         GenerateCode(&ast_buffer, type_desc, rule_no);
                         GenerateCode(&ast_buffer, "*)", rule_no);
@@ -3320,8 +3340,10 @@ void CppAction2::GenerateListAllocation(CTC &ctc,
             else
             {
                 GenerateCode(&ast_buffer, lparen, rule_no);
-               // GenerateCode(&ast_buffer, ctc.FindBestTypeFor(allocation_element.element_type_symbol_index), rule_no);
-                GenerateCode(&ast_buffer,"IAst", rule_no);
+              //  auto temp_type = ctc.FindBestTypeFor(allocation_element.element_type_symbol_index);
+                auto temp_type = ctc.FindUniqueTypeFor(allocation_element.element_type_symbol_index, option->ast_type);
+
+                GenerateCode(&ast_buffer, temp_type, rule_no);
                 GenerateCode(&ast_buffer, "*)", rule_no);
                 GenerateCode(&ast_buffer, "getRhsSym(", rule_no);
                 IntToString index(allocation_element.element_position);
@@ -3351,7 +3373,6 @@ void CppAction2::GenerateListAllocation(CTC &ctc,
             GenerateCode(&ast_buffer, lparen, rule_no);
             GenerateCode(&ast_buffer, lparen, rule_no);
             GenerateCode(&ast_buffer, allocation_element.name, rule_no);
-           // GenerateCode(&ast_buffer, "IAst", rule_no);
             GenerateCode(&ast_buffer, "*)", rule_no);
             GenerateCode(&ast_buffer, "getRhsSym(", rule_no);
             IntToString index(allocation_element.list_position);
@@ -3371,10 +3392,12 @@ void CppAction2::GenerateListAllocation(CTC &ctc,
             else
             {
                 GenerateCode(&ast_buffer, lparen, rule_no);
-               // GenerateCode(&ast_buffer, ctc.FindBestTypeFor(allocation_element.element_type_symbol_index), rule_no);
-                GenerateCode(&ast_buffer, "IAst*)", rule_no);
+                //auto temp_type = ctc.FindBestTypeFor(allocation_element.element_type_symbol_index);
+                auto temp_type = ctc.FindUniqueTypeFor(allocation_element.element_type_symbol_index, option->ast_type);
+
+                GenerateCode(&ast_buffer, temp_type, rule_no);
             
-                GenerateCode(&ast_buffer, "getRhsSym(", rule_no);
+                GenerateCode(&ast_buffer, " *)getRhsSym(", rule_no);
                 IntToString index(allocation_element.element_position);
                 GenerateCode(&ast_buffer, index.String(), rule_no);
             }

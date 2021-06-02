@@ -438,6 +438,9 @@ public:
 //
      T& get(int i)
     {
+       if (OutOfRange(i)) {
+             throw std::out_of_range("out of range");
+         }
         return (*this)[i];
     }
     //

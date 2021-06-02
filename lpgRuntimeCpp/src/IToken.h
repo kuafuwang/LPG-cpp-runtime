@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include "Object.h"
+
 
 struct IToken;
 struct IPrsStream;
@@ -13,7 +15,7 @@ struct IGetToken
 	virtual IToken* getLeftIToken() = 0;
     virtual IToken* getRightIToken() = 0;
 };
-struct IToken
+struct IToken :public Object
 {
 	virtual ~IToken() = default;
 	static constexpr  wchar_t EOF_ = 0xFFFF;

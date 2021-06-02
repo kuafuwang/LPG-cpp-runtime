@@ -7,10 +7,12 @@
 #include "buffer.h"
 
 #include <sys/stat.h>
-#include <string.h>
+#include <cstring>
+#include <string>
 #include <iostream>
-using namespace std;
-
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 class Token;
 class VariableSymbol;
 class RuleSymbol;
@@ -49,7 +51,9 @@ public:
 
     unsigned HashAddress() { return hash_address; }
 
-    virtual char *Name() { return name;}
+    virtual char *Name() {
+    	return name;
+    }
     virtual size_t NameLength() { return length; }
 
     int Index() { return pool_index; }
@@ -192,6 +196,14 @@ private:
     bool used;
 };
 
+class ReferenceSymbol
+{
+public:
+	ReferenceSymbol(const std::string& _n, int _l, Symbol* _d);
+    std::string name;
+    int line_no;
+    Symbol* define_symbol;
+};
 
 class InputFileSymbol : public Symbol
 {
@@ -215,7 +227,7 @@ public:
     void Lock()     { locked = true; }
     void Unlock()   { locked = false; }
     bool IsLocked() { return locked; }
-
+    void ResetInput(char* _buffer, int len);
     void ReadInput();
 
     Tuple<unsigned> &LineLocation() { return line_location; }
@@ -258,8 +270,8 @@ public:
         file = fopen(name_, "wb");
         if ((! file) && strlen(name) > 0)
         {
-             cout << "Unable to open file \"" << name_ << "\"\n";
-             cout.flush();
+             std::cout << "Unable to open file \"" << name_ << "\"\n";
+             std::cout.flush();
              throw 12;
         }
     }
@@ -316,10 +328,7 @@ public:
                                           filename_symbol(NULL)
     {}
 
-    virtual ~BlockSymbol()
-    {
-        delete [] block_end;
-    }
+    virtual ~BlockSymbol();
 
     char *BlockBegin() { return name; }
     int BlockBeginLength() { return length; }
@@ -356,7 +365,12 @@ public:
     }
     TextBuffer *Buffer() { return buffer; }
 
+    void AddReference(ReferenceSymbol* _s)
+    {
+        references.push_back(_s);
+    }
 private:
+    std::vector<ReferenceSymbol*> references;
     int kind;
     char *block_end;
     int block_end_length;

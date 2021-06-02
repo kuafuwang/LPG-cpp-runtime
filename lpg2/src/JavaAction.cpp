@@ -1809,7 +1809,7 @@ static std::string replaceAll(const std::string& s, const std::string& var, cons
 
     do {
         int idx = s.find(var, pos);
-        if (idx == string::npos) {
+        if (idx == std::string::npos) {
             result += s.substr(pos);
             break;
         } else {
@@ -1839,7 +1839,7 @@ static void PutWithIndentation(TextBuffer& buffer, const std::string& s, const c
 {
     for (int pos=0; pos < s.length(); ) {
         int idx = s.find('\n', pos);
-        int end = (idx == string::npos) ? s.length() : idx + 1;
+        int end = (idx == std::string::npos) ? s.length() : idx + 1;
 
         buffer.Put(indentation);
         buffer.Put(s.c_str() + pos, end - pos);
@@ -2255,6 +2255,7 @@ void JavaAction::GenerateCommentHeader(TextBuffer &ast_buffer,
                                        Tuple<int> &ungenerated_rule,
                                        Tuple<int> &generated_rule)
 {
+    BlockSymbol* scope_block = nullptr;
     const char *rule_info = " *<li>Rule $rule_number:  $rule_text";
 
     ast_buffer.Put(indentation); ast_buffer.Put("/**");
@@ -2276,7 +2277,7 @@ void JavaAction::GenerateCommentHeader(TextBuffer &ast_buffer,
 
             ast_buffer.Put("\n");
             ast_buffer.Put(indentation);
-            ProcessActionLine(ActionBlockElement::BODY,
+            ProcessActionLine(scope_block, ActionBlockElement::BODY,
                               &ast_buffer,
                               lex_stream -> FileName(separator_token),
                               rule_info,
@@ -2309,7 +2310,7 @@ void JavaAction::GenerateCommentHeader(TextBuffer &ast_buffer,
 
         ast_buffer.Put("\n");
         ast_buffer.Put(indentation);
-        ProcessActionLine(ActionBlockElement::BODY,
+        ProcessActionLine(scope_block, ActionBlockElement::BODY,
                           &ast_buffer,
                           lex_stream -> FileName(separator_token), // option -> DefaultBlock() -> ActionfileSymbol() -> Name(),
                           rule_info,

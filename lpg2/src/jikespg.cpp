@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         cout << "\n"
              << Control::HEADER_INFO
              << " Version " << Control::VERSION
-             << "\n(C) Copyright IBM Corp. 1984, 2006.\n\n";
+             << "\n(C) Copyright LPG Group. 1984, 2021.\n\n";
         exit(0);
     }
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
             delete control;
         }
     }
-    catch (bad_alloc b)
+    catch (bad_alloc& b)
     {
         cerr << "***OS System Failure: Out of memory" << endl;
         cerr.flush();

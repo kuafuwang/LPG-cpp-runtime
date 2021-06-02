@@ -48,6 +48,7 @@ void Control::ProcessGrammar(void)
 //
 void Control::ConstructParser(void)
 {
+	
     Generator *generator = NULL;
     Table *table = NULL;
 

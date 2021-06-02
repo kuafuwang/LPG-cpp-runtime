@@ -2,6 +2,21 @@
 
 int HashPrimes::primes[] = {DEFAULT_HASH_SIZE, 8191, 16411, MAX_HASH_SIZE};
 
+ReferenceSymbol::ReferenceSymbol(const std::string& _n, int _l, Symbol* _d): name(_n), line_no(_l), define_symbol(_d)
+{
+	if(name.find("kw_lexer_class") != std::string::npos)
+	{
+        name = "kw_lexer_class2";
+	}
+}
+
+void InputFileSymbol::ResetInput(char* _buffer, int len)
+{
+    delete[] buffer;
+    buffer = _buffer;
+    buffer_length = len;
+}
+
 void
 InputFileSymbol::ReadInput()
 {
@@ -71,4 +86,13 @@ ActionFileSymbol::Flush()
     }
     
     return;
+}
+
+BlockSymbol::~BlockSymbol()
+{
+	delete [] block_end;
+	for (auto& it : references)
+	{
+		delete it;
+	}
 }

@@ -15,7 +15,7 @@
         //
         // Rule $rule_number$:  $rule_text
         //
-        #line $next_line "$input_file$"./
+        //#line $next_line "$input_file$" ./
 
     --
     -- This macro is used to initialize the rule_action array

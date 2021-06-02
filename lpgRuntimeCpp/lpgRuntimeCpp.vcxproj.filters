@@ -66,6 +66,15 @@
     <ClCompile Include="src\DifferTokens.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utf8LexStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LPGSourcePositionLocator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Any.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IAst.h">
@@ -186,6 +195,24 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\ParseTableProxy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utf8LexStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utf8LpgLexStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ISourcePositionLocator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LPGSourcePositionLocator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Any.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lpg-common.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

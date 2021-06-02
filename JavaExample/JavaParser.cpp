@@ -14,17 +14,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-    //#line 169 "btParserTemplateF.gi
- 
-#include "JavaParser.h"
+    //#line 360 "btParserTemplateF.gi
+
+     #include "JavaParser.h"
 
 #include "JavaParser_top_level_ast.h"
-ParseTable* JavaParser::prsTable = new JavaParserprs();
 
-    //#line 364 "btParserTemplateF.gi
-
-   
-     void JavaParser::ruleAction(int ruleNumber)
+void JavaParser::ruleAction(int ruleNumber)
     {
         switch (ruleNumber)
         {
@@ -58,7 +54,7 @@ using namespace JavaParser_top_level_ast;
                                        //#line 194 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                        //#line 194 GJavaParser.g
-                                       (IAst*)getRhsSym(2),
+                                       (Ast*)getRhsSym(2),
                                        //#line 194 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 194 GJavaParser.g
@@ -76,7 +72,7 @@ using namespace JavaParser_top_level_ast;
                                        //#line 195 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                        //#line 195 GJavaParser.g
-                                       (IAst*)getRhsSym(2),
+                                       (Ast*)getRhsSym(2),
                                        //#line 195 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 195 GJavaParser.g
@@ -269,9 +265,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 231 GJavaParser.g
                      _automatic_ast_pool << new ClassType(getLeftIToken(), getRightIToken(),
                                   //#line 231 GJavaParser.g
-                                  (IAst*)getRhsSym(1),
+                                  (Ast*)getRhsSym(1),
                                   //#line 231 GJavaParser.g
-                                  (IAst*)getRhsSym(2))
+                                  (TypeArguments*)getRhsSym(2))
                 //#line 231 GJavaParser.g
                 );
             break;
@@ -285,9 +281,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 233 GJavaParser.g
                      _automatic_ast_pool << new InterfaceType(getLeftIToken(), getRightIToken(),
                                       //#line 233 GJavaParser.g
-                                      (IAst*)getRhsSym(1),
+                                      (Ast*)getRhsSym(1),
                                       //#line 233 GJavaParser.g
-                                      (IAst*)getRhsSym(2))
+                                      (TypeArguments*)getRhsSym(2))
                 //#line 233 GJavaParser.g
                 );
             break;
@@ -306,11 +302,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 236 GJavaParser.g
                      _automatic_ast_pool << new TypeName(getLeftIToken(), getRightIToken(),
                                  //#line 236 GJavaParser.g
-                                 (IAst*)getRhsSym(1),
+                                 (Ast*)getRhsSym(1),
                                  //#line 236 GJavaParser.g
                                   _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                  //#line 236 GJavaParser.g
-                                 (IAst*)getRhsSym(3))
+                                 (identifier*)getRhsSym(3))
                 //#line 236 GJavaParser.g
                 );
             break;
@@ -334,7 +330,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 242 GJavaParser.g
                      _automatic_ast_pool << new ArrayType(getLeftIToken(), getRightIToken(),
                                   //#line 242 GJavaParser.g
-                                  (IAst*)getRhsSym(1),
+                                  (Ast*)getRhsSym(1),
                                   //#line 242 GJavaParser.g
                                    _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                   //#line 242 GJavaParser.g
@@ -352,9 +348,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 244 GJavaParser.g
                      _automatic_ast_pool << new TypeParameter(getLeftIToken(), getRightIToken(),
                                       //#line 244 GJavaParser.g
-                                      (IAst*)getRhsSym(1),
+                                      (identifier*)getRhsSym(1),
                                       //#line 244 GJavaParser.g
-                                      (IAst*)getRhsSym(2))
+                                      (TypeBound*)getRhsSym(2))
                 //#line 244 GJavaParser.g
                 );
             break;
@@ -370,9 +366,9 @@ using namespace JavaParser_top_level_ast;
                                   //#line 246 GJavaParser.g
                                    _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                   //#line 246 GJavaParser.g
-                                  (IAst*)getRhsSym(2),
+                                  (ClassType*)getRhsSym(2),
                                   //#line 246 GJavaParser.g
-                                  (IAst*)getRhsSym(3))
+                                  (Ast*)getRhsSym(3))
                 //#line 246 GJavaParser.g
                 );
             break;
@@ -391,9 +387,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 249 GJavaParser.g
                      _automatic_ast_pool << new AdditionalBoundList(getLeftIToken(), getRightIToken(),
                                             //#line 249 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 249 GJavaParser.g
-                                            (IAst*)getRhsSym(2))
+                                            (AdditionalBound*)getRhsSym(2))
                 //#line 249 GJavaParser.g
                 );
             break;
@@ -409,7 +405,7 @@ using namespace JavaParser_top_level_ast;
                                         //#line 251 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 251 GJavaParser.g
-                                        (IAst*)getRhsSym(2))
+                                        (InterfaceType*)getRhsSym(2))
                 //#line 251 GJavaParser.g
                 );
             break;
@@ -425,7 +421,7 @@ using namespace JavaParser_top_level_ast;
                                       //#line 253 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                       //#line 253 GJavaParser.g
-                                      (IAst*)getRhsSym(2),
+                                      (Ast*)getRhsSym(2),
                                       //#line 253 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 253 GJavaParser.g
@@ -446,11 +442,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 256 GJavaParser.g
                      _automatic_ast_pool << new ActualTypeArgumentList(getLeftIToken(), getRightIToken(),
                                                //#line 256 GJavaParser.g
-                                               (IAst*)getRhsSym(1),
+                                               (Ast*)getRhsSym(1),
                                                //#line 256 GJavaParser.g
                                                 _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                //#line 256 GJavaParser.g
-                                               (IAst*)getRhsSym(3))
+                                               (Ast*)getRhsSym(3))
                 //#line 256 GJavaParser.g
                 );
             break;
@@ -476,7 +472,7 @@ using namespace JavaParser_top_level_ast;
                                  //#line 261 GJavaParser.g
                                   _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                  //#line 261 GJavaParser.g
-                                 (IAst*)getRhsSym(2))
+                                 (Ast*)getRhsSym(2))
                 //#line 261 GJavaParser.g
                 );
             break;
@@ -492,7 +488,7 @@ using namespace JavaParser_top_level_ast;
                                         //#line 263 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 263 GJavaParser.g
-                                        (IAst*)getRhsSym(2))
+                                        (Ast*)getRhsSym(2))
                 //#line 263 GJavaParser.g
                 );
             break;
@@ -508,7 +504,7 @@ using namespace JavaParser_top_level_ast;
                                         //#line 264 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 264 GJavaParser.g
-                                        (IAst*)getRhsSym(2))
+                                        (Ast*)getRhsSym(2))
                 //#line 264 GJavaParser.g
                 );
             break;
@@ -527,11 +523,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 271 GJavaParser.g
                      _automatic_ast_pool << new PackageName(getLeftIToken(), getRightIToken(),
                                     //#line 271 GJavaParser.g
-                                    (IAst*)getRhsSym(1),
+                                    (Ast*)getRhsSym(1),
                                     //#line 271 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                     //#line 271 GJavaParser.g
-                                    (IAst*)getRhsSym(3))
+                                    (identifier*)getRhsSym(3))
                 //#line 271 GJavaParser.g
                 );
             break;
@@ -550,11 +546,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 280 GJavaParser.g
                      _automatic_ast_pool << new ExpressionName(getLeftIToken(), getRightIToken(),
                                        //#line 280 GJavaParser.g
-                                       (IAst*)getRhsSym(1),
+                                       (Ast*)getRhsSym(1),
                                        //#line 280 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                        //#line 280 GJavaParser.g
-                                       (IAst*)getRhsSym(3))
+                                       (identifier*)getRhsSym(3))
                 //#line 280 GJavaParser.g
                 );
             break;
@@ -573,11 +569,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 283 GJavaParser.g
                      _automatic_ast_pool << new MethodName(getLeftIToken(), getRightIToken(),
                                    //#line 283 GJavaParser.g
-                                   (IAst*)getRhsSym(1),
+                                   (Ast*)getRhsSym(1),
                                    //#line 283 GJavaParser.g
                                     _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                    //#line 283 GJavaParser.g
-                                   (IAst*)getRhsSym(3))
+                                   (identifier*)getRhsSym(3))
                 //#line 283 GJavaParser.g
                 );
             break;
@@ -596,11 +592,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 286 GJavaParser.g
                      _automatic_ast_pool << new PackageOrTypeName(getLeftIToken(), getRightIToken(),
                                           //#line 286 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 286 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 286 GJavaParser.g
-                                          (IAst*)getRhsSym(3))
+                                          (identifier*)getRhsSym(3))
                 //#line 286 GJavaParser.g
                 );
             break;
@@ -619,11 +615,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 289 GJavaParser.g
                      _automatic_ast_pool << new AmbiguousName(getLeftIToken(), getRightIToken(),
                                       //#line 289 GJavaParser.g
-                                      (IAst*)getRhsSym(1),
+                                      (Ast*)getRhsSym(1),
                                       //#line 289 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                       //#line 289 GJavaParser.g
-                                      (IAst*)getRhsSym(3))
+                                      (identifier*)getRhsSym(3))
                 //#line 289 GJavaParser.g
                 );
             break;
@@ -637,11 +633,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 293 GJavaParser.g
                      _automatic_ast_pool << new CompilationUnit(getLeftIToken(), getRightIToken(),
                                         //#line 293 GJavaParser.g
-                                        (IAst*)getRhsSym(1),
+                                        (PackageDeclaration*)getRhsSym(1),
                                         //#line 293 GJavaParser.g
-                                        (IAst*)getRhsSym(2),
+                                        (Ast*)getRhsSym(2),
                                         //#line 293 GJavaParser.g
-                                        (IAst*)getRhsSym(3))
+                                        (Ast*)getRhsSym(3))
                 //#line 293 GJavaParser.g
                 );
             break;
@@ -660,9 +656,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 296 GJavaParser.g
                      _automatic_ast_pool << new ImportDeclarations(getLeftIToken(), getRightIToken(),
                                            //#line 296 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 296 GJavaParser.g
-                                           (IAst*)getRhsSym(2))
+                                           (Ast*)getRhsSym(2))
                 //#line 296 GJavaParser.g
                 );
             break;
@@ -681,9 +677,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 299 GJavaParser.g
                      _automatic_ast_pool << new TypeDeclarations(getLeftIToken(), getRightIToken(),
                                          //#line 299 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (Ast*)getRhsSym(1),
                                          //#line 299 GJavaParser.g
-                                         (IAst*)getRhsSym(2))
+                                         (Ast*)getRhsSym(2))
                 //#line 299 GJavaParser.g
                 );
             break;
@@ -697,11 +693,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 301 GJavaParser.g
                      _automatic_ast_pool << new PackageDeclaration(getLeftIToken(), getRightIToken(),
                                            //#line 301 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 301 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                            //#line 301 GJavaParser.g
-                                           (IAst*)getRhsSym(3),
+                                           (Ast*)getRhsSym(3),
                                            //#line 301 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 301 GJavaParser.g
@@ -739,7 +735,7 @@ using namespace JavaParser_top_level_ast;
                                                     //#line 308 GJavaParser.g
                                                      _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                     //#line 308 GJavaParser.g
-                                                    (IAst*)getRhsSym(2),
+                                                    (Ast*)getRhsSym(2),
                                                     //#line 308 GJavaParser.g
                                                      _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 308 GJavaParser.g
@@ -757,7 +753,7 @@ using namespace JavaParser_top_level_ast;
                                                       //#line 310 GJavaParser.g
                                                        _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                       //#line 310 GJavaParser.g
-                                                      (IAst*)getRhsSym(2),
+                                                      (Ast*)getRhsSym(2),
                                                       //#line 310 GJavaParser.g
                                                        _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                                       //#line 310 GJavaParser.g
@@ -781,11 +777,11 @@ using namespace JavaParser_top_level_ast;
                                                       //#line 312 GJavaParser.g
                                                        _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                       //#line 312 GJavaParser.g
-                                                      (IAst*)getRhsSym(3),
+                                                      (Ast*)getRhsSym(3),
                                                       //#line 312 GJavaParser.g
                                                        _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                                       //#line 312 GJavaParser.g
-                                                      (IAst*)getRhsSym(5),
+                                                      (identifier*)getRhsSym(5),
                                                       //#line 312 GJavaParser.g
                                                        _automatic_ast_pool << new AstToken(getRhsIToken(6)))
                 //#line 312 GJavaParser.g
@@ -805,7 +801,7 @@ using namespace JavaParser_top_level_ast;
                                                         //#line 314 GJavaParser.g
                                                          _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                         //#line 314 GJavaParser.g
-                                                        (IAst*)getRhsSym(3),
+                                                        (Ast*)getRhsSym(3),
                                                         //#line 314 GJavaParser.g
                                                          _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                                         //#line 314 GJavaParser.g
@@ -857,19 +853,19 @@ using namespace JavaParser_top_level_ast;
                     //#line 325 GJavaParser.g
                      _automatic_ast_pool << new NormalClassDeclaration(getLeftIToken(), getRightIToken(),
                                                //#line 325 GJavaParser.g
-                                               (IAst*)getRhsSym(1),
+                                               (Ast*)getRhsSym(1),
                                                //#line 325 GJavaParser.g
                                                 _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                //#line 325 GJavaParser.g
-                                               (IAst*)getRhsSym(3),
+                                               (identifier*)getRhsSym(3),
                                                //#line 325 GJavaParser.g
-                                               (IAst*)getRhsSym(4),
+                                               (TypeParameters*)getRhsSym(4),
                                                //#line 325 GJavaParser.g
-                                               (IAst*)getRhsSym(5),
+                                               (Super*)getRhsSym(5),
                                                //#line 325 GJavaParser.g
-                                               (IAst*)getRhsSym(6),
+                                               (Interfaces*)getRhsSym(6),
                                                //#line 325 GJavaParser.g
-                                               (IAst*)getRhsSym(7))
+                                               (ClassBody*)getRhsSym(7))
                 //#line 325 GJavaParser.g
                 );
             break;
@@ -888,9 +884,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 328 GJavaParser.g
                      _automatic_ast_pool << new ClassModifiers(getLeftIToken(), getRightIToken(),
                                        //#line 328 GJavaParser.g
-                                       (IAst*)getRhsSym(1),
+                                       (Ast*)getRhsSym(1),
                                        //#line 328 GJavaParser.g
-                                       (IAst*)getRhsSym(2))
+                                       (Ast*)getRhsSym(2))
                 //#line 328 GJavaParser.g
                 );
             break;
@@ -995,7 +991,7 @@ using namespace JavaParser_top_level_ast;
                                        //#line 339 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                        //#line 339 GJavaParser.g
-                                       (IAst*)getRhsSym(2),
+                                       (Ast*)getRhsSym(2),
                                        //#line 339 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 339 GJavaParser.g
@@ -1016,11 +1012,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 342 GJavaParser.g
                      _automatic_ast_pool << new TypeParameterList(getLeftIToken(), getRightIToken(),
                                           //#line 342 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 342 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 342 GJavaParser.g
-                                          (IAst*)getRhsSym(3))
+                                          (TypeParameter*)getRhsSym(3))
                 //#line 342 GJavaParser.g
                 );
             break;
@@ -1036,7 +1032,7 @@ using namespace JavaParser_top_level_ast;
                               //#line 344 GJavaParser.g
                                _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                               //#line 344 GJavaParser.g
-                              (IAst*)getRhsSym(2))
+                              (ClassType*)getRhsSym(2))
                 //#line 344 GJavaParser.g
                 );
             break;
@@ -1052,7 +1048,7 @@ using namespace JavaParser_top_level_ast;
                                    //#line 351 GJavaParser.g
                                     _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                    //#line 351 GJavaParser.g
-                                   (IAst*)getRhsSym(2))
+                                   (Ast*)getRhsSym(2))
                 //#line 351 GJavaParser.g
                 );
             break;
@@ -1071,11 +1067,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 354 GJavaParser.g
                      _automatic_ast_pool << new InterfaceTypeList(getLeftIToken(), getRightIToken(),
                                           //#line 354 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 354 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 354 GJavaParser.g
-                                          (IAst*)getRhsSym(3))
+                                          (InterfaceType*)getRhsSym(3))
                 //#line 354 GJavaParser.g
                 );
             break;
@@ -1091,7 +1087,7 @@ using namespace JavaParser_top_level_ast;
                                   //#line 361 GJavaParser.g
                                    _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                   //#line 361 GJavaParser.g
-                                  (IAst*)getRhsSym(2),
+                                  (Ast*)getRhsSym(2),
                                   //#line 361 GJavaParser.g
                                    _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 361 GJavaParser.g
@@ -1112,9 +1108,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 364 GJavaParser.g
                      _automatic_ast_pool << new ClassBodyDeclarations(getLeftIToken(), getRightIToken(),
                                               //#line 364 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 364 GJavaParser.g
-                                              (IAst*)getRhsSym(2))
+                                              (Ast*)getRhsSym(2))
                 //#line 364 GJavaParser.g
                 );
             break;
@@ -1180,11 +1176,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 377 GJavaParser.g
                      _automatic_ast_pool << new FieldDeclaration(getLeftIToken(), getRightIToken(),
                                          //#line 377 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (Ast*)getRhsSym(1),
                                          //#line 377 GJavaParser.g
-                                         (IAst*)getRhsSym(2),
+                                         (Ast*)getRhsSym(2),
                                          //#line 377 GJavaParser.g
-                                         (IAst*)getRhsSym(3),
+                                         (Ast*)getRhsSym(3),
                                          //#line 377 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 377 GJavaParser.g
@@ -1205,11 +1201,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 380 GJavaParser.g
                      _automatic_ast_pool << new VariableDeclarators(getLeftIToken(), getRightIToken(),
                                             //#line 380 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 380 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 380 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (Ast*)getRhsSym(3))
                 //#line 380 GJavaParser.g
                 );
             break;
@@ -1228,11 +1224,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 383 GJavaParser.g
                      _automatic_ast_pool << new VariableDeclarator(getLeftIToken(), getRightIToken(),
                                            //#line 383 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 383 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                            //#line 383 GJavaParser.g
-                                           (IAst*)getRhsSym(3))
+                                           (Ast*)getRhsSym(3))
                 //#line 383 GJavaParser.g
                 );
             break;
@@ -1251,7 +1247,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 386 GJavaParser.g
                      _automatic_ast_pool << new VariableDeclaratorId(getLeftIToken(), getRightIToken(),
                                              //#line 386 GJavaParser.g
-                                             (IAst*)getRhsSym(1),
+                                             (Ast*)getRhsSym(1),
                                              //#line 386 GJavaParser.g
                                               _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                              //#line 386 GJavaParser.g
@@ -1284,9 +1280,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 392 GJavaParser.g
                      _automatic_ast_pool << new FieldModifiers(getLeftIToken(), getRightIToken(),
                                        //#line 392 GJavaParser.g
-                                       (IAst*)getRhsSym(1),
+                                       (Ast*)getRhsSym(1),
                                        //#line 392 GJavaParser.g
-                                       (IAst*)getRhsSym(2))
+                                       (Ast*)getRhsSym(2))
                 //#line 392 GJavaParser.g
                 );
             break;
@@ -1389,9 +1385,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 403 GJavaParser.g
                      _automatic_ast_pool << new MethodDeclaration(getLeftIToken(), getRightIToken(),
                                           //#line 403 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (MethodHeader*)getRhsSym(1),
                                           //#line 403 GJavaParser.g
-                                          (IAst*)getRhsSym(2))
+                                          (Ast*)getRhsSym(2))
                 //#line 403 GJavaParser.g
                 );
             break;
@@ -1405,15 +1401,15 @@ using namespace JavaParser_top_level_ast;
                     //#line 405 GJavaParser.g
                      _automatic_ast_pool << new MethodHeader(getLeftIToken(), getRightIToken(),
                                      //#line 405 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 405 GJavaParser.g
-                                     (IAst*)getRhsSym(2),
+                                     (TypeParameters*)getRhsSym(2),
                                      //#line 405 GJavaParser.g
-                                     (IAst*)getRhsSym(3),
+                                     (Ast*)getRhsSym(3),
                                      //#line 405 GJavaParser.g
-                                     (IAst*)getRhsSym(4),
+                                     (Ast*)getRhsSym(4),
                                      //#line 405 GJavaParser.g
-                                     (IAst*)getRhsSym(5))
+                                     (Throws*)getRhsSym(5))
                 //#line 405 GJavaParser.g
                 );
             break;
@@ -1444,11 +1440,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 410 GJavaParser.g
                      _automatic_ast_pool << new MethodDeclarator0(getLeftIToken(), getRightIToken(),
                                           //#line 410 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (identifier*)getRhsSym(1),
                                           //#line 410 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 410 GJavaParser.g
-                                          (IAst*)getRhsSym(3),
+                                          (Ast*)getRhsSym(3),
                                           //#line 410 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 410 GJavaParser.g
@@ -1464,7 +1460,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 412 GJavaParser.g
                      _automatic_ast_pool << new MethodDeclarator1(getLeftIToken(), getRightIToken(),
                                           //#line 412 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 412 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 412 GJavaParser.g
@@ -1487,11 +1483,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 415 GJavaParser.g
                      _automatic_ast_pool << new FormalParameterList(getLeftIToken(), getRightIToken(),
                                             //#line 415 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 415 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 415 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (LastFormalParameter*)getRhsSym(3))
                 //#line 415 GJavaParser.g
                 );
             break;
@@ -1510,11 +1506,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 418 GJavaParser.g
                      _automatic_ast_pool << new FormalParameters(getLeftIToken(), getRightIToken(),
                                          //#line 418 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (Ast*)getRhsSym(1),
                                          //#line 418 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                          //#line 418 GJavaParser.g
-                                         (IAst*)getRhsSym(3))
+                                         (FormalParameter*)getRhsSym(3))
                 //#line 418 GJavaParser.g
                 );
             break;
@@ -1528,11 +1524,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 420 GJavaParser.g
                      _automatic_ast_pool << new FormalParameter(getLeftIToken(), getRightIToken(),
                                         //#line 420 GJavaParser.g
-                                        (IAst*)getRhsSym(1),
+                                        (Ast*)getRhsSym(1),
                                         //#line 420 GJavaParser.g
-                                        (IAst*)getRhsSym(2),
+                                        (Ast*)getRhsSym(2),
                                         //#line 420 GJavaParser.g
-                                        (IAst*)getRhsSym(3))
+                                        (Ast*)getRhsSym(3))
                 //#line 420 GJavaParser.g
                 );
             break;
@@ -1551,9 +1547,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 423 GJavaParser.g
                      _automatic_ast_pool << new VariableModifiers(getLeftIToken(), getRightIToken(),
                                           //#line 423 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 423 GJavaParser.g
-                                          (IAst*)getRhsSym(2))
+                                          (Ast*)getRhsSym(2))
                 //#line 423 GJavaParser.g
                 );
             break;
@@ -1584,13 +1580,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 428 GJavaParser.g
                      _automatic_ast_pool << new LastFormalParameter(getLeftIToken(), getRightIToken(),
                                             //#line 428 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 428 GJavaParser.g
-                                            (IAst*)getRhsSym(2),
+                                            (Ast*)getRhsSym(2),
                                             //#line 428 GJavaParser.g
-                                            (IAst*)getRhsSym(3),
+                                            (Ellipsisopt*)getRhsSym(3),
                                             //#line 428 GJavaParser.g
-                                            (IAst*)getRhsSym(4))
+                                            (Ast*)getRhsSym(4))
                 //#line 428 GJavaParser.g
                 );
             break;
@@ -1609,9 +1605,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 437 GJavaParser.g
                      _automatic_ast_pool << new MethodModifiers(getLeftIToken(), getRightIToken(),
                                         //#line 437 GJavaParser.g
-                                        (IAst*)getRhsSym(1),
+                                        (Ast*)getRhsSym(1),
                                         //#line 437 GJavaParser.g
-                                        (IAst*)getRhsSym(2))
+                                        (Ast*)getRhsSym(2))
                 //#line 437 GJavaParser.g
                 );
             break;
@@ -1740,7 +1736,7 @@ using namespace JavaParser_top_level_ast;
                                //#line 450 GJavaParser.g
                                 _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                //#line 450 GJavaParser.g
-                               (IAst*)getRhsSym(2))
+                               (Ast*)getRhsSym(2))
                 //#line 450 GJavaParser.g
                 );
             break;
@@ -1759,11 +1755,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 453 GJavaParser.g
                      _automatic_ast_pool << new ExceptionTypeList(getLeftIToken(), getRightIToken(),
                                           //#line 453 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 453 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 453 GJavaParser.g
-                                          (IAst*)getRhsSym(3))
+                                          (Ast*)getRhsSym(3))
                 //#line 453 GJavaParser.g
                 );
             break;
@@ -1811,7 +1807,7 @@ using namespace JavaParser_top_level_ast;
                                           //#line 463 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                           //#line 463 GJavaParser.g
-                                          (IAst*)getRhsSym(2))
+                                          (Block*)getRhsSym(2))
                 //#line 463 GJavaParser.g
                 );
             break;
@@ -1825,13 +1821,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 465 GJavaParser.g
                      _automatic_ast_pool << new ConstructorDeclaration(getLeftIToken(), getRightIToken(),
                                                //#line 465 GJavaParser.g
-                                               (IAst*)getRhsSym(1),
+                                               (Ast*)getRhsSym(1),
                                                //#line 465 GJavaParser.g
-                                               (IAst*)getRhsSym(2),
+                                               (ConstructorDeclarator*)getRhsSym(2),
                                                //#line 465 GJavaParser.g
-                                               (IAst*)getRhsSym(3),
+                                               (Throws*)getRhsSym(3),
                                                //#line 465 GJavaParser.g
-                                               (IAst*)getRhsSym(4))
+                                               (ConstructorBody*)getRhsSym(4))
                 //#line 465 GJavaParser.g
                 );
             break;
@@ -1845,13 +1841,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 467 GJavaParser.g
                      _automatic_ast_pool << new ConstructorDeclarator(getLeftIToken(), getRightIToken(),
                                               //#line 467 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (TypeParameters*)getRhsSym(1),
                                               //#line 467 GJavaParser.g
-                                              (IAst*)getRhsSym(2),
+                                              (identifier*)getRhsSym(2),
                                               //#line 467 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                               //#line 467 GJavaParser.g
-                                              (IAst*)getRhsSym(4),
+                                              (Ast*)getRhsSym(4),
                                               //#line 467 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(5)))
                 //#line 467 GJavaParser.g
@@ -1877,9 +1873,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 472 GJavaParser.g
                      _automatic_ast_pool << new ConstructorModifiers(getLeftIToken(), getRightIToken(),
                                              //#line 472 GJavaParser.g
-                                             (IAst*)getRhsSym(1),
+                                             (Ast*)getRhsSym(1),
                                              //#line 472 GJavaParser.g
-                                             (IAst*)getRhsSym(2))
+                                             (Ast*)getRhsSym(2))
                 //#line 472 GJavaParser.g
                 );
             break;
@@ -1936,9 +1932,9 @@ using namespace JavaParser_top_level_ast;
                                         //#line 479 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 479 GJavaParser.g
-                                        (IAst*)getRhsSym(2),
+                                        (Ast*)getRhsSym(2),
                                         //#line 479 GJavaParser.g
-                                        (IAst*)getRhsSym(3),
+                                        (Ast*)getRhsSym(3),
                                         //#line 479 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 479 GJavaParser.g
@@ -1954,13 +1950,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 481 GJavaParser.g
                      _automatic_ast_pool << new ExplicitConstructorInvocation0(getLeftIToken(), getRightIToken(),
                                                        //#line 481 GJavaParser.g
-                                                       (IAst*)getRhsSym(1),
+                                                       (TypeArguments*)getRhsSym(1),
                                                        //#line 481 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                        //#line 481 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                                        //#line 481 GJavaParser.g
-                                                       (IAst*)getRhsSym(4),
+                                                       (Ast*)getRhsSym(4),
                                                        //#line 481 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                                        //#line 481 GJavaParser.g
@@ -1978,13 +1974,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 482 GJavaParser.g
                      _automatic_ast_pool << new ExplicitConstructorInvocation1(getLeftIToken(), getRightIToken(),
                                                        //#line 482 GJavaParser.g
-                                                       (IAst*)getRhsSym(1),
+                                                       (TypeArguments*)getRhsSym(1),
                                                        //#line 482 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                        //#line 482 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                                        //#line 482 GJavaParser.g
-                                                       (IAst*)getRhsSym(4),
+                                                       (Ast*)getRhsSym(4),
                                                        //#line 482 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                                        //#line 482 GJavaParser.g
@@ -2002,17 +1998,17 @@ using namespace JavaParser_top_level_ast;
                     //#line 483 GJavaParser.g
                      _automatic_ast_pool << new ExplicitConstructorInvocation2(getLeftIToken(), getRightIToken(),
                                                        //#line 483 GJavaParser.g
-                                                       (IAst*)getRhsSym(1),
+                                                       (Ast*)getRhsSym(1),
                                                        //#line 483 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                        //#line 483 GJavaParser.g
-                                                       (IAst*)getRhsSym(3),
+                                                       (TypeArguments*)getRhsSym(3),
                                                        //#line 483 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                                        //#line 483 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                                        //#line 483 GJavaParser.g
-                                                       (IAst*)getRhsSym(6),
+                                                       (Ast*)getRhsSym(6),
                                                        //#line 483 GJavaParser.g
                                                         _automatic_ast_pool << new AstToken(getRhsIToken(7)),
                                                        //#line 483 GJavaParser.g
@@ -2030,15 +2026,15 @@ using namespace JavaParser_top_level_ast;
                     //#line 485 GJavaParser.g
                      _automatic_ast_pool << new EnumDeclaration(getLeftIToken(), getRightIToken(),
                                         //#line 485 GJavaParser.g
-                                        (IAst*)getRhsSym(1),
+                                        (Ast*)getRhsSym(1),
                                         //#line 485 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                         //#line 485 GJavaParser.g
-                                        (IAst*)getRhsSym(3),
+                                        (identifier*)getRhsSym(3),
                                         //#line 485 GJavaParser.g
-                                        (IAst*)getRhsSym(4),
+                                        (Interfaces*)getRhsSym(4),
                                         //#line 485 GJavaParser.g
-                                        (IAst*)getRhsSym(5))
+                                        (EnumBody*)getRhsSym(5))
                 //#line 485 GJavaParser.g
                 );
             break;
@@ -2054,11 +2050,11 @@ using namespace JavaParser_top_level_ast;
                                  //#line 487 GJavaParser.g
                                   _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                  //#line 487 GJavaParser.g
-                                 (IAst*)getRhsSym(2),
+                                 (Ast*)getRhsSym(2),
                                  //#line 487 GJavaParser.g
-                                 (IAst*)getRhsSym(3),
+                                 (Commaopt*)getRhsSym(3),
                                  //#line 487 GJavaParser.g
-                                 (IAst*)getRhsSym(4),
+                                 (EnumBodyDeclarations*)getRhsSym(4),
                                  //#line 487 GJavaParser.g
                                   _automatic_ast_pool << new AstToken(getRhsIToken(5)))
                 //#line 487 GJavaParser.g
@@ -2079,11 +2075,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 490 GJavaParser.g
                      _automatic_ast_pool << new EnumConstants(getLeftIToken(), getRightIToken(),
                                       //#line 490 GJavaParser.g
-                                      (IAst*)getRhsSym(1),
+                                      (Ast*)getRhsSym(1),
                                       //#line 490 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                       //#line 490 GJavaParser.g
-                                      (IAst*)getRhsSym(3))
+                                      (Ast*)getRhsSym(3))
                 //#line 490 GJavaParser.g
                 );
             break;
@@ -2097,13 +2093,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 492 GJavaParser.g
                      _automatic_ast_pool << new EnumConstant(getLeftIToken(), getRightIToken(),
                                      //#line 492 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 492 GJavaParser.g
-                                     (IAst*)getRhsSym(2),
+                                     (identifier*)getRhsSym(2),
                                      //#line 492 GJavaParser.g
-                                     (IAst*)getRhsSym(3),
+                                     (Arguments*)getRhsSym(3),
                                      //#line 492 GJavaParser.g
-                                     (IAst*)getRhsSym(4))
+                                     (ClassBody*)getRhsSym(4))
                 //#line 492 GJavaParser.g
                 );
             break;
@@ -2119,7 +2115,7 @@ using namespace JavaParser_top_level_ast;
                                   //#line 494 GJavaParser.g
                                    _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                   //#line 494 GJavaParser.g
-                                  (IAst*)getRhsSym(2),
+                                  (Ast*)getRhsSym(2),
                                   //#line 494 GJavaParser.g
                                    _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 494 GJavaParser.g
@@ -2137,7 +2133,7 @@ using namespace JavaParser_top_level_ast;
                                              //#line 496 GJavaParser.g
                                               _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                              //#line 496 GJavaParser.g
-                                             (IAst*)getRhsSym(2))
+                                             (Ast*)getRhsSym(2))
                 //#line 496 GJavaParser.g
                 );
             break;
@@ -2161,17 +2157,17 @@ using namespace JavaParser_top_level_ast;
                     //#line 503 GJavaParser.g
                      _automatic_ast_pool << new NormalInterfaceDeclaration(getLeftIToken(), getRightIToken(),
                                                    //#line 503 GJavaParser.g
-                                                   (IAst*)getRhsSym(1),
+                                                   (Ast*)getRhsSym(1),
                                                    //#line 503 GJavaParser.g
                                                     _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                    //#line 503 GJavaParser.g
-                                                   (IAst*)getRhsSym(3),
+                                                   (identifier*)getRhsSym(3),
                                                    //#line 503 GJavaParser.g
-                                                   (IAst*)getRhsSym(4),
+                                                   (TypeParameters*)getRhsSym(4),
                                                    //#line 503 GJavaParser.g
-                                                   (IAst*)getRhsSym(5),
+                                                   (Ast*)getRhsSym(5),
                                                    //#line 503 GJavaParser.g
-                                                   (IAst*)getRhsSym(6))
+                                                   (InterfaceBody*)getRhsSym(6))
                 //#line 503 GJavaParser.g
                 );
             break;
@@ -2190,9 +2186,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 506 GJavaParser.g
                      _automatic_ast_pool << new InterfaceModifiers(getLeftIToken(), getRightIToken(),
                                            //#line 506 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 506 GJavaParser.g
-                                           (IAst*)getRhsSym(2))
+                                           (Ast*)getRhsSym(2))
                 //#line 506 GJavaParser.g
                 );
             break;
@@ -2285,7 +2281,7 @@ using namespace JavaParser_top_level_ast;
                                            //#line 516 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                            //#line 516 GJavaParser.g
-                                           (IAst*)getRhsSym(2))
+                                           (InterfaceType*)getRhsSym(2))
                 //#line 516 GJavaParser.g
                 );
             break;
@@ -2299,11 +2295,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 517 GJavaParser.g
                      _automatic_ast_pool << new ExtendsInterfaces1(getLeftIToken(), getRightIToken(),
                                            //#line 517 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 517 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                            //#line 517 GJavaParser.g
-                                           (IAst*)getRhsSym(3))
+                                           (InterfaceType*)getRhsSym(3))
                 //#line 517 GJavaParser.g
                 );
             break;
@@ -2319,7 +2315,7 @@ using namespace JavaParser_top_level_ast;
                                       //#line 524 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                       //#line 524 GJavaParser.g
-                                      (IAst*)getRhsSym(2),
+                                      (Ast*)getRhsSym(2),
                                       //#line 524 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 524 GJavaParser.g
@@ -2340,9 +2336,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 527 GJavaParser.g
                      _automatic_ast_pool << new InterfaceMemberDeclarations(getLeftIToken(), getRightIToken(),
                                                     //#line 527 GJavaParser.g
-                                                    (IAst*)getRhsSym(1),
+                                                    (Ast*)getRhsSym(1),
                                                     //#line 527 GJavaParser.g
-                                                    (IAst*)getRhsSym(2))
+                                                    (Ast*)getRhsSym(2))
                 //#line 527 GJavaParser.g
                 );
             break;
@@ -2388,11 +2384,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 535 GJavaParser.g
                      _automatic_ast_pool << new ConstantDeclaration(getLeftIToken(), getRightIToken(),
                                             //#line 535 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 535 GJavaParser.g
-                                            (IAst*)getRhsSym(2),
+                                            (Ast*)getRhsSym(2),
                                             //#line 535 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (Ast*)getRhsSym(3))
                 //#line 535 GJavaParser.g
                 );
             break;
@@ -2411,9 +2407,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 538 GJavaParser.g
                      _automatic_ast_pool << new ConstantModifiers(getLeftIToken(), getRightIToken(),
                                           //#line 538 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 538 GJavaParser.g
-                                          (IAst*)getRhsSym(2))
+                                          (Ast*)getRhsSym(2))
                 //#line 538 GJavaParser.g
                 );
             break;
@@ -2468,15 +2464,15 @@ using namespace JavaParser_top_level_ast;
                     //#line 545 GJavaParser.g
                      _automatic_ast_pool << new AbstractMethodDeclaration(getLeftIToken(), getRightIToken(),
                                                   //#line 545 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (Ast*)getRhsSym(1),
                                                   //#line 545 GJavaParser.g
-                                                  (IAst*)getRhsSym(2),
+                                                  (TypeParameters*)getRhsSym(2),
                                                   //#line 545 GJavaParser.g
-                                                  (IAst*)getRhsSym(3),
+                                                  (Ast*)getRhsSym(3),
                                                   //#line 545 GJavaParser.g
-                                                  (IAst*)getRhsSym(4),
+                                                  (Ast*)getRhsSym(4),
                                                   //#line 545 GJavaParser.g
-                                                  (IAst*)getRhsSym(5),
+                                                  (Throws*)getRhsSym(5),
                                                   //#line 545 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(6)))
                 //#line 545 GJavaParser.g
@@ -2497,9 +2493,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 548 GJavaParser.g
                      _automatic_ast_pool << new AbstractMethodModifiers(getLeftIToken(), getRightIToken(),
                                                 //#line 548 GJavaParser.g
-                                                (IAst*)getRhsSym(1),
+                                                (Ast*)getRhsSym(1),
                                                 //#line 548 GJavaParser.g
-                                                (IAst*)getRhsSym(2))
+                                                (Ast*)getRhsSym(2))
                 //#line 548 GJavaParser.g
                 );
             break;
@@ -2542,15 +2538,15 @@ using namespace JavaParser_top_level_ast;
                     //#line 554 GJavaParser.g
                      _automatic_ast_pool << new AnnotationTypeDeclaration(getLeftIToken(), getRightIToken(),
                                                   //#line 554 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (Ast*)getRhsSym(1),
                                                   //#line 554 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                   //#line 554 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                                   //#line 554 GJavaParser.g
-                                                  (IAst*)getRhsSym(4),
+                                                  (identifier*)getRhsSym(4),
                                                   //#line 554 GJavaParser.g
-                                                  (IAst*)getRhsSym(5))
+                                                  (AnnotationTypeBody*)getRhsSym(5))
                 //#line 554 GJavaParser.g
                 );
             break;
@@ -2566,7 +2562,7 @@ using namespace JavaParser_top_level_ast;
                                            //#line 556 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                            //#line 556 GJavaParser.g
-                                           (IAst*)getRhsSym(2),
+                                           (Ast*)getRhsSym(2),
                                            //#line 556 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 556 GJavaParser.g
@@ -2587,9 +2583,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 559 GJavaParser.g
                      _automatic_ast_pool << new AnnotationTypeElementDeclarations(getLeftIToken(), getRightIToken(),
                                                           //#line 559 GJavaParser.g
-                                                          (IAst*)getRhsSym(1),
+                                                          (Ast*)getRhsSym(1),
                                                           //#line 559 GJavaParser.g
-                                                          (IAst*)getRhsSym(2))
+                                                          (Ast*)getRhsSym(2))
                 //#line 559 GJavaParser.g
                 );
             break;
@@ -2603,17 +2599,17 @@ using namespace JavaParser_top_level_ast;
                     //#line 561 GJavaParser.g
                      _automatic_ast_pool << new AnnotationTypeElementDeclaration0(getLeftIToken(), getRightIToken(),
                                                           //#line 561 GJavaParser.g
-                                                          (IAst*)getRhsSym(1),
+                                                          (Ast*)getRhsSym(1),
                                                           //#line 561 GJavaParser.g
-                                                          (IAst*)getRhsSym(2),
+                                                          (Ast*)getRhsSym(2),
                                                           //#line 561 GJavaParser.g
-                                                          (IAst*)getRhsSym(3),
+                                                          (identifier*)getRhsSym(3),
                                                           //#line 561 GJavaParser.g
                                                            _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                                           //#line 561 GJavaParser.g
                                                            _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                                           //#line 561 GJavaParser.g
-                                                          (IAst*)getRhsSym(6),
+                                                          (DefaultValue*)getRhsSym(6),
                                                           //#line 561 GJavaParser.g
                                                            _automatic_ast_pool << new AstToken(getRhsIToken(7)))
                 //#line 561 GJavaParser.g
@@ -2668,7 +2664,7 @@ using namespace JavaParser_top_level_ast;
                                      //#line 569 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                      //#line 569 GJavaParser.g
-                                     (IAst*)getRhsSym(2))
+                                     (Ast*)getRhsSym(2))
                 //#line 569 GJavaParser.g
                 );
             break;
@@ -2687,9 +2683,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 572 GJavaParser.g
                      _automatic_ast_pool << new Annotations(getLeftIToken(), getRightIToken(),
                                     //#line 572 GJavaParser.g
-                                    (IAst*)getRhsSym(1),
+                                    (Ast*)getRhsSym(1),
                                     //#line 572 GJavaParser.g
-                                    (IAst*)getRhsSym(2))
+                                    (Ast*)getRhsSym(2))
                 //#line 572 GJavaParser.g
                 );
             break;
@@ -2720,11 +2716,11 @@ using namespace JavaParser_top_level_ast;
                                          //#line 578 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 578 GJavaParser.g
-                                         (IAst*)getRhsSym(2),
+                                         (Ast*)getRhsSym(2),
                                          //#line 578 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                          //#line 578 GJavaParser.g
-                                         (IAst*)getRhsSym(4),
+                                         (Ast*)getRhsSym(4),
                                          //#line 578 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(5)))
                 //#line 578 GJavaParser.g
@@ -2745,11 +2741,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 581 GJavaParser.g
                      _automatic_ast_pool << new ElementValuePairs(getLeftIToken(), getRightIToken(),
                                           //#line 581 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 581 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 581 GJavaParser.g
-                                          (IAst*)getRhsSym(3))
+                                          (ElementValuePair*)getRhsSym(3))
                 //#line 581 GJavaParser.g
                 );
             break;
@@ -2763,11 +2759,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 583 GJavaParser.g
                      _automatic_ast_pool << new ElementValuePair(getLeftIToken(), getRightIToken(),
                                          //#line 583 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (identifier*)getRhsSym(1),
                                          //#line 583 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                          //#line 583 GJavaParser.g
-                                         (IAst*)getRhsSym(3))
+                                         (Ast*)getRhsSym(3))
                 //#line 583 GJavaParser.g
                 );
             break;
@@ -2803,9 +2799,9 @@ using namespace JavaParser_top_level_ast;
                                                      //#line 591 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                      //#line 591 GJavaParser.g
-                                                     (IAst*)getRhsSym(2),
+                                                     (Ast*)getRhsSym(2),
                                                      //#line 591 GJavaParser.g
-                                                     (IAst*)getRhsSym(3),
+                                                     (Commaopt*)getRhsSym(3),
                                                      //#line 591 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 591 GJavaParser.g
@@ -2826,11 +2822,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 594 GJavaParser.g
                      _automatic_ast_pool << new ElementValues(getLeftIToken(), getRightIToken(),
                                       //#line 594 GJavaParser.g
-                                      (IAst*)getRhsSym(1),
+                                      (Ast*)getRhsSym(1),
                                       //#line 594 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                       //#line 594 GJavaParser.g
-                                      (IAst*)getRhsSym(3))
+                                      (Ast*)getRhsSym(3))
                 //#line 594 GJavaParser.g
                 );
             break;
@@ -2846,7 +2842,7 @@ using namespace JavaParser_top_level_ast;
                                          //#line 596 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 596 GJavaParser.g
-                                         (IAst*)getRhsSym(2))
+                                         (Ast*)getRhsSym(2))
                 //#line 596 GJavaParser.g
                 );
             break;
@@ -2862,11 +2858,11 @@ using namespace JavaParser_top_level_ast;
                                                 //#line 598 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                 //#line 598 GJavaParser.g
-                                                (IAst*)getRhsSym(2),
+                                                (Ast*)getRhsSym(2),
                                                 //#line 598 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                                 //#line 598 GJavaParser.g
-                                                (IAst*)getRhsSym(4),
+                                                (Ast*)getRhsSym(4),
                                                 //#line 598 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(5)))
                 //#line 598 GJavaParser.g
@@ -2884,9 +2880,9 @@ using namespace JavaParser_top_level_ast;
                                          //#line 602 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 602 GJavaParser.g
-                                         (IAst*)getRhsSym(2),
+                                         (Ast*)getRhsSym(2),
                                          //#line 602 GJavaParser.g
-                                         (IAst*)getRhsSym(3),
+                                         (Commaopt*)getRhsSym(3),
                                          //#line 602 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 602 GJavaParser.g
@@ -2907,11 +2903,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 605 GJavaParser.g
                      _automatic_ast_pool << new VariableInitializers(getLeftIToken(), getRightIToken(),
                                              //#line 605 GJavaParser.g
-                                             (IAst*)getRhsSym(1),
+                                             (Ast*)getRhsSym(1),
                                              //#line 605 GJavaParser.g
                                               _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                              //#line 605 GJavaParser.g
-                                             (IAst*)getRhsSym(3))
+                                             (Ast*)getRhsSym(3))
                 //#line 605 GJavaParser.g
                 );
             break;
@@ -2927,7 +2923,7 @@ using namespace JavaParser_top_level_ast;
                               //#line 621 GJavaParser.g
                                _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                               //#line 621 GJavaParser.g
-                              (IAst*)getRhsSym(2),
+                              (Ast*)getRhsSym(2),
                               //#line 621 GJavaParser.g
                                _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 621 GJavaParser.g
@@ -2948,9 +2944,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 624 GJavaParser.g
                      _automatic_ast_pool << new BlockStatements(getLeftIToken(), getRightIToken(),
                                         //#line 624 GJavaParser.g
-                                        (IAst*)getRhsSym(1),
+                                        (Ast*)getRhsSym(1),
                                         //#line 624 GJavaParser.g
-                                        (IAst*)getRhsSym(2))
+                                        (Ast*)getRhsSym(2))
                 //#line 624 GJavaParser.g
                 );
             break;
@@ -2979,7 +2975,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 630 GJavaParser.g
                      _automatic_ast_pool << new LocalVariableDeclarationStatement(getLeftIToken(), getRightIToken(),
                                                           //#line 630 GJavaParser.g
-                                                          (IAst*)getRhsSym(1),
+                                                          (LocalVariableDeclaration*)getRhsSym(1),
                                                           //#line 630 GJavaParser.g
                                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)))
                 //#line 630 GJavaParser.g
@@ -2995,11 +2991,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 632 GJavaParser.g
                      _automatic_ast_pool << new LocalVariableDeclaration(getLeftIToken(), getRightIToken(),
                                                  //#line 632 GJavaParser.g
-                                                 (IAst*)getRhsSym(1),
+                                                 (Ast*)getRhsSym(1),
                                                  //#line 632 GJavaParser.g
-                                                 (IAst*)getRhsSym(2),
+                                                 (Ast*)getRhsSym(2),
                                                  //#line 632 GJavaParser.g
-                                                 (IAst*)getRhsSym(3))
+                                                 (Ast*)getRhsSym(3))
                 //#line 632 GJavaParser.g
                 );
             break;
@@ -3132,11 +3128,11 @@ using namespace JavaParser_top_level_ast;
                                         //#line 675 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                         //#line 675 GJavaParser.g
-                                        (IAst*)getRhsSym(3),
+                                        (Ast*)getRhsSym(3),
                                         //#line 675 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                         //#line 675 GJavaParser.g
-                                        (IAst*)getRhsSym(5))
+                                        (Ast*)getRhsSym(5))
                 //#line 675 GJavaParser.g
                 );
             break;
@@ -3154,15 +3150,15 @@ using namespace JavaParser_top_level_ast;
                                             //#line 677 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 677 GJavaParser.g
-                                            (IAst*)getRhsSym(3),
+                                            (Ast*)getRhsSym(3),
                                             //#line 677 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                             //#line 677 GJavaParser.g
-                                            (IAst*)getRhsSym(5),
+                                            (Ast*)getRhsSym(5),
                                             //#line 677 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(6)),
                                             //#line 677 GJavaParser.g
-                                            (IAst*)getRhsSym(7))
+                                            (Ast*)getRhsSym(7))
                 //#line 677 GJavaParser.g
                 );
             break;
@@ -3180,15 +3176,15 @@ using namespace JavaParser_top_level_ast;
                                                      //#line 679 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                      //#line 679 GJavaParser.g
-                                                     (IAst*)getRhsSym(3),
+                                                     (Ast*)getRhsSym(3),
                                                      //#line 679 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                                      //#line 679 GJavaParser.g
-                                                     (IAst*)getRhsSym(5),
+                                                     (Ast*)getRhsSym(5),
                                                      //#line 679 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(6)),
                                                      //#line 679 GJavaParser.g
-                                                     (IAst*)getRhsSym(7))
+                                                     (Ast*)getRhsSym(7))
                 //#line 679 GJavaParser.g
                 );
             break;
@@ -3214,11 +3210,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 683 GJavaParser.g
                      _automatic_ast_pool << new LabeledStatement(getLeftIToken(), getRightIToken(),
                                          //#line 683 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (identifier*)getRhsSym(1),
                                          //#line 683 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                          //#line 683 GJavaParser.g
-                                         (IAst*)getRhsSym(3))
+                                         (Ast*)getRhsSym(3))
                 //#line 683 GJavaParser.g
                 );
             break;
@@ -3232,11 +3228,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 685 GJavaParser.g
                      _automatic_ast_pool << new LabeledStatementNoShortIf(getLeftIToken(), getRightIToken(),
                                                   //#line 685 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (identifier*)getRhsSym(1),
                                                   //#line 685 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                   //#line 685 GJavaParser.g
-                                                  (IAst*)getRhsSym(3))
+                                                  (Ast*)getRhsSym(3))
                 //#line 685 GJavaParser.g
                 );
             break;
@@ -3250,7 +3246,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 687 GJavaParser.g
                      _automatic_ast_pool << new ExpressionStatement(getLeftIToken(), getRightIToken(),
                                             //#line 687 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 687 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)))
                 //#line 687 GJavaParser.g
@@ -3303,7 +3299,7 @@ using namespace JavaParser_top_level_ast;
                                          //#line 706 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 706 GJavaParser.g
-                                         (IAst*)getRhsSym(2),
+                                         (Ast*)getRhsSym(2),
                                          //#line 706 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 706 GJavaParser.g
@@ -3321,11 +3317,11 @@ using namespace JavaParser_top_level_ast;
                                          //#line 707 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 707 GJavaParser.g
-                                         (IAst*)getRhsSym(2),
+                                         (Ast*)getRhsSym(2),
                                          //#line 707 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                          //#line 707 GJavaParser.g
-                                         (IAst*)getRhsSym(4),
+                                         (Ast*)getRhsSym(4),
                                          //#line 707 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(5)))
                 //#line 707 GJavaParser.g
@@ -3345,11 +3341,11 @@ using namespace JavaParser_top_level_ast;
                                         //#line 709 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                         //#line 709 GJavaParser.g
-                                        (IAst*)getRhsSym(3),
+                                        (Ast*)getRhsSym(3),
                                         //#line 709 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                         //#line 709 GJavaParser.g
-                                        (IAst*)getRhsSym(5))
+                                        (SwitchBlock*)getRhsSym(5))
                 //#line 709 GJavaParser.g
                 );
             break;
@@ -3365,9 +3361,9 @@ using namespace JavaParser_top_level_ast;
                                     //#line 711 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                     //#line 711 GJavaParser.g
-                                    (IAst*)getRhsSym(2),
+                                    (Ast*)getRhsSym(2),
                                     //#line 711 GJavaParser.g
-                                    (IAst*)getRhsSym(3),
+                                    (Ast*)getRhsSym(3),
                                     //#line 711 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 711 GJavaParser.g
@@ -3388,9 +3384,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 714 GJavaParser.g
                      _automatic_ast_pool << new SwitchBlockStatementGroups(getLeftIToken(), getRightIToken(),
                                                    //#line 714 GJavaParser.g
-                                                   (IAst*)getRhsSym(1),
+                                                   (Ast*)getRhsSym(1),
                                                    //#line 714 GJavaParser.g
-                                                   (IAst*)getRhsSym(2))
+                                                   (SwitchBlockStatementGroup*)getRhsSym(2))
                 //#line 714 GJavaParser.g
                 );
             break;
@@ -3404,9 +3400,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 716 GJavaParser.g
                      _automatic_ast_pool << new SwitchBlockStatementGroup(getLeftIToken(), getRightIToken(),
                                                   //#line 716 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (Ast*)getRhsSym(1),
                                                   //#line 716 GJavaParser.g
-                                                  (IAst*)getRhsSym(2))
+                                                  (Ast*)getRhsSym(2))
                 //#line 716 GJavaParser.g
                 );
             break;
@@ -3425,9 +3421,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 719 GJavaParser.g
                      _automatic_ast_pool << new SwitchLabels(getLeftIToken(), getRightIToken(),
                                      //#line 719 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 719 GJavaParser.g
-                                     (IAst*)getRhsSym(2))
+                                     (Ast*)getRhsSym(2))
                 //#line 719 GJavaParser.g
                 );
             break;
@@ -3443,7 +3439,7 @@ using namespace JavaParser_top_level_ast;
                                      //#line 721 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                      //#line 721 GJavaParser.g
-                                     (IAst*)getRhsSym(2),
+                                     (Ast*)getRhsSym(2),
                                      //#line 721 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 721 GJavaParser.g
@@ -3461,7 +3457,7 @@ using namespace JavaParser_top_level_ast;
                                      //#line 722 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                      //#line 722 GJavaParser.g
-                                     (IAst*)getRhsSym(2),
+                                     (Ast*)getRhsSym(2),
                                      //#line 722 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 722 GJavaParser.g
@@ -3502,11 +3498,11 @@ using namespace JavaParser_top_level_ast;
                                        //#line 727 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                        //#line 727 GJavaParser.g
-                                       (IAst*)getRhsSym(3),
+                                       (Ast*)getRhsSym(3),
                                        //#line 727 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                        //#line 727 GJavaParser.g
-                                       (IAst*)getRhsSym(5))
+                                       (Ast*)getRhsSym(5))
                 //#line 727 GJavaParser.g
                 );
             break;
@@ -3524,11 +3520,11 @@ using namespace JavaParser_top_level_ast;
                                                 //#line 729 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                 //#line 729 GJavaParser.g
-                                                (IAst*)getRhsSym(3),
+                                                (Ast*)getRhsSym(3),
                                                 //#line 729 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                                 //#line 729 GJavaParser.g
-                                                (IAst*)getRhsSym(5))
+                                                (Ast*)getRhsSym(5))
                 //#line 729 GJavaParser.g
                 );
             break;
@@ -3544,13 +3540,13 @@ using namespace JavaParser_top_level_ast;
                                     //#line 731 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                     //#line 731 GJavaParser.g
-                                    (IAst*)getRhsSym(2),
+                                    (Ast*)getRhsSym(2),
                                     //#line 731 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                     //#line 731 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                     //#line 731 GJavaParser.g
-                                    (IAst*)getRhsSym(5),
+                                    (Ast*)getRhsSym(5),
                                     //#line 731 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(6)),
                                     //#line 731 GJavaParser.g
@@ -3582,19 +3578,19 @@ using namespace JavaParser_top_level_ast;
                                           //#line 736 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 736 GJavaParser.g
-                                          (IAst*)getRhsSym(3),
+                                          (Ast*)getRhsSym(3),
                                           //#line 736 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                           //#line 736 GJavaParser.g
-                                          (IAst*)getRhsSym(5),
+                                          (Ast*)getRhsSym(5),
                                           //#line 736 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(6)),
                                           //#line 736 GJavaParser.g
-                                          (IAst*)getRhsSym(7),
+                                          (Ast*)getRhsSym(7),
                                           //#line 736 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(8)),
                                           //#line 736 GJavaParser.g
-                                          (IAst*)getRhsSym(9))
+                                          (Ast*)getRhsSym(9))
                 //#line 736 GJavaParser.g
                 );
             break;
@@ -3612,19 +3608,19 @@ using namespace JavaParser_top_level_ast;
                                               //#line 738 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 738 GJavaParser.g
-                                              (IAst*)getRhsSym(3),
+                                              (Ast*)getRhsSym(3),
                                               //#line 738 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                               //#line 738 GJavaParser.g
-                                              (IAst*)getRhsSym(5),
+                                              (Ast*)getRhsSym(5),
                                               //#line 738 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(6)),
                                               //#line 738 GJavaParser.g
-                                              (IAst*)getRhsSym(7),
+                                              (Ast*)getRhsSym(7),
                                               //#line 738 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(8)),
                                               //#line 738 GJavaParser.g
-                                              (IAst*)getRhsSym(9))
+                                              (Ast*)getRhsSym(9))
                 //#line 738 GJavaParser.g
                 );
             break;
@@ -3658,11 +3654,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 746 GJavaParser.g
                      _automatic_ast_pool << new StatementExpressionList(getLeftIToken(), getRightIToken(),
                                                 //#line 746 GJavaParser.g
-                                                (IAst*)getRhsSym(1),
+                                                (Ast*)getRhsSym(1),
                                                 //#line 746 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                 //#line 746 GJavaParser.g
-                                                (IAst*)getRhsSym(3))
+                                                (Ast*)getRhsSym(3))
                 //#line 746 GJavaParser.g
                 );
             break;
@@ -3680,15 +3676,15 @@ using namespace JavaParser_top_level_ast;
                                              //#line 748 GJavaParser.g
                                               _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                              //#line 748 GJavaParser.g
-                                             (IAst*)getRhsSym(3),
+                                             (FormalParameter*)getRhsSym(3),
                                              //#line 748 GJavaParser.g
                                               _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                              //#line 748 GJavaParser.g
-                                             (IAst*)getRhsSym(5),
+                                             (Ast*)getRhsSym(5),
                                              //#line 748 GJavaParser.g
                                               _automatic_ast_pool << new AstToken(getRhsIToken(6)),
                                              //#line 748 GJavaParser.g
-                                             (IAst*)getRhsSym(7))
+                                             (Ast*)getRhsSym(7))
                 //#line 748 GJavaParser.g
                 );
             break;
@@ -3704,7 +3700,7 @@ using namespace JavaParser_top_level_ast;
                                        //#line 750 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                        //#line 750 GJavaParser.g
-                                       (IAst*)getRhsSym(2),
+                                       (identifier*)getRhsSym(2),
                                        //#line 750 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 750 GJavaParser.g
@@ -3722,7 +3718,7 @@ using namespace JavaParser_top_level_ast;
                                           //#line 752 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                           //#line 752 GJavaParser.g
-                                          (IAst*)getRhsSym(2),
+                                          (identifier*)getRhsSym(2),
                                           //#line 752 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 752 GJavaParser.g
@@ -3740,7 +3736,7 @@ using namespace JavaParser_top_level_ast;
                                         //#line 754 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 754 GJavaParser.g
-                                        (IAst*)getRhsSym(2),
+                                        (Ast*)getRhsSym(2),
                                         //#line 754 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 754 GJavaParser.g
@@ -3758,7 +3754,7 @@ using namespace JavaParser_top_level_ast;
                                        //#line 756 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                        //#line 756 GJavaParser.g
-                                       (IAst*)getRhsSym(2),
+                                       (Ast*)getRhsSym(2),
                                        //#line 756 GJavaParser.g
                                         _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 756 GJavaParser.g
@@ -3778,11 +3774,11 @@ using namespace JavaParser_top_level_ast;
                                               //#line 758 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 758 GJavaParser.g
-                                              (IAst*)getRhsSym(3),
+                                              (Ast*)getRhsSym(3),
                                               //#line 758 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                               //#line 758 GJavaParser.g
-                                              (IAst*)getRhsSym(5))
+                                              (Block*)getRhsSym(5))
                 //#line 758 GJavaParser.g
                 );
             break;
@@ -3798,9 +3794,9 @@ using namespace JavaParser_top_level_ast;
                                       //#line 760 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                       //#line 760 GJavaParser.g
-                                      (IAst*)getRhsSym(2),
+                                      (Block*)getRhsSym(2),
                                       //#line 760 GJavaParser.g
-                                      (IAst*)getRhsSym(3))
+                                      (Ast*)getRhsSym(3))
                 //#line 760 GJavaParser.g
                 );
             break;
@@ -3816,11 +3812,11 @@ using namespace JavaParser_top_level_ast;
                                       //#line 761 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                       //#line 761 GJavaParser.g
-                                      (IAst*)getRhsSym(2),
+                                      (Block*)getRhsSym(2),
                                       //#line 761 GJavaParser.g
-                                      (IAst*)getRhsSym(3),
+                                      (Ast*)getRhsSym(3),
                                       //#line 761 GJavaParser.g
-                                      (IAst*)getRhsSym(4))
+                                      (Finally*)getRhsSym(4))
                 //#line 761 GJavaParser.g
                 );
             break;
@@ -3839,9 +3835,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 764 GJavaParser.g
                      _automatic_ast_pool << new Catches(getLeftIToken(), getRightIToken(),
                                 //#line 764 GJavaParser.g
-                                (IAst*)getRhsSym(1),
+                                (Ast*)getRhsSym(1),
                                 //#line 764 GJavaParser.g
-                                (IAst*)getRhsSym(2))
+                                (CatchClause*)getRhsSym(2))
                 //#line 764 GJavaParser.g
                 );
             break;
@@ -3859,11 +3855,11 @@ using namespace JavaParser_top_level_ast;
                                     //#line 766 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                     //#line 766 GJavaParser.g
-                                    (IAst*)getRhsSym(3),
+                                    (FormalParameter*)getRhsSym(3),
                                     //#line 766 GJavaParser.g
                                      _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                     //#line 766 GJavaParser.g
-                                    (IAst*)getRhsSym(5))
+                                    (Block*)getRhsSym(5))
                 //#line 766 GJavaParser.g
                 );
             break;
@@ -3879,7 +3875,7 @@ using namespace JavaParser_top_level_ast;
                                 //#line 768 GJavaParser.g
                                  _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                 //#line 768 GJavaParser.g
-                                (IAst*)getRhsSym(2))
+                                (Block*)getRhsSym(2))
                 //#line 768 GJavaParser.g
                 );
             break;
@@ -3908,7 +3904,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 784 GJavaParser.g
                      _automatic_ast_pool << new PrimaryNoNewArray0(getLeftIToken(), getRightIToken(),
                                            //#line 784 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 784 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                            //#line 784 GJavaParser.g
@@ -3956,7 +3952,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 787 GJavaParser.g
                      _automatic_ast_pool << new PrimaryNoNewArray3(getLeftIToken(), getRightIToken(),
                                            //#line 787 GJavaParser.g
-                                           (IAst*)getRhsSym(1),
+                                           (Ast*)getRhsSym(1),
                                            //#line 787 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                            //#line 787 GJavaParser.g
@@ -3976,7 +3972,7 @@ using namespace JavaParser_top_level_ast;
                                            //#line 788 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                            //#line 788 GJavaParser.g
-                                           (IAst*)getRhsSym(2),
+                                           (Ast*)getRhsSym(2),
                                            //#line 788 GJavaParser.g
                                             _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 788 GJavaParser.g
@@ -4127,19 +4123,19 @@ using namespace JavaParser_top_level_ast;
                                                          //#line 811 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                          //#line 811 GJavaParser.g
-                                                         (IAst*)getRhsSym(2),
+                                                         (TypeArguments*)getRhsSym(2),
                                                          //#line 811 GJavaParser.g
-                                                         (IAst*)getRhsSym(3),
+                                                         (ClassType*)getRhsSym(3),
                                                          //#line 811 GJavaParser.g
-                                                         (IAst*)getRhsSym(4),
+                                                         (TypeArguments*)getRhsSym(4),
                                                          //#line 811 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                                          //#line 811 GJavaParser.g
-                                                         (IAst*)getRhsSym(6),
+                                                         (Ast*)getRhsSym(6),
                                                          //#line 811 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(7)),
                                                          //#line 811 GJavaParser.g
-                                                         (IAst*)getRhsSym(8))
+                                                         (ClassBody*)getRhsSym(8))
                 //#line 811 GJavaParser.g
                 );
             break;
@@ -4153,25 +4149,25 @@ using namespace JavaParser_top_level_ast;
                     //#line 812 GJavaParser.g
                      _automatic_ast_pool << new ClassInstanceCreationExpression1(getLeftIToken(), getRightIToken(),
                                                          //#line 812 GJavaParser.g
-                                                         (IAst*)getRhsSym(1),
+                                                         (Ast*)getRhsSym(1),
                                                          //#line 812 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                          //#line 812 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                                          //#line 812 GJavaParser.g
-                                                         (IAst*)getRhsSym(4),
+                                                         (TypeArguments*)getRhsSym(4),
                                                          //#line 812 GJavaParser.g
-                                                         (IAst*)getRhsSym(5),
+                                                         (identifier*)getRhsSym(5),
                                                          //#line 812 GJavaParser.g
-                                                         (IAst*)getRhsSym(6),
+                                                         (TypeArguments*)getRhsSym(6),
                                                          //#line 812 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(7)),
                                                          //#line 812 GJavaParser.g
-                                                         (IAst*)getRhsSym(8),
+                                                         (Ast*)getRhsSym(8),
                                                          //#line 812 GJavaParser.g
                                                           _automatic_ast_pool << new AstToken(getRhsIToken(9)),
                                                          //#line 812 GJavaParser.g
-                                                         (IAst*)getRhsSym(10))
+                                                         (ClassBody*)getRhsSym(10))
                 //#line 812 GJavaParser.g
                 );
             break;
@@ -4190,11 +4186,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 816 GJavaParser.g
                      _automatic_ast_pool << new ArgumentList(getLeftIToken(), getRightIToken(),
                                      //#line 816 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 816 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                      //#line 816 GJavaParser.g
-                                     (IAst*)getRhsSym(3))
+                                     (Ast*)getRhsSym(3))
                 //#line 816 GJavaParser.g
                 );
             break;
@@ -4210,11 +4206,11 @@ using namespace JavaParser_top_level_ast;
                                                  //#line 826 GJavaParser.g
                                                   _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                  //#line 826 GJavaParser.g
-                                                 (IAst*)getRhsSym(2),
+                                                 (Ast*)getRhsSym(2),
                                                  //#line 826 GJavaParser.g
-                                                 (IAst*)getRhsSym(3),
+                                                 (Ast*)getRhsSym(3),
                                                  //#line 826 GJavaParser.g
-                                                 (IAst*)getRhsSym(4))
+                                                 (Ast*)getRhsSym(4))
                 //#line 826 GJavaParser.g
                 );
             break;
@@ -4230,11 +4226,11 @@ using namespace JavaParser_top_level_ast;
                                                  //#line 827 GJavaParser.g
                                                   _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                  //#line 827 GJavaParser.g
-                                                 (IAst*)getRhsSym(2),
+                                                 (ClassType*)getRhsSym(2),
                                                  //#line 827 GJavaParser.g
-                                                 (IAst*)getRhsSym(3),
+                                                 (Ast*)getRhsSym(3),
                                                  //#line 827 GJavaParser.g
-                                                 (IAst*)getRhsSym(4))
+                                                 (Ast*)getRhsSym(4))
                 //#line 827 GJavaParser.g
                 );
             break;
@@ -4250,11 +4246,11 @@ using namespace JavaParser_top_level_ast;
                                                  //#line 828 GJavaParser.g
                                                   _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                  //#line 828 GJavaParser.g
-                                                 (IAst*)getRhsSym(2),
+                                                 (Ast*)getRhsSym(2),
                                                  //#line 828 GJavaParser.g
-                                                 (IAst*)getRhsSym(3),
+                                                 (Ast*)getRhsSym(3),
                                                  //#line 828 GJavaParser.g
-                                                 (IAst*)getRhsSym(4))
+                                                 (ArrayInitializer*)getRhsSym(4))
                 //#line 828 GJavaParser.g
                 );
             break;
@@ -4270,11 +4266,11 @@ using namespace JavaParser_top_level_ast;
                                                  //#line 829 GJavaParser.g
                                                   _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                  //#line 829 GJavaParser.g
-                                                 (IAst*)getRhsSym(2),
+                                                 (ClassType*)getRhsSym(2),
                                                  //#line 829 GJavaParser.g
-                                                 (IAst*)getRhsSym(3),
+                                                 (Ast*)getRhsSym(3),
                                                  //#line 829 GJavaParser.g
-                                                 (IAst*)getRhsSym(4))
+                                                 (ArrayInitializer*)getRhsSym(4))
                 //#line 829 GJavaParser.g
                 );
             break;
@@ -4293,9 +4289,9 @@ using namespace JavaParser_top_level_ast;
                     //#line 832 GJavaParser.g
                      _automatic_ast_pool << new DimExprs(getLeftIToken(), getRightIToken(),
                                  //#line 832 GJavaParser.g
-                                 (IAst*)getRhsSym(1),
+                                 (Ast*)getRhsSym(1),
                                  //#line 832 GJavaParser.g
-                                 (IAst*)getRhsSym(2))
+                                 (DimExpr*)getRhsSym(2))
                 //#line 832 GJavaParser.g
                 );
             break;
@@ -4311,7 +4307,7 @@ using namespace JavaParser_top_level_ast;
                                 //#line 834 GJavaParser.g
                                  _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                 //#line 834 GJavaParser.g
-                                (IAst*)getRhsSym(2),
+                                (Ast*)getRhsSym(2),
                                 //#line 834 GJavaParser.g
                                  _automatic_ast_pool << new AstToken(getRhsIToken(3)))
                 //#line 834 GJavaParser.g
@@ -4343,7 +4339,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 837 GJavaParser.g
                      _automatic_ast_pool << new Dims1(getLeftIToken(), getRightIToken(),
                               //#line 837 GJavaParser.g
-                              (IAst*)getRhsSym(1),
+                              (Ast*)getRhsSym(1),
                               //#line 837 GJavaParser.g
                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                               //#line 837 GJavaParser.g
@@ -4361,11 +4357,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 839 GJavaParser.g
                      _automatic_ast_pool << new FieldAccess0(getLeftIToken(), getRightIToken(),
                                      //#line 839 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 839 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                      //#line 839 GJavaParser.g
-                                     (IAst*)getRhsSym(3))
+                                     (identifier*)getRhsSym(3))
                 //#line 839 GJavaParser.g
                 );
             break;
@@ -4383,7 +4379,7 @@ using namespace JavaParser_top_level_ast;
                                      //#line 840 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                      //#line 840 GJavaParser.g
-                                     (IAst*)getRhsSym(3))
+                                     (identifier*)getRhsSym(3))
                 //#line 840 GJavaParser.g
                 );
             break;
@@ -4397,7 +4393,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 841 GJavaParser.g
                      _automatic_ast_pool << new FieldAccess2(getLeftIToken(), getRightIToken(),
                                      //#line 841 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 841 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                      //#line 841 GJavaParser.g
@@ -4405,7 +4401,7 @@ using namespace JavaParser_top_level_ast;
                                      //#line 841 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                      //#line 841 GJavaParser.g
-                                     (IAst*)getRhsSym(5))
+                                     (identifier*)getRhsSym(5))
                 //#line 841 GJavaParser.g
                 );
             break;
@@ -4419,11 +4415,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 843 GJavaParser.g
                      _automatic_ast_pool << new MethodInvocation0(getLeftIToken(), getRightIToken(),
                                           //#line 843 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 843 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 843 GJavaParser.g
-                                          (IAst*)getRhsSym(3),
+                                          (Ast*)getRhsSym(3),
                                           //#line 843 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 843 GJavaParser.g
@@ -4439,17 +4435,17 @@ using namespace JavaParser_top_level_ast;
                     //#line 844 GJavaParser.g
                      _automatic_ast_pool << new MethodInvocation1(getLeftIToken(), getRightIToken(),
                                           //#line 844 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 844 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 844 GJavaParser.g
-                                          (IAst*)getRhsSym(3),
+                                          (TypeArguments*)getRhsSym(3),
                                           //#line 844 GJavaParser.g
-                                          (IAst*)getRhsSym(4),
+                                          (identifier*)getRhsSym(4),
                                           //#line 844 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                           //#line 844 GJavaParser.g
-                                          (IAst*)getRhsSym(6),
+                                          (Ast*)getRhsSym(6),
                                           //#line 844 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(7)))
                 //#line 844 GJavaParser.g
@@ -4469,13 +4465,13 @@ using namespace JavaParser_top_level_ast;
                                           //#line 845 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 845 GJavaParser.g
-                                          (IAst*)getRhsSym(3),
+                                          (TypeArguments*)getRhsSym(3),
                                           //#line 845 GJavaParser.g
-                                          (IAst*)getRhsSym(4),
+                                          (identifier*)getRhsSym(4),
                                           //#line 845 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                           //#line 845 GJavaParser.g
-                                          (IAst*)getRhsSym(6),
+                                          (Ast*)getRhsSym(6),
                                           //#line 845 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(7)))
                 //#line 845 GJavaParser.g
@@ -4491,7 +4487,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 846 GJavaParser.g
                      _automatic_ast_pool << new MethodInvocation3(getLeftIToken(), getRightIToken(),
                                           //#line 846 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 846 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 846 GJavaParser.g
@@ -4499,13 +4495,13 @@ using namespace JavaParser_top_level_ast;
                                           //#line 846 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                           //#line 846 GJavaParser.g
-                                          (IAst*)getRhsSym(5),
+                                          (TypeArguments*)getRhsSym(5),
                                           //#line 846 GJavaParser.g
-                                          (IAst*)getRhsSym(6),
+                                          (identifier*)getRhsSym(6),
                                           //#line 846 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(7)),
                                           //#line 846 GJavaParser.g
-                                          (IAst*)getRhsSym(8),
+                                          (Ast*)getRhsSym(8),
                                           //#line 846 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(9)))
                 //#line 846 GJavaParser.g
@@ -4521,17 +4517,17 @@ using namespace JavaParser_top_level_ast;
                     //#line 847 GJavaParser.g
                      _automatic_ast_pool << new MethodInvocation4(getLeftIToken(), getRightIToken(),
                                           //#line 847 GJavaParser.g
-                                          (IAst*)getRhsSym(1),
+                                          (Ast*)getRhsSym(1),
                                           //#line 847 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                           //#line 847 GJavaParser.g
-                                          (IAst*)getRhsSym(3),
+                                          (TypeArguments*)getRhsSym(3),
                                           //#line 847 GJavaParser.g
-                                          (IAst*)getRhsSym(4),
+                                          (identifier*)getRhsSym(4),
                                           //#line 847 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(5)),
                                           //#line 847 GJavaParser.g
-                                          (IAst*)getRhsSym(6),
+                                          (Ast*)getRhsSym(6),
                                           //#line 847 GJavaParser.g
                                            _automatic_ast_pool << new AstToken(getRhsIToken(7)))
                 //#line 847 GJavaParser.g
@@ -4547,11 +4543,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 855 GJavaParser.g
                      _automatic_ast_pool << new ArrayAccess0(getLeftIToken(), getRightIToken(),
                                      //#line 855 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 855 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                      //#line 855 GJavaParser.g
-                                     (IAst*)getRhsSym(3),
+                                     (Ast*)getRhsSym(3),
                                      //#line 855 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 855 GJavaParser.g
@@ -4567,11 +4563,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 856 GJavaParser.g
                      _automatic_ast_pool << new ArrayAccess1(getLeftIToken(), getRightIToken(),
                                      //#line 856 GJavaParser.g
-                                     (IAst*)getRhsSym(1),
+                                     (Ast*)getRhsSym(1),
                                      //#line 856 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                      //#line 856 GJavaParser.g
-                                     (IAst*)getRhsSym(3),
+                                     (Ast*)getRhsSym(3),
                                      //#line 856 GJavaParser.g
                                       _automatic_ast_pool << new AstToken(getRhsIToken(4)))
                 //#line 856 GJavaParser.g
@@ -4607,7 +4603,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 863 GJavaParser.g
                      _automatic_ast_pool << new PostIncrementExpression(getLeftIToken(), getRightIToken(),
                                                 //#line 863 GJavaParser.g
-                                                (IAst*)getRhsSym(1),
+                                                (Ast*)getRhsSym(1),
                                                 //#line 863 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(2)))
                 //#line 863 GJavaParser.g
@@ -4623,7 +4619,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 865 GJavaParser.g
                      _automatic_ast_pool << new PostDecrementExpression(getLeftIToken(), getRightIToken(),
                                                 //#line 865 GJavaParser.g
-                                                (IAst*)getRhsSym(1),
+                                                (Ast*)getRhsSym(1),
                                                 //#line 865 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(2)))
                 //#line 865 GJavaParser.g
@@ -4651,7 +4647,7 @@ using namespace JavaParser_top_level_ast;
                                          //#line 869 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 869 GJavaParser.g
-                                         (IAst*)getRhsSym(2))
+                                         (Ast*)getRhsSym(2))
                 //#line 869 GJavaParser.g
                 );
             break;
@@ -4667,7 +4663,7 @@ using namespace JavaParser_top_level_ast;
                                          //#line 870 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                          //#line 870 GJavaParser.g
-                                         (IAst*)getRhsSym(2))
+                                         (Ast*)getRhsSym(2))
                 //#line 870 GJavaParser.g
                 );
             break;
@@ -4688,7 +4684,7 @@ using namespace JavaParser_top_level_ast;
                                                //#line 873 GJavaParser.g
                                                 _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                //#line 873 GJavaParser.g
-                                               (IAst*)getRhsSym(2))
+                                               (Ast*)getRhsSym(2))
                 //#line 873 GJavaParser.g
                 );
             break;
@@ -4704,7 +4700,7 @@ using namespace JavaParser_top_level_ast;
                                                //#line 875 GJavaParser.g
                                                 _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                //#line 875 GJavaParser.g
-                                               (IAst*)getRhsSym(2))
+                                               (Ast*)getRhsSym(2))
                 //#line 875 GJavaParser.g
                 );
             break;
@@ -4725,7 +4721,7 @@ using namespace JavaParser_top_level_ast;
                                                      //#line 878 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                      //#line 878 GJavaParser.g
-                                                     (IAst*)getRhsSym(2))
+                                                     (Ast*)getRhsSym(2))
                 //#line 878 GJavaParser.g
                 );
             break;
@@ -4741,7 +4737,7 @@ using namespace JavaParser_top_level_ast;
                                                      //#line 879 GJavaParser.g
                                                       _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                                      //#line 879 GJavaParser.g
-                                                     (IAst*)getRhsSym(2))
+                                                     (Ast*)getRhsSym(2))
                 //#line 879 GJavaParser.g
                 );
             break;
@@ -4762,13 +4758,13 @@ using namespace JavaParser_top_level_ast;
                                         //#line 882 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 882 GJavaParser.g
-                                        (IAst*)getRhsSym(2),
+                                        (Ast*)getRhsSym(2),
                                         //#line 882 GJavaParser.g
-                                        (IAst*)getRhsSym(3),
+                                        (Ast*)getRhsSym(3),
                                         //#line 882 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                         //#line 882 GJavaParser.g
-                                        (IAst*)getRhsSym(5))
+                                        (Ast*)getRhsSym(5))
                 //#line 882 GJavaParser.g
                 );
             break;
@@ -4784,11 +4780,11 @@ using namespace JavaParser_top_level_ast;
                                         //#line 883 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(1)),
                                         //#line 883 GJavaParser.g
-                                        (IAst*)getRhsSym(2),
+                                        (Ast*)getRhsSym(2),
                                         //#line 883 GJavaParser.g
                                          _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                         //#line 883 GJavaParser.g
-                                        (IAst*)getRhsSym(4))
+                                        (Ast*)getRhsSym(4))
                 //#line 883 GJavaParser.g
                 );
             break;
@@ -4807,11 +4803,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 886 GJavaParser.g
                      _automatic_ast_pool << new MultiplicativeExpression0(getLeftIToken(), getRightIToken(),
                                                   //#line 886 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (Ast*)getRhsSym(1),
                                                   //#line 886 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                   //#line 886 GJavaParser.g
-                                                  (IAst*)getRhsSym(3))
+                                                  (Ast*)getRhsSym(3))
                 //#line 886 GJavaParser.g
                 );
             break;
@@ -4825,11 +4821,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 887 GJavaParser.g
                      _automatic_ast_pool << new MultiplicativeExpression1(getLeftIToken(), getRightIToken(),
                                                   //#line 887 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (Ast*)getRhsSym(1),
                                                   //#line 887 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                   //#line 887 GJavaParser.g
-                                                  (IAst*)getRhsSym(3))
+                                                  (Ast*)getRhsSym(3))
                 //#line 887 GJavaParser.g
                 );
             break;
@@ -4843,11 +4839,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 888 GJavaParser.g
                      _automatic_ast_pool << new MultiplicativeExpression2(getLeftIToken(), getRightIToken(),
                                                   //#line 888 GJavaParser.g
-                                                  (IAst*)getRhsSym(1),
+                                                  (Ast*)getRhsSym(1),
                                                   //#line 888 GJavaParser.g
                                                    _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                   //#line 888 GJavaParser.g
-                                                  (IAst*)getRhsSym(3))
+                                                  (Ast*)getRhsSym(3))
                 //#line 888 GJavaParser.g
                 );
             break;
@@ -4866,11 +4862,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 891 GJavaParser.g
                      _automatic_ast_pool << new AdditiveExpression0(getLeftIToken(), getRightIToken(),
                                             //#line 891 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 891 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 891 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (Ast*)getRhsSym(3))
                 //#line 891 GJavaParser.g
                 );
             break;
@@ -4884,11 +4880,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 892 GJavaParser.g
                      _automatic_ast_pool << new AdditiveExpression1(getLeftIToken(), getRightIToken(),
                                             //#line 892 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 892 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 892 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (Ast*)getRhsSym(3))
                 //#line 892 GJavaParser.g
                 );
             break;
@@ -4907,11 +4903,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 895 GJavaParser.g
                      _automatic_ast_pool << new ShiftExpression0(getLeftIToken(), getRightIToken(),
                                          //#line 895 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (Ast*)getRhsSym(1),
                                          //#line 895 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                          //#line 895 GJavaParser.g
-                                         (IAst*)getRhsSym(3))
+                                         (Ast*)getRhsSym(3))
                 //#line 895 GJavaParser.g
                 );
             break;
@@ -4925,13 +4921,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 896 GJavaParser.g
                      _automatic_ast_pool << new ShiftExpression1(getLeftIToken(), getRightIToken(),
                                          //#line 896 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (Ast*)getRhsSym(1),
                                          //#line 896 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                          //#line 896 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                          //#line 896 GJavaParser.g
-                                         (IAst*)getRhsSym(4))
+                                         (Ast*)getRhsSym(4))
                 //#line 896 GJavaParser.g
                 );
             break;
@@ -4945,7 +4941,7 @@ using namespace JavaParser_top_level_ast;
                     //#line 897 GJavaParser.g
                      _automatic_ast_pool << new ShiftExpression2(getLeftIToken(), getRightIToken(),
                                          //#line 897 GJavaParser.g
-                                         (IAst*)getRhsSym(1),
+                                         (Ast*)getRhsSym(1),
                                          //#line 897 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                          //#line 897 GJavaParser.g
@@ -4953,7 +4949,7 @@ using namespace JavaParser_top_level_ast;
                                          //#line 897 GJavaParser.g
                                           _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                          //#line 897 GJavaParser.g
-                                         (IAst*)getRhsSym(5))
+                                         (Ast*)getRhsSym(5))
                 //#line 897 GJavaParser.g
                 );
             break;
@@ -4972,11 +4968,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 900 GJavaParser.g
                      _automatic_ast_pool << new RelationalExpression0(getLeftIToken(), getRightIToken(),
                                               //#line 900 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 900 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 900 GJavaParser.g
-                                              (IAst*)getRhsSym(3))
+                                              (Ast*)getRhsSym(3))
                 //#line 900 GJavaParser.g
                 );
             break;
@@ -4990,11 +4986,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 901 GJavaParser.g
                      _automatic_ast_pool << new RelationalExpression1(getLeftIToken(), getRightIToken(),
                                               //#line 901 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 901 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 901 GJavaParser.g
-                                              (IAst*)getRhsSym(3))
+                                              (Ast*)getRhsSym(3))
                 //#line 901 GJavaParser.g
                 );
             break;
@@ -5008,11 +5004,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 902 GJavaParser.g
                      _automatic_ast_pool << new RelationalExpression2(getLeftIToken(), getRightIToken(),
                                               //#line 902 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 902 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 902 GJavaParser.g
-                                              (IAst*)getRhsSym(3))
+                                              (Ast*)getRhsSym(3))
                 //#line 902 GJavaParser.g
                 );
             break;
@@ -5026,13 +5022,13 @@ using namespace JavaParser_top_level_ast;
                     //#line 903 GJavaParser.g
                      _automatic_ast_pool << new RelationalExpression3(getLeftIToken(), getRightIToken(),
                                               //#line 903 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 903 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 903 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(3)),
                                               //#line 903 GJavaParser.g
-                                              (IAst*)getRhsSym(4))
+                                              (Ast*)getRhsSym(4))
                 //#line 903 GJavaParser.g
                 );
             break;
@@ -5046,11 +5042,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 904 GJavaParser.g
                      _automatic_ast_pool << new RelationalExpression4(getLeftIToken(), getRightIToken(),
                                               //#line 904 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 904 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 904 GJavaParser.g
-                                              (IAst*)getRhsSym(3))
+                                              (Ast*)getRhsSym(3))
                 //#line 904 GJavaParser.g
                 );
             break;
@@ -5069,11 +5065,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 907 GJavaParser.g
                      _automatic_ast_pool << new EqualityExpression0(getLeftIToken(), getRightIToken(),
                                             //#line 907 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 907 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 907 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (Ast*)getRhsSym(3))
                 //#line 907 GJavaParser.g
                 );
             break;
@@ -5087,11 +5083,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 908 GJavaParser.g
                      _automatic_ast_pool << new EqualityExpression1(getLeftIToken(), getRightIToken(),
                                             //#line 908 GJavaParser.g
-                                            (IAst*)getRhsSym(1),
+                                            (Ast*)getRhsSym(1),
                                             //#line 908 GJavaParser.g
                                              _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                             //#line 908 GJavaParser.g
-                                            (IAst*)getRhsSym(3))
+                                            (Ast*)getRhsSym(3))
                 //#line 908 GJavaParser.g
                 );
             break;
@@ -5110,11 +5106,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 911 GJavaParser.g
                      _automatic_ast_pool << new AndExpression(getLeftIToken(), getRightIToken(),
                                       //#line 911 GJavaParser.g
-                                      (IAst*)getRhsSym(1),
+                                      (Ast*)getRhsSym(1),
                                       //#line 911 GJavaParser.g
                                        _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                       //#line 911 GJavaParser.g
-                                      (IAst*)getRhsSym(3))
+                                      (Ast*)getRhsSym(3))
                 //#line 911 GJavaParser.g
                 );
             break;
@@ -5133,11 +5129,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 914 GJavaParser.g
                      _automatic_ast_pool << new ExclusiveOrExpression(getLeftIToken(), getRightIToken(),
                                               //#line 914 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 914 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 914 GJavaParser.g
-                                              (IAst*)getRhsSym(3))
+                                              (Ast*)getRhsSym(3))
                 //#line 914 GJavaParser.g
                 );
             break;
@@ -5156,11 +5152,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 917 GJavaParser.g
                      _automatic_ast_pool << new InclusiveOrExpression(getLeftIToken(), getRightIToken(),
                                               //#line 917 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 917 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 917 GJavaParser.g
-                                              (IAst*)getRhsSym(3))
+                                              (Ast*)getRhsSym(3))
                 //#line 917 GJavaParser.g
                 );
             break;
@@ -5179,11 +5175,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 920 GJavaParser.g
                      _automatic_ast_pool << new ConditionalAndExpression(getLeftIToken(), getRightIToken(),
                                                  //#line 920 GJavaParser.g
-                                                 (IAst*)getRhsSym(1),
+                                                 (Ast*)getRhsSym(1),
                                                  //#line 920 GJavaParser.g
                                                   _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                  //#line 920 GJavaParser.g
-                                                 (IAst*)getRhsSym(3))
+                                                 (Ast*)getRhsSym(3))
                 //#line 920 GJavaParser.g
                 );
             break;
@@ -5202,11 +5198,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 923 GJavaParser.g
                      _automatic_ast_pool << new ConditionalOrExpression(getLeftIToken(), getRightIToken(),
                                                 //#line 923 GJavaParser.g
-                                                (IAst*)getRhsSym(1),
+                                                (Ast*)getRhsSym(1),
                                                 //#line 923 GJavaParser.g
                                                  _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                                 //#line 923 GJavaParser.g
-                                                (IAst*)getRhsSym(3))
+                                                (Ast*)getRhsSym(3))
                 //#line 923 GJavaParser.g
                 );
             break;
@@ -5225,15 +5221,15 @@ using namespace JavaParser_top_level_ast;
                     //#line 926 GJavaParser.g
                      _automatic_ast_pool << new ConditionalExpression(getLeftIToken(), getRightIToken(),
                                               //#line 926 GJavaParser.g
-                                              (IAst*)getRhsSym(1),
+                                              (Ast*)getRhsSym(1),
                                               //#line 926 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(2)),
                                               //#line 926 GJavaParser.g
-                                              (IAst*)getRhsSym(3),
+                                              (Ast*)getRhsSym(3),
                                               //#line 926 GJavaParser.g
                                                _automatic_ast_pool << new AstToken(getRhsIToken(4)),
                                               //#line 926 GJavaParser.g
-                                              (IAst*)getRhsSym(5))
+                                              (Ast*)getRhsSym(5))
                 //#line 926 GJavaParser.g
                 );
             break;
@@ -5257,11 +5253,11 @@ using namespace JavaParser_top_level_ast;
                     //#line 931 GJavaParser.g
                      _automatic_ast_pool << new Assignment(getLeftIToken(), getRightIToken(),
                                    //#line 931 GJavaParser.g
-                                   (IAst*)getRhsSym(1),
+                                   (Ast*)getRhsSym(1),
                                    //#line 931 GJavaParser.g
-                                   (IAst*)getRhsSym(2),
+                                   (Ast*)getRhsSym(2),
                                    //#line 931 GJavaParser.g
-                                   (IAst*)getRhsSym(3))
+                                   (Ast*)getRhsSym(3))
                 //#line 931 GJavaParser.g
                 );
             break;
@@ -6061,7 +6057,7 @@ using namespace JavaParser_top_level_ast;
             //
             case 539:
                 break;
-    //#line 372 "btParserTemplateF.gi
+    //#line 368 "btParserTemplateF.gi
 
     
             default:

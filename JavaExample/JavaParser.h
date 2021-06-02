@@ -16,14 +16,6 @@
 
     //#line 163 "btParserTemplateF.gi
 
-
-
-    //#line 17 "GJavaParser.g
-
-
-
-    //#line 173 "btParserTemplateF.gi
-
 #pragma once
 
 #include <iostream>
@@ -45,6 +37,13 @@
 #include "RuleAction.h"
 #include "IcuUtil.h"
 #include "stringex.h"
+#include "Any.h"
+
+    //#line 17 "GJavaParser.g
+
+
+
+    //#line 190 "btParserTemplateF.gi
 
 namespace JavaParser_top_level_ast {
 	struct Ast;
@@ -60,7 +59,7 @@ namespace JavaParser_top_level_ast {
     }
      bool unimplementedSymbolsWarning = false;
 
-    static ParseTable* prsTable;
+     inline static ParseTable* prsTable = new JavaParserprs();
      ParseTable* getParseTable() { return prsTable; }
 
      BacktrackingParser* btParser = nullptr;
@@ -176,22 +175,22 @@ namespace JavaParser_top_level_ast {
      */
      PrsStream* getParseStream() { return prsStream; }
 
-     JavaParser_top_level_ast::Ast* parser()
+    JavaParser_top_level_ast::Ast* parser()
     {
         return parser(nullptr, 0);
     }
-    
-     JavaParser_top_level_ast::Ast* parser(Monitor* monitor)
+
+    JavaParser_top_level_ast::Ast* parser(Monitor* monitor)
     {
         return parser(monitor, 0);
     }
     
-     JavaParser_top_level_ast::Ast * parser(int error_repair_count)
+    JavaParser_top_level_ast::Ast * parser(int error_repair_count)
     {
         return parser(nullptr, error_repair_count);
     }
 
-     JavaParser_top_level_ast::Ast * parser(Monitor* monitor, int error_repair_count)
+    JavaParser_top_level_ast::Ast * parser(Monitor* monitor, int error_repair_count)
     {
         btParser->setMonitor(monitor);
         
@@ -252,18 +251,18 @@ namespace JavaParser_top_level_ast {
     {
         return parseLPGUserAction(nullptr, 0);
     }
-
-    JavaParser_top_level_ast::Ast * parseLPGUserAction(Monitor* monitor)
+        
+     JavaParser_top_level_ast::Ast * parseLPGUserAction(Monitor* monitor)
     {
         return parseLPGUserAction(monitor, 0);
     }
         
-    JavaParser_top_level_ast::Ast * parseLPGUserAction(int error_repair_count)
+     JavaParser_top_level_ast::Ast * parseLPGUserAction(int error_repair_count)
     {
         return parseLPGUserAction(nullptr, error_repair_count);
     }
         
-    JavaParser_top_level_ast::Ast * parseLPGUserAction(Monitor *monitor, int error_repair_count)
+     JavaParser_top_level_ast::Ast * parseLPGUserAction(Monitor *monitor, int error_repair_count)
     {
         btParser->setMonitor(monitor);
         
@@ -283,7 +282,7 @@ namespace JavaParser_top_level_ast {
     }
 
 
-    //#line 368 "btParserTemplateF.gi
+    //#line 364 "btParserTemplateF.gi
 
 };
 

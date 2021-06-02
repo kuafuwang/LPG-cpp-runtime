@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AbstractToken.cpp" />
+    <ClCompile Include="src\Any.cpp" />
     <ClCompile Include="src\BacktrackingParser.cpp" />
     <ClCompile Include="src\ConfigurationStack.cpp" />
     <ClCompile Include="src\DeterministicParser.cpp" />
@@ -158,14 +159,17 @@
     <ClCompile Include="src\LexParser.cpp" />
     <ClCompile Include="src\LexStream.cpp" />
     <ClCompile Include="src\lpgRuntime.cpp" />
+    <ClCompile Include="src\LPGSourcePositionLocator.cpp" />
     <ClCompile Include="src\PrsStream.cpp" />
     <ClCompile Include="src\RecoveryParser.cpp" />
     <ClCompile Include="src\Stacks.cpp" />
     <ClCompile Include="src\Token.cpp" />
+    <ClCompile Include="src\Utf8LexStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AbstractToken.h" />
     <ClInclude Include="src\Adjunct.h" />
+    <ClInclude Include="src\Any.h" />
     <ClInclude Include="src\AstPoolHolder.h" />
     <ClInclude Include="src\BacktrackingParser.h" />
     <ClInclude Include="src\ConfigurationElement.h" />
@@ -183,7 +187,10 @@
     <ClInclude Include="src\ILexStream.h" />
     <ClInclude Include="src\IMessageHandler.h" />
     <ClInclude Include="src\IPrsStream.h" />
+    <ClInclude Include="src\ISourcePositionLocator.h" />
     <ClInclude Include="src\IToken.h" />
+    <ClInclude Include="src\lpg-common.h" />
+    <ClInclude Include="src\LPGSourcePositionLocator.h" />
     <ClInclude Include="src\ParseTableProxy.h" />
     <ClInclude Include="src\LexParser.h" />
     <ClInclude Include="src\LexStream.h" />
@@ -204,6 +211,8 @@
     <ClInclude Include="src\Token.h" />
     <ClInclude Include="src\TokenStream.h" />
     <ClInclude Include="src\tuple.h" />
+    <ClInclude Include="src\Utf8LexStream.h" />
+    <ClInclude Include="src\Utf8LpgLexStream.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

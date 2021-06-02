@@ -316,7 +316,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\jikespg.g" />
     <None Include="src\Makefile" />
     <None Include="src\MakeRules" />
     <None Include="src\MakeRules.aix" />

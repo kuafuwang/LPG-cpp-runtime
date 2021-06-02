@@ -179,7 +179,7 @@
     {
 	 
          bool unimplementedSymbolsWarning = $unimplemented_symbols_warning;
-          struct  $ast_class ;
+ 
 
         inline static ParseTable* prs = new $prs_type();
          ParseTable* getParseTable() { return prs; }
@@ -271,7 +271,7 @@
          std::wstring getTokenKindName(int kind) { return $sym_type::orderedTerminalSymbols[kind]; }            
          int getEOFTokenKind() { return $prs_type ::EOFT_SYMBOL; }
          PrsStream* getParseStream() { return (PrsStream*) this; }
-        struct $ast_class;
+       
          $ast_class * parser()
         {
             return parser(nullptr, 0);

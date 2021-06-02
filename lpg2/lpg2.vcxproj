@@ -122,7 +122,6 @@
     <ClInclude Include="src\XmlTable.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\jikespg.g" />
     <None Include="src\Makefile" />
     <None Include="src\MakeRules" />
     <None Include="src\MakeRules.aix" />
@@ -187,7 +186,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

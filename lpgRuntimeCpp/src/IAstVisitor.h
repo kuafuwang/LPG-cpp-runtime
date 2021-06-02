@@ -1,6 +1,6 @@
 #pragma once
-struct IAst;
-
+//struct IAst;
+#include "IAst.h"
 struct IAstVisitor
 {
 	virtual ~IAstVisitor() = default;
