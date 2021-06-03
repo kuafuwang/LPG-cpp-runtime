@@ -118,7 +118,7 @@ void LexStream::reportLexicalError(int left_loc, int right_loc)
 	reportLexicalError(errorCode, left_loc, right_loc, 0, 0, {tokenText});
 }
 
-std::vector<int> LexStream::getLocation(int left_loc, int right_loc)
+IMessageHandler::Location LexStream::getLocation(int left_loc, int right_loc)
 {
 	int length = (right_loc < streamLength_
 		              ? right_loc
@@ -184,10 +184,10 @@ void LexStream::reportLexicalError(int errorCode, int left_loc, int right_loc, i
 		 * It is called with the following arguments:
 		 */
 		errMsg->handleMessage(errorCode,
-		                     getLocation(left_loc, right_loc),
-		                     getLocation(error_left_loc, error_right_loc),
-		                     getFileName(),
-		                     errorInfo);
+		                      getLocation(left_loc, right_loc),
+		                      getLocation(error_left_loc, error_right_loc),
+		                      getFileName(),
+		                      errorInfo);
 	}
 }
 

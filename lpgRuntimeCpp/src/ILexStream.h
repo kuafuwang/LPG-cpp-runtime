@@ -1,11 +1,12 @@
 #pragma once
 #include <memory>
 
+#include "IMessageHandler.h"
 #include "TokenStream.h"
 
 struct IPrsStream;
 
-struct  IMessageHandler;
+
 
 struct ILexStream : public TokenStream
 {
@@ -69,7 +70,7 @@ struct ILexStream : public TokenStream
     /**
      * See IMessaageHandler for a description of the int[] return value.
      */
-   virtual std::vector<int> getLocation(int left_loc, int right_loc)=0;
+   virtual IMessageHandler::Location getLocation(int left_loc, int right_loc)=0;
 
    virtual void reportLexicalError(int left, int right)=0;
 

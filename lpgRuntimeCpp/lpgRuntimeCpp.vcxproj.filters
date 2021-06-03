@@ -75,6 +75,9 @@
     <ClCompile Include="src\Any.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\CharOperation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\IAst.h">
@@ -213,6 +216,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\lpg-common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\U_chars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CharOperation.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

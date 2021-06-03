@@ -148,6 +148,7 @@
     <ClCompile Include="src\AbstractToken.cpp" />
     <ClCompile Include="src\Any.cpp" />
     <ClCompile Include="src\BacktrackingParser.cpp" />
+    <ClCompile Include="src\CharOperation.cpp" />
     <ClCompile Include="src\ConfigurationStack.cpp" />
     <ClCompile Include="src\DeterministicParser.cpp" />
     <ClCompile Include="src\diagnose.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="src\Any.h" />
     <ClInclude Include="src\AstPoolHolder.h" />
     <ClInclude Include="src\BacktrackingParser.h" />
+    <ClInclude Include="src\CharOperation.h" />
     <ClInclude Include="src\ConfigurationElement.h" />
     <ClInclude Include="src\ConfigurationStack.h" />
     <ClInclude Include="src\DeterministicParser.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="src\tuple.h" />
     <ClInclude Include="src\Utf8LexStream.h" />
     <ClInclude Include="src\Utf8LpgLexStream.h" />
+    <ClInclude Include="src\U_chars.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,8 +9,8 @@
 
 struct MessageHandle : public IMessageHandler
 {
-	void handleMessage(int errorCode, std::vector<int> msgLocation, std::vector<int> errorLocation,
-		const std::wstring& filename, const std::vector<std::wstring>& errorInfo) override
+	void handleMessage(int errorCode, const Location& msgLocation, const Location& errorLocation,
+	                   const std::wstring& filename, const std::vector<std::wstring>& errorInfo) override
 	{
 		
         std::wcout << "filename:" << filename << std::endl;

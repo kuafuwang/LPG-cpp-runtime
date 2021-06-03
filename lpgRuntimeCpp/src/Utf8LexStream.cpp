@@ -354,12 +354,12 @@ void Utf8LexStream::reportLexicalError(int left_loc, int right_loc)
 	
 }
 
-std::vector<int> Utf8LexStream::getLocation(int left_loc, int right_loc)
+IMessageHandler::Location Utf8LexStream::getLocation(int left_loc, int right_loc)
 {
 	int length = (right_loc < inputBytes.length()
 		              ? right_loc
 		              : inputBytes.length() - 1) - left_loc + 1;
-	return std::vector<int>
+	return 
 	{
 		left_loc,
 		length,
@@ -420,10 +420,10 @@ void Utf8LexStream::reportLexicalError(int errorCode, int left_loc, int right_lo
 		 * It is called with the following arguments:
 		 */
 		errMsg->handleMessage(errorCode,
-			getLocation(left_loc, right_loc),
-			getLocation(error_left_loc, error_right_loc),
-			getFileName(),
-			errorInfo);
+		                      getLocation(left_loc, right_loc),
+		                      getLocation(error_left_loc, error_right_loc),
+		                      getFileName(),
+		                      errorInfo);
 	}
 }
 

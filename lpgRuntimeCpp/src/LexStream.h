@@ -327,7 +327,7 @@ struct LexStream :
     /**
      * See IMessaageHandler for a description of the int[] return value.
      */
-    std::vector<int> getLocation(int left_loc, int right_loc);
+    IMessageHandler::Location getLocation(int left_loc, int right_loc);
 
     void reportLexicalError(int errorCode, int left_loc, int right_loc, int error_left_loc, int error_right_loc,
                             const std::vector<std::wstring>& errorInfo);

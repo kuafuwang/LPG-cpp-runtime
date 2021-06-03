@@ -9,6 +9,24 @@
  */
 
 struct IMessageHandler {
+	struct Location
+	{
+        int left_loc;
+        int length;
+        int start_line;
+        int start_column;
+        int end_line;
+        int end_column;
+		
+        Location(int _left_loc,
+        int _length,
+        int _start_line,
+        int _start_column,
+        int _end_line,
+        int _end_column): left_loc(_left_loc), length(_length), start_line(_start_line), start_column(_start_column), end_line(_end_line), end_column(_end_column)
+        {
+        }
+	};
 	virtual ~IMessageHandler() = default;
 	/**
      * The following constants can be used as indexes to dereference
@@ -35,6 +53,6 @@ struct IMessageHandler {
      * @param filename
      * @param errorInfo
      */
-   virtual   void handleMessage(int errorCode, std::vector<int> msgLocation, std::vector<int> errorLocation, 
-        const  std::wstring& filename,const std::vector<std::wstring>& errorInfo) = 0;
+   virtual   void handleMessage(int errorCode, const Location& msgLocation, const  Location& errorLocation,
+                                const  std::wstring& filename, const std::vector<std::wstring>& errorInfo) = 0;
 };
