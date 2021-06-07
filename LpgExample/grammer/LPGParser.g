@@ -1,6 +1,6 @@
 %options la=6
 %options automatic_ast=topLevel,ast_type=ASTNode,visitor=preorder,parent_saved
-%options template=dtParserTemplateF.gi
+%options template= btParserTemplateF.gi
 %options import_terminals=LPGLexer.gi
 
 %Globals
@@ -35,16 +35,19 @@
 
 %Headers
     /.
-         std::unordered_map<std::wstring, IAst*> symtab;
+     std::unordered_multimap<std::wstring, IAst*> symtab;
+     std::vector<LPGParser_top_level_ast::nonTerm*>  _non_terms;
+     std::vector<LPGParser_top_level_ast::terminal*>  _terms;
+     std::vector<LPGParser_top_level_ast::ASTNodeToken*>  _macro_name_symbo;
      ./
 %End
 
 %Rules
     LPG ::= options_segment LPG_INPUT
     /.
-        std::unordered_map<std::wstring, IAst*>* symbolTable;
+       
         void initialize() {
-             symbolTable = &(environment->symtab); 
+            
         }
      ./
 
@@ -114,7 +117,8 @@
     defineSpec ::= macro_name_symbol macro_segment
     /.
         void initialize() {
-             environment->symtab.insert({getmacro_name_symbol()->toString(), this});
+            environment->symtab.insert({getmacro_name_symbol()->toString(), this});
+            environment->_macro_name_symbo.push_back(static_cast<ASTNodeToken*>(getmacro_name_symbol()));
         }
      ./
 
@@ -188,8 +192,8 @@
     nonTerm ::= ruleNameWithAttributes produces ruleList
     /.
         void initialize() {
-             auto temp = ((RuleName*)getruleNameWithAttributes())->getSYMBOL()->toString();
-             environment->symtab.insert({temp, this});
+            environment->symtab.insert({ getruleNameWithAttributes()->getSYMBOL()->toString(), this});
+            environment->_non_terms.push_back(this);
         }
      ./
 
@@ -247,7 +251,8 @@
     terminal ::= terminal_symbol optTerminalAlias
     /.
         void initialize() {
-             environment->symtab.insert({getterminal_symbol()->toString(), this});
+            environment->symtab.insert({getterminal_symbol()->toString(), this});
+            environment->_terms.push_back(this);
         }
      ./
     optTerminalAlias ::= %empty | produces name

@@ -467,6 +467,23 @@
           ./
    action_block ::= aA cC tT iI oO nN _opt bB lL oO cC kK
                   | aA bB
+
+
+   option ::= ast_block$ab optionWhite '='$eq optionWhite '('$lp optionWhite block_begin$bb optionWhite ','$comma2 optionWhite block_end$be optionWhite ')'$rp optionWhite
+          /.$BeginJava
+                      makeToken(getRhsFirstTokenIndex($ab), getRhsLastTokenIndex($ab), $_SYMBOL);
+                      makeToken(getRhsFirstTokenIndex($eq), getRhsLastTokenIndex($eq), $_EQUAL);
+                      makeToken(getRhsFirstTokenIndex($lp), getRhsLastTokenIndex($lp), $_LEFT_PAREN);
+
+                      makeToken(getRhsFirstTokenIndex($bb), getRhsLastTokenIndex($bb), $_SYMBOL);
+                      makeToken(getRhsFirstTokenIndex($comma2), getRhsLastTokenIndex($comma2), $_COMMA);
+                      makeToken(getRhsFirstTokenIndex($be), getRhsLastTokenIndex($be), $_SYMBOL);
+                      makeToken(getRhsFirstTokenIndex($rp), getRhsLastTokenIndex($rp), $_RIGHT_PAREN);
+            $EndJava
+          ./
+
+   ast_block ::= aA sS tT _opt bB lL oO cC kK
+
    filename -> Value
    block_begin -> Value
    block_end -> Value
@@ -919,6 +936,7 @@
                                 | xX mM lL
                                 | cC
                                 | cC pP pP
+                                | rR tT '_' cC pP pP
                                 | jJ aA vV aA
                                 | pP lL xX
                                 | pP lL xX aA sS mM
