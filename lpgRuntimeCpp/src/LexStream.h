@@ -132,7 +132,7 @@ struct LexStream :
 
     void setFileName(std::wstring fileName) { this->fileName_ = fileName; }
 
-    std::wstring getFileName() { return fileName_; }
+    std::wstring getFileName() override { return fileName_; }
 
     void setLineOffsets(std::shared_ptr< IntSegmentedTuple>& lineOffsets)
     {

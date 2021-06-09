@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <sstream>
 
 #include "ConfigurationElement.h"
 #include "ConfigurationStack.h"

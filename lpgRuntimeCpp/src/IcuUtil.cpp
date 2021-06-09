@@ -23,32 +23,34 @@ namespace IcuUtil
 		UCharsetDetector* csd = ucsdet_open(&status);
 		if (status != U_ZERO_ERROR)
 			return pair<string, int>("", 0);
-
-		ucsdet_setText(csd, data, len, &status);
-		if (U_FAILURE(status))
-			goto DET_ERROR;
-
 		
-		csm = ucsdet_detectAll(csd, &matchCount, &status);
-		if (U_FAILURE(status))
-			goto DET_ERROR;
+		do {
 
-		if (matchCount <= 0)
-			goto DET_ERROR;
+			ucsdet_setText(csd, data, len, &status);
+			if (U_FAILURE(status))
+				break;
 
-		confidence = ucsdet_getConfidence(csm[0], &status);
-		if (U_FAILURE(status))
-			goto DET_ERROR;
 
-		matchMost = ucsdet_getName(csm[0], &status);
-		if (U_FAILURE(status))
-			goto DET_ERROR;
+			csm = ucsdet_detectAll(csd, &matchCount, &status);
+			if (U_FAILURE(status))
+				break;
 
-		return pair<string, int>(matchMost, confidence);
+			if (matchCount <= 0)
+				break;
 
-	DET_ERROR:
-		ucsdet_close(csd);
-		return pair<string, int>(string(), 0);
+			confidence = ucsdet_getConfidence(csm[0], &status);
+			if (U_FAILURE(status))
+				break;
+
+			matchMost = ucsdet_getName(csm[0], &status);
+			if (U_FAILURE(status))
+				break;
+			ucsdet_close(csd);
+			return pair<string, int>(matchMost, confidence);
+			
+	} while (false);
+	ucsdet_close(csd);
+	return pair<string, int>({}, 0);
 	}
 
 	std::string ws2s(std::wstring const& wstr)
@@ -67,6 +69,7 @@ namespace IcuUtil
 		const auto to_buf = to_target;
 		auto to_limit = to_target + out.size();
 		ucnv_fromUnicode(pToUcnv, &to_target, to_limit, &to_from, to_from + wstr.size(), NULL, out_flush, &out_err);
+		ucnv_close(pToUcnv);
 		if (U_FAILURE(out_err))
 		{
 			return  {};
@@ -90,6 +93,7 @@ namespace IcuUtil
 		const auto tmp_buf = tmp_target;
 
 		ucnv_toUnicode(pFromCnv, &tmp_target, tmp_target + content.size(), &in_source, in_source + str.size(), NULL, flush, &inerr);
+		ucnv_close(pFromCnv);
 		if (U_FAILURE(inerr))
 			return {};
 		int count = tmp_target - tmp_buf;
@@ -156,6 +160,7 @@ namespace IcuUtil
 		const auto tmp_buf = tmp_target;
 		
 		ucnv_toUnicode(pFromCnv, &tmp_target, tmp_target + content.size(), &in_source, in_source + holder.size(), NULL, flush, &inerr);
+		ucnv_close(pFromCnv);
 		if (U_FAILURE(inerr))
 			return false;
 	    count = tmp_target - tmp_buf;
