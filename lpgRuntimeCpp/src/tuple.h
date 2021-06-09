@@ -17,22 +17,22 @@ template <class T>
 class Array
 {
     int size;
-    T *info;
+    T* info;
     std::vector<T> holder;
 public:
     Array() : size(0),
-              info(NULL)
+        info(NULL)
     {}
 
-    Array(int size_) : size(size_), holder(size_,{})
+    Array(int size_) : size(size_), holder(size_, {})
     {
         info = &holder[0];
         //info = new T[size];
     }
 
-    Array(int size_, T value) :  size(size_), holder(size_, {})
+    Array(int size_, T value) : size(size_), holder(size_, {})
     {
-      //  info = new T[size];
+        //  info = new T[size];
         info = &holder[0];
         Initialize(value);
 
@@ -41,7 +41,7 @@ public:
 
     ~Array()
     {
-       // delete [] info;
+        // delete [] info;
     }
 
     void Initialize(T init_value)
@@ -106,7 +106,7 @@ public:
         //    Array<T> *a = NULL;
         //    a -> _size = 0;
         //}
-        assert(! OutOfRange(i));
+        assert(!OutOfRange(i));
 
         int length = size - i;
         memset(&info[i], 0, length * sizeof(T));
@@ -119,20 +119,20 @@ public:
     //
     inline bool OutOfRange(const int i)
     {
-	    return (i < 0 || i >= size);
+        return (i < 0 || i >= size);
     }
     T& at(const int i)
     {
-    	if(OutOfRange(i))
-    	{
-           throw  std::out_of_range("invalid index subscript");
-    	}
+        if (OutOfRange(i))
+        {
+            throw  std::out_of_range("invalid index subscript");
+        }
         return info[i];
     }
     //
     // Return the ith element of the array
     //
-    T &operator[](const int i)
+    T& operator[](const int i)
     {
         //
         // Use this code when debugging to force a crash instead of
@@ -143,7 +143,7 @@ public:
         //    Array<T> *a = NULL;
         //    a -> _size = 0;
         //}
-        assert(! OutOfRange(i));
+        assert(!OutOfRange(i));
 
         return info[i];
     }
@@ -273,12 +273,12 @@ public:
 
     T& at(const int i)
     {
-        if(OutOfRange(i))
+        if (OutOfRange(i))
         {
-           throw  std::out_of_range("invalid index subscript");
+            throw  std::out_of_range("invalid index subscript");
         }
-         return info[i];
-       
+        return info[i];
+
     }
 };
 
@@ -299,7 +299,7 @@ protected:
 
     enum { DEFAULT_LOG_BLKSIZE = 3, DEFAULT_BASE_INCREMENT = 4 };
 
-    Array<T *> base;
+    Array<T*> base;
     int top,
         _size;
 
@@ -396,7 +396,7 @@ public:
             {
                 _size -= Blksize();
                 base[k] += _size;
-                delete [] base[k];
+                delete[] base[k];
                 base[k] = NULL;
             }
 
@@ -404,7 +404,7 @@ public:
                 base.Resize(0);
         }
 
-        top  = n;
+        top = n;
     }
 
     //
@@ -436,19 +436,19 @@ public:
 // Such a check might be useful for debugging and a range exception
 // should be thrown if it yields true.
 //
-     T& get(int i)
+    T& get(int i)
     {
-       if (OutOfRange(i)) {
-             throw std::out_of_range("out of range");
-         }
+        if (OutOfRange(i)) {
+            throw std::out_of_range("out of range");
+        }
         return (*this)[i];
     }
     //
 // Insert an element in the dynamic array at the location indicated.
 //
-     void set(int i, T element)
+    void set(int i, T element)
     {
-         (*this)[i] = element;
+        (*this)[i] = element;
     }
     //
     // Return length of the dynamic array.
@@ -478,7 +478,7 @@ public:
         //    Tuple<T> *p = NULL;
         //    p -> top = 0;
         //}
-        assert(! OutOfRange(i));
+        assert(!OutOfRange(i));
 
         return base[i >> log_blksize][i];
     }
@@ -494,14 +494,14 @@ public:
         return i;
     }
 
-    inline void Push(T elt) { this -> Next() = elt; }
+    inline void Push(T elt) { this->Next() = elt; }
     inline void add(T elt) { this->Next() = elt; }
     //
     // Not "return (*this)[--top]" because that may violate an invariant
     // in operator[].
     //
-    inline T Pop() { assert(top!=0); top--; return base[top >> log_blksize][top]; }
-    inline T Top() { assert(top!=0); return (*this)[top-1]; }
+    inline T Pop() { assert(top != 0); top--; return base[top >> log_blksize][top]; }
+    inline T Top() { assert(top != 0); return (*this)[top - 1]; }
 
     //
     // Add an element to the dynamic array and return a reference to
@@ -512,7 +512,7 @@ public:
     //
     // Assignment of a dynamic array to another.
     //
-    inline Tuple<T>& operator=( Tuple<T>& rhs)
+    inline Tuple<T>& operator=(Tuple<T>& rhs)
     {
         if (this != &rhs)
         {
@@ -531,7 +531,7 @@ public:
     {
         if (this != &rhs)
         {
-            if (this -> top != rhs.top)
+            if (this->top != rhs.top)
                 return false;
             for (int i = 0; i < rhs.top; i++)
             {
@@ -554,18 +554,18 @@ public:
         }
         else
         {
-            for (log_blksize = 1; (((unsigned) 1 << log_blksize) < estimate) && (log_blksize < 31); log_blksize++)
+            for (log_blksize = 1; (((unsigned)1 << log_blksize) < estimate) && (log_blksize < 31); log_blksize++)
                 ;
             if (log_blksize <= DEFAULT_LOG_BLKSIZE)
                 base_increment = 1;
             else if (log_blksize < 13)
             {
-                base_increment = (unsigned) 1 << (log_blksize - 4);
+                base_increment = (unsigned)1 << (log_blksize - 4);
                 log_blksize = 4;
             }
             else
             {
-                base_increment = (unsigned) 1 << (log_blksize - 8);
+                base_increment = (unsigned)1 << (log_blksize - 8);
                 log_blksize = 8;
             }
             base_increment++; // add a little margin to avoid reallocating the base.
@@ -579,7 +579,7 @@ public:
     // Constructor of a Tuple
     //
     Tuple(int log_blksize_, int base_increment_) : log_blksize(log_blksize_),
-                                                   base_increment(base_increment_)
+        base_increment(base_increment_)
     {
         _size = 0;
         top = 0;
@@ -589,7 +589,7 @@ public:
     // Initialization of a dynamic array.
     //
     Tuple(Tuple<T>& rhs) : log_blksize(rhs.log_blksize),
-                           base_increment(rhs.base_increment)
+        base_increment(rhs.base_increment)
     {
         _size = 0;
         *this = rhs;
@@ -627,7 +627,7 @@ public:
     //
     inline size_t SpaceAllocated(void)
     {
-        return ((base.Size() * sizeof(T **)) + (_size * sizeof(T)));
+        return ((base.Size() * sizeof(T**)) + (_size * sizeof(T)));
     }
 
     //
@@ -635,7 +635,7 @@ public:
     //
     inline size_t SpaceUsed(void)
     {
-        return (((_size >> log_blksize) * sizeof(T **)) + (top * sizeof(T)));
+        return (((_size >> log_blksize) * sizeof(T**)) + (top * sizeof(T)));
     }
 
 };
@@ -650,22 +650,22 @@ class ConvertibleArray : public Tuple<T>
 public:
 
     ConvertibleArray(int estimate = 0) : Tuple<T>(estimate),
-                                         array(NULL)
+        array(NULL)
     {}
 
     ConvertibleArray(int log_blksize, int base_increment) : Tuple<T>(log_blksize, base_increment),
-                                                            array(NULL)
+        array(NULL)
     {}
 
-    ~ConvertibleArray() { delete [] array; }
+    ~ConvertibleArray() { delete[] array; }
 
     //
     // This function converts a tuple into a regular array and destroys the
     // original tuple.
     //
-    inline T *&Array()
+    inline T*& Array()
     {
-        if ((! array) && Tuple<T>::top > 0)
+        if ((!array) && Tuple<T>::top > 0)
         {
             array = new T[Tuple<T>::top];
 
@@ -675,12 +675,12 @@ public:
             while (i < n)
             {
                 memmove(&array[processed_size], Tuple<T>::base[i] + processed_size, Tuple<T>::Blksize() * sizeof(T));
-                delete [] (Tuple<T>::base[i] + processed_size);
+                delete[](Tuple<T>::base[i] + processed_size);
                 i++;
                 processed_size += Tuple<T>::Blksize();
             }
             memmove(&array[processed_size], Tuple<T>::base[n] + processed_size, (Tuple<T>::top - processed_size) * sizeof(T));
-            delete [] (Tuple<T>::base[n] + processed_size);
+            delete[](Tuple<T>::base[n] + processed_size);
             Tuple<T>::base.Resize(0);
             Tuple<T>::_size = 0;
         }
@@ -699,7 +699,7 @@ public:
         //     ConvertibleArray<T> *p = NULL;
         //     p -> array = 0;
         // }
-        assert(! Tuple<T>::OutOfRange(i));
+        assert(!Tuple<T>::OutOfRange(i));
 
         return (array ? array[i] : Tuple<T>::base[i >> Tuple<T>::log_blksize][i]);
     }
@@ -708,7 +708,7 @@ public:
     inline void Reset(const int n = 0) { assert(false); }
     inline T& Next()
     {
-        assert(! array);
+        assert(!array);
 
         int i = Tuple<T>::nextIndex();
         return Tuple<T>::base[i >> Tuple<T>::log_blksize][i];
@@ -721,7 +721,7 @@ public:
 
 private:
 
-    T *array;
+    T* array;
 };
 
 template <class T>
@@ -741,7 +741,7 @@ public:
 
     T Pop()
     {
-        assert(! IsEmpty());
+        assert(!IsEmpty());
         int last_index = Length() - 1;
         T t = (*this)[last_index];
         Reset(last_index);
@@ -749,9 +749,9 @@ public:
         return t;
     }
 
-    void Pop(T &t)
+    void Pop(T& t)
     {
-        assert(! IsEmpty());
+        assert(!IsEmpty());
         int last_index = Length() - 1;
         t = (*this)[last_index];
         Reset(last_index);
@@ -759,9 +759,9 @@ public:
         return;
     }
 
-    T &Top()
+    T& Top()
     {
-        assert(! IsEmpty());
+        assert(!IsEmpty());
         return (*this)[Length() - 1];
     }
 };
@@ -771,24 +771,24 @@ class BoundedArray
 {
     int lbound,
         ubound;
-    T *info;
+    T* info;
 
 public:
 
     BoundedArray() : lbound(0),
-                     ubound(-1),
-                     info(NULL)
+        ubound(-1),
+        info(NULL)
     {}
 
     BoundedArray(int lbound_, int ubound_) : lbound(lbound_),
-                                             ubound(ubound_)
+        ubound(ubound_)
     {
         assert(ubound >= lbound);
         info = (new T[Size()]) - lbound;
     }
 
     BoundedArray(int lbound_, int ubound_, T init_value) : lbound(lbound_),
-                                                           ubound(ubound_)
+        ubound(ubound_)
     {
         assert(ubound >= lbound);
         info = (new T[Size()]) - lbound;
@@ -798,7 +798,7 @@ public:
     ~BoundedArray()
     {
         info += lbound;
-        delete [] info;
+        delete[] info;
     }
 
     void Initialize(T init_value)
@@ -812,15 +812,15 @@ public:
         if (new_ubound < new_lbound)
         {
             info += lbound;
-            delete [] info;
-    
+            delete[] info;
+
             info = NULL;
             lbound = new_lbound;
             ubound = new_ubound;
         }
         else
         {
-            T *old_info = info;
+            T* old_info = info;
             int new_size = new_ubound - new_lbound + 1;
             info = new T[new_size];
             if (old_info)
@@ -828,7 +828,7 @@ public:
                 old_info += lbound;
                 if (new_lbound == lbound && new_ubound > ubound)
                     memmove(info, old_info, Size() * sizeof(T));
-                delete [] old_info;
+                delete[] old_info;
             }
 
             info -= new_lbound;
@@ -861,7 +861,7 @@ public:
     //
     // Return the ith element of the array
     //
-    T &operator[](const int i)
+    T& operator[](const int i)
     {
         //
         // Use this code when debugging to force a crash instead of
@@ -872,7 +872,7 @@ public:
         //    BoundedArray<T> *a = NULL;
         //    a -> lbound = 0;
         //}
-        assert(! OutOfRange(i));
+        assert(!OutOfRange(i));
 
         return info[i];
     }
@@ -885,11 +885,11 @@ template <class T>
 class shared_ptr_array
 {
     std::shared_ptr< std::vector<T> >  _data;
-   
+
 public:
     shared_ptr_array() : _data(new std::vector<T>())
     {
-	    
+
     }
     shared_ptr_array(T* start, int length) :_data(new std::vector<T>(start, start + length))
     {
@@ -899,46 +899,46 @@ public:
     {
 
     }
-    shared_ptr_array(typename std::vector<T>::const_iterator start, 
+    shared_ptr_array(typename std::vector<T>::const_iterator start,
         typename std::vector<T>::const_iterator end) :_data(new std::vector<T>(start, end))
     {
 
     }
 
-    shared_ptr_array(std::vector<T>&& buf):_data(new std::vector<T>( std::move(buf)))
+    shared_ptr_array(std::vector<T>&& buf) :_data(new std::vector<T>(std::move(buf)))
     {
-        
+
     }
     shared_ptr_array(const std::vector<T>& buf) :_data(new std::vector<T>(buf))
     {
-      
-    }
-	
-    shared_ptr_array(int size_) : _data(new std::vector<T>(size_,{}))
-    {
-       
+
     }
 
-    shared_ptr_array(int size_, T value) : _data(new std::vector<T>(size_,value))
+    shared_ptr_array(int size_) : _data(new std::vector<T>(size_, {}))
     {
-      
+
     }
-    shared_ptr_array(const shared_ptr_array& rhs):_data(rhs._data)
+
+    shared_ptr_array(int size_, T value) : _data(new std::vector<T>(size_, value))
+    {
+
+    }
+    shared_ptr_array(const shared_ptr_array& rhs) :_data(rhs._data)
     {
     }
-   
+
     shared_ptr_array(shared_ptr_array&& rhs) noexcept :_data(rhs._data)
     {
     }
-	
+
     ~shared_ptr_array()
     {
-      
+
     }
     void swap(shared_ptr_array& other) noexcept {
         _data.swap(other);
     }
-    shared_ptr_array&  operator=(const shared_ptr_array& rhs)
+    shared_ptr_array& operator=(const shared_ptr_array& rhs)
     {
         _data = rhs._data;
         return  *this;
@@ -953,16 +953,16 @@ public:
         _data->swap(buf);
         return  *this;
     }
-	
+
     shared_ptr_array& operator=(const std::vector<T>& buf)
     {
         (*_data) = buf;
         return  *this;
     }
-	
+
     int size()const
     {
-	    return _data->size();
+        return _data->size();
     }
     T* data()const
     {
@@ -979,9 +979,9 @@ public:
     {
         return  !operator()();
     }
-	bool operator()() const
+    bool operator()() const
     {
-	    if(!_data) return false;
+        if (!_data) return false;
         return (!_data->empty());
     }
 };
@@ -990,11 +990,12 @@ template <class T>
 class shared_ptr_basic_string
 {
     using  string_type = std::basic_string<T>;
-	
-   
+
+
 
 public:
     std::shared_ptr < string_type > _data;
+    bool initilize = false;
     string_type& get_string_type() const {
         return *_data.get();
     }
@@ -1002,43 +1003,43 @@ public:
     {
 
     }
-    shared_ptr_basic_string(T* start, int length) :_data(new string_type(start, start + length))
+    shared_ptr_basic_string(T* start, int length) :_data(new string_type(start, start + length)), initilize(true)
     {
 
     }
-    shared_ptr_basic_string(T* start, T* end) :_data(new std::vector<T>(start, end))
+    shared_ptr_basic_string(T* start, T* end) :_data(new std::vector<T>(start, end)), initilize(true)
     {
 
     }
     shared_ptr_basic_string(typename string_type::const_iterator start,
-        typename string_type::const_iterator end) :_data(new string_type(start, end))
+        typename string_type::const_iterator end) :_data(new string_type(start, end)), initilize(true)
     {
 
     }
 
-    shared_ptr_basic_string(string_type&& buf) :_data(new string_type(std::move(buf)))
+    shared_ptr_basic_string(string_type&& buf) :_data(new string_type(std::move(buf))), initilize(true)
     {
 
     }
-    shared_ptr_basic_string(const string_type& buf) :_data(new string_type(buf))
-    {
-
-    }
-
-    shared_ptr_basic_string(int size_) : _data(new string_type(size_, {}))
+    shared_ptr_basic_string(const string_type& buf) :_data(new string_type(buf)), initilize(true)
     {
 
     }
 
-    shared_ptr_basic_string(int size_, T value) : _data(new string_type(size_, value))
+    shared_ptr_basic_string(int size_) : _data(new string_type(size_, {})), initilize(true)
     {
 
     }
-    shared_ptr_basic_string(const shared_ptr_basic_string& rhs) :_data(rhs._data)
+
+    shared_ptr_basic_string(int size_, T value) : _data(new string_type(size_, value)), initilize(true)
+    {
+
+    }
+    shared_ptr_basic_string(const shared_ptr_basic_string& rhs) :_data(rhs._data), initilize(true)
     {
     }
 
-    shared_ptr_basic_string(shared_ptr_basic_string&& rhs) noexcept :_data(rhs._data)
+    shared_ptr_basic_string(shared_ptr_basic_string&& rhs) noexcept :_data(rhs._data), initilize(true)
     {
     }
 
@@ -1048,26 +1049,31 @@ public:
     }
     void swap(shared_ptr_basic_string& other) noexcept {
         _data.swap(other);
+        std::swap(initilize, other.initilize);
     }
     shared_ptr_basic_string& operator=(const shared_ptr_basic_string& rhs)
     {
         _data = rhs._data;
+        initilize = rhs.initilize;
         return  *this;
     }
     shared_ptr_basic_string& operator=(shared_ptr_basic_string&& right) noexcept { // take resource from _Right
         _data.swap(right._data);
+        std::swap(initilize, right.initilize);
         return *this;
     }
 
     shared_ptr_basic_string& operator=(string_type&& buf)
     {
         _data->swap(buf);
+        initilize = true;
         return  *this;
     }
 
     shared_ptr_basic_string& operator=(const string_type& buf)
     {
         (*_data) = buf;
+        initilize = true;
         return  *this;
     }
 
@@ -1075,11 +1081,11 @@ public:
     {
         return _data->size();
     }
-	int length() const
+    int length() const
     {
         return  _data->length();
     }
-    T* data() const 
+    T* data() const
     {
         return &_data->operator[](0);
     }
@@ -1100,8 +1106,7 @@ public:
     }
     bool operator()() const
     {
-        if (!_data) return false;
-        return (!_data->empty());
+        return    initilize;
     }
     string_type substr(const size_t _Off = 0, const size_t _Count = string_type::npos) const {
         // return [_Off, _Off + _Count) as new string
@@ -1117,15 +1122,15 @@ using shared_ptr_wstring = shared_ptr_basic_string<wchar_t>;
 namespace System
 {
     template <class T>
-	void arraycopy(T& src,  int  srcPos,
+    void arraycopy(T& src, int  srcPos,
         T& dest, int destPos,
         int length)
-	{
-		for(int i= 0; i < length;  ++i)
-		{
+    {
+        for (int i = 0; i < length; ++i)
+        {
             dest[destPos + i] = src[srcPos + i];
-		}
-	}
+        }
+    }
 }
 
 
