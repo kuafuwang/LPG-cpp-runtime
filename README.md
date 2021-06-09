@@ -1,6 +1,9 @@
 # LPG-cpp-runtime
 C++ runtime for LPG 2.0. This project is a c++ target for LPG2.0
 
+## Projects using LPG-cpp-runtime:
+* [LPG-language-server](https://github.com/kuafuwang/LPG-language-server)
+
 ## Getting Started with LPG
 
 [Getting Started with LPG]( https://github.com/kuafuwang/LPG-cpp-runtime/tree/main/lpg-generator-templates-2.1.00/docs )
