@@ -284,8 +284,7 @@ int PrsStream::getLastRealToken(int i)
 
 void PrsStream::addTokensInRangeToList(std::vector<IToken*>& list, IToken* start_token, IToken* end_token)
 {
-	assert(list.size());
-
+	
 	if (start_token == nullptr || end_token == nullptr)
 		return;
 

@@ -8,7 +8,11 @@
 
     ./
 %End
-
+%Headers
+    /.
+       wchar_t escape_token='$';
+     ./
+%End
 %Define
  
     $kw_lexer_class /.$LPGKWLexer./
@@ -616,6 +620,7 @@
                       makeToken(getRhsFirstTokenIndex($e), getRhsLastTokenIndex($e), $_SYMBOL);
                       makeToken(getRhsFirstTokenIndex($eq), getRhsLastTokenIndex($eq), $_EQUAL);
                       makeToken(getRhsFirstTokenIndex($val), getRhsLastTokenIndex($val), $_SYMBOL);
+                      escape_token = *(lexStream->getInputChars().data() + getRhsFirstTokenIndex($val));
             $EndJava
           ./
    escape ::= eE sS cC aA pP eE
