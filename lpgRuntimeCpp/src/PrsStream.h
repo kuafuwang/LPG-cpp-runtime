@@ -14,6 +14,7 @@ struct PrsStream :public IPrsStream, public ParseErrorCodes
     ILexStream* iLexStream;
     shared_ptr_array<int> kindMap;
     Tuple<IToken*> tokens;
+    Tuple<IToken*> rangeTokens;
     Tuple<IToken*> adjuncts;
     int index = 0;
     int len = 0;

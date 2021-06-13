@@ -81,6 +81,7 @@ void PrsStream::internalResetTokenStream()
 		delete adjuncts[i];
 	}
 	adjuncts.reset();
+	rangeTokens.reset();
 }
 void PrsStream::resetTokenStream()
 {
@@ -104,6 +105,7 @@ void PrsStream::makeToken(int startLoc, int endLoc, int kind)
 	Token* token = new Token(this, startLoc, endLoc, mapKind(kind));
 	token->setTokenIndex(tokens.size());
 	tokens.add(token);
+	rangeTokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
 	
 }
@@ -114,7 +116,7 @@ void PrsStream::makeToken(IToken* token, int offset_adjustment)
 	token->setEndOffset(token->getEndOffset() + offset_adjustment);
 
 	token->setTokenIndex(tokens.size());
-
+	rangeTokens.add(token);
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
 
@@ -160,7 +162,7 @@ int PrsStream::makeErrorToken(int firsttok, int lasttok, int errortok, int kind)
 	token->setTokenIndex(tokens.size());
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
-	
+	rangeTokens.add(token);
 	return index;
 }
 
@@ -169,7 +171,7 @@ void PrsStream::addToken(IToken* token)
 	token->setTokenIndex(tokens.size());
 	tokens.add(token);
 	token->setAdjunctIndex(adjuncts.size());
-	
+	rangeTokens.add(token);
 }
 
 void PrsStream::makeAdjunct(int startLoc, int endLoc, int kind)
@@ -179,6 +181,7 @@ void PrsStream::makeAdjunct(int startLoc, int endLoc, int kind)
 	adjunct->setAdjunctIndex(adjuncts.size());
 	adjunct->setTokenIndex(token_index);
 	adjuncts.add(adjunct);
+	rangeTokens.add(adjunct);
 }
 
 void PrsStream::makeAdjunct(IToken* adjunct, int offset_adjustment)
@@ -190,6 +193,7 @@ void PrsStream::makeAdjunct(IToken* adjunct, int offset_adjustment)
 	adjunct->setAdjunctIndex(adjuncts.size());
 	adjunct->setAdjunctIndex(token_index);
 	adjuncts.add(adjunct);
+	rangeTokens.add(adjunct);
 }
 
 void PrsStream::addAdjunct(IToken* adjunct)
@@ -198,6 +202,7 @@ void PrsStream::addAdjunct(IToken* adjunct)
 	adjunct->setTokenIndex(token_index);
 	adjunct->setAdjunctIndex(adjuncts.size());
 	adjuncts.add(adjunct);
+	rangeTokens.add(adjunct);
 }
 
 std::wstring PrsStream::getTokenText(int i)

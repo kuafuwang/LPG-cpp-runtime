@@ -103,7 +103,9 @@ struct IPrsStream :public  TokenStream
     virtual   Tuple <IToken*> getTokens()=0;
 
     virtual   Tuple<IToken*> getAdjuncts()=0;
-
+	
+    virtual   Tuple <IToken*> getRangeTokens() = 0;
+	
     virtual std::vector<IToken*> getFollowingAdjuncts(int i) =0;
 
     virtual std::vector<IToken*> getPrecedingAdjuncts(int i) =0;
