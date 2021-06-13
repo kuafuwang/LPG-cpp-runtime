@@ -283,4 +283,9 @@ struct PrsStream :public IPrsStream, public ParseErrorCodes
 
 private:
     void internalResetTokenStream();
+public:
+    Tuple<IToken*> getRangeTokens() override
+    {
+       return  rangeTokens;
+    }
 };
