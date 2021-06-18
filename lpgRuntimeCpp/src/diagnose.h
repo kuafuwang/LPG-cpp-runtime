@@ -116,7 +116,7 @@ struct DiagnoseParser :public ParseErrorCodes,public  ParseTableProxy
         BUFF_SIZE = 32,
         MAX_DISTANCE = 30,
         MIN_DISTANCE = 3;
-        static constexpr int  INFINITY_ = std::numeric_limits<int>::max(); // should be much bigger than MAX_DISTANCE !!!
+    static const int  INFINITY_; // should be much bigger than MAX_DISTANCE !!!
 
 
     int symbolIndex(int index)

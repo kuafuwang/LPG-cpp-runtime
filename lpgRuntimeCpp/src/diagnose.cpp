@@ -11,6 +11,8 @@
 #include "stringex.h"
 #include "TokenStream.h"
 
+const int  DiagnoseParser::INFINITY_ = std::numeric_limits<int>::max(); // should be much bigger than MAX_DISTANCE !!!
+
 DiagnoseParser::PrimaryRepairInfo::PrimaryRepairInfo(PrimaryRepairInfo& clone)
 {
 	copy(clone);

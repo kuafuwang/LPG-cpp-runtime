@@ -134,7 +134,7 @@
     Token ::= '|'               /.$BeginJava makeToken($_OR_MARKER);$EndJava./
     Token ::= '['               /.$BeginJava makeToken($_LEFT_BRACKET);$EndJava./
     Token ::= ']'               /.$BeginJava makeToken($_RIGHT_BRACKET);$EndJava./
-
+    Token ::= A
     digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
     aA -> a | A

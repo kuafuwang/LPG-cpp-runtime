@@ -6,6 +6,7 @@
 %Globals
     /.
         #include <unordered_map>
+        #include "LpgData.h"
      ./
 %End
 
@@ -35,10 +36,14 @@
 
 %Headers
     /.
-     std::unordered_multimap<std::wstring, IAst*> symtab;
-     std::vector<LPGParser_top_level_ast::nonTerm*>  _non_terms;
-     std::vector<LPGParser_top_level_ast::terminal*>  _terms;
-     std::vector<LPGParser_top_level_ast::ASTNodeToken*>  _macro_name_symbo;
+
+ std::unordered_multimap<std::wstring, LPGParser_top_level_ast::terminal_symbol0*>  terminal_symbol_produce_SYMBOL;
+ std::unordered_multimap<std::wstring, LPGParser_top_level_ast::recover_symbol*>  _recover_symbols;
+ std::unordered_multimap<std::wstring, LPGParser_top_level_ast::defineSpec*>  _define_specs;
+ 
+ std::unordered_multimap<std::wstring, LPGParser_top_level_ast::nonTerm*>  _non_terms;
+ std::unordered_multimap<std::wstring, LPGParser_top_level_ast::terminal*>  _terms;
+ std::vector<LPGParser_top_level_ast::ASTNodeToken*>  _macro_name_symbo;
      ./
 %End
 
@@ -117,8 +122,8 @@
     defineSpec ::= macro_name_symbol macro_segment
     /.
         void initialize() {
-            environment->symtab.insert({getmacro_name_symbol()->toString(), this});
-            environment->_macro_name_symbo.push_back(static_cast<ASTNodeToken*>(getmacro_name_symbol()));
+	environment->_define_specs.insert({getmacro_name_symbol()->toString(), this});
+	environment->_macro_name_symbo.push_back(static_cast<ASTNodeToken*>(getmacro_name_symbol()));
         }
      ./
 
@@ -192,8 +197,7 @@
     nonTerm ::= ruleNameWithAttributes produces ruleList
     /.
         void initialize() {
-            environment->symtab.insert({ getruleNameWithAttributes()->getSYMBOL()->toString(), this});
-            environment->_non_terms.push_back(this);
+         environment->_non_terms.insert({getruleNameWithAttributes()->getSYMBOL()->toString(), this});
         }
      ./
 
@@ -236,7 +240,6 @@
 
     action_segment ::= BLOCK 
     /.
-
     ./
 
     -- $start
@@ -251,8 +254,7 @@
     terminal ::= terminal_symbol optTerminalAlias
     /.
         void initialize() {
-            environment->symtab.insert({getterminal_symbol()->toString(), this});
-            environment->_terms.push_back(this);
+         	environment->_terms.insert({getterminal_symbol()->toString(), this});
         }
      ./
     optTerminalAlias ::= %empty | produces name
@@ -260,7 +262,7 @@
     terminal_symbol ::= SYMBOL
     /.
         void initialize() {
-             environment->symtab.insert({getSYMBOL()->toString(), this});
+            environment->terminal_symbol_produce_SYMBOL.insert({getSYMBOL()->toString(), this});
         }
      ./
     terminal_symbol ::= MACRO_NAME -- warning: escape prefix used in symbol
@@ -270,8 +272,8 @@
 
     -- $types
     types_segment$$type_declarations ::= type_declarations | types_segment type_declarations
-
-    type_declarations     ::= SYMBOL produces barSymbolList
+  
+    type_declarations     ::= SYMBOL produces barSymbolList opt_action_segment
     barSymbolList$$SYMBOL ::= SYMBOL | barSymbolList '|'$ SYMBOL
 
     --
@@ -285,7 +287,7 @@
     recover_symbol ::= SYMBOL
     /.
         void initialize() {
-             environment->symtab.insert({getSYMBOL()->toString(), this});
+            environment->_recover_symbols.insert({ getSYMBOL()->toString(), this });
         }
      ./
 
