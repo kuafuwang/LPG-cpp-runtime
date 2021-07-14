@@ -17,7 +17,8 @@ struct IGetToken
 };
 struct IToken :public Object
 {
-	virtual ~IToken() = default;
+	IToken();;
+	virtual ~IToken();
 	static constexpr  wchar_t EOF_ = 0xFFFF;
 
   virtual    int getKind()=0;
@@ -51,5 +52,12 @@ struct IToken :public Object
 
   virtual      std::wstring toString()=0;
   std::string to_utf8_string();
+  void setExtData(void* _v);
+ 
+  void* getExtData() const;
+ 
+private:
+	struct Data;
+	Data* d_ptr;
 };
 

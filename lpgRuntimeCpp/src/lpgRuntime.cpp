@@ -41,12 +41,40 @@ const  std::vector< std::wstring> ParseErrorCodes::errorMsgText =
      return IcuUtil::ws2s(toString());
  }
 
- std::string IToken::to_utf8_string()
+struct IToken::Data
+{
+    void* data=nullptr;
+};
+IToken::IToken():d_ptr(nullptr)
+{
+}
+
+IToken::~IToken()
+{
+    delete d_ptr;
+}
+
+std::string IToken::to_utf8_string()
  {
      return IcuUtil::ws2s(toString());
  }
 
-  std::string TokenStream::to_utf8_string(int startOffset, int endOffset)
+void IToken::setExtData(void* _v)
+{
+	if(!d_ptr)
+	{
+        d_ptr = new Data();
+	}
+  
+    d_ptr->data = _v;
+}
+
+void* IToken::getExtData() const
+{
+    return  d_ptr->data;
+}
+
+std::string TokenStream::to_utf8_string(int startOffset, int endOffset)
  {
       return IcuUtil::ws2s(toString(startOffset, endOffset));
  }
