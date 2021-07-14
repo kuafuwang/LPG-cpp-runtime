@@ -71,7 +71,9 @@ void IToken::setExtData(void* _v)
 
 void* IToken::getExtData() const
 {
-    return  d_ptr->data;
+	if(d_ptr)
+	 return  d_ptr->data;
+	return nullptr;
 }
 
 std::string TokenStream::to_utf8_string(int startOffset, int endOffset)
