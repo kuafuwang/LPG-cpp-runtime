@@ -1,12 +1,12 @@
 %options la=6
-%options automatic_ast=topLevel,ast_type=ASTNode,visitor=preorder,parent_saved
+%options automatic_ast=toplevel,ast_type=ASTNode,visitor=preorder,parent_saved
 %options template= btParserTemplateF.gi
 %options import_terminals=LPGLexer.gi
 
 %Globals
     /.
         #include <unordered_map>
-        #include "LpgData.h"
+   
      ./
 %End
 
@@ -225,7 +225,7 @@
     produces ::= '->'
     produces ::= '->?'
 
-    rule ::= symWithAttrsList opt_action_segment
+    rule ::= symWithAttrsList action_segment_list
 
     symWithAttrsList$$symWithAttrs ::= %empty | symWithAttrsList symWithAttrs
 

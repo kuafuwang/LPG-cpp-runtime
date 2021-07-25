@@ -937,15 +937,9 @@
           ./
    programming_language ::= pP rR oO gG rR aA mM mM iI nN gG _opt lL aA nN gG uU aA gG eE
                           | pP lL
-   programming_language_value ::= none
-                                | xX mM lL
-                                | cC
-                                | cC pP pP
-                                | rR tT '_' cC pP pP
-                                | jJ aA vV aA
-                                | pP lL xX
-                                | pP lL xX aA sS mM
-                                | mM lL
+
+   programming_language_value -> Value
+   
    option ::= prs_file$pf optionWhite '='$eq optionWhite Value$val optionWhite
           /.$BeginJava
                       makeToken(getRhsFirstTokenIndex($pf), getRhsLastTokenIndex($pf), $_SYMBOL);

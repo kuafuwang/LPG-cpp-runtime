@@ -10,7 +10,7 @@ using namespace  LPGParser_top_level_ast;
 int main()
 {
 	LPGLexer lexer; // Create the lexer
-	lexer.reset(LR"(C:\Users\kuafu\source\repos\lpgRuntimeCpp\lpg2\src\jikespg.g)", 8);
+	lexer.reset(LR"(E:\LPG2\lpg2\src\jikespg.g)", 8);
 	//lexer.reset(LR"(C:\Users\kuafu\source\repos\lpgRuntimeCpp\LpgExample\LpgExample.cpp)", 4);
 	
 	LPGParser parser(lexer.getILexStream()); // Create the parser

@@ -4,10 +4,10 @@
   struct LPGParsersym {
      typedef  unsigned char byte;
       static constexpr int
-      TK_EQUIVALENCE = 4,
-      TK_PRIORITY_EQUIVALENCE = 5,
-      TK_ARROW = 6,
-      TK_PRIORITY_ARROW = 7,
+      TK_EQUIVALENCE = 5,
+      TK_PRIORITY_EQUIVALENCE = 6,
+      TK_ARROW = 7,
+      TK_PRIORITY_ARROW = 8,
       TK_OR_MARKER = 14,
       TK_EQUAL = 38,
       TK_COMMA = 37,
@@ -48,7 +48,7 @@
       TK_SINGLE_LINE_COMMENT = 45,
       TK_MACRO_NAME = 2,
       TK_SYMBOL = 1,
-      TK_BLOCK = 8,
+      TK_BLOCK = 4,
       TK_VBAR = 46,
       TK_ERROR_TOKEN = 47;
 
@@ -57,11 +57,11 @@
                  L"SYMBOL",
                  L"MACRO_NAME",
                  L"END_KEY",
+                 L"BLOCK",
                  L"EQUIVALENCE",
                  L"PRIORITY_EQUIVALENCE",
                  L"ARROW",
                  L"PRIORITY_ARROW",
-                 L"BLOCK",
                  L"ERROR_KEY",
                  L"EOL_KEY",
                  L"IDENTIFIER_KEY",

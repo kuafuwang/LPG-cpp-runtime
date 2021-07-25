@@ -24,12 +24,11 @@
 
 
     #include <unordered_map>
- 
+
+struct LPGParser;
 #pragma once
 #include "IAbstractArrayList.h"
 #include "IAst.h"
-struct LPGParser;
-
 namespace LPGParser_top_level_ast{
   struct Visitor;
   struct ASTNode;
@@ -476,7 +475,7 @@ struct ASTNode :public IAst
         this->rightIToken = rightIToken;
     }
 
-    void initialize() {}
+    virtual void initialize() {}
 
     /**
      * A list of all children of this node, excluding the nullptr ones.
@@ -594,6 +593,7 @@ struct ASTNodeToken :public  ASTNode
         v->endVisit(this);
     }
 };
+
 /**
  *<b>
  *<li>Rule 1:  LPG ::= options_segment LPG_INPUT
@@ -604,22 +604,22 @@ struct LPG :public ASTNode
     LPGParser* environment;
     LPGParser* getEnvironment() { return environment; }
 
-    option_specList* lpg_options_segment;
-    LPG_itemList* lpg_LPG_INPUT;
+    option_specList *lpg_options_segment;
+    LPG_itemList *lpg_LPG_INPUT;
 
-    option_specList* getoptions_segment() { return lpg_options_segment; };
-    void setoptions_segment(option_specList* lpg_options_segment) { this->lpg_options_segment = lpg_options_segment; }
-    LPG_itemList* getLPG_INPUT() { return lpg_LPG_INPUT; };
-    void setLPG_INPUT(LPG_itemList* lpg_LPG_INPUT) { this->lpg_LPG_INPUT = lpg_LPG_INPUT; }
+    option_specList *getoptions_segment() { return lpg_options_segment; };
+    void setoptions_segment(option_specList *lpg_options_segment) { this->lpg_options_segment = lpg_options_segment; }
+    LPG_itemList *getLPG_INPUT() { return lpg_LPG_INPUT; };
+    void setLPG_INPUT(LPG_itemList *lpg_LPG_INPUT) { this->lpg_LPG_INPUT = lpg_LPG_INPUT; }
 
-    LPG(LPGParser* environment, IToken* leftIToken, IToken* rightIToken,
-        option_specList* lpg_options_segment,
-        LPG_itemList* lpg_LPG_INPUT) :ASTNode(leftIToken, rightIToken) {
+    LPG(LPGParser *environment, IToken* leftIToken, IToken* rightIToken,
+        option_specList *lpg_options_segment,
+        LPG_itemList *lpg_LPG_INPUT):ASTNode(leftIToken, rightIToken)    {
         this->environment = environment;
         this->lpg_options_segment = lpg_options_segment;
-        ((ASTNode*)lpg_options_segment)->setParent(this);
+        ((ASTNode*) lpg_options_segment)->setParent(this);
         this->lpg_LPG_INPUT = lpg_LPG_INPUT;
-        ((ASTNode*)lpg_LPG_INPUT)->setParent(this);
+        ((ASTNode*) lpg_LPG_INPUT)->setParent(this);
         initialize();
     }
 
@@ -636,12 +636,12 @@ struct LPG :public ASTNode
 
     void accept(IAstVisitor* v)
     {
-        if (!v->preVisit(this)) return;
-        enter((Visitor*)v);
+        if (! v->preVisit(this)) return;
+        enter((Visitor*) v);
         v->postVisit(this);
     }
 
-    void enter(Visitor* v)
+    void enter(Visitor *v)
     {
         bool checkChildren = v->visit(this);
         if (checkChildren)
@@ -652,13 +652,13 @@ struct LPG :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 47 "LPGParser.g
+    //#line 52 "LPGParser.g
 
-
+   
     void initialize() {
-
+        
     }
-};
+ };
 
 /**
  *<b>
@@ -2134,7 +2134,7 @@ struct defineSpec :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 113 "LPGParser.g
+    //#line 123 "LPGParser.g
 
     void initialize();
  };
@@ -2667,6 +2667,8 @@ struct nameSpecList :public AbstractASTNodeList{
     void enter(Visitor* v);
 };
 
+
+
 /**
  *<b>
  *<li>Rule 89:  nameSpec ::= name produces name
@@ -2820,6 +2822,8 @@ struct nonTermList :public AbstractASTNodeList{
     void enter(Visitor* v);
 };
 
+
+
 /**
  *<b>
  *<li>Rule 101:  nonTerm ::= ruleNameWithAttributes produces ruleList
@@ -2886,7 +2890,7 @@ struct nonTerm :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 188 "LPGParser.g
+    //#line 198 "LPGParser.g
 
     void initialize();
  };
@@ -2997,29 +3001,26 @@ struct ruleList :public AbstractASTNodeList{
 
 /**
  *<b>
- *<li>Rule 111:  rule ::= symWithAttrsList opt_action_segment
+ *<li>Rule 111:  rule ::= symWithAttrsList action_segment_list
  *</b>
  */
 struct rule :public ASTNode
 {
     symWithAttrsList *lpg_symWithAttrsList;
-    action_segment *lpg_opt_action_segment;
+    action_segmentList *lpg_action_segment_list;
 
     symWithAttrsList *getsymWithAttrsList() { return lpg_symWithAttrsList; };
     void setsymWithAttrsList(symWithAttrsList *lpg_symWithAttrsList) { this->lpg_symWithAttrsList = lpg_symWithAttrsList; }
-    /**
-     * The value returned by <b>getopt_action_segment</b> may be <b>nullptr</b>
-     */
-    action_segment *getopt_action_segment() { return lpg_opt_action_segment; };
-    void setopt_action_segment(action_segment *lpg_opt_action_segment) { this->lpg_opt_action_segment = lpg_opt_action_segment; }
+    action_segmentList *getaction_segment_list() { return lpg_action_segment_list; };
+    void setaction_segment_list(action_segmentList *lpg_action_segment_list) { this->lpg_action_segment_list = lpg_action_segment_list; }
 
     rule(IToken* leftIToken, IToken* rightIToken,
          symWithAttrsList *lpg_symWithAttrsList,
-         action_segment *lpg_opt_action_segment):ASTNode(leftIToken, rightIToken)    {
+         action_segmentList *lpg_action_segment_list):ASTNode(leftIToken, rightIToken)    {
         this->lpg_symWithAttrsList = lpg_symWithAttrsList;
         ((ASTNode*) lpg_symWithAttrsList)->setParent(this);
-        this->lpg_opt_action_segment = lpg_opt_action_segment;
-        if (lpg_opt_action_segment != nullptr) ((ASTNode*) lpg_opt_action_segment)->setParent(this);
+        this->lpg_action_segment_list = lpg_action_segment_list;
+        ((ASTNode*) lpg_action_segment_list)->setParent(this);
         initialize();
     }
 
@@ -3030,7 +3031,7 @@ struct rule :public ASTNode
     {
         std::vector<IAst*> list;
         list.push_back((IAst*)lpg_symWithAttrsList);
-        list.push_back((IAst*)lpg_opt_action_segment);
+        list.push_back((IAst*)lpg_action_segment_list);
         return list;
     }
 
@@ -3047,7 +3048,7 @@ struct rule :public ASTNode
         if (checkChildren)
         {
             ((IAst*)lpg_symWithAttrsList)->accept(v);
-            if (lpg_opt_action_segment != nullptr) ((IAst*)lpg_opt_action_segment)->accept(v);
+            ((IAst*)lpg_action_segment_list)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3179,8 +3180,7 @@ struct action_segment :public ASTNodeToken
         v->endVisit(this);
     }
 
-    //#line 233 "LPGParser.g
-
+    //#line 242 "LPGParser.g
 
 };
 
@@ -3326,7 +3326,7 @@ struct terminal :public ASTNode
         v->endVisit(this);
     }
 
-    //#line 247 "LPGParser.g
+    //#line 255 "LPGParser.g
 
     void initialize();
  };
@@ -3427,7 +3427,7 @@ struct type_declarationsList :public AbstractASTNodeList{
 
 /**
  *<b>
- *<li>Rule 135:  type_declarations ::= SYMBOL produces barSymbolList
+ *<li>Rule 135:  type_declarations ::= SYMBOL produces barSymbolList opt_action_segment
  *</b>
  */
 struct type_declarations :public ASTNode
@@ -3435,6 +3435,7 @@ struct type_declarations :public ASTNode
     ASTNodeToken *lpg_SYMBOL;
     ASTNode *lpg_produces;
     SYMBOLList *lpg_barSymbolList;
+    action_segment *lpg_opt_action_segment;
 
     ASTNodeToken *getSYMBOL() { return lpg_SYMBOL; };
     void setSYMBOL(ASTNodeToken *lpg_SYMBOL) { this->lpg_SYMBOL = lpg_SYMBOL; }
@@ -3442,17 +3443,25 @@ struct type_declarations :public ASTNode
     void setproduces(ASTNode *lpg_produces) { this->lpg_produces = lpg_produces; }
     SYMBOLList *getbarSymbolList() { return lpg_barSymbolList; };
     void setbarSymbolList(SYMBOLList *lpg_barSymbolList) { this->lpg_barSymbolList = lpg_barSymbolList; }
+    /**
+     * The value returned by <b>getopt_action_segment</b> may be <b>nullptr</b>
+     */
+    action_segment *getopt_action_segment() { return lpg_opt_action_segment; };
+    void setopt_action_segment(action_segment *lpg_opt_action_segment) { this->lpg_opt_action_segment = lpg_opt_action_segment; }
 
     type_declarations(IToken* leftIToken, IToken* rightIToken,
                       ASTNodeToken *lpg_SYMBOL,
                       ASTNode *lpg_produces,
-                      SYMBOLList *lpg_barSymbolList):ASTNode(leftIToken, rightIToken)    {
+                      SYMBOLList *lpg_barSymbolList,
+                      action_segment *lpg_opt_action_segment):ASTNode(leftIToken, rightIToken)    {
         this->lpg_SYMBOL = lpg_SYMBOL;
         ((ASTNode*) lpg_SYMBOL)->setParent(this);
         this->lpg_produces = lpg_produces;
         ((ASTNode*) lpg_produces)->setParent(this);
         this->lpg_barSymbolList = lpg_barSymbolList;
         ((ASTNode*) lpg_barSymbolList)->setParent(this);
+        this->lpg_opt_action_segment = lpg_opt_action_segment;
+        if (lpg_opt_action_segment != nullptr) ((ASTNode*) lpg_opt_action_segment)->setParent(this);
         initialize();
     }
 
@@ -3465,6 +3474,7 @@ struct type_declarations :public ASTNode
         list.push_back((IAst*)lpg_SYMBOL);
         list.push_back((IAst*)lpg_produces);
         list.push_back((IAst*)lpg_barSymbolList);
+        list.push_back((IAst*)lpg_opt_action_segment);
         return list;
     }
 
@@ -3483,6 +3493,7 @@ struct type_declarations :public ASTNode
             ((IAst*)lpg_SYMBOL)->accept(v);
             ((IAst*)lpg_produces)->accept(v);
             ((IAst*)lpg_barSymbolList)->accept(v);
+            if (lpg_opt_action_segment != nullptr) ((IAst*)lpg_opt_action_segment)->accept(v);
         }
         v->endVisit(this);
     }
@@ -3522,7 +3533,6 @@ struct symbol_pairList :public AbstractASTNodeList{
 
     void enter(Visitor* v);
 };
-
 
 /**
  *<b>
@@ -3610,12 +3620,10 @@ struct recover_symbol :public ASTNodeToken
         v->endVisit(this);
     }
 
-    //#line 281 "LPGParser.g
+    //#line 288 "LPGParser.g
 
     void initialize();
  };
-
-
 
 /**
  *<em>
@@ -4909,7 +4917,7 @@ struct terminal_symbol0 :public ASTNodeToken
         v->endVisit(this);
     }
 
-    //#line 256 "LPGParser.g
+    //#line 263 "LPGParser.g
 
     void initialize();
  };
