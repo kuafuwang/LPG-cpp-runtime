@@ -708,10 +708,7 @@ int DiagnoseParser::parseCheck(Array<int>& stack, int stack_top, int first_symbo
 
 DiagnoseParser::RepairCandidate DiagnoseParser::errorRecovery(int error_token)
 {
-	if(error_token == 5410)
-	{
-		error_token = 5410;
-	}
+
 	int prevtok = tokStream->getPrevious(error_token);
 
 	//
@@ -2116,85 +2113,72 @@ std::wstring DiagnoseParser::PrintSecondaryMessage(int msg_code,
 	int scope_name_index)
 {
 	//using std::wcout;
-	std::wstringstream wstringstream;
-	std::wstring name_str;
+	std::wstringstream message;
+	std::wstring str;
 	int i,
 		len = 0;
 
 	if (name_index >= 0)
 	{
 	
-		name_str = name(name_index);
-		len =name_str.size();
+		str = name(name_index);
+		len =str.size();
 	}
-
-	/*int left_line_no = tokStream->getLine(left_token_loc),
-		left_column_no = tokStream->getColumn(left_token_loc),
-		right_line_no = tokStream->getEndLine(right_token_loc),
-		right_column_no = tokStream->getEndColumn(right_token_loc),
-		left_location = left_token_loc,
-		right_location = right_token_loc;
-
-	wstringstream << tokStream->getFileName()
-		<< ':' << left_line_no << ':' << left_column_no
-		<< ':' << right_line_no << ':' << right_column_no
-		<< ':' << left_location << ':' << right_location
-		<< ": ";*/
-
+	
 	switch (msg_code)
 	{
 	case MISPLACED_CODE:
-		wstringstream << "Misplaced construct(s)";
+		message << "Misplaced construct(s)";
 		break;
 	case SCOPE_CODE:
-		wstringstream << '\"';
+		message << '\"';
 		for (i = scopeSuffix(-(int)name_index);
 			scopeRhs(i) != 0; i++)
 		{
 			len = name(scopeRhs(i)).size();
-			name_str = name(scopeRhs(i)).c_str();
+			str = name(scopeRhs(i)).c_str();
 			for (int j = 0; j < len; j++)
-				wstringstream << name_str[j];
+				message << str[j];
 			if (scopeRhs(i + 1)) // any more symbols to print?
-				wstringstream << ' ';
+				message << ' ';
 		}
-		wstringstream << '\"';
-		wstringstream << " inserted to complete scope";
+		message << '\"';
+		message << " inserted to complete scope";
 		//
 		// TODO: This should not be an option
 		//
 		if (scope_name_index)
 		{
-			name_str = name(scope_name_index);
-			len = name_str.size();
+			str = name(scope_name_index);
+			len = str.size();
 			for (int j = 0; j < len; j++) // any more symbols to print?
-				wstringstream << name_str[j];
+				message << str[j];
 		}
-		else wstringstream << "phrase";
+		else message << "phrase";
 		break;
 	case  MANUAL_CODE:
-		wstringstream << '\"';
+		message << '\"';
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
-		wstringstream << "\" inserted to complete structure";
+			message << str[i];
+		message << "\" inserted to complete structure";
 		break;
 	case MERGE_CODE:
-		wstringstream << "Symbols merged to form ";
+		message << "Symbols merged to form ";
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
+			message << str[i];
 		break;
 	default:
 		if (msg_code == DELETION_CODE || len == 0)
-			wstringstream << "Unexpected input discarded";
+			message << "Unexpected input discarded";
 		else
 		{
 			for (i = 0; i < len; i++)
-				wstringstream << name_str[i];
-			wstringstream << " expected instead";
+				message << str[i];
+			message << " expected instead";
 		}
 	}
 
-	return  wstringstream.str();
+	return  message.str();
 
 
 }
@@ -2212,123 +2196,112 @@ std::wstring DiagnoseParser::PrintPrimaryMessage(int msg_code,
 	int right_token_loc,
 	int scope_name_index)
 {
-	std::wstringstream wstringstream;
-	std::wstring name_str ;
+	std::wstringstream message;
+	std::wstring str ;
 	
 	int i,
 		len = 0;
-	/*int left_line_no = tokStream->getLine(left_token_loc),
-	left_column_no = tokStream->getColumn(left_token_loc),
-	right_line_no = tokStream->getEndLine(right_token_loc),
-	right_column_no = tokStream->getEndColumn(right_token_loc),
-	left_location = left_token_loc,
-	right_location = right_token_loc;
 
-wstringstream << tokStream->getFileName()
-	<< ':' << left_line_no << ':' << left_column_no
-	<< ':' << right_line_no << ':' << right_column_no
-	<< ':' << left_location << ':' << right_location
-	<< ": ";*/
 	if (name_index >= 0)
 	{
-		name_str = name(name_index);
-		len = name_str.size();
+		str = name(name_index);
+		len = str.size();
 	
 	}
 
 	switch (msg_code)
 	{
 	case ERROR_CODE:
-		wstringstream << "Parsing terminated at this token";
+		message << "Parsing terminated at this token";
 		break;
 	case BEFORE_CODE:
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
-		wstringstream << " inserted before this token";
+			message << str[i];
+		message << " inserted before this token";
 		break;
 	case INSERTION_CODE:
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
-		wstringstream << " expected after this token";
+			message << str[i];
+		message << " expected after this token";
 		break;
 	case DELETION_CODE:
 		if (left_token_loc == right_token_loc)
-			wstringstream << "Unexpected symbol ignored";
-		else wstringstream << "Unexpected symbols ignored";
+			message << "Unexpected symbol ignored";
+		else message << "Unexpected symbols ignored";
 		break;
 	case INVALID_CODE:
 		if (len == 0)
-			wstringstream << "Unexpected input discarded";
+			message << "Unexpected input discarded";
 		else
 		{
-			wstringstream << "Invalid ";
+			message << "Invalid ";
 			for (i = 0; i < len; i++)
-				wstringstream << name_str[i];
+				message << str[i];
 		}
 		break;
 	case SUBSTITUTION_CODE:
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
-		wstringstream << " expected instead of this token";
+			message << str[i];
+		message << " expected instead of this token";
 		break;
 	case SCOPE_CODE:
-		wstringstream << '\"';
+		message << '\"';
 		for (i = scopeSuffix(-(int)name_index);
 			scopeRhs(i) != 0; i++)
 		{
 			len = name(scopeRhs(i)).size();
-			name_str = name(scopeRhs(i)).c_str();
+			str = name(scopeRhs(i)).c_str();
 			for (int j = 0; j < len; j++)
-				wstringstream << name_str[j];
+				message << str[j];
 			if (scopeRhs(i + 1)) // any more symbols to print?
-				wstringstream << ' ';
+				message << ' ';
 		}
-		wstringstream << '\"';
-		wstringstream << " inserted to complete scope";
+		message << '\"';
+		message << " inserted to complete scope";
 		//
 		// TODO: This should not be an option
 		//
 		if (scope_name_index)
 		{
-			name_str = name(scope_name_index);
-			len = name_str.size();
+			str = name(scope_name_index);
+			len = str.size();
 			for (int j = 0; j < len; j++) // any more symbols to print?
-				wstringstream << name_str[j];
+				message << str[j];
 		}
-		else wstringstream << "scope";
+		else message << "scope";
 		break;
 	case MANUAL_CODE:
-		wstringstream << '\"';
+		message << '\"';
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
-		wstringstream << "\" inserted to complete structure";
+			message << str[i];
+		message << "\" inserted to complete structure";
 		break;
 	case MERGE_CODE:
-		wstringstream << "symbols merged to form ";
+		message << "symbols merged to form ";
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
+			message << str[i];
 		break;
 	case EOF_CODE:
 		for (i = 0; i < len; i++)
-			wstringstream << name_str[i];
-		wstringstream << " reached after this token";
+			message << str[i];
+		message << " reached after this token";
 		break;
 	default:
 		if (msg_code == MISPLACED_CODE)
-			wstringstream << "misplaced construct(s)";
+			message << "misplaced construct(s)";
 		else if (len == 0)
-			wstringstream << "unexpected input discarded";
+			message << "unexpected input discarded";
 		else
 		{
 			for (i = 0; i < len; i++)
-				wstringstream << name_str[i];
-			wstringstream << " expected instead";
+				message << str[i];
+			message << " expected instead";
 		}
 		break;
 	}
 
-	wstringstream << '\n';
-	return  wstringstream.str();
+	message << '\n';
+	return  message.str();
 }
 void DiagnoseParser::emitError(int msg_code, int name_index, int left_token, int right_token, int scope_name_index)
 {

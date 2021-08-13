@@ -30,6 +30,7 @@ public:
     Array(int size_) : size(size_)
     {
         info = new T[size];
+        Initialize({});
     }
 
     Array(int size_, T value) : size(size_)
