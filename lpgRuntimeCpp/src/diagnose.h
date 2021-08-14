@@ -394,12 +394,7 @@ struct DiagnoseParser :public ParseErrorCodes,public  ParseTableProxy
     // secondary substitution or a secondary deletion.
     //
     void secondaryDiagnosis(SecondaryRepairInfo& repair);
-    std::wstring PrintSecondaryMessage(int msg_code, int name_index, int left_token_loc, int right_token_loc,
-                               int scope_name_index);
-    std::wstring PrintPrimaryMessage(int msg_code, int name_index, int left_token_loc, int right_token_loc,
-                             int scope_name_index);
-
-
+   
     //
     // This method is invoked by an LPG PARSER or a semantic
     // routine to process an error message.
